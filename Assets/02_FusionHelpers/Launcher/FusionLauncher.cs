@@ -64,7 +64,7 @@ namespace FusionHelpers
 			FusionSession sessionPrefab,
 			INetworkSceneManager sceneManager,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
-		{
+			{
 			_sessionPrefab = sessionPrefab;
 			_connectionCallback = onConnect;
 

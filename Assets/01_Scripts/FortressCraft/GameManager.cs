@@ -51,12 +51,12 @@ namespace Agit.FortressCraft
 
 		protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{
-			Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
+			// Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
 		}
 
 		protected override void OnPlayerAvatarRemoved(FusionPlayer fusionPlayer)
 		{
-			Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
+			// Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
 		}
 
 		public void OnTankDeath()
