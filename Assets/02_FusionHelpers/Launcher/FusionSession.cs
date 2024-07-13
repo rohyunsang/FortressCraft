@@ -30,8 +30,8 @@ namespace FusionHelpers
 		
 		public override void Spawned()
 		{
-      Debug.Log($"Spawned Network Session for Runner: {Runner}");
-      Runner.RegisterSingleton(this);
+			 Debug.Log($"Spawned Network Session for Runner: {Runner}");
+			 Runner.RegisterSingleton(this);
 		}
 
 		public override void Render()
