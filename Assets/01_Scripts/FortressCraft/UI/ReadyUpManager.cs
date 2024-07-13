@@ -83,7 +83,7 @@ namespace Agit.FortressCraft
 			bool allPlayersReady = readyCount == playerCount;
 
 			_disconnectInfoText.SetActive(!allPlayersReady);
-			_readyupInfoText.SetActive(!allPlayersReady && playerCount > 1);
+			_readyupInfoText.SetActive(!allPlayersReady && playerCount > 0);
 
 			if (allPlayersReady)
 			{

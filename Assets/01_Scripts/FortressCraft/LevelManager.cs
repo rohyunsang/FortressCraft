@@ -5,10 +5,17 @@ using FusionHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace Agit.FortressCraft
 {
+	public enum SceneIndex
+	{
+		Main = 0,
+		Lobby,
+		Battle
+	}
+
+
 	/// <summary>
 	/// The LevelManager controls the map - keeps track of spawn points for players.
 	/// </summary>
@@ -50,12 +57,10 @@ namespace Agit.FortressCraft
 		}
 
 		// Get a random level
-		public int GetRandomLevelIndex()
+		public int GetBattleSceneIndex()
 		{
-			int idx = Random.Range(0, _levels.Length);
+			int idx = (int)SceneIndex.Battle;
 			// Make sure it's not the same level again. This is partially because it's more fun to try different levels and partially because scene handling breaks if trying to load the same scene again.
-			if (_levels[idx] == _loadedScene.AsIndex)
-				idx = (idx + 1) % _levels.Length;
 			return idx;
 		}
 
@@ -83,7 +88,7 @@ namespace Agit.FortressCraft
 			}
 			else
 			{
-				Runner.LoadScene(SceneRef.FromIndex(_levels[nextLevelIndex]), new LoadSceneParameters(LoadSceneMode.Additive), true);
+				Runner.LoadScene(SceneRef.FromIndex((int)SceneIndex.Battle), new LoadSceneParameters(LoadSceneMode.Additive), true);
 			}
 		}
 
@@ -196,7 +201,7 @@ namespace Agit.FortressCraft
 				if(Runner.IsServer || Runner.IsSharedModeMasterClient)
 					gameManager.currentPlayState = GameManager.PlayState.LOBBY;
 				InputController.fetchInput = true;
-//		    Debug.Log($"Switched Scene from {prevScene} to {newScene}");
+//				Debug.Log($"Switched Scene from {prevScene} to {newScene}");
 			}
 			else
 			{

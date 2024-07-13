@@ -28,12 +28,14 @@ namespace Agit.FortressCraft
 		private static readonly int Recharge = Shader.PropertyToID("_Recharge");
 		private AudioEmitter _audio;
 
-		public override void Spawned()
+        public override void Spawned() // 
 		{
 			_audio = GetComponent<AudioEmitter>();
 			if(Object.HasStateAuthority)
 				SetNextPowerup();
 			InitPowerupVisuals();
+			
+			// 5초 뒤에 유닛 계속 소환 되는 로직. 
 		}
 
 		public override void Render()

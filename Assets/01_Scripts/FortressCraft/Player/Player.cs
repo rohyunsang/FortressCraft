@@ -348,7 +348,7 @@ namespace Agit.FortressCraft
 					_damageVisuals.OnDeath();
 					
 					if(Runner.TryGetSingleton( out GameManager gameManager))
-						gameManager.OnTankDeath();
+						gameManager.OnCommanderDeath();
 
 					break;
 				case Stage.TeleportOut:

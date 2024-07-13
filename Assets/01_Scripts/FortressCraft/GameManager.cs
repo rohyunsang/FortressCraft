@@ -59,7 +59,7 @@ namespace Agit.FortressCraft
 			// Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
 		}
 
-		public void OnTankDeath()
+		public void OnCommanderDeath()
 		{
 			if (currentPlayState != PlayState.LOBBY)
 			{
@@ -82,7 +82,7 @@ namespace Agit.FortressCraft
 				Debug.Log($"Someone died - {playersLeft} left");
 				if (lastPlayerStanding != null)
 				{
-					int nextLevelIndex = Runner.GetLevelManager().GetRandomLevelIndex();
+					int nextLevelIndex = Runner.GetLevelManager().GetBattleSceneIndex();
 					int newScore = score[lastPlayerStanding.PlayerIndex] + 1;
 					if(HasStateAuthority)
 						score.Set(lastPlayerStanding.PlayerIndex, newScore);
@@ -150,7 +150,7 @@ namespace Agit.FortressCraft
 
 			// Reset stats and transition to level.
 			ResetStats();
-			LoadLevel(Runner.GetLevelManager().GetRandomLevelIndex());
+			LoadLevel(Runner.GetLevelManager().GetBattleSceneIndex());
 		}
 		
 		private void LoadLevel(int nextLevelIndex)

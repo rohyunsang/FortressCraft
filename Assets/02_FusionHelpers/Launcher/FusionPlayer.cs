@@ -46,7 +46,7 @@ namespace FusionHelpers
 
 			Debug.Log($"Spawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 
-      Runner.WaitForSingleton<FusionSession>(session => session.AddPlayerAvatar(this));
+			Runner.WaitForSingleton<FusionSession>(session => session.AddPlayerAvatar(this));
 		}
 
 		public override void Despawned(NetworkRunner runner, bool hasState)

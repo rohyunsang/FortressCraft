@@ -89,7 +89,7 @@ namespace FusionHelpers
 				ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>(),
 				SceneManager = sceneManager,
 				Scene = scene,
-				
+				PlayerCount = 4 // Max Player is 4 
 			});
 		}
 
@@ -141,6 +141,7 @@ namespace FusionHelpers
 				}
 				session.PlayerJoined(player);
 			}
+
 		}
 
 		public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
