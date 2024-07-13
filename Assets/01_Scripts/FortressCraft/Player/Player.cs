@@ -14,7 +14,7 @@ namespace Agit.FortressCraft
 		private const int MAX_HEALTH = 100;
 
 		[Header("Visuals")] [SerializeField] private Transform _hull;
-		[SerializeField] private Transform _turret;
+		[SerializeField] private Transform _commander;
 		[SerializeField] private Transform _visualParent;
 		[SerializeField] private Material[] _playerMaterials;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
@@ -59,9 +59,9 @@ namespace Agit.FortressCraft
 		public Color playerColor { get; set; }
 
 		public Vector3 velocity => Object != null && Object.IsValid ? _cc.Velocity : Vector3.zero;
-		public Vector3 turretPosition => _turret.position;
+		public Vector3 commanderPosition => _commander.position;
 
-		public Quaternion turretRotation => _turret.rotation;
+		public Quaternion commanderRotation => _commander.rotation;
 
 		public Quaternion hullRotation => _hull.rotation;
 		public GameObject cameraTarget => _cc.gameObject;
@@ -157,7 +157,7 @@ namespace Agit.FortressCraft
 				// have Input or State Authority - meaning on the controlling player or the server.
 				if (GetInput(out NetworkInputData input))
 				{
-					SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
+					// SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
 
 					//if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					//	weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.PRIMARY);
@@ -203,7 +203,8 @@ namespace Agit.FortressCraft
 			}
 				
 			var interpolated = new NetworkBehaviourBufferInterpolator(this);
-			// _turret.rotation = Quaternion.Euler(0, interpolated.Angle(nameof(aimDirection)), 0);
+
+			// _commander.rotation = Quaternion.Euler(0, interpolated.Angle(nameof(aimDirection)), 0);
 			// _damageVisuals.CheckHealth(GetPropertyReader<int>(nameof(life)).Read(interpolated.From), MAX_HEALTH);
 		}
 
@@ -230,7 +231,7 @@ namespace Agit.FortressCraft
 			_cc.Move(new Vector3(moveVector.x, 0, moveVector.y));
 
 			if (aimVector.sqrMagnitude > 0)
-				_turret.forward = new Vector3(aimVector.x, 0, aimVector.y);
+				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
 			// aimDirection = _turret.rotation.eulerAngles.y;
 		}
 
@@ -361,7 +362,7 @@ namespace Agit.FortressCraft
 		private void SpawnTeleportOutFx()
 		{
 			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
-			teleout.StartTeleport(playerColor, turretRotation, hullRotation);
+			// teleout.StartTeleport(playerColor, commanderRotation, hullRotation);
 		}
 
 		private void ResetPlayer()

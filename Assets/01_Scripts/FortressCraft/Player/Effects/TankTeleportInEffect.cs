@@ -78,7 +78,7 @@ namespace Agit.FortressCraft
 
 			// Set the dummy tank
 			_tankDummy.SetActive(true);
-			_tankDummyTurret.rotation = _player.turretRotation;
+			// _tankDummyTurret.rotation = _player.commanderRotation;
 			_tankDummyHull.rotation = _player.hullRotation;
 
 			// Waits for the tank to be ready before playing the discharge effect
