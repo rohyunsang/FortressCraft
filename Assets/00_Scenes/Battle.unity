@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18154544, g: 0.22718836, b: 0.30740592, a: 1}
+  m_IndirectSpecularColor: {r: 0.18154576, g: 0.22718874, b: 0.3074065, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: Flags
-      value: 1
+      value: 262145
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: SortKey
@@ -1158,7 +1158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: Flags
-      value: 1
+      value: 262145
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: SortKey
@@ -1986,7 +1986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: Flags
-      value: 1
+      value: 262145
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: SortKey
@@ -3285,7 +3285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: Flags
-      value: 1
+      value: 262145
       objectReference: {fileID: 0}
     - target: {fileID: 4993461855264777998, guid: 120ffc773e92e4ab2834f0c3007edc5a, type: 3}
       propertyPath: SortKey
