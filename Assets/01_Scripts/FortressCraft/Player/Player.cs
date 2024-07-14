@@ -128,6 +128,7 @@ namespace Agit.FortressCraft
 			RegisterEventListener( (PickupEvent evt) => OnPickup(evt));
 
             // PlayerName Change
+            
             var fusionLauncher = FindObjectOfType<FusionLauncher>();
 
             if (fusionLauncher != null)
@@ -135,9 +136,10 @@ namespace Agit.FortressCraft
                 // _playerName 값을 NetworkString<_32>로 변환하여 PlayerName에 할당
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
+            
         }
 
-		public override void Despawned(NetworkRunner runner, bool hasState)
+        public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
