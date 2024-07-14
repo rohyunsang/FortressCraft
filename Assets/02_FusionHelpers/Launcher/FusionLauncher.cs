@@ -48,7 +48,7 @@ namespace FusionHelpers
 			Loaded
 		}
 
-		public static FusionLauncher Launch(GameMode mode, string region,string playerName , string room ,FusionSession sessionPrefab,
+		public static FusionLauncher Launch(GameMode mode, string region, string room,string playerName  ,FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
