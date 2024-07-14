@@ -36,6 +36,8 @@ namespace FusionHelpers
 		private Action<NetworkRunner, ConnectionStatus, string> _connectionCallback;
 		private FusionSession _sessionPrefab;
 
+		public string playerName = null;
+
 		public enum ConnectionStatus
 		{
 			Disconnected,
@@ -46,22 +48,27 @@ namespace FusionHelpers
 			Loaded
 		}
 
-		public static FusionLauncher Launch(GameMode mode, string region, string room,FusionSession sessionPrefab,
+		public static FusionLauncher Launch(GameMode mode, string region,string playerName , string room ,FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
 
-			// In non-shared mode, we need a hitbox manager to make sure lag compensation works properly.
-			if (mode != GameMode.Shared)
+			
+			launcher.playerName = playerName;
+            Debug.Log("pN" + playerName);
+            Debug.Log("lpN" + launcher.playerName);
+
+            // In non-shared mode, we need a hitbox manager to make sure lag compensation works properly.
+            if (mode != GameMode.Shared)
 				launcher.gameObject.AddComponent<HitboxManager>();
 
-			launcher.InternalLaunch(mode,region,room,sessionPrefab, sceneLoader, onConnect);
+			launcher.InternalLaunch(mode,region,room, sessionPrefab, sceneLoader, onConnect);
 			return launcher;
 		}
 		
 		private async void InternalLaunch(GameMode mode, string region, string room,
-			FusionSession sessionPrefab,
+            FusionSession sessionPrefab,
 			INetworkSceneManager sceneManager,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 			{
