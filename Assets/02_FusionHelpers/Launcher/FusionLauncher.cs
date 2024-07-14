@@ -56,8 +56,6 @@ namespace FusionHelpers
 
 			
 			launcher.playerName = playerName;
-            Debug.Log("pN" + playerName);
-            Debug.Log("lpN" + launcher.playerName);
 
             // In non-shared mode, we need a hitbox manager to make sure lag compensation works properly.
             if (mode != GameMode.Shared)
