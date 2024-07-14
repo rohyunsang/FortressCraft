@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/00_Scenes/Lobby.unity
     guid: e7073f19ee8574db19f8808196062ff8
   - enabled: 1
+    path: Assets/00_Scenes/Battle_test.unity
+    guid: 61aca9aff11d24b3f9ad03fe3cf9073d
+  - enabled: 1
     path: Assets/00_Scenes/Battle.unity
     guid: c8e8f95c091b64329b97fba535292c16
   - enabled: 0
