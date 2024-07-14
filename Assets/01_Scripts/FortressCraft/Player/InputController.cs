@@ -87,17 +87,25 @@ namespace Agit.FortressCraft
 				_moveDelta = Vector2.zero;
 				
 				if (Input.GetKey(KeyCode.W))
-					_moveDelta += Vector2.up;
+					{
+						_moveDelta += Vector2.up;
+					}
 
 				if (Input.GetKey(KeyCode.S))
-					_moveDelta += Vector2.down;
+					{
+						_moveDelta += Vector2.down;
+					}
 
 				if (Input.GetKey(KeyCode.A))
-					_moveDelta += Vector2.left;
+					{
+						_moveDelta += Vector2.left;
+					}
 
 				if (Input.GetKey(KeyCode.D))
-					_moveDelta += Vector2.right;
-
+					{
+						_moveDelta += Vector2.right;
+					}
+				
 				Vector3 mousePos = Input.mousePosition;
 
 				RaycastHit hit;
@@ -116,6 +124,7 @@ namespace Agit.FortressCraft
 				// Vector3 aimDirection = mouseCollisionPoint - _player.turretPosition;
 				// _aimDelta = new Vector2(aimDirection.x,aimDirection.z );
 			}
+
 			else if (Input.touchSupported)
 			{
 				bool leftIsDown = false;
@@ -162,7 +171,6 @@ namespace Agit.FortressCraft
 				_mobileInput.gameObject.SetActive(false);
 			}
 		}
-
 		public void ToggleReady()
 		{
 			_buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;

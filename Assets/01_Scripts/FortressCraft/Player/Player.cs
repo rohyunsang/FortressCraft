@@ -1,6 +1,7 @@
 using Fusion;
 using FusionHelpers;
 using UnityEngine;
+using Cinemachine;
 
 namespace Agit.FortressCraft
 {
@@ -73,6 +74,8 @@ namespace Agit.FortressCraft
 		private float _respawnInSeconds = -1;
 		private ChangeDetector _changes;
 		private NetworkInputData _oldInput;
+		public GameObject camera;
+		public CinemachineVirtualCamera vCam;
 
 		public void ToggleReady()
 		{
@@ -88,6 +91,9 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
+			camera = GameObject.Find("Virtual Camera");
+			vCam = camera.GetComponent<CinemachineVirtualCamera>();
+			vCam.Follow = this.gameObject.transform;
 		}
 
 		public override void InitNetworkState()
@@ -157,14 +163,23 @@ namespace Agit.FortressCraft
 				// have Input or State Authority - meaning on the controlling player or the server.
 				if (GetInput(out NetworkInputData input))
 				{
-					// SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
+					SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
 
-					//if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
-					//	weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.PRIMARY);
+					/*if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+					{
+						weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.PRIMARY);
+					}
+					if (input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
+					{
+						weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.SECONDARY);
+					}*/
 
-					//if (input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
-					//	weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.SECONDARY);
+					/*if(input.IsDown(NetworkInputData.))
+					{
 
+					}
+					*/
+					
 					// We don't want to predict this because it's a toggle and a mis-prediction due to lost input will double toggle the button
 					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
@@ -228,7 +243,7 @@ namespace Agit.FortressCraft
 			if (!isActivated)
 				return;
 
-			_cc.Move(new Vector3(moveVector.x, 0, moveVector.y));
+			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
 
 			if (aimVector.sqrMagnitude > 0)
 				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);

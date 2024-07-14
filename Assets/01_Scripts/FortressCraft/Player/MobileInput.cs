@@ -19,8 +19,8 @@ public class MobileInput : MonoBehaviour
 	{
 		foreach (InputController ic in FindObjectsOfType<InputController>())
 		{
-			if(ic.Object.HasInputAuthority)
-				ic.ToggleReady();
+			//if(ic.Object.HasInputAuthority)
+				//ic.ToggleReady();
 		}
 	}
 
