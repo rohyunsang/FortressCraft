@@ -1,24 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
+using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
+using static UnityEngine.EventSystems.PointerEventData;
 
-public class Arrow : MonoBehaviour
+public class Arrow : NetworkBehaviour
 {
     public Transform TargetTransform { get; set; }
-    private Rigidbody2D rb;
+    private NetworkRigidbody2D _rb;
     [SerializeField] private float arrowSpeed = 5.0f;
 
-    private void Awake()
+    public override void Spawned()
     {
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<NetworkRigidbody2D>();
         Invoke("DestroySelf", 1.3f);
     }
 
-    private void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
         Vector3 movDir = TargetTransform.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
-        rb.velocity = movDirNormalized * arrowSpeed;
+        _rb.Rigidbody.velocity = movDirNormalized * arrowSpeed;
     }
 
     public void DestroySelf()

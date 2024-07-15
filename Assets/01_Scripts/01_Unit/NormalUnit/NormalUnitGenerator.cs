@@ -23,7 +23,7 @@ public class NormalUnitGenerator : NetworkBehaviour
         //Debug.Log( Id );
         if (spawnTimer.Expired(Runner))
         {
-            Debug.Log(Id);
+            //Debug.Log(Id);
             spawnTimer = TickTimer.CreateFromSeconds(Runner, spwanTime);
             spawner.SpawnUnit(Runner);
         }

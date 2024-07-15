@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Unit_A
+  - Unit_B
+  - Unit_C
+  - Unit_D
+  - Ground_A
+  - Ground_B
+  - Ground_C
+  - Ground_D
   layers:
   - Default
   - TransparentFX

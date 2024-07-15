@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FlashWhite
-  m_Shader: {fileID: 4800000, guid: 6588884d1f15043fda772e3fca052485, type: 3}
+  m_Shader: {fileID: 4800000, guid: 3b48eb246ea884060b8573bacb389683, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

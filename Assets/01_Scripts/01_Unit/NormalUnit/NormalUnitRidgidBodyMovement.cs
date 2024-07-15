@@ -20,17 +20,20 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     private string nowGround;
 
     private Animator animator;
+    private NetworkMecanimAnimator _netAnimator;
     private BodyCollider bodyCollider;
     private NormalUnitFire normalUnitFire;
 
     private NetworkRigidbody2D _rb;
     private float HP;
 
+    private TickTimer dieTimer;
+
     void Awake()
     {
         initialized = false;
         _rb = GetComponent<NetworkRigidbody2D>();
-        
+        _netAnimator = GetComponent<NetworkMecanimAnimator>();
         animator = GetComponent<Animator>();
         bodyCollider = GetComponentInChildren<BodyCollider>();
         normalUnitFire = GetComponentInChildren<NormalUnitFire>();
@@ -68,14 +71,17 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         CheckDamaged();
         
         
-
+        if( dieTimer.Expired(Runner) )
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     protected bool Attack()
     {
         if (!AttackEnabled)
         {
-            animator.SetTrigger("Idle");
+            _netAnimator.Animator.SetTrigger("Idle");
             return false;
         }
 
@@ -86,8 +92,12 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         {
             if (col.CompareTag(TargetUnit))
             {
+                //Debug.Log("Target in");
                 normalUnitFire.TargetTranform = col.transform;
-                animator.SetTrigger("Attack");
+                //animator.SetTrigger("Attack");
+                _netAnimator.Animator.SetTrigger("Attack");
+                //Invoke("Fire", 0.4f);
+                
                 return true;
             }
         }
@@ -96,13 +106,18 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         return false;
     }
 
+    public void FireArrow()
+    {
+        normalUnitFire.Fire(Runner);
+    }
+
     private void Die()
     {
         //Debug.Log(HP);
         if (HP <= 0.0f)
         {
-            animator.SetTrigger("Die");
-            Invoke("DestroySelf", 0.26f);
+            _netAnimator.Animator.SetTrigger("Die");
+            dieTimer = TickTimer.CreateFromSeconds(Runner, 0.26f);
         }
     }
 
@@ -135,7 +150,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         {
             //Debug.Log("Stoped");
             _rb.Rigidbody.velocity = Vector2.zero;
-            animator.SetTrigger("Idle");
+            _netAnimator.Animator.SetTrigger("Idle");
             return;
         }
 
@@ -143,9 +158,9 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         Vector3 movDir = targetGround.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
         //Debug.Log( targetGround + " " + movDir);
-        if (Mathf.Abs(movDir.x) > 0.5 && Mathf.Abs(movDir.y) > 0.5f)
+        if (Mathf.Abs(movDir.x) > 0.1 && Mathf.Abs(movDir.y) > 0.1f)
         {
-            animator.SetTrigger("Run");
+            _netAnimator.Animator.SetTrigger("Run");
         }
 
         _rb.Rigidbody.velocity = movDirNormalized * testSpeed;
@@ -166,7 +181,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         {
             HP -= bodyCollider.Damaged;
             bodyCollider.Damaged = 0.0f;
-            animator.SetTrigger("Damaged");
+            _netAnimator.Animator.SetTrigger("Damaged");
             Die();
             Debug.Log(HP);
         }
