@@ -4,6 +4,9 @@ using FusionHelpers;
 using Tanknarok.UI;
 using TMPro;
 using UnityEngine;
+using System;
+using static UnityEngine.Random;
+using Random = UnityEngine.Random;
 
 namespace Agit.FortressCraft
 {
@@ -15,15 +18,14 @@ namespace Agit.FortressCraft
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
 		[SerializeField] private TMP_InputField _room;
-		[SerializeField] private TextMeshProUGUI _progress;
-		[SerializeField] private Panel _uiCurtain;
+        [SerializeField] private TMP_InputField playerName;
+        [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
 		[SerializeField] private Panel _uiRoom;
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 		[SerializeField] private TextMeshProUGUI _audioText;
-        [SerializeField] private TMP_InputField playerName;
 
 
 
@@ -31,6 +33,7 @@ namespace Agit.FortressCraft
 		private GameMode _gameMode;
 		private int _nextPlayerIndex;
 
+		private string randomRoomCode;
 
 
 		private void Awake()
@@ -62,21 +65,29 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		// What mode to play - Called from the start menu
-		public void OnHostOptions()
-		{
-			SetGameMode(GameMode.Host);
-		}
-
-		public void OnJoinOptions()
-		{
-			SetGameMode(GameMode.Client);
-		}
-
-		public void OnSharedOptions()
+		public void OnSharedOptions()  // using    App - UI Intro - Start Panel - CreateRoom, Join
 		{
 			SetGameMode(GameMode.Shared);
-		}
+            
+        }
+
+		public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
+        {
+            _room.gameObject.SetActive(false);
+            CreateRandomRoomCode();
+        }
+
+        private void CreateRandomRoomCode()
+		{
+            // 0에서 99999 사이의 랜덤 숫자 생성
+            int randomNumber = Random.Range(0, 100000);
+            // 숫자를 문자열로 변환하면서 5자리 포맷을 유지
+            string randomCode = randomNumber.ToString("D5");
+			_room.text = randomCode;
+
+			Debug.Log(_room.text);
+            _levelManager.SetRoomCode(_room.text);
+        }
 
 		public void OnCancel()
         {
@@ -184,7 +195,6 @@ namespace Agit.FortressCraft
 					break;
 			}
 
-			_uiCurtain.SetVisible(!running);
 			_uiStart.SetVisible(intro);
 			_uiProgress.SetVisible(progress);
 			_uiGame.SetActive(running);

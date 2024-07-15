@@ -5,6 +5,7 @@ using FusionHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using TMPro;
 
 namespace Agit.FortressCraft
 {
@@ -36,15 +37,29 @@ namespace Agit.FortressCraft
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
 		public ReadyUpManager readyUpManager => _readyUpManager;
 
-		[Networked] public string roomCode { get; set; }
+        [SerializeField] private TextMeshProUGUI roomCodeTMP;
+
+        [Networked, OnChangedRender(nameof(SetRoomCode))] public NetworkString<_32> RoomCode { get; set; }
 
 
 
-		private void Awake()
+        private void Awake()
 		{
 			_countdownManager.Reset();
 //			_scoreManager.ResetAllGameScores();
 		}
+
+		public void SetRoomCode(string roomCode)
+		{
+			RoomCode = roomCode;
+			RoomCodeUISync();
+        }
+
+		public void RoomCodeUISync()
+		{
+			Debug.Log(RoomCode.ToString() + " ROROROOM");
+            roomCodeTMP.text = "Room Code : " + RoomCode.ToString();
+        }
 
 		public override void Shutdown()
 		{
@@ -121,7 +136,7 @@ namespace Agit.FortressCraft
 				foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
 				{
 					Player player = (Player) fusionPlayer;
-					Debug.Log($"De-spawning tank {fusionPlayer.PlayerIndex}:{fusionPlayer}");
+					Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
 					player.TeleportOut();
 					yield return new WaitForSeconds(0.1f);
 				}

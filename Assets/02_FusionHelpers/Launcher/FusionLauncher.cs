@@ -53,7 +53,6 @@ namespace FusionHelpers
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
-
 			
 			launcher.playerName = playerName;
 

@@ -43,8 +43,8 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
-        [Networked] public NetworkString<_32> PlayerName { get; set; }
 
+        [Networked] public NetworkString<_32> PlayerName { get; set; }
         [SerializeField] TextMeshPro playerNameLabel;
 
         public enum Stage
@@ -135,6 +135,12 @@ namespace Agit.FortressCraft
             {
                 // _playerName 값을 NetworkString<_32>로 변환하여 PlayerName에 할당
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
+            }
+
+			var levelManager = FindObjectOfType<LevelManager>();
+			if (levelManager != null)
+			{
+                levelManager.RoomCodeUISync();
             }
             
         }
