@@ -4015,7 +4015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e690b5fb1084f5ab1c86457af401d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SyncScale: 0
+  SyncScale: 1
   SyncParent: 1
   _interpolationTarget: {fileID: 0}
   UsePreciseRotation: 0
@@ -4060,7 +4060,7 @@ MonoBehaviour:
   Animator: {fileID: 4571188272955174647}
   TotalWords: 7
   ApplyTiming: 2
-  SyncSettings: 79
+  SyncSettings: 111
   StateHashes: 00000000a4d79b1920f44df6dec3f04e7b8717f196b0ff5a8c21c5b029bdc670c27e4e8d958341e2dc70caa977967513ab4ce551
   TriggerHashes: 000000002b1a167c20e23b680d286c4037b9350177967513
 --- !u!1 &9121760705250729418

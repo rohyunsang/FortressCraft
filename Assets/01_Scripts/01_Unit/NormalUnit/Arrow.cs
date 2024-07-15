@@ -17,6 +17,8 @@ public class Arrow : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if ( TargetTransform == null ) return;
+
         Vector3 movDir = TargetTransform.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
         _rb.Rigidbody.velocity = movDirNormalized * arrowSpeed;

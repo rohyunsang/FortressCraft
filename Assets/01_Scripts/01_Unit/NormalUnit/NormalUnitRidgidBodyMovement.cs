@@ -33,6 +33,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         initialized = false;
         _rb = GetComponent<NetworkRigidbody2D>();
+        
         _netAnimator = GetComponent<NetworkMecanimAnimator>();
         animator = GetComponent<Animator>();
         bodyCollider = GetComponentInChildren<BodyCollider>();
@@ -67,7 +68,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         //Debug.Log("NormalUnitRigidBodyMovement is working");
         if (!Attack()) MoveToTarget();
         else _rb.Rigidbody.velocity = Vector2.zero;
-
+        
         CheckDamaged();
         
         
@@ -94,9 +95,17 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
             {
                 //Debug.Log("Target in");
                 normalUnitFire.TargetTranform = col.transform;
-                //animator.SetTrigger("Attack");
+
+                if( col.transform.position.x > transform.position.x )
+                {
+                    transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
+                }
+
                 _netAnimator.Animator.SetTrigger("Attack");
-                //Invoke("Fire", 0.4f);
                 
                 return true;
             }

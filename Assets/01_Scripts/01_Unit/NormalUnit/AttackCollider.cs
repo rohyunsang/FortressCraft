@@ -17,9 +17,12 @@ public class AttackCollider : MonoBehaviour
     {
         if( collision.CompareTag(TargetUnit) )
         {
-            collision.GetComponent<BodyCollider>().Damaged = _damage;
-            Debug.Log("Hit!");
-            arrow.DestroySelf();
+            if(collision.TryGetComponent<BodyCollider>(out BodyCollider bodycoliider))
+            {
+                bodycoliider.Damaged = _damage;
+                Debug.Log("Hit!");
+                arrow.DestroySelf();
+            }
         }
     }
 }
