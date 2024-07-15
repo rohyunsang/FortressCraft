@@ -23,10 +23,15 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 		[SerializeField] private TextMeshProUGUI _audioText;
+        [SerializeField] private TMP_InputField playerName;
 
-		private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
+
+
+        private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
 		private int _nextPlayerIndex;
+
+
 
 		private void Awake()
 		{
@@ -98,7 +103,7 @@ namespace Agit.FortressCraft
 					region = region.Split(" (")[0];
                 }
 
-				FusionLauncher.Launch(_gameMode, region, _room.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
+				FusionLauncher.Launch(_gameMode, region, _room.text, playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 			}
 		}
 

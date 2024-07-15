@@ -36,6 +36,10 @@ namespace Agit.FortressCraft
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
 		public ReadyUpManager readyUpManager => _readyUpManager;
 
+		[Networked] public string roomCode { get; set; }
+
+
+
 		private void Awake()
 		{
 			_countdownManager.Reset();
@@ -113,7 +117,7 @@ namespace Agit.FortressCraft
 				InputController.fetchInput = false;
 
 				// Despawn players with a small delay between each one
-				Debug.Log("De-spawning all tanks");
+				Debug.Log("De-spawning all players");
 				foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
 				{
 					Player player = (Player) fusionPlayer;

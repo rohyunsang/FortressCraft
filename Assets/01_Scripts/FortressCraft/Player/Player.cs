@@ -1,5 +1,6 @@
 using Fusion;
 using FusionHelpers;
+using TMPro;
 using UnityEngine;
 
 namespace Agit.FortressCraft
@@ -42,8 +43,11 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+        [Networked] public NetworkString<_32> PlayerName { get; set; }
 
-		public enum Stage
+        [SerializeField] TextMeshPro playerNameLabel;
+
+        public enum Stage
 		{
 			New,
 			TeleportOut,
@@ -122,9 +126,20 @@ namespace Agit.FortressCraft
 			
 			RegisterEventListener( (DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage) );
 			RegisterEventListener( (PickupEvent evt) => OnPickup(evt));
-		}
 
-		public override void Despawned(NetworkRunner runner, bool hasState)
+            // PlayerName Change
+            
+            var fusionLauncher = FindObjectOfType<FusionLauncher>();
+
+            if (fusionLauncher != null)
+            {
+                // _playerName 값을 NetworkString<_32>로 변환하여 PlayerName에 할당
+                PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
+            }
+            
+        }
+
+        public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
@@ -199,6 +214,9 @@ namespace Agit.FortressCraft
 					case nameof(stage):
 						OnStageChanged();
 						break;
+					case nameof(PlayerName):
+						OnPlayerNameChanged();
+                        break;
 				}
 			}
 				
@@ -326,6 +344,11 @@ namespace Agit.FortressCraft
 				}
 			}
 		}
+
+		public void OnPlayerNameChanged()
+		{
+			playerNameLabel.text = PlayerName.ToString();
+        }
 
 		public void OnStageChanged()
 		{
