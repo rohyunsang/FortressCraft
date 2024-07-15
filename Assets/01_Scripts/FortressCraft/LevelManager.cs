@@ -37,7 +37,7 @@ namespace Agit.FortressCraft
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
 		public ReadyUpManager readyUpManager => _readyUpManager;
 
-        [SerializeField] private TextMeshProUGUI roomCodeTMP;
+        [SerializeField] public TextMeshProUGUI roomCodeTMP;
 
         [Networked, OnChangedRender(nameof(SetRoomCode))] public NetworkString<_32> RoomCode { get; set; }
 
@@ -57,7 +57,6 @@ namespace Agit.FortressCraft
 
 		public void RoomCodeUISync()
 		{
-			Debug.Log(RoomCode.ToString() + " ROROROOM");
             roomCodeTMP.text = "Room Code : " + RoomCode.ToString();
         }
 

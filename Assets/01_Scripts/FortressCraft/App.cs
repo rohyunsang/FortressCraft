@@ -68,10 +68,14 @@ namespace Agit.FortressCraft
 		public void OnSharedOptions()  // using    App - UI Intro - Start Panel - CreateRoom, Join
 		{
 			SetGameMode(GameMode.Shared);
-            
+			
+        }
+		public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
+        {
+			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
         }
 
-		public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
+        public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
         {
             _room.gameObject.SetActive(false);
             CreateRandomRoomCode();
