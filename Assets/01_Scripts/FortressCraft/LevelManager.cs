@@ -26,7 +26,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private ScoreManager _scoreManager;
 		[FormerlySerializedAs("_readyupManager")] [SerializeField] private ReadyUpManager _readyUpManager;
 		[SerializeField] private CountdownManager _countdownManager;
-		[SerializeField] private AudioEmitter _audioEmitter;
 
 		[SerializeField] private int _lobby;
 		[SerializeField] private int[] _levels;
@@ -99,7 +98,7 @@ namespace Agit.FortressCraft
 				//UnloadScene();
 				_loadedScene = SceneRef.None;
 			}
-			Debug.Log($"LevelManager.LoadLevel({nextLevelIndex});");
+			// Debug.Log($"LevelManager.LoadLevel({nextLevelIndex});");
 			if (nextLevelIndex < 0)
 			{
 				Runner.LoadScene(SceneRef.FromIndex(_lobby), new LoadSceneParameters(LoadSceneMode.Additive), true);
@@ -163,7 +162,6 @@ namespace Agit.FortressCraft
 			if (newScene.AsIndex == 0)
 				yield break;
 			
-			_audioEmitter.Play();
 			
 			onStatusUpdate?.Invoke( Runner, FusionLauncher.ConnectionStatus.Loading, "");
 
@@ -181,11 +179,9 @@ namespace Agit.FortressCraft
 			_currentLevel = FindObjectOfType<LevelBehaviour>();
 			if(_currentLevel!=null)
 				_currentLevel.Activate();
-			MusicPlayer.instance.SetLowPassTranstionDirection( newScene.AsIndex>_lobby ? 1f : -1f);
 
 			yield return new WaitForSeconds(0.3f);
 
-			_audioEmitter.Stop();
 
 			GameManager gameManager;
 			while (!Runner.TryGetSingleton(out gameManager))

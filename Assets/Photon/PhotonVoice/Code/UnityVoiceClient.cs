@@ -198,6 +198,8 @@ namespace Photon.Voice.Unity
         /// <summary>
         /// Primary Recorder to be used by VoiceConnection implementations directly or via integration objects.
         /// </summary>
+        /// 
+
         public Recorder PrimaryRecorder
         {
             get => this.primaryRecorder;

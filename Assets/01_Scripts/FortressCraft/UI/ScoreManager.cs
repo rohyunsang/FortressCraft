@@ -18,7 +18,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private float _doubleDigitSpacing;
 
 		[SerializeField] private ParticleSystem _confetti;
-		[SerializeField] private AudioEmitter _audioEmitter;
 
 		private Dictionary<int, FinalGameScoreUI> _finalGameScoreUI = new ();
 		private Dictionary<PlayerRef, IntermediateLevelScoreUI> _intermediateLevelScoreUI = new Dictionary<PlayerRef, IntermediateLevelScoreUI>();
@@ -62,7 +61,6 @@ namespace Agit.FortressCraft
 			_confetti.transform.position = _finalGameScoreUI[gameManager.matchWinner.PlayerIndex].transform.position + Vector3.up;
 			_confetti.Play();
 
-			_audioEmitter.PlayOneShot();
 		}
 
 		public void ResetAllGameScores()

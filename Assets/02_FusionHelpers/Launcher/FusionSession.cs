@@ -48,7 +48,7 @@ namespace FusionHelpers
 				{
 					if (!_players.TryGetValue(refByIndex.Value, out _))
 					{
-						Debug.Log($"I am State Auth for Player Index {refByIndex.Key} - Spawning Avatar");
+						// Debug.Log($"I am State Auth for Player Index {refByIndex.Key} - Spawning Avatar");
 						Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, refByIndex.Value, (runner, o) =>
 						{
 							Runner.SetPlayerObject(refByIndex.Value, o);
