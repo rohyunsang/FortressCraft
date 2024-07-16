@@ -52,10 +52,11 @@ namespace Photon.Voice.Fusion
 
         protected override void Start()
         {
-            
+            Debug.Log("Audio : Start");
             // skip "Temporary Runner Prefab"
             if (this.networkRunner.State == NetworkRunner.States.Shutdown)
             {
+                Debug.Log("aaaaaaaaaaaaaaaaaaAudio : return?");
                 return;
             }
             // Actual start code if the runner is already connecting
@@ -69,7 +70,7 @@ namespace Photon.Voice.Fusion
 
             voiceFollowClientStarted = true;
             base.Start();
-
+            Debug.Log("Audio : return?");
             if (this.UsePrimaryRecorder)
             {
                 if (this.PrimaryRecorder != null)
@@ -86,16 +87,11 @@ namespace Photon.Voice.Fusion
         protected override void Awake()
         {
             base.Awake();
-
-            this.networkRunner = this.GetComponent<NetworkRunner>();
-
-            // Step 2 Recorder Connecting 
-
+            
             this.PrimaryRecorder = GameObject.FindGameObjectWithTag("Recorder").GetComponent<Recorder>();
-
-            // Step 3 Speaker Connecting 
-
             this.SpeakerPrefab = Resources.Load<GameObject>("[Speaker]");
+
+            this.networkRunner = GetComponent<NetworkRunner>();
 
             VoiceRegisterCustomTypes();
         }
@@ -164,6 +160,7 @@ namespace Photon.Voice.Fusion
             {
 #if FUSION2
                 settings.AppIdVoice = PhotonAppSettings.Global.AppSettings.AppIdVoice;
+                Debug.Log("settings.AppIdVoice " + settings.AppIdVoice);
                 settings.AppVersion = PhotonAppSettings.Global.AppSettings.AppVersion;
                 settings.FixedRegion = PhotonAppSettings.Global.AppSettings.FixedRegion;
                 settings.UseNameServer = PhotonAppSettings.Global.AppSettings.UseNameServer;
