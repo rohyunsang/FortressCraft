@@ -3,6 +3,7 @@ namespace Photon.Voice.Fusion
 {
     using global::Fusion;
     using global::Fusion.Sockets;
+    // using PhotonAppSettings2 = global::Fusion.Photon.Voice.PhotonAppSettings;
     using PhotonAppSettings = global::Fusion.Photon.Realtime.PhotonAppSettings;
     using System.Collections.Generic;
     using Realtime;
@@ -86,10 +87,10 @@ namespace Photon.Voice.Fusion
 
         protected override void Awake()
         {
-            base.Awake();
-            
             this.PrimaryRecorder = GameObject.FindGameObjectWithTag("Recorder").GetComponent<Recorder>();
             this.SpeakerPrefab = Resources.Load<GameObject>("[Speaker]");
+            
+            base.Awake();
 
             this.networkRunner = GetComponent<NetworkRunner>();
 
@@ -160,7 +161,6 @@ namespace Photon.Voice.Fusion
             {
 #if FUSION2
                 settings.AppIdVoice = PhotonAppSettings.Global.AppSettings.AppIdVoice;
-                Debug.Log("settings.AppIdVoice " + settings.AppIdVoice);
                 settings.AppVersion = PhotonAppSettings.Global.AppSettings.AppVersion;
                 settings.FixedRegion = PhotonAppSettings.Global.AppSettings.FixedRegion;
                 settings.UseNameServer = PhotonAppSettings.Global.AppSettings.UseNameServer;
