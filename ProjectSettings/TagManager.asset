@@ -12,6 +12,7 @@ TagManager:
   - Ground_B
   - Ground_C
   - Ground_D
+  - Attack
   layers:
   - Default
   - TransparentFX

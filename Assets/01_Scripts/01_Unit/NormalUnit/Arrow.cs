@@ -22,12 +22,14 @@ public class Arrow : NetworkBehaviour
         Vector3 movDir = TargetTransform.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
         _rb.Rigidbody.velocity = movDirNormalized * arrowSpeed;
+
+        float angle = Mathf.Atan2(movDir.y, movDir.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = targetRotation;
     }
 
     public void DestroySelf()
     {
         Destroy(this.gameObject);
     }
-
-
 }

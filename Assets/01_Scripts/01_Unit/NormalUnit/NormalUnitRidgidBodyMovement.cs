@@ -5,6 +5,8 @@ using static UnityEngine.EventSystems.PointerEventData;
 
 public class NormalUnitRigidBodyMovement : NetworkBehaviour
 {
+    public NormalUintSpawner Spawner { get; set; }
+
     private Transform ground_A;
     private Transform ground_B;
     private Transform ground_C;
@@ -51,6 +53,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
     public void Initializing()
     {
+        if (initialized) TargetString = Spawner.Target;
         TargetGround = "Ground_" + TargetString;
         TargetUnit = "Unit_" + TargetString;
         initialized = true;
@@ -71,11 +74,12 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         
         CheckDamaged();
         
-        
         if( dieTimer.Expired(Runner) )
         {
             Destroy(this.gameObject);
         }
+        
+        Initializing();
     }
 
     protected bool Attack()
@@ -134,7 +138,6 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         Transform targetGround;
 
-
         if (TargetGround.CompareTo("Ground_A") == 0)
         {
             targetGround = ground_A;
@@ -165,6 +168,8 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
 
         Vector3 movDir = targetGround.position - transform.position;
+
+
         Vector3 movDirNormalized = movDir.normalized;
         //Debug.Log( targetGround + " " + movDir);
         if (Mathf.Abs(movDir.x) > 0.1 && Mathf.Abs(movDir.y) > 0.1f)
@@ -192,13 +197,12 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
             bodyCollider.Damaged = 0.0f;
             _netAnimator.Animator.SetTrigger("Damaged");
             Die();
-            Debug.Log(HP);
+            //Debug.Log(HP);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-
         if (collision.CompareTag("Ground_A"))
         {
             nowGround = "Ground_A";
@@ -215,10 +219,5 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         {
             nowGround = "Ground_D";
         }
-        else
-        {
-            nowGround = "Bridge";
-        }
-        //Debug.Log(nowGround);
     }
 }

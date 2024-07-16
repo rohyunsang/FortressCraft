@@ -133,7 +133,7 @@ namespace Agit.FortressCraft
 
             if (fusionLauncher != null)
             {
-                // _playerName 값을 NetworkString<_32>로 변환하여 PlayerName에 할당
+                // _playerName ???? NetworkString<_32>?? ???????? PlayerName?? ????
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
             

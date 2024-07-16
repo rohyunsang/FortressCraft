@@ -14,7 +14,7 @@ public class NormalUnitGenerator : NetworkBehaviour
     public override void Spawned()
     {
         spawner = GetComponent<NormalUintSpawner>();
-        SetWaitingTime();
+        if( spawner.Usable ) SetWaitingTime();
     }
 
     public override void FixedUpdateNetwork()
@@ -24,7 +24,7 @@ public class NormalUnitGenerator : NetworkBehaviour
         if (spawnTimer.Expired(Runner))
         {
             //Debug.Log(Id);
-            spawnTimer = TickTimer.CreateFromSeconds(Runner, spwanTime);
+            SetWaitingTime();
             spawner.SpawnUnit(Runner);
         }
     }
