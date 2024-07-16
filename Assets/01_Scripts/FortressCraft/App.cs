@@ -31,9 +31,6 @@ namespace Agit.FortressCraft
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
-		private int _nextPlayerIndex;
-
-		private string randomRoomCode;
 
 
 		private void Awake()

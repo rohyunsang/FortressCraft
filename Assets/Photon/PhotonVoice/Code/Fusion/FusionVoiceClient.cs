@@ -12,7 +12,6 @@ namespace Photon.Voice.Fusion
     using System;
 
     [AddComponentMenu("Photon Voice/Fusion/Fusion Voice Client")]
-    [RequireComponent(typeof(NetworkRunner))]
     public class FusionVoiceClient : VoiceFollowClient, INetworkRunnerCallbacks
     {
         // abstract VoiceFollowClient implementation
@@ -53,6 +52,7 @@ namespace Photon.Voice.Fusion
 
         protected override void Start()
         {
+            
             // skip "Temporary Runner Prefab"
             if (this.networkRunner.State == NetworkRunner.States.Shutdown)
             {
@@ -88,6 +88,15 @@ namespace Photon.Voice.Fusion
             base.Awake();
 
             this.networkRunner = this.GetComponent<NetworkRunner>();
+
+            // Step 2 Recorder Connecting 
+
+            this.PrimaryRecorder = GameObject.FindGameObjectWithTag("Recorder").GetComponent<Recorder>();
+
+            // Step 3 Speaker Connecting 
+
+            this.SpeakerPrefab = Resources.Load<GameObject>("[Speaker]");
+
             VoiceRegisterCustomTypes();
         }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Fusion;
 using Fusion.Photon.Realtime;
 using Fusion.Sockets;
+using Photon.Voice;
+using Photon.Voice.Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -56,10 +58,6 @@ namespace FusionHelpers
 			
 			launcher.playerName = playerName;
 
-            // In non-shared mode, we need a hitbox manager to make sure lag compensation works properly.
-            if (mode != GameMode.Shared)
-				launcher.gameObject.AddComponent<HitboxManager>();
-
 			launcher.InternalLaunch(mode,region,room, sessionPrefab, sceneLoader, onConnect);
 			return launcher;
 		}
@@ -78,11 +76,14 @@ namespace FusionHelpers
 			runner.name = name;
 			runner.ProvideInput = mode != GameMode.Server;
 
-			 NetworkSceneInfo scene = new NetworkSceneInfo();
+			// Voice 
+			gameObject.AddComponent<FusionVoiceClient>();
+
+			NetworkSceneInfo scene = new NetworkSceneInfo();
 			scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
-			// An empty region will use the best region.
-			PhotonAppSettings.Global.AppSettings.FixedRegion = region;
+            // An empty region will use the best region.
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice에도 PhotonAppSettings가 있어서 모호 참조 에러뜬다. 
 
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
