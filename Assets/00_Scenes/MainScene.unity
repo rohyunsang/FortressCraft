@@ -1192,6 +1192,7 @@ MonoBehaviour:
   _uiGame: {fileID: 7620482187611796560}
   _regionDropdown: {fileID: 990872702}
   _audioText: {fileID: 359349355}
+  roomCode: 
 --- !u!4 &322567093
 Transform:
   m_ObjectHideFlags: 0
@@ -3010,7 +3011,7 @@ MonoBehaviour:
   RandomRoom: 0
   autoConnect: 1
   publishUserId: 1
-  RoomName: 33333
+  RoomName: 
 --- !u!1 &682423115
 GameObject:
   m_ObjectHideFlags: 0
@@ -6364,6 +6365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1353448200}
   - component: {fileID: 1353448198}
+  - component: {fileID: 1353448201}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -6409,6 +6411,14 @@ Transform:
   - {fileID: 922821742}
   m_Father: {fileID: 322567093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1353448201
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353448197}
+  m_Enabled: 1
 --- !u!1 &1358977782
 GameObject:
   m_ObjectHideFlags: 0
@@ -7919,18 +7929,6 @@ MonoBehaviour:
       - m_Target: {fileID: 322567092}
         m_TargetAssemblyTypeName: FusionExamples.Tanknarok.App, Assembly-CSharp
         m_MethodName: OnSharedOptions
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 322567092}
-        m_TargetAssemblyTypeName: Agit.FortressCraft.App, Assembly-CSharp
-        m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

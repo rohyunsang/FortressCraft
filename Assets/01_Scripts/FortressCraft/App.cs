@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using static UnityEngine.Random;
 using Random = UnityEngine.Random;
+using Photon.Voice.Unity.UtilityScripts;
 
 namespace Agit.FortressCraft
 {
@@ -27,6 +28,7 @@ namespace Agit.FortressCraft
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 		[SerializeField] private TextMeshProUGUI _audioText;
 
+		public string roomCode = "";
 
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
@@ -70,6 +72,8 @@ namespace Agit.FortressCraft
 		public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
         {
 			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
+			roomCode = _room.text;
+            SetVoiceRoomName();
         }
 
         public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
@@ -84,11 +88,26 @@ namespace Agit.FortressCraft
             int randomNumber = Random.Range(0, 100000);
             // 숫자를 문자열로 변환하면서 5자리 포맷을 유지
             string randomCode = randomNumber.ToString("D5");
-			_room.text = randomCode;
+			
+			roomCode = randomCode;
+            _room.text = randomCode;
 
 			Debug.Log(_room.text);
+
             _levelManager.SetRoomCode(_room.text);
+
+			SetVoiceRoomName();
+
         }
+
+		private void SetVoiceRoomName()
+		{
+			GameObject recorder = GameObject.FindGameObjectWithTag("Recorder");
+			if (recorder != null)
+			{
+				recorder.GetComponent<ConnectAndJoin>().RoomName = roomCode;
+			}
+		}
 
 		public void OnCancel()
         {

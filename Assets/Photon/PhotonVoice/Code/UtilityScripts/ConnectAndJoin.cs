@@ -39,7 +39,7 @@ namespace Photon.Voice.Unity.UtilityScripts
 
         public bool IsConnected { get { return this.voiceConnection != null && this.voiceConnection.Client != null && this.voiceConnection.Client.IsConnected; } }
 
-        public void Init() // using Button 
+        public void Init() // using Button UI - VoiceManager - VoiceOn
        {
             this.voiceConnection = this.GetComponent<VoiceConnection>();
             this.voiceConnection.Client.AddCallbackTarget(this);
