@@ -138,6 +138,7 @@
                     if (GUILayout.Button("Disconnect"))
                     {
                         connection.Client.Disconnect();
+                        // 이 함수를 사용해야 한다. 
                     }
                 }
             }

@@ -10,8 +10,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Transactions;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -36,6 +38,11 @@ namespace Photon.Voice.Unity
             {
                 AddRecorder(this.PrimaryRecorder);
             }
+        }
+
+        public void DisConnectVoice() // using Button  UI - Lobby - VoiceManager - VoiceOn
+        {
+            base.Client.Disconnect();
         }
 
         public override bool ConnectUsingSettings(AppSettings overwriteSettings = null)
@@ -191,6 +198,7 @@ namespace Photon.Voice.Unity
 #if UNITY_EDITOR
         public List<RemoteVoiceLink> CachedRemoteVoices
         {
+            
             get { return this.cachedRemoteVoices; }
         }
 #endif
@@ -351,6 +359,7 @@ namespace Photon.Voice.Unity
 
         protected virtual void OnDestroy()
         {
+            Debug.Log("bbbbbbb");
             this.client.StateChanged -= this.OnVoiceStateChanged;
             this.client.OpResponseReceived -= this.OnOperationResponseReceived;
             this.client.Disconnect();
