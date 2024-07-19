@@ -357,7 +357,6 @@ namespace Photon.Voice.Unity
 
         protected virtual void OnDestroy()
         {
-            Debug.Log("bbbbbbb");
             this.client.StateChanged -= this.OnVoiceStateChanged;
             this.client.OpResponseReceived -= this.OnOperationResponseReceived;
             this.client.Disconnect();
