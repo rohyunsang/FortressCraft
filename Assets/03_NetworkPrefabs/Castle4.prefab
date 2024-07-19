@@ -639,7 +639,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitPrefab:
     RawGuidValue: 3f0bbddaaf792489b85450e599278580
-  target: A
+  player: {fileID: 0}
+  initialTarget: A
 --- !u!114 &5657599004905199562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,11 +666,12 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1325487631
+  SortKey: 1641716866
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 7278009121461960068}
   - {fileID: 5657599004905199562}
 --- !u!1 &9091242899121908273
 GameObject:

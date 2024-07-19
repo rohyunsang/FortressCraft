@@ -12,11 +12,17 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     private Transform ground_C;
     private Transform ground_D;
     [SerializeField] private int testSpeed;
+
     public string TargetString { get; set; }
 
     public bool AttackEnabled { get; set; }
     public string TargetGround { get; set; }
     public string TargetUnit { get; set; }
+    public float Damage { get; set; }
+
+    private readonly static int animAttackBow =
+        Animator.StringToHash("Base Layer.2_Attack_Bow");
+    private AnimatorStateInfo animatorState;
 
     private bool initialized = false;
     private string nowGround;
@@ -53,27 +59,46 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
     public void Initializing()
     {
-        if (initialized) TargetString = Spawner.Target;
+        if (initialized)
+        {   // RPC Properties
+            TargetString = Spawner.Target;
+            AttackEnabled = Spawner.AttackEnabled;
+            Damage = Spawner.Damage;
+        }
+
         TargetGround = "Ground_" + TargetString;
         TargetUnit = "Unit_" + TargetString;
         initialized = true;
     }
 
-    public override void Spawned()
-    {
-        Runner.SetPlayerAlwaysInterested(Object.InputAuthority, Object, true);
-    }
-
-
     public override void FixedUpdateNetwork()
     {
         if (!initialized) return;
+        
+        Debug.Log("Attack: " + AttackEnabled);
         //Debug.Log("NormalUnitRigidBodyMovement is working");
+        //Debug.Log( Spawner.AttackEnabled + " / " + AttackEnabled);
         if (!Attack()) MoveToTarget();
         else _rb.Rigidbody.velocity = Vector2.zero;
         
+        animatorState = animator.GetCurrentAnimatorStateInfo(0);
+
+        if( animatorState.fullPathHash != animAttackBow )
+        {
+            if (_rb.Rigidbody.velocity.x != 0.0f || _rb.Rigidbody.velocity.y != 0.0f)
+            {
+                _netAnimator.Animator.SetTrigger("Run");
+            }
+            else
+            {
+                _netAnimator.Animator.SetTrigger("Idle");
+            }
+        }
+
         CheckDamaged();
-        
+
+        Debug.Log(Spawner);
+
         if( dieTimer.Expired(Runner) )
         {
             Destroy(this.gameObject);
@@ -86,7 +111,6 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         if (!AttackEnabled)
         {
-            _netAnimator.Animator.SetTrigger("Idle");
             return false;
         }
 
@@ -109,12 +133,13 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
                     transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
                 }
 
-                _netAnimator.Animator.SetTrigger("Attack");
+                if (animatorState.fullPathHash != animAttackBow) {
+                    _netAnimator.Animator.SetTrigger("Attack");
+                }
                 
                 return true;
             }
         }
-
 
         return false;
     }
@@ -156,27 +181,18 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         }
 
         //Debug.Log(targetGround);
-
         //Debug.Log(TargetGround + " " + nowGround);
         if (TargetGround.CompareTo(nowGround) == 0)
         {
             //Debug.Log("Stoped");
             _rb.Rigidbody.velocity = Vector2.zero;
-            _netAnimator.Animator.SetTrigger("Idle");
+            //_netAnimator.Animator.SetTrigger("Idle");
             return;
         }
 
-
         Vector3 movDir = targetGround.position - transform.position;
-
-
         Vector3 movDirNormalized = movDir.normalized;
-        //Debug.Log( targetGround + " " + movDir);
-        if (Mathf.Abs(movDir.x) > 0.1 && Mathf.Abs(movDir.y) > 0.1f)
-        {
-            _netAnimator.Animator.SetTrigger("Run");
-        }
-
+        
         _rb.Rigidbody.velocity = movDirNormalized * testSpeed;
 
         if (movDir.x > 0)

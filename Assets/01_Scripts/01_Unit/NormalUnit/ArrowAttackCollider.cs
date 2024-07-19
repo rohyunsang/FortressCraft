@@ -13,11 +13,12 @@ public class ArrowAttackCollider : AttackCollider
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (TargetUnit == null) return;
         if (collision.CompareTag(TargetUnit))
         {
             if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycoliider))
             {
-                bodycoliider.Damaged = _damage;
+                bodycoliider.Damaged = Damage;
                 //Debug.Log("Hit!");
                 arrow.DestroySelf();
             }

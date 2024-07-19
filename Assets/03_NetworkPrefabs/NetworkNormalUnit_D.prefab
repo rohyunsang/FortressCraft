@@ -2333,7 +2333,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_Sprite: {fileID: 3923885903126733222, guid: d24756e433435b249be5737019648d69, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.96996236, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2710,7 +2710,7 @@ MonoBehaviour:
   TotalWords: 7
   ApplyTiming: 2
   SyncSettings: 111
-  StateHashes: 00000000a4d79b1920f44df6dec3f04e7b8717f196b0ff5a8c21c5b029bdc670c27e4e8d8ec27c719453469b958341e2dc70caa977967513ab4ce551
+  StateHashes: 00000000a4d79b1920f44df6dec3f04e7b8717f196b0ff5a8c21c5b029bdc670c27e4e8d497ab0cd9b2400f777967513ab4ce551
   TriggerHashes: 000000002b1a167c20e23b680d286c4037b9350177967513
 --- !u!1 &5943304329288923704
 GameObject:

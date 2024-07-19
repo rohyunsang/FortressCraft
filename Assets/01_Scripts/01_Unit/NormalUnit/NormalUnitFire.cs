@@ -23,7 +23,9 @@ public class NormalUnitFire : MonoBehaviour, INetworkRunnerCallbacks
         NetworkObject networkObject = runner.Spawn(arrow, transform.position, Quaternion.identity);
 
         networkObject.GetComponent<Arrow>().TargetTransform = TargetTranform;
-        networkObject.GetComponentInChildren<AttackCollider>().TargetUnit = TargetUnit;
+        AttackCollider attackCollider = networkObject.GetComponentInChildren<AttackCollider>();
+        attackCollider.TargetUnit = TargetUnit;
+        attackCollider.Damage = normalUnit.Damage;
     }
 
     #region unused Callbacks

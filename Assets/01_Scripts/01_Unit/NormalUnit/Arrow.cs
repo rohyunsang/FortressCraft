@@ -19,6 +19,12 @@ public class Arrow : NetworkBehaviour
     {
         if ( TargetTransform == null ) return;
 
+        if (Mathf.Abs(TargetTransform.position.x - transform.position.x) < 0.05f &&
+            Mathf.Abs(TargetTransform.position.y - transform.position.y) < 0.05f) {
+            _rb.Rigidbody.velocity = Vector2.zero;
+            return;
+        }
+
         Vector3 movDir = TargetTransform.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
         _rb.Rigidbody.velocity = movDirNormalized * arrowSpeed;

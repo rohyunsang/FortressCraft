@@ -14,7 +14,6 @@ public class ChangeTarget : NetworkBehaviour
     private void Awake()
     {
         spawners = GameObject.FindObjectsOfType<NormalUintSpawner>();
-
         btns = GetComponentsInChildren<Button>();
 
         foreach (Button btn in btns)
@@ -35,9 +34,14 @@ public class ChangeTarget : NetworkBehaviour
             {
                 btn.onClick.AddListener(setTargetD);
             }
+            else if(btn.transform.name == "Button_Attack")
+            {
+                btn.onClick.AddListener(SetAttack);
+            }
         }
-
     }
+
+    
 
     private void FixedUpdate()
     {
@@ -53,26 +57,16 @@ public class ChangeTarget : NetworkBehaviour
             if (spawner.player.PlayerId.PlayerId == Runner.LocalPlayer.PlayerId)
             {
                 targetSpawner = spawner;
-
                 break;
             }
         }
     }
-
-    
 
     public void setTargetA()
     {
         if (targetSpawner == null) return;
         Debug.Log("Set as A");
         targetSpawner.RPCTargetChange("A");
-        /*
-        foreach (NormalUintSpawner spawner in spawners)
-        {
-            Debug.Log("Set as A");
-            spawner.RPCTargetChange("A");
-        }
-        */
     }
 
 
@@ -81,13 +75,6 @@ public class ChangeTarget : NetworkBehaviour
         if (targetSpawner == null) return;
         Debug.Log("Set as B");
         targetSpawner.RPCTargetChange("B");
-        /*
-        foreach (NormalUintSpawner spawner in spawners)
-        {
-            Debug.Log("Set as B");
-            spawner.RPCTargetChange("B");
-        }
-        */
     }
 
     public void setTargetC()
@@ -95,13 +82,6 @@ public class ChangeTarget : NetworkBehaviour
         if (targetSpawner == null) return;
         Debug.Log("Set as C");
         targetSpawner.RPCTargetChange("C");
-        /*
-        foreach (NormalUintSpawner spawner in spawners)
-        {
-            Debug.Log("Set as C");
-            spawner.RPCTargetChange("C");
-        }
-        */
     }
 
     public void setTargetD()
@@ -109,13 +89,31 @@ public class ChangeTarget : NetworkBehaviour
         if (targetSpawner == null) return;
         Debug.Log("Set as D");
         targetSpawner.RPCTargetChange("D");
-        /*
-        foreach (NormalUintSpawner spawner in spawners)
-        {
-            Debug.Log("Set as D");
-            spawner.RPCTargetChange("D");
-        }
-        */
     }
 
+    public void SetAttack()
+    {
+        if (targetSpawner == null) return;
+
+        if( targetSpawner.AttackEnabled == true )
+        {
+            OffAttack();
+        }
+        else
+        {
+            OnAttack();
+        }
+    }
+
+    private void OffAttack()
+    {
+        Debug.Log("Off Attack");
+        targetSpawner.RPCSettingAttackEnabled("Off");
+    }
+
+    private void OnAttack()
+    {
+        Debug.Log("On Attack");
+        targetSpawner.RPCSettingAttackEnabled("On");
+    }
 }

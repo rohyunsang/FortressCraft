@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4197238505315720056}
   m_Layer: 20
   m_Name: Trigger
-  m_TagString: Untagged
+  m_TagString: Ground_B
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -639,7 +639,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitPrefab:
     RawGuidValue: 1fe22e38493b948af8f90f8bf79cef7a
-  target: C
+  player: {fileID: 0}
+  initialTarget: C
 --- !u!114 &3011124483476639218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,11 +666,12 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 765501035
+  SortKey: 3037595695
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 7453605011642941100}
   - {fileID: 3011124483476639218}
 --- !u!1 &9007116973177074890
 GameObject:

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class AttackCollider : MonoBehaviour
 {
-    [SerializeField] protected float _damage;
+    public float Damage { get; set; }
     public string TargetUnit { get; set; }
 }

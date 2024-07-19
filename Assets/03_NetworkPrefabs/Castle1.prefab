@@ -723,7 +723,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitPrefab:
     RawGuidValue: ee912bbe7b6884806b13cd793b4d29ad
-  target: B
+  player: {fileID: 0}
+  initialTarget: B
 --- !u!114 &6243358051450147233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,4 +755,5 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 135369399474149061}
   - {fileID: 6243358051450147233}
