@@ -1276,9 +1276,12 @@ namespace Photon.Chat
 
         private void HandleChatMessagesEvent(EventData eventData)
         {
+            Debug.WriteLine("Processing chat messages event");
             object[] messages = (object[])eventData.Parameters[(byte)ChatParameterCode.Messages];
             string[] senders = (string[])eventData.Parameters[(byte)ChatParameterCode.Senders];
             string channelName = (string)eventData.Parameters[(byte)ChatParameterCode.Channel];
+            Debug.WriteLine($"Channel: {channelName}, Messages: {messages.Length}, Senders: {senders.Length}");
+
             int lastMsgId = (int)eventData.Parameters[ChatParameterCode.MsgId];
 
             ChatChannel channel;

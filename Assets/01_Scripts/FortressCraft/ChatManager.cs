@@ -3,85 +3,136 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Chat;
 using ExitGames.Client.Photon;
-using Fusion.Photon.Realtime;
+using PhotonAppSettings = global::Fusion.Photon.Realtime.PhotonAppSettings;
 using AuthenticationValues = Photon.Chat.AuthenticationValues;
+using TMPro;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
     public class ChatManager : MonoBehaviour, IChatClientListener
     {
+        [SerializeField] private PhotonAppSettings photonSettings;
+
+        bool isConnected = false;
 
         ChatClient chatClient;
-        [SerializeField] string userID = "";
+
+        public string userID = "";
+        public string roomCode = "";
+
+        public string privateReceiver = "";
+
+        public Text chatDisplay;
+        [SerializeField] private TMP_InputField chatField;
+        private string currentChat = "";
+        public Button sendButton;
 
         // Start is called before the first frame update
-        void Start()
+        public void Init()  
         {
-            AppSettings settings = new AppSettings();
 
-            chatClient = new ChatClient (this);
+            chatClient = new ChatClient(this);
+            var settings = photonSettings.AppSettings;
+
             chatClient.Connect(settings.AppIdChat, settings.AppVersion, new AuthenticationValues(userID));
+            Debug.Log("userID " + userID);
+            chatClient.Subscribe(new string[] { "1234" });
+
+            sendButton.onClick.AddListener(SubmitPublicChat);
         }
 
         // Update is called once per frame
         void Update()
         {
-            chatClient.Service();
+
+            if (isConnected)
+            {
+                chatClient.Service();
+            }
+        }
+
+        public void SubmitPublicChat()
+        {
+            if (privateReceiver == "")
+            {
+                chatClient.PublishMessage(roomCode, chatField.text); // Make sure the correct channel is used
+                Debug.Log($"Message published to {roomCode}: {chatField.text}");
+                currentChat = "";
+                chatField.text = "";
+            }
         }
 
         public void DebugReturn(DebugLevel level, string message)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnChatStateChange(ChatState state)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnConnected()
         {
-            throw new System.NotImplementedException();
+            isConnected = true;
+
+            Debug.Log("Connected to Photon Chat");
         }
 
         public void OnDisconnected()
         {
-            throw new System.NotImplementedException();
+            isConnected = false;
+
+            Debug.Log("Disconnected from Photon Chat");
         }
 
         public void OnGetMessages(string channelName, string[] senders, object[] messages)
         {
-            throw new System.NotImplementedException();
+            if (messages.Length > 0)
+            {
+                Debug.Log($"Received messages on {channelName}");
+                string msgs = "";
+                for (int i = 0; i < senders.Length; i++)
+                {
+                    msgs += $"{senders[i]}: {messages[i].ToString()}, ";
+                }
+                chatDisplay.text += "\n" + msgs;
+                Debug.Log(msgs);
+            }
         }
 
         public void OnPrivateMessage(string sender, object message, string channelName)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnSubscribed(string[] channels, bool[] results)
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < channels.Length; i++)
+            {
+                if (results[i])
+                {
+                    Debug.Log($"Successfully subscribed to {channels[i]}");
+                }
+                else
+                {
+                    Debug.Log($"Failed to subscribe to {channels[i]}");
+                }
+            }
         }
 
         public void OnUnsubscribed(string[] channels)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnUserSubscribed(string channel, string user)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnUserUnsubscribed(string channel, string user)
         {
-            throw new System.NotImplementedException();
         }
 
 

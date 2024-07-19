@@ -18,6 +18,7 @@ namespace Agit.FortressCraft
 	{
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
+		[SerializeField] private ChatManager _chatManager;
 		[SerializeField] private TMP_InputField _room;
         [SerializeField] private TMP_InputField playerName;
         [SerializeField] private TextMeshProUGUI _progress;
@@ -27,6 +28,7 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 		[SerializeField] private TextMeshProUGUI _audioText;
+
 
 		public string roomCode = "";
 
@@ -74,6 +76,8 @@ namespace Agit.FortressCraft
 			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
 			roomCode = _room.text;
             SetVoiceRoomName();
+
+			_chatManager.userID = playerName.text;
         }
 
         public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
@@ -95,6 +99,7 @@ namespace Agit.FortressCraft
 			Debug.Log(_room.text);
 
             _levelManager.SetRoomCode(_room.text);
+			_chatManager.roomCode = roomCode;
 
 			SetVoiceRoomName();
 
@@ -168,6 +173,9 @@ namespace Agit.FortressCraft
 						break;
 					case FusionLauncher.ConnectionStatus.Failed:
 						ErrorBox.Show("Error!", reason, () => { });
+						break;
+					case FusionLauncher.ConnectionStatus.Loaded:
+                        _chatManager.Init();
 						break;
 				}
 			}
