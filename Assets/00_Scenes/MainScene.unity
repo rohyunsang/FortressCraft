@@ -1304,7 +1304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelManager: {fileID: 1353448198}
   _gameManagerPrefab: {fileID: 592953329146046646, guid: cebdea494ca74974e809d626e5e9f63e, type: 3}
-  _chatManager: {fileID: 611688575}
+  _chatManager: {fileID: 0}
   _room: {fileID: 1414014595}
   playerName: {fileID: 523402101}
   _progress: {fileID: 604924949}
@@ -3129,13 +3129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05bb6619304339c47a6f0f7b039d42df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  photonSettings: {fileID: 11400000, guid: 46db308b89e9ed74eb106d9c6dae0529, type: 2}
-  userID: 
-  roomCode: 
-  privateReceiver: 
-  chatDisplay: {fileID: 1641155523}
-  chatField: {fileID: 1093036270}
-  sendButton: {fileID: 152438745}
 --- !u!1 &623962329
 GameObject:
   m_ObjectHideFlags: 0

@@ -77,7 +77,7 @@ namespace Agit.FortressCraft
 			roomCode = _room.text;
             SetVoiceRoomName();
 
-			_chatManager.userID = playerName.text;
+			// _chatManager.userID = playerName.text;
         }
 
         public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
@@ -99,7 +99,7 @@ namespace Agit.FortressCraft
 			Debug.Log(_room.text);
 
             _levelManager.SetRoomCode(_room.text);
-			_chatManager.roomCode = roomCode;
+			// _chatManager.roomCode = roomCode;
 
 			SetVoiceRoomName();
 
@@ -175,7 +175,7 @@ namespace Agit.FortressCraft
 						ErrorBox.Show("Error!", reason, () => { });
 						break;
 					case FusionLauncher.ConnectionStatus.Loaded:
-                        _chatManager.Init();
+                        // _chatManager.Init();
 						break;
 				}
 			}
