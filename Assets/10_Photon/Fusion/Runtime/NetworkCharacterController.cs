@@ -77,7 +77,7 @@ namespace Fusion {
 
     public void Move(Vector3 direction) 
     {
-      Debug.Log("NetworkCharacterController Move");
+      // Debug.Log("NetworkCharacterController Move");
       var deltaTime    = Runner.DeltaTime;
       var previousPos  = transform.position;
       var moveVelocity = Data.Velocity;
