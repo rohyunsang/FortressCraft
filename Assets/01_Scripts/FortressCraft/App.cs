@@ -18,7 +18,6 @@ namespace Agit.FortressCraft
 	{
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
-		[SerializeField] private ChatManager _chatManager;
 		[SerializeField] private TMP_InputField _room;
         [SerializeField] private TMP_InputField playerName;
         [SerializeField] private TextMeshProUGUI _progress;

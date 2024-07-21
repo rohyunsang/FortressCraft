@@ -47,6 +47,9 @@ namespace Agit.FortressCraft
         [Networked] public NetworkString<_32> PlayerName { get; set; }
         [SerializeField] TextMeshPro playerNameLabel;
 
+        [Networked] public NetworkString<_256> LastPublicChat { get; set; }
+
+
         public enum Stage
 		{
 			New,
@@ -78,7 +81,10 @@ namespace Agit.FortressCraft
 		private ChangeDetector _changes;
 		private NetworkInputData _oldInput;
 
-		public void ToggleReady()
+		string currentChat = "";
+
+
+        public void ToggleReady()
 		{
 			ready = !ready;
 		}
@@ -136,6 +142,8 @@ namespace Agit.FortressCraft
                 // _playerName 값을 NetworkString<_32>로 변환하여 PlayerName에 할당
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
+
+			ChatSystem.instance.playerName = fusionLauncher.playerName;
         }
 
         public override void Despawned(NetworkRunner runner, bool hasState)
@@ -214,8 +222,13 @@ namespace Agit.FortressCraft
 						OnStageChanged();
 						break;
 					case nameof(PlayerName):
+						Debug.Log("Render Platyerana");
 						OnPlayerNameChanged();
                         break;
+					case nameof(LastPublicChat):
+						Debug.Log("Render");
+						OnChatChanged();
+						break;
 				}
 			}
 				
@@ -349,7 +362,20 @@ namespace Agit.FortressCraft
 			playerNameLabel.text = PlayerName.ToString();
         }
 
-		public void OnStageChanged()
+		public void ChatGate()
+		{
+            currentChat = ChatSystem.instance.chatInputField.text;
+			LastPublicChat = new NetworkString<_256>(currentChat);
+			currentChat = "";
+        }
+
+        public void OnChatChanged()
+        {
+            ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
+			ChatSystem.instance.chatInputField.text = "";
+        }
+
+        public void OnStageChanged()
 		{
 			switch (stage)
 			{
