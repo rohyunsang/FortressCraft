@@ -1,11 +1,13 @@
 using UnityEngine;
 using Fusion;
 using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
+using UnityEngine.Pool;
 using static UnityEngine.EventSystems.PointerEventData;
 
 public class NormalUnitRigidBodyMovement : NetworkBehaviour
 {
     public NormalUintSpawner Spawner { get; set; }
+    public IObjectPool<GameObject> _Pool { get; set; }
 
     private Transform ground_A;
     private Transform ground_B;
@@ -19,6 +21,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     public string TargetGround { get; set; }
     public string TargetUnit { get; set; }
     public float Damage { get; set; }
+    public float Defense { get; set; }  // 0~1 사이 값으로 사용, 받은 대미지에 곱해서 적용
 
     private readonly static int animAttackBow =
         Animator.StringToHash("Base Layer.2_Attack_Bow");
@@ -33,7 +36,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     private NormalUnitFire normalUnitFire;
 
     private NetworkRigidbody2D _rb;
-    private float HP;
+    public float HP { get; set; }
 
     private TickTimer dieTimer;
 
@@ -75,9 +78,10 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         if (!initialized) return;
         
-        Debug.Log("Attack: " + AttackEnabled);
+        //Debug.Log("Attack: " + AttackEnabled);
         //Debug.Log("NormalUnitRigidBodyMovement is working");
         //Debug.Log( Spawner.AttackEnabled + " / " + AttackEnabled);
+        
         if (!Attack()) MoveToTarget();
         else _rb.Rigidbody.velocity = Vector2.zero;
         
@@ -97,11 +101,10 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
         CheckDamaged();
 
-        Debug.Log(Spawner);
-
         if( dieTimer.Expired(Runner) )
         {
-            Destroy(this.gameObject);
+            _Pool.Release(this.gameObject);
+            //Destroy(this.gameObject);
         }
         
         Initializing();
@@ -209,7 +212,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         if (bodyCollider.Damaged > 0.0f)
         {
-            HP -= bodyCollider.Damaged;
+            HP -= Defense * bodyCollider.Damaged;
             bodyCollider.Damaged = 0.0f;
             _netAnimator.Animator.SetTrigger("Damaged");
             Die();
