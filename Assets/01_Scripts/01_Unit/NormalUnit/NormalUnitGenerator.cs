@@ -21,7 +21,7 @@ public class NormalUnitGenerator : NetworkBehaviour
         {
             //Debug.Log(Id);
             SetWaitingTime();
-            spawner.SpawnUnit(Runner);
+            spawner.SpawnUnit();
         }
     }
 

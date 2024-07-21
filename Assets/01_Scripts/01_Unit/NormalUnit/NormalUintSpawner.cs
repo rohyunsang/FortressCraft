@@ -1,8 +1,7 @@
 using UnityEngine;
 using Fusion;
-using UnityEngine.Pool;
 using Agit.FortressCraft;
-
+using UnityEngine.Pool;
 
 public class NormalUintSpawner : NetworkBehaviour
 {
@@ -12,8 +11,8 @@ public class NormalUintSpawner : NetworkBehaviour
 
     [SerializeField] private string initialTarget = "";
 
-    public IObjectPool<GameObject> Pool { get; set; }
-    [SerializeField] private int unitCapacity = 5;
+    public IObjectPool<NetworkObject> Pool { get; set; }
+    [SerializeField] private int defaultCapacity = 5;
     [SerializeField] private int maxPoolSize = 10;
 
     // RPC property
@@ -62,7 +61,7 @@ public class NormalUintSpawner : NetworkBehaviour
     {
         Usable = false;
 
-        GetComponent<NetworkObject>().RequestStateAuthority();
+        //GetComponent<NetworkObject>().RequestStateAuthority();
 
         Target = initialTarget;
         AttackEnabled = true;
@@ -82,12 +81,13 @@ public class NormalUintSpawner : NetworkBehaviour
             }
         }
 
-        if (player != null) {
+        if (player != null)
+        {
             InitPooling();
         }
     }
 
-    public void SpawnUnit(NetworkRunner runner)
+    public void SpawnUnit()
     {
         /*
         if (runner.IsSharedModeMasterClient)
@@ -104,32 +104,34 @@ public class NormalUintSpawner : NetworkBehaviour
             normalUnitRigidBodyMovement.Initializing();
         }
         */
-        if(runner.IsSharedModeMasterClient)
+        if (Runner.IsSharedModeMasterClient)
         {
             Pool.Get();
         }
     }
-    
+
     // Object Pooling
     private void InitPooling()
     {
         if (!Runner.IsSharedModeMasterClient) return;
 
-        Pool = new ObjectPool<GameObject>(CreatPooledItem, OnTakeFromPool,
+        Pool = new ObjectPool<NetworkObject>(CreatPooledItem, OnTakeFromPool,
                                              OnReturnedToPool, OnDestroyPoolObject,
-                                             true, unitCapacity, maxPoolSize);
+                                             true, defaultCapacity, maxPoolSize);
 
+        /*
         // 미리 생성
-        for( int i = 0; i < unitCapacity; ++i )
+        for (int i = 0; i < defaultCapacity; ++i)
         {
             GameObject no = CreatPooledItem();
             NormalUnitRigidBodyMovement normal = no.GetComponent<NormalUnitRigidBodyMovement>();
-            normal._Pool.Release(no);
+            normal._Pool.Release(normal.gameObject);
         }
+        */
     }
 
     // 생성 
-    private GameObject CreatPooledItem()
+    private NetworkObject CreatPooledItem()
     {
         NetworkObject unitObj = null;
         if (Runner.IsSharedModeMasterClient)
@@ -151,24 +153,43 @@ public class NormalUintSpawner : NetworkBehaviour
 
         unitObj.GetComponent<NormalUnitRigidBodyMovement>()._Pool = this.Pool;
 
-        return unitObj.gameObject;
+        return unitObj;
     }
 
     // 사용 
-    private void OnTakeFromPool(GameObject poolGo)
+    private void OnTakeFromPool(NetworkObject poolNo)
     {
-        poolGo.SetActive(true);
+        //Debug.Log("TakeFromPool");
+        poolNo.transform.position = transform.position;
+        NormalUnitRigidBodyMovement normal = poolNo.gameObject.GetComponent<NormalUnitRigidBodyMovement>();
+        normal.HP = 100.0f;
+        Debug.Log("11" + " " + poolNo.gameObject.name);
+        RPCSetActive(poolNo);
+        Debug.Log("22" + " " + poolNo.gameObject.name);
     }
 
     // 반환
-    private void OnReturnedToPool(GameObject poolGo)
+    private void OnReturnedToPool(NetworkObject poolNo)
     {
-        poolGo.SetActive(false);
+        RPCSetUnactive(poolNo);
     }
 
-    private void OnDestroyPoolObject(GameObject poolGo)
+    private void OnDestroyPoolObject(NetworkObject poolNo)
     {
-        Destroy(poolGo);
+        Destroy(poolNo.gameObject);
     }
-    
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPCSetUnactive(NetworkObject poolNo)
+    {
+        poolNo.gameObject.SetActive(false);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPCSetActive(NetworkObject poolNo)
+    {
+        Debug.Log(poolNo.gameObject.name + " is activated");
+        poolNo.gameObject.SetActive(true);
+        Debug.Log(poolNo.gameObject.activeSelf);
+    }
 }

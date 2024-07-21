@@ -7,13 +7,13 @@ using static UnityEngine.EventSystems.PointerEventData;
 public class NormalUnitRigidBodyMovement : NetworkBehaviour
 {
     public NormalUintSpawner Spawner { get; set; }
-    public IObjectPool<GameObject> _Pool { get; set; }
-
     private Transform ground_A;
     private Transform ground_B;
     private Transform ground_C;
     private Transform ground_D;
     [SerializeField] private int testSpeed;
+
+    public IObjectPool<NetworkObject> _Pool { get; set; }
 
     public string TargetString { get; set; }
 
@@ -103,7 +103,8 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
         if( dieTimer.Expired(Runner) )
         {
-            _Pool.Release(this.gameObject);
+            _Pool.Release(Object);
+            //RPCSetUnactive();
             //Destroy(this.gameObject);
         }
         
@@ -161,6 +162,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
             dieTimer = TickTimer.CreateFromSeconds(Runner, 0.26f);
         }
     }
+
 
     private void MoveToTarget()
     {
