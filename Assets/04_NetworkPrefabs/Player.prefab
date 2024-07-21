@@ -2183,6 +2183,7 @@ GameObject:
   - component: {fileID: 2653525218152594309}
   - component: {fileID: 2207852679990085300}
   - component: {fileID: 7781708162755150858}
+  - component: {fileID: 4423126997026053310}
   m_Layer: 5
   m_Name: Player
   m_TagString: Untagged
@@ -2253,6 +2254,7 @@ MonoBehaviour:
   - {fileID: 8960233729958994200}
   - {fileID: 8838001341374833890}
   - {fileID: 2653525218152594309}
+  - {fileID: 4423126997026053310}
 --- !u!143 &-3928054935676406298
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2397,6 +2399,24 @@ MonoBehaviour:
   _damageSnd: {fileID: 0}
   _explosionSnd: {fileID: 0}
   _audioEmitter: {fileID: 0}
+--- !u!114 &4423126997026053310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552724304938365259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 5022701445885422978}
+  TotalWords: 1
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90b95b3bae5f77bcf
+  TriggerHashes: 000000002afa86260d286c4073cbfc9f
 --- !u!1 &5629812651216997283
 GameObject:
   m_ObjectHideFlags: 0

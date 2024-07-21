@@ -24,9 +24,7 @@ namespace Agit.FortressCraft
         private const int MAX_LIVES = 3;
 		private const int MAX_HEALTH = 100;
 
-		[Header("Visuals")] [SerializeField] private Transform _hull;
 		[SerializeField] private Transform _commander;
-		[SerializeField] private Transform _visualParent;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
 
@@ -49,8 +47,6 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
-
-		
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -114,11 +110,6 @@ namespace Agit.FortressCraft
 
 			ready = false;
 
-			SetupDeathExplosion();
-
-			// _teleportIn.Initialize(this);
-
-
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
 
@@ -135,19 +126,12 @@ namespace Agit.FortressCraft
 			SpawnTeleportOutFx();
 		}
 
-		private void OnPickup( PickupEvent evt)
+		private void OnPickup(PickupEvent evt)
 		{
 			PowerupElement powerup = PowerupSpawner.GetPowerup(evt.powerup);
 
 			if (powerup.powerupType == PowerupType.HEALTH)
 				life = MAX_HEALTH;
-		}
-
-		void SetupDeathExplosion()
-		{
-			//_deathExplosionInstance = Instantiate(_deathExplosionPrefab, transform.parent);
-			// _deathExplosionInstance.SetActive(false);
-			// ColorChanger.ChangeColor(_deathExplosionInstance.transform, playerColor);
 		}
 
 		public override void FixedUpdateNetwork()
@@ -215,14 +199,11 @@ namespace Agit.FortressCraft
 		/// <param name="attacker"></param>
 		public void ApplyAreaDamage(Vector3 impulse, int damage)
 		{
-			if (!isActivated || !invulnerabilityTimer.Expired(Runner))
+			if (!isActivated)
 				return;
 
 			if (Runner.TryGetSingleton(out GameManager gameManager))
 			{
-				_cc.Velocity += impulse / 10.0f; // Magic constant to compensate for not properly dealing with masses
-				_cc.Move(Vector3.zero); // Velocity property is only used by CC when steering, so pretend we are, without actually steering anywhere
-
 				if (damage >= life)
 				{
 					life = 0;
@@ -239,10 +220,7 @@ namespace Agit.FortressCraft
 					life -= (byte)damage;
 					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
 				}
-
 			}
-
-			invulnerabilityTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 		}
 
 		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
@@ -332,20 +310,17 @@ namespace Agit.FortressCraft
 					SpawnTeleportOutFx();
 					break;
 			}
-			// _visualParent.gameObject.SetActive(stage == Stage.Active);
 			_collider.enabled = stage != Stage.Dead;
 		}
 
 		private void SpawnTeleportOutFx()
 		{
 			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
-			// teleout.StartTeleport(playerColor, commanderRotation, hullRotation);
 		}
 
 		private void ResetPlayer()
 		{
 			Debug.Log($"Resetting player {PlayerId}, tick={Runner.Tick}, timer={respawnTimer.IsRunning}:{respawnTimer.TargetTick}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} to state={stage}");
-			// weaponManager.ResetAllWeapons();
 			stage = Stage.Active;
 		}
 
