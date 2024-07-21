@@ -2,6 +2,7 @@ using Fusion;
 using FusionHelpers;
 using UnityEngine;
 using Cinemachine;
+using System.Collections.Generic;
 
 namespace Agit.FortressCraft
 {
@@ -11,19 +12,25 @@ namespace Agit.FortressCraft
 	[RequireComponent(typeof(NetworkCharacterController))]
 	public class Player : FusionPlayer
 	{
-		private const int MAX_LIVES = 3;
+        public enum Stage
+        {
+            New,
+            TeleportOut,
+            TeleportIn,
+            Active,
+            Dead
+        }
+
+        private const int MAX_LIVES = 3;
 		private const int MAX_HEALTH = 100;
 
 		[Header("Visuals")] [SerializeField] private Transform _hull;
 		[SerializeField] private Transform _commander;
 		[SerializeField] private Transform _visualParent;
-		[SerializeField] private Material[] _playerMaterials;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
 
-		[Space(10)] [SerializeField] private GameObject _deathExplosionPrefab;
 		[SerializeField] private float _respawnTime;
-		[SerializeField] private WeaponManager weaponManager;
 
 		public struct DamageEvent : INetworkEvent
 		{
@@ -38,44 +45,38 @@ namespace Agit.FortressCraft
 
 		[Networked] public Stage stage { get; set; }
 		[Networked] private int life { get; set; }
-		[Networked] private Angle aimDirection { get; set; }
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
 
-		public enum Stage
-		{
-			New,
-			TeleportOut,
-			TeleportIn,
-			Active,
-			Dead
-		}
+		
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
-
-		public Material playerMaterial { get; set; }
-		public Color playerColor { get; set; }
 
 		public Vector3 velocity => Object != null && Object.IsValid ? _cc.Velocity : Vector3.zero;
 		public Vector3 commanderPosition => _commander.position;
 
 		public Quaternion commanderRotation => _commander.rotation;
 
-		public Quaternion hullRotation => _hull.rotation;
 		public GameObject cameraTarget => _cc.gameObject;
 
 		private NetworkCharacterController _cc;
 		private Collider _collider;
-		private GameObject _deathExplosionInstance;
-		private TankDamageVisual _damageVisuals;
 		private float _respawnInSeconds = -1;
+
 		private ChangeDetector _changes;
+
 		private NetworkInputData _oldInput;
 		public GameObject camera;
 		public CinemachineVirtualCamera vCam;
+
+		public Animator anim;
+
+		// Hit Info
+		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
+
 
 		public void ToggleReady()
 		{
@@ -113,13 +114,10 @@ namespace Agit.FortressCraft
 
 			ready = false;
 
-			SetMaterial();
 			SetupDeathExplosion();
 
 			// _teleportIn.Initialize(this);
 
-			_damageVisuals = GetComponent<TankDamageVisual>();
-			_damageVisuals.Initialize(playerMaterial);
 
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
@@ -135,7 +133,6 @@ namespace Agit.FortressCraft
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
 			SpawnTeleportOutFx();
-			Destroy(_deathExplosionInstance);
 		}
 
 		private void OnPickup( PickupEvent evt)
@@ -144,8 +141,6 @@ namespace Agit.FortressCraft
 
 			if (powerup.powerupType == PowerupType.HEALTH)
 				life = MAX_HEALTH;
-			else
-				weaponManager.InstallWeapon(powerup);
 		}
 
 		void SetupDeathExplosion()
@@ -159,29 +154,17 @@ namespace Agit.FortressCraft
 		{
 			if (InputController.fetchInput)
 			{
-				// Get our input struct and act accordingly. This method will only return data if we
-				// have Input or State Authority - meaning on the controlling player or the server.
-				if (GetInput(out NetworkInputData input))
+                if (GetInput(out NetworkInputData input))
 				{
-					SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
 
-					/*if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
-					{
-						weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.PRIMARY);
-					}
-					if (input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
-					{
-						weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.SECONDARY);
-					}*/
+                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
-					/*if(input.IsDown(NetworkInputData.))
+					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					{
+						anim.SetTrigger("Attack");
+                    }
 
-					}
-					*/
-					
-					// We don't want to predict this because it's a toggle and a mis-prediction due to lost input will double toggle the button
-					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
+                    if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 
 					_oldInput = input;
@@ -223,33 +206,7 @@ namespace Agit.FortressCraft
 			// _damageVisuals.CheckHealth(GetPropertyReader<int>(nameof(life)).Read(interpolated.From), MAX_HEALTH);
 		}
 
-		private void SetMaterial()
-		{
-			// playerMaterial = Instantiate(_playerMaterials[PlayerIndex]);
-			// playerColor = playerMaterial.GetColor("_EnergyColor");
-
-			// TankPartMesh[] tankParts = GetComponentsInChildren<TankPartMesh>();
-			//foreach (TankPartMesh part in tankParts)
-			//{
-			//	part.SetMaterial(playerMaterial);
-			//}
-		}
-
-		/// <summary>
-		/// Set the direction of movement and aim
-		/// </summary>
-		private void SetDirections(Vector2 moveVector, Vector2 aimVector)
-		{
-			if (!isActivated)
-				return;
-
-			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
-
-			if (aimVector.sqrMagnitude > 0)
-				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
-			// aimDirection = _turret.rotation.eulerAngles.y;
-		}
-
+		
 		/// <summary>
 		/// Apply damage to Tank with an associated impact impulse
 		/// </summary>
@@ -283,11 +240,22 @@ namespace Agit.FortressCraft
 					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
 				}
 
-				_damageVisuals.CheckHealth(life , MAX_HEALTH);
 			}
 
 			invulnerabilityTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 		}
+
+		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
+		{
+			if (!isActivated)
+				return;
+
+			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
+
+			if (aimVector.sqrMagnitude > 0)
+				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
+		}
+
 
 		public void Reset()
 		{
@@ -355,12 +323,6 @@ namespace Agit.FortressCraft
 					// _teleportIn.EndTeleport();
 					break;
 				case Stage.Dead:
-					_deathExplosionInstance.transform.position = transform.position;
-					_deathExplosionInstance.SetActive(false); // dirty fix to reactivate the death explosion if the particlesystem is still active
-					_deathExplosionInstance.SetActive(true);
-
-					_visualParent.gameObject.SetActive(false);
-					_damageVisuals.OnDeath();
 					
 					if(Runner.TryGetSingleton( out GameManager gameManager))
 						gameManager.OnCommanderDeath();

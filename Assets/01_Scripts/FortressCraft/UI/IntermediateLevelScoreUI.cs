@@ -15,8 +15,6 @@ namespace Agit.FortressCraft
 
 		public void Initialize(Player player)
 		{
-			Color scoreColor = player.playerMaterial.GetColor("_SilhouetteColor");
-			_score.color = scoreColor;
 		}
 
 		public void SetScore(int score, bool animate)

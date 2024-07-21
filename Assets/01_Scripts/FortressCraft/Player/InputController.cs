@@ -76,11 +76,11 @@ namespace Agit.FortressCraft
 			if (Input.mousePresent)
 			{
                 if (Input.GetKey(KeyCode.J))
-                    _buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_PRIMARY;
                 if (Input.GetKey(KeyCode.K))
-                    _buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_SECONDARY;
                 if (Input.GetKey(KeyCode.L))
-                    _buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_TERTIARY;
 
                 if (Input.GetKey(KeyCode.R))
 					_buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;

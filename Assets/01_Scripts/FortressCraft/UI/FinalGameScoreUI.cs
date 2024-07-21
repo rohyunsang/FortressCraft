@@ -15,9 +15,6 @@ namespace Agit.FortressCraft
 		{
 			_playerName.text = $"Player {player.PlayerIndex}";
 
-			Color textColor = player.playerMaterial.GetColor("_SilhouetteColor");
-			_score.color = textColor;
-			_playerName.color = textColor;
 		}
 
 		public void SetScore(int newScore)
