@@ -8,6 +8,7 @@ using System;
 using static UnityEngine.Random;
 using Random = UnityEngine.Random;
 using Photon.Voice.Unity.UtilityScripts;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
@@ -18,15 +19,14 @@ namespace Agit.FortressCraft
 	{
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
-		[SerializeField] private TMP_InputField _room;
-        [SerializeField] private TMP_InputField playerName;
+		[SerializeField] private InputField _room;
+        [SerializeField] private InputField playerName;
         [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
-		[SerializeField] private Panel _uiRoom;
+		[SerializeField] private GameObject _uiRoom;
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
-		[SerializeField] private TextMeshProUGUI _audioText;
 
 
 		public string roomCode = "";
@@ -41,7 +41,9 @@ namespace Agit.FortressCraft
 			Application.targetFrameRate = 60;
 			DontDestroyOnLoad(this);
 			_levelManager.onStatusUpdate = OnConnectionStatusUpdate;
-		}
+
+            SetGameMode(GameMode.Shared);
+        }
 
 		private void Start()
 		{
@@ -65,23 +67,16 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		public void OnSharedOptions()  // using    App - UI Intro - Start Panel - CreateRoom, Join
-		{
-			SetGameMode(GameMode.Shared);
-			
-        }
 		public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
         {
 			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
 			roomCode = _room.text;
-            SetVoiceRoomName();
 
-			// _chatManager.userID = playerName.text;
+            SetVoiceRoomName();
         }
 
         public void CreateRoom()  // using    App - UI Intro - Start Panel - CreateRoom
         {
-            _room.gameObject.SetActive(false);
             CreateRandomRoomCode();
         }
 
@@ -98,9 +93,8 @@ namespace Agit.FortressCraft
 			Debug.Log(_room.text);
 
             _levelManager.SetRoomCode(_room.text);
-			// _chatManager.roomCode = roomCode;
 
-			SetVoiceRoomName();
+			// SetVoiceRoomName();
 
         }
 
@@ -115,31 +109,25 @@ namespace Agit.FortressCraft
 
 		public void OnCancel()
         {
-			if (GateUI(_uiRoom))
-				_uiStart.SetVisible(true);
+			_uiStart.SetVisible(true);
         }
 
 		private void SetGameMode(GameMode gamemode)
 		{
 			_gameMode = gamemode;
-			if (GateUI(_uiStart))
-				_uiRoom.SetVisible(true);
 		}
 
 		public void OnEnterRoom()
 		{
-			if (GateUI(_uiRoom))
-			{
-				// Get region from dropdown
-				string region = string.Empty;
-				if (_regionDropdown.value > 0)
-                {
-					region = _regionDropdown.options[_regionDropdown.value].text;
-					region = region.Split(" (")[0];
-                }
+			// Get region from dropdown
+			string region = string.Empty;
+			if (_regionDropdown.value > 0)
+            {
+				region = _regionDropdown.options[_regionDropdown.value].text;
+				region = region.Split(" (")[0];
+            }
 
-				FusionLauncher.Launch(_gameMode, region, _room.text, playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
-			}
+			FusionLauncher.Launch(_gameMode, region, _room.text, playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		/// <summary>
@@ -185,8 +173,8 @@ namespace Agit.FortressCraft
 
 		public void ToggleAudio()
         {
-			AudioListener.volume = 1f - AudioListener.volume;
-			_audioText.text = AudioListener.volume > 0.5f ? "ON" : "OFF";
+			// AudioListener.volume = 1f - AudioListener.volume;
+			//_audioText.text = AudioListener.volume > 0.5f ? "ON" : "OFF";
         }
 
 		private void UpdateUI()

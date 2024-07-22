@@ -134,6 +134,7 @@ namespace Agit.FortressCraft
                 // _playerName °ªÀ» NetworkString<_32>·Î º¯È¯ÇÏ¿© PlayerName¿¡ ÇÒ´ç
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
+			Debug.Log("AAAAAAAAAAAAA" + fusionLauncher.playerName);
 
             ChatSystem.instance.playerName = fusionLauncher.playerName;
         }

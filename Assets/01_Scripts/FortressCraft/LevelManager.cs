@@ -45,7 +45,6 @@ namespace Agit.FortressCraft
         private void Awake()
 		{
 			_countdownManager.Reset();
-//			_scoreManager.ResetAllGameScores();
 		}
 
 		public void SetRoomCode(string roomCode)
