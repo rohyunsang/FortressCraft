@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Recorder
+  - A
+  - B
+  - C
+  - D
   layers:
   - Default
   - TransparentFX

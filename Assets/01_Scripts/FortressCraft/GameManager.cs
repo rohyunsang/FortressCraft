@@ -8,7 +8,6 @@ namespace Agit.FortressCraft
 	{
 		public enum PlayState { LOBBY, LEVEL, TRANSITION }
 
-		[SerializeField] private ForceField _forceField;
 
 		[Networked] public PlayState currentPlayState { get; set; }
 		[Networked, Capacity(4)] private NetworkArray<int> score => default;
@@ -107,10 +106,6 @@ namespace Agit.FortressCraft
 
 		private void Update()
 		{
-			for (int i = 0; i < 4; i++)
-			{
-				_forceField.SetPlayer(i, GetPlayerByIndex<Player>(i));
-			}
 
 			LevelManager lm = Runner.GetLevelManager();
 			lm.readyUpManager.UpdateUI(currentPlayState, AllPlayers, OnAllPlayersReady);
