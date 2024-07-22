@@ -1,7 +1,9 @@
-using Fusion;
+Ôªøusing Fusion;
 using FusionHelpers;
-using TMPro;
 using UnityEngine;
+using Cinemachine;
+using System.Collections.Generic;
+using TMPro;
 
 namespace Agit.FortressCraft
 {
@@ -11,19 +13,23 @@ namespace Agit.FortressCraft
 	[RequireComponent(typeof(NetworkCharacterController))]
 	public class Player : FusionPlayer
 	{
-		private const int MAX_LIVES = 3;
+        public enum Stage
+        {
+            New,
+            TeleportOut,
+            TeleportIn,
+            Active,
+            Dead
+        }
+
+        private const int MAX_LIVES = 3;
 		private const int MAX_HEALTH = 100;
 
-		[Header("Visuals")] [SerializeField] private Transform _hull;
 		[SerializeField] private Transform _commander;
-		[SerializeField] private Transform _visualParent;
-		[SerializeField] private Material[] _playerMaterials;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
 
-		[Space(10)] [SerializeField] private GameObject _deathExplosionPrefab;
 		[SerializeField] private float _respawnTime;
-		[SerializeField] private WeaponManager weaponManager;
 
 		public struct DamageEvent : INetworkEvent
 		{
@@ -38,51 +44,42 @@ namespace Agit.FortressCraft
 
 		[Networked] public Stage stage { get; set; }
 		[Networked] private int life { get; set; }
-		[Networked] private Angle aimDirection { get; set; }
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
 
-        [Networked] public NetworkString<_32> PlayerName { get; set; }
-        [SerializeField] TextMeshPro playerNameLabel;
-
-        [Networked] public NetworkString<_256> LastPublicChat { get; set; }
-
-
-        public enum Stage
-		{
-			New,
-			TeleportOut,
-			TeleportIn,
-			Active,
-			Dead
-		}
-
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
-
-		public Material playerMaterial { get; set; }
-		public Color playerColor { get; set; }
 
 		public Vector3 velocity => Object != null && Object.IsValid ? _cc.Velocity : Vector3.zero;
 		public Vector3 commanderPosition => _commander.position;
 
 		public Quaternion commanderRotation => _commander.rotation;
 
-		public Quaternion hullRotation => _hull.rotation;
 		public GameObject cameraTarget => _cc.gameObject;
 
 		private NetworkCharacterController _cc;
 		private Collider _collider;
-		private GameObject _deathExplosionInstance;
-		private TankDamageVisual _damageVisuals;
 		private float _respawnInSeconds = -1;
-		private ChangeDetector _changes;
+
+		private ChangeDetector changes;
+
 		private NetworkInputData _oldInput;
+		public GameObject camera;
+		public CinemachineVirtualCamera vCam;
 
-		string currentChat = "";
+		public Animator anim;
 
+		// Hit Info
+		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
+
+
+        [Networked] public NetworkString<_32> PlayerName { get; set; }
+        [SerializeField] TextMeshPro playerNameLabel;
+
+        [Networked] public NetworkString<_256> LastPublicChat { get; set; }
+        string currentChat = "";
 
         public void ToggleReady()
 		{
@@ -98,6 +95,9 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
+			camera = GameObject.Find("Virtual Camera");
+			vCam = camera.GetComponent<CinemachineVirtualCamera>();
+			vCam.Follow = this.gameObject.transform;
 		}
 
 		public override void InitNetworkState()
@@ -113,17 +113,9 @@ namespace Agit.FortressCraft
 
 			DontDestroyOnLoad(gameObject);
 
-			_changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
+			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
 			ready = false;
-
-			SetMaterial();
-			SetupDeathExplosion();
-
-			// _teleportIn.Initialize(this);
-
-			_damageVisuals = GetComponent<TankDamageVisual>();
-			_damageVisuals.Initialize(playerMaterial);
 
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
@@ -134,61 +126,48 @@ namespace Agit.FortressCraft
 			RegisterEventListener( (PickupEvent evt) => OnPickup(evt));
 
             // PlayerName Change
-            
+
             var fusionLauncher = FindObjectOfType<FusionLauncher>();
 
             if (fusionLauncher != null)
             {
-                // _playerName ∞™¿ª NetworkString<_32>∑Œ ∫Ø»Ø«œø© PlayerNameø° «“¥Á
+                // _playerName ¬∞¬™√Ä¬ª NetworkString<_32>¬∑√é ¬∫¬Ø√à¬Ø√á√è¬ø¬© PlayerName¬ø¬° √á√í¬¥√ß
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
 
-			ChatSystem.instance.playerName = fusionLauncher.playerName;
+            ChatSystem.instance.playerName = fusionLauncher.playerName;
         }
 
-        public override void Despawned(NetworkRunner runner, bool hasState)
+		public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
 			SpawnTeleportOutFx();
-			Destroy(_deathExplosionInstance);
 		}
 
-		private void OnPickup( PickupEvent evt)
+		private void OnPickup(PickupEvent evt)
 		{
 			PowerupElement powerup = PowerupSpawner.GetPowerup(evt.powerup);
 
 			if (powerup.powerupType == PowerupType.HEALTH)
 				life = MAX_HEALTH;
-			else
-				weaponManager.InstallWeapon(powerup);
-		}
-
-		void SetupDeathExplosion()
-		{
-			//_deathExplosionInstance = Instantiate(_deathExplosionPrefab, transform.parent);
-			// _deathExplosionInstance.SetActive(false);
-			// ColorChanger.ChangeColor(_deathExplosionInstance.transform, playerColor);
 		}
 
 		public override void FixedUpdateNetwork()
 		{
 			if (InputController.fetchInput)
 			{
-				// Get our input struct and act accordingly. This method will only return data if we
-				// have Input or State Authority - meaning on the controlling player or the server.
-				if (GetInput(out NetworkInputData input))
+                if (GetInput(out NetworkInputData input))
 				{
-					// SetDirections(input.moveDirection.normalized, input.aimDirection.normalized);
 
-					//if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
-					//	weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.PRIMARY);
+                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
-					//if (input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
-					//	weaponManager.FireWeapon(WeaponManager.WeaponInstallationType.SECONDARY);
+					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+					{
+						anim.SetTrigger("Attack");
+                    }
 
-					// We don't want to predict this because it's a toggle and a mis-prediction due to lost input will double toggle the button
-					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
+                    if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 
 					_oldInput = input;
@@ -204,83 +183,70 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		/// <summary>
-		/// Render is the Fusion equivalent of Unity's Update() and unlike FixedUpdateNetwork which is very different from FixedUpdate,
-		/// Render is in fact exactly the same. It even uses the same Time.deltaTime time steps. The purpose of Render is that
-		/// it is always called *after* FixedUpdateNetwork - so to be safe you should use Render over Update if you're on a
-		/// SimulationBehaviour.
-		///
-		/// Here, we use Render to update visual aspects of the Tank that does not involve changing of networked properties.
-		/// </summary>
-		public override void Render()
-		{
-			foreach (var change in _changes.DetectChanges(this))
-			{
-				switch (change)
-				{
-					case nameof(stage):
-						OnStageChanged();
-						break;
-					case nameof(PlayerName):
-						Debug.Log("Render Platyerana");
-						OnPlayerNameChanged();
+        /// <summary>
+        /// Render is the Fusion equivalent of Unity's Update() and unlike FixedUpdateNetwork which is very different from FixedUpdate,
+        /// Render is in fact exactly the same. It even uses the same Time.deltaTime time steps. The purpose of Render is that
+        /// it is always called *after* FixedUpdateNetwork - so to be safe you should use Render over Update if you're on a
+        /// SimulationBehaviour.
+        ///
+        /// Here, we use Render to update visual aspects of the Tank that does not involve changing of networked properties.
+        /// </summary>
+        public override void Render()
+        {
+            foreach (var change in changes.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(stage):
+                        OnStageChanged();
                         break;
-					case nameof(LastPublicChat):
-						Debug.Log("Render");
-						OnChatChanged();
-						break;
-				}
-			}
-				
-			var interpolated = new NetworkBehaviourBufferInterpolator(this);
+                    case nameof(PlayerName):
+                        Debug.Log("Render Platyerana");
+                        OnPlayerNameChanged();
+                        break;
+                    case nameof(LastPublicChat):
+                        Debug.Log("Render");
+                        OnChatChanged();
+                        break;
+                }
+            }
 
-			// _commander.rotation = Quaternion.Euler(0, interpolated.Angle(nameof(aimDirection)), 0);
-			// _damageVisuals.CheckHealth(GetPropertyReader<int>(nameof(life)).Read(interpolated.From), MAX_HEALTH);
-		}
+            var interpolated = new NetworkBehaviourBufferInterpolator(this);
 
-		private void SetMaterial()
-		{
-			// playerMaterial = Instantiate(_playerMaterials[PlayerIndex]);
-			// playerColor = playerMaterial.GetColor("_EnergyColor");
+        }
 
-			// TankPartMesh[] tankParts = GetComponentsInChildren<TankPartMesh>();
-			//foreach (TankPartMesh part in tankParts)
-			//{
-			//	part.SetMaterial(playerMaterial);
-			//}
-		}
+        public void OnPlayerNameChanged()
+        {
+            playerNameLabel.text = PlayerName.ToString();
+        }
 
-		/// <summary>
-		/// Set the direction of movement and aim
-		/// </summary>
-		private void SetDirections(Vector2 moveVector, Vector2 aimVector)
+        public void ChatGate()
+        {
+            currentChat = ChatSystem.instance.chatInputField.text;
+            LastPublicChat = new NetworkString<_256>(currentChat);
+            currentChat = "";
+        }
+
+        public void OnChatChanged()
+        {
+            ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
+            ChatSystem.instance.chatInputField.text = "";
+        }
+
+
+        /// <summary>
+        /// Apply damage to Tank with an associated impact impulse
+        /// </summary>
+        /// <param name="impulse"></param>
+        /// <param name="damage"></param>
+        /// <param name="attacker"></param>
+        public void ApplyAreaDamage(Vector3 impulse, int damage)
 		{
 			if (!isActivated)
 				return;
 
-			_cc.Move(new Vector3(moveVector.x, 0, moveVector.y));
-
-			if (aimVector.sqrMagnitude > 0)
-				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
-			// aimDirection = _turret.rotation.eulerAngles.y;
-		}
-
-		/// <summary>
-		/// Apply damage to Tank with an associated impact impulse
-		/// </summary>
-		/// <param name="impulse"></param>
-		/// <param name="damage"></param>
-		/// <param name="attacker"></param>
-		public void ApplyAreaDamage(Vector3 impulse, int damage)
-		{
-			if (!isActivated || !invulnerabilityTimer.Expired(Runner))
-				return;
-
 			if (Runner.TryGetSingleton(out GameManager gameManager))
 			{
-				_cc.Velocity += impulse / 10.0f; // Magic constant to compensate for not properly dealing with masses
-				_cc.Move(Vector3.zero); // Velocity property is only used by CC when steering, so pretend we are, without actually steering anywhere
-
 				if (damage >= life)
 				{
 					life = 0;
@@ -297,12 +263,20 @@ namespace Agit.FortressCraft
 					life -= (byte)damage;
 					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
 				}
-
-				_damageVisuals.CheckHealth(life , MAX_HEALTH);
 			}
-
-			invulnerabilityTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 		}
+
+		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
+		{
+			if (!isActivated)
+				return;
+
+			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
+
+			if (aimVector.sqrMagnitude > 0)
+				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
+		}
+
 
 		public void Reset()
 		{
@@ -357,25 +331,7 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		public void OnPlayerNameChanged()
-		{
-			playerNameLabel.text = PlayerName.ToString();
-        }
-
-		public void ChatGate()
-		{
-            currentChat = ChatSystem.instance.chatInputField.text;
-			LastPublicChat = new NetworkString<_256>(currentChat);
-			currentChat = "";
-        }
-
-        public void OnChatChanged()
-        {
-            ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
-			ChatSystem.instance.chatInputField.text = "";
-        }
-
-        public void OnStageChanged()
+		public void OnStageChanged()
 		{
 			switch (stage)
 			{
@@ -388,12 +344,6 @@ namespace Agit.FortressCraft
 					// _teleportIn.EndTeleport();
 					break;
 				case Stage.Dead:
-					_deathExplosionInstance.transform.position = transform.position;
-					_deathExplosionInstance.SetActive(false); // dirty fix to reactivate the death explosion if the particlesystem is still active
-					_deathExplosionInstance.SetActive(true);
-
-					_visualParent.gameObject.SetActive(false);
-					_damageVisuals.OnDeath();
 					
 					if(Runner.TryGetSingleton( out GameManager gameManager))
 						gameManager.OnCommanderDeath();
@@ -403,20 +353,17 @@ namespace Agit.FortressCraft
 					SpawnTeleportOutFx();
 					break;
 			}
-			// _visualParent.gameObject.SetActive(stage == Stage.Active);
 			_collider.enabled = stage != Stage.Dead;
 		}
 
 		private void SpawnTeleportOutFx()
 		{
 			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
-			// teleout.StartTeleport(playerColor, commanderRotation, hullRotation);
 		}
 
 		private void ResetPlayer()
 		{
 			Debug.Log($"Resetting player {PlayerId}, tick={Runner.Tick}, timer={respawnTimer.IsRunning}:{respawnTimer.TargetTick}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} to state={stage}");
-			// weaponManager.ResetAllWeapons();
 			stage = Stage.Active;
 		}
 

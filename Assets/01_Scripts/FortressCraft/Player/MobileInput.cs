@@ -6,8 +6,6 @@ public class MobileInput : MonoBehaviour
 {
 	[SerializeField] private RectTransform _leftJoy;
 	[SerializeField] private RectTransform _leftKnob;
-	[SerializeField] private RectTransform _rightJoy;
-	[SerializeField] private RectTransform _rightKnob;
 	private Transform _canvas;
 
 	private void Awake()
@@ -19,8 +17,8 @@ public class MobileInput : MonoBehaviour
 	{
 		foreach (InputController ic in FindObjectsOfType<InputController>())
 		{
-			if(ic.Object.HasInputAuthority)
-				ic.ToggleReady();
+			//if(ic.Object.HasInputAuthority)
+				//ic.ToggleReady();
 		}
 	}
 
@@ -52,10 +50,5 @@ public class MobileInput : MonoBehaviour
 	public void SetLeft(bool active, Vector2 down, Vector2 current)
 	{
 		SetJoy(_leftJoy, _leftKnob, active, down, current);
-	}
-
-	public void SetRight(bool active, Vector2 down, Vector2 current)
-	{
-		SetJoy(_rightJoy, _rightKnob, active, down, current);
 	}
 }
