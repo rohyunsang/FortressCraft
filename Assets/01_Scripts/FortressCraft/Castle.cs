@@ -40,8 +40,17 @@ namespace Agit.FortressCraft{
             AsycHp(); //* 체력 갱신
             if (CurrentHP <= 0)
             {
-                Debug.Log("체력 0 이하 죽음!");
+                
+                DestroyCastle();
             }
+        }
+
+        private void DestroyCastle()
+        {
+            Debug.Log("체력 0 이하 죽음!");
+            // UI Call : Defeat Panel -> OnClilk -> 
+            // Delete Input Auth
+            // Delete Playter   
         }
 
         public override void Render()
@@ -73,7 +82,6 @@ namespace Agit.FortressCraft{
             {
                 return;
             }
-            Debug.Log("Trigger");
 
             // PlayerWeapon 컴포넌트를 시도하여 가져오고, 있으면 데미지 처리
             if (collision.TryGetComponent<PlayerWeapon>(out PlayerWeapon weapon))

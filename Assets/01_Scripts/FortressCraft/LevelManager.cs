@@ -90,7 +90,7 @@ namespace Agit.FortressCraft
 			_currentLevel = null;
 			if (_loadedScene.IsValid)
 			{
-				Debug.Log($"AAAAAAAAAAAAAA LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
+				Debug.Log($"LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
 				Runner.UnloadScene(_loadedScene);
 				_loadedScene = SceneRef.None;
 			}

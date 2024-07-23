@@ -22,7 +22,7 @@ namespace Agit.FortressCraft
             Dead
         }
 
-        private const int MAX_LIVES = 3;
+        private const int MAX_LIVES = 100;
 		private const int MAX_HEALTH = 100;
 
 		[SerializeField] private Transform _commander;
@@ -315,7 +315,6 @@ namespace Agit.FortressCraft
 
 					// Place the tank at its spawn point. This has to be done in FUN() because the transform gets reset otherwise
 					Transform spawn = spawnpt.transform;
-					Debug.Log("AAAAAAAAA" + spawn.position);
 					_cc.Teleport( spawn.position, spawn.rotation );
 
 					// If the player was already here when we joined, it might already be active, in which case we don't want to trigger any spawn FX, so just leave it ACTIVE
