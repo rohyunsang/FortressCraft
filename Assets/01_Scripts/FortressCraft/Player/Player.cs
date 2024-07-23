@@ -286,7 +286,7 @@ namespace Agit.FortressCraft
 			lives = MAX_LIVES;
 		}
 
-		public void Respawn( float inSeconds=0 )
+		public void Respawn( float inSeconds = 0 )
 		{
 			_respawnInSeconds = inSeconds;
 		}
@@ -300,6 +300,7 @@ namespace Agit.FortressCraft
 				if (_respawnInSeconds <= 0)
 				{
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
+
 					if (spawnpt == null)
 					{
 						_respawnInSeconds = Runner.DeltaTime;
@@ -338,17 +339,12 @@ namespace Agit.FortressCraft
 			{
 				case Stage.TeleportIn:
 					Debug.Log($"Starting teleport for player {PlayerId} @ {transform.position} cc@ {_cc.Data.Position}, tick={Runner.Tick}");
-					// _teleportIn.StartTeleport();
 					break;
 				case Stage.Active:
-					//_damageVisuals.CleanUpDebris();
-					// _teleportIn.EndTeleport();
 					break;
 				case Stage.Dead:
-					
 					if(Runner.TryGetSingleton( out GameManager gameManager))
 						gameManager.OnCommanderDeath();
-
 					break;
 				case Stage.TeleportOut:
 					SpawnTeleportOutFx();

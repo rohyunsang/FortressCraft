@@ -12,8 +12,8 @@ namespace Agit.FortressCraft
 	public enum SceneIndex
 	{
 		Main = 0,
-		Lobby,
-		Battle
+		Lobby = 1,
+		Battle = 2
 	}
 
 
@@ -58,7 +58,14 @@ namespace Agit.FortressCraft
             roomCodeTMP.text = "Room Code : " + RoomCode.ToString();
         }
 
-		public override void Shutdown()
+        public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
+        {
+            if (_currentLevel != null)
+                return _currentLevel.GetPlayerSpawnPoint(playerIndex);
+            return null;
+        }
+
+        public override void Shutdown()
 		{
 			Debug.Log("LevelManager.Shutdown();");
 			_currentLevel = null;
@@ -72,19 +79,10 @@ namespace Agit.FortressCraft
 			base.Shutdown();
 		}
 
-		// Get a random level
 		public int GetBattleSceneIndex()
 		{
 			int idx = (int)SceneIndex.Battle;
-			// Make sure it's not the same level again. This is partially because it's more fun to try different levels and partially because scene handling breaks if trying to load the same scene again.
 			return idx;
-		}
-
-		public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
-		{
-			if (_currentLevel!=null)
-				return _currentLevel.GetPlayerSpawnPoint(playerIndex);
-			return null;
 		}
 
 		public void LoadLevel(int nextLevelIndex)
@@ -94,7 +92,6 @@ namespace Agit.FortressCraft
 			{
 				Debug.Log($"LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
 				Runner.UnloadScene(_loadedScene);
-				//UnloadScene();
 				_loadedScene = SceneRef.None;
 			}
 			// Debug.Log($"LevelManager.LoadLevel({nextLevelIndex});");
@@ -134,7 +131,7 @@ namespace Agit.FortressCraft
 				{
 					Player player = (Player) fusionPlayer;
 					Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
-					player.TeleportOut();
+					// player.TeleportOut();
 					yield return new WaitForSeconds(0.1f);
 				}
 
@@ -176,7 +173,7 @@ namespace Agit.FortressCraft
 			
 			// Activate the next level
 			_currentLevel = FindObjectOfType<LevelBehaviour>();
-			if(_currentLevel!=null)
+			if(_currentLevel != null)
 				_currentLevel.Activate();
 
 			yield return new WaitForSeconds(0.3f);
@@ -214,7 +211,6 @@ namespace Agit.FortressCraft
 				if(Runner.IsServer || Runner.IsSharedModeMasterClient)
 					gameManager.currentPlayState = GameManager.PlayState.LOBBY;
 				InputController.fetchInput = true;
-//				Debug.Log($"Switched Scene from {prevScene} to {newScene}");
 			}
 			else
 			{

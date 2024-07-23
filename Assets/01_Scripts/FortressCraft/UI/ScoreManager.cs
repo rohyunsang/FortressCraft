@@ -17,8 +17,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private float _singleDigitSpacing;
 		[SerializeField] private float _doubleDigitSpacing;
 
-		[SerializeField] private ParticleSystem _confetti;
-
 		private Dictionary<int, FinalGameScoreUI> _finalGameScoreUI = new ();
 		private Dictionary<PlayerRef, IntermediateLevelScoreUI> _intermediateLevelScoreUI = new Dictionary<PlayerRef, IntermediateLevelScoreUI>();
 
@@ -58,9 +56,6 @@ namespace Agit.FortressCraft
 			// Organize the scores and celebrate with confetti
 			OrganizeScoreBoards(gameManager);
 
-			_confetti.transform.position = _finalGameScoreUI[gameManager.matchWinner.PlayerIndex].transform.position + Vector3.up;
-			_confetti.Play();
-
 		}
 
 		public void ResetAllGameScores()
@@ -72,7 +67,6 @@ namespace Agit.FortressCraft
 			foreach (IntermediateLevelScoreUI ui in _intermediateLevelScoreUI.Values)
 				LocalObjectPool.Release(ui);
 			_intermediateLevelScoreUI.Clear();
-			_confetti.Clear();
 		}
 
 		private class ScoreBoard
