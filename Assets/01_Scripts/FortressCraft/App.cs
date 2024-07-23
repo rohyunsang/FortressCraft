@@ -20,7 +20,7 @@ namespace Agit.FortressCraft
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
 		[SerializeField] private InputField _room;
-        [SerializeField] private InputField playerName;
+        [SerializeField] private InputField _playerName;
         [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
@@ -127,7 +127,7 @@ namespace Agit.FortressCraft
 				region = region.Split(" (")[0];
             }
 
-			FusionLauncher.Launch(_gameMode, region, _room.text, playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
+			FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		/// <summary>
