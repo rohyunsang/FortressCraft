@@ -14,16 +14,22 @@ namespace Agit.FortressCraft
 
         public InputField _room;
         public InputField _playerName;
+        public Button createButton;
         public Button joinButton;
 
         private void Awake()
         {
             joinButton.onClick.AddListener(InitOnClickJoinButton);
+            createButton.onClick.AddListener(InitOnClickCreateButton);
         }
 
         public void InitOnClickJoinButton()
         {
             _room.text = "";
+            _playerName.text = "";
+        }
+        private void InitOnClickCreateButton()
+        {
             _playerName.text = "";
         }
 

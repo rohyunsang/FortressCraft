@@ -126,8 +126,7 @@ namespace Agit.FortressCraft
 				region = _regionDropdown.options[_regionDropdown.value].text;
 				region = region.Split(" (")[0];
             }
-
-			FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
+            FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		/// <summary>

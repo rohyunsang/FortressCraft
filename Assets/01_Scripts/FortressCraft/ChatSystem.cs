@@ -40,7 +40,6 @@ namespace Agit.FortressCraft
 
             foreach (Player player in players)
             {
-                Debug.Log("PlayerAAAAAAAAAAAAAAAAAAAAAAAAAA" + playerName);
                 if (player != null && player.PlayerName.ToString() == playerName)
                 {
                     player.ChatGate();

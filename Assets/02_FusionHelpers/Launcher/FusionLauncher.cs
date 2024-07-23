@@ -146,7 +146,6 @@ namespace FusionHelpers
 				}
 				session.PlayerJoined(player);
 			}
-
 		}
 
 		public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -190,9 +189,7 @@ namespace FusionHelpers
 		public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
 		public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
 		public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
-
 		public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-		
 		public void OnSceneLoadStart(NetworkRunner runner) { }
 		public void OnSceneLoadDone(NetworkRunner runner) { }
 		public void OnInput(NetworkRunner runner, NetworkInput input) { }
