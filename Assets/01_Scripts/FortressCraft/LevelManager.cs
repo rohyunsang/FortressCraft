@@ -90,7 +90,7 @@ namespace Agit.FortressCraft
 			_currentLevel = null;
 			if (_loadedScene.IsValid)
 			{
-				Debug.Log($"LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
+				Debug.Log($"AAAAAAAAAAAAAA LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
 				Runner.UnloadScene(_loadedScene);
 				_loadedScene = SceneRef.None;
 			}
@@ -137,7 +137,7 @@ namespace Agit.FortressCraft
 
 				yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
 
-				_scoreManager.ResetAllGameScores();
+				// _scoreManager.ResetAllGameScores();
 				if (gameManager.lastPlayerStanding != null)
 				{
 					_scoreManager.ShowIntermediateLevelScore( gameManager );
@@ -173,8 +173,8 @@ namespace Agit.FortressCraft
 			
 			// Activate the next level
 			_currentLevel = FindObjectOfType<LevelBehaviour>();
-			if(_currentLevel != null)
-				_currentLevel.Activate();
+			//if(_currentLevel != null)
+				//_currentLevel.Activate();
 
 			yield return new WaitForSeconds(0.3f);
 

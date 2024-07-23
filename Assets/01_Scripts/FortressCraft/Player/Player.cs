@@ -127,10 +127,8 @@ namespace Agit.FortressCraft
 
             if (fusionLauncher != null)
             {
-                // _playerName °ªÀ» NetworkString<_32>·Î º¯È¯ÇÏ¿© PlayerName¿¡ ÇÒ´ç
                 PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
             }
-			Debug.Log("AAAAAAAAAAAAA" + fusionLauncher.playerName);
 
             ChatSystem.instance.playerName = fusionLauncher.playerName;
         }
@@ -317,6 +315,7 @@ namespace Agit.FortressCraft
 
 					// Place the tank at its spawn point. This has to be done in FUN() because the transform gets reset otherwise
 					Transform spawn = spawnpt.transform;
+					Debug.Log("AAAAAAAAA" + spawn.position);
 					_cc.Teleport( spawn.position, spawn.rotation );
 
 					// If the player was already here when we joined, it might already be active, in which case we don't want to trigger any spawn FX, so just leave it ACTIVE

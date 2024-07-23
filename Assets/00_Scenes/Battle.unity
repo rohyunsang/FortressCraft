@@ -3879,6 +3879,11 @@ MonoBehaviour:
     ambientColor: {r: 0.764151, g: 0.684969, b: 0.33521715, a: 0}
     fogColor: {r: 0.4056604, g: 0.066972226, b: 0.066972226, a: 0}
     fog: 1
+  _playerSpawnPoints:
+  - {fileID: 1640449330}
+  - {fileID: 1441393001}
+  - {fileID: 1172277}
+  - {fileID: 562626002}
 --- !u!1 &1605100566
 GameObject:
   m_ObjectHideFlags: 0
