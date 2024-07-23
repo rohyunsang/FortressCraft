@@ -637,10 +637,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2b078aed09c478c93c208eee6d5168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab:
-    RawGuidValue: 1fe22e38493b948af8f90f8bf79cef7a
+  UnitPrefab: {fileID: 3261838686935695687, guid: 1fe22e38493b948af8f90f8bf79cef7a, type: 3}
   player: {fileID: 0}
   initialTarget: C
+  defaultCapacity: 5
+  maxPoolSize: 10
 --- !u!114 &3011124483476639218
 MonoBehaviour:
   m_ObjectHideFlags: 0

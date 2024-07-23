@@ -1,19 +1,19 @@
 using UnityEngine;
 using Fusion;
+using FusionHelpers;
 using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
-using UnityEngine.Pool;
-using static UnityEngine.EventSystems.PointerEventData;
+
 
 public class NormalUnitRigidBodyMovement : NetworkBehaviour
 {
+    [Networked] public bool IsActive { get; set; }
+
     public NormalUintSpawner Spawner { get; set; }
     private Transform ground_A;
     private Transform ground_B;
     private Transform ground_C;
     private Transform ground_D;
     [SerializeField] private int testSpeed;
-
-    public IObjectPool<NetworkObject> _Pool { get; set; }
 
     public string TargetString { get; set; }
 
@@ -39,6 +39,11 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     public float HP { get; set; }
 
     private TickTimer dieTimer;
+
+    public override void Spawned()
+    {
+        Debug.Log("Unit Spawned");
+    }
 
     void Awake()
     {
@@ -76,8 +81,8 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if (!IsActive) return;
         if (!initialized) return;
-        
         //Debug.Log("Attack: " + AttackEnabled);
         //Debug.Log("NormalUnitRigidBodyMovement is working");
         //Debug.Log( Spawner.AttackEnabled + " / " + AttackEnabled);
@@ -103,8 +108,12 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
         if( dieTimer.Expired(Runner) )
         {
-            _Pool.Release(Object);
-            //RPCSetUnactive();
+            transform.position = new Vector3(20000.0f, 20000.0f);
+            IsActive = false;
+
+            NetworkObjectReleaseContext context = new NetworkObjectReleaseContext( Object, Spawner.id, false, false );
+            Spawner.poolManager.ReleaseInstance(Runner, context);
+            //LocalObjectPool.Release(Object);
             //Destroy(this.gameObject);
         }
         

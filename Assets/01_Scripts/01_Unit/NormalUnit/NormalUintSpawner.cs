@@ -1,17 +1,16 @@
 using UnityEngine;
 using Fusion;
 using Agit.FortressCraft;
-using UnityEngine.Pool;
+using FusionHelpers;
 
 public class NormalUintSpawner : NetworkBehaviour
 {
-    public NetworkPrefabRef UnitPrefab;
+    public NetworkObject UnitPrefab;
     public Player player = null;
     public bool Usable { get; private set; }
-
+    public NetworkObjectPoolManager poolManager;
     [SerializeField] private string initialTarget = "";
 
-    public IObjectPool<NetworkObject> Pool { get; set; }
     [SerializeField] private int defaultCapacity = 5;
     [SerializeField] private int maxPoolSize = 10;
 
@@ -20,6 +19,8 @@ public class NormalUintSpawner : NetworkBehaviour
     public bool AttackEnabled { get; set; }
     public float Damage { get; set; }
     public float Defense { get; set; }
+
+    public NetworkPrefabId id;
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPCTargetChange(string t)
@@ -62,7 +63,7 @@ public class NormalUintSpawner : NetworkBehaviour
         Usable = false;
 
         //GetComponent<NetworkObject>().RequestStateAuthority();
-
+        poolManager = GetComponent<NetworkObjectPoolManager>();
         Target = initialTarget;
         AttackEnabled = true;
         Damage = 20.0f;
@@ -81,115 +82,52 @@ public class NormalUintSpawner : NetworkBehaviour
             }
         }
 
-        if (player != null)
-        {
-            InitPooling();
-        }
+        NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
+        id = temp.NetworkTypeId.AsPrefabId;
+        Destroy(temp.gameObject);
+        poolManager.AddPoolTable(id);
     }
 
     public void SpawnUnit()
     {
-        /*
-        if (runner.IsSharedModeMasterClient)
+        
+        if (Runner.IsSharedModeMasterClient)
         {
-            NetworkObject unitObj = runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
-            NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+            NetworkObject unitObj = null;
+            //NetworkPrefabId id = NetworkPrefabId.FromIndex(2);
             
-            normalUnitRigidBodyMovement.TargetString = Target;
-            normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
-            normalUnitRigidBodyMovement.Damage = Damage;
-            normalUnitRigidBodyMovement.Defense = Defense;
+            NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
+            var result = poolManager.AcquirePrefabInstance(Runner, context, out unitObj);
 
-            normalUnitRigidBodyMovement.Spawner = this;
-            normalUnitRigidBodyMovement.Initializing();
+            if(result == NetworkObjectAcquireResult.Success)
+            {
+                NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+
+                normalUnitRigidBodyMovement.TargetString = Target;
+                normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
+                normalUnitRigidBodyMovement.Damage = Damage;
+                normalUnitRigidBodyMovement.Defense = Defense;
+
+                normalUnitRigidBodyMovement.Spawner = this;
+                normalUnitRigidBodyMovement.IsActive = true;
+                normalUnitRigidBodyMovement.Initializing();
+            }
+            else
+            {
+                Debug.LogError("Pooling Failed");
+            }
         }
-        */
-        if (Runner.IsSharedModeMasterClient)
-        {
-            Pool.Get();
-        }
     }
 
-    // Object Pooling
-    private void InitPooling()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPCSetActive(NetworkObject NO)
     {
-        if (!Runner.IsSharedModeMasterClient) return;
-
-        Pool = new ObjectPool<NetworkObject>(CreatPooledItem, OnTakeFromPool,
-                                             OnReturnedToPool, OnDestroyPoolObject,
-                                             true, defaultCapacity, maxPoolSize);
-
-        /*
-        // 미리 생성
-        for (int i = 0; i < defaultCapacity; ++i)
-        {
-            GameObject no = CreatPooledItem();
-            NormalUnitRigidBodyMovement normal = no.GetComponent<NormalUnitRigidBodyMovement>();
-            normal._Pool.Release(normal.gameObject);
-        }
-        */
+        NO.gameObject.SetActive(true);
     }
 
-    // 생성 
-    private NetworkObject CreatPooledItem()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPCSetUnactive(NetworkObject NO)
     {
-        NetworkObject unitObj = null;
-        if (Runner.IsSharedModeMasterClient)
-        {
-            unitObj = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
-            NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
-
-            normalUnitRigidBodyMovement.HP = 100.0f;
-            normalUnitRigidBodyMovement.TargetString = Target;
-            normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
-            normalUnitRigidBodyMovement.Damage = Damage;
-            normalUnitRigidBodyMovement.Defense = Defense;
-
-            normalUnitRigidBodyMovement.Spawner = this;
-            normalUnitRigidBodyMovement.Initializing();
-        }
-
-        if (unitObj == null) return null;
-
-        unitObj.GetComponent<NormalUnitRigidBodyMovement>()._Pool = this.Pool;
-
-        return unitObj;
-    }
-
-    // 사용 
-    private void OnTakeFromPool(NetworkObject poolNo)
-    {
-        //Debug.Log("TakeFromPool");
-        poolNo.transform.position = transform.position;
-        NormalUnitRigidBodyMovement normal = poolNo.gameObject.GetComponent<NormalUnitRigidBodyMovement>();
-        normal.HP = 100.0f;
-        Debug.Log("11" + " " + poolNo.gameObject.name);
-        RPCSetActive(poolNo);
-        Debug.Log("22" + " " + poolNo.gameObject.name);
-    }
-
-    // 반환
-    private void OnReturnedToPool(NetworkObject poolNo)
-    {
-        RPCSetUnactive(poolNo);
-    }
-
-    private void OnDestroyPoolObject(NetworkObject poolNo)
-    {
-        Destroy(poolNo.gameObject);
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPCSetUnactive(NetworkObject poolNo)
-    {
-        poolNo.gameObject.SetActive(false);
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPCSetActive(NetworkObject poolNo)
-    {
-        Debug.Log(poolNo.gameObject.name + " is activated");
-        poolNo.gameObject.SetActive(true);
-        Debug.Log(poolNo.gameObject.activeSelf);
+        NO.gameObject.SetActive(false);
     }
 }
