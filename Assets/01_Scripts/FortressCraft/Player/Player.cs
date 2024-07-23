@@ -66,8 +66,7 @@ namespace Agit.FortressCraft
 		private ChangeDetector changes;
 
 		private NetworkInputData _oldInput;
-		public GameObject camera;
-		public CinemachineVirtualCamera vCam;
+		
 
 		public Animator anim;
 
@@ -95,9 +94,6 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
-			camera = GameObject.Find("Virtual Camera");
-			vCam = camera.GetComponent<CinemachineVirtualCamera>();
-			vCam.Follow = this.gameObject.transform;
 		}
 
 		public override void InitNetworkState()
@@ -202,7 +198,6 @@ namespace Agit.FortressCraft
                         OnStageChanged();
                         break;
                     case nameof(PlayerName):
-                        Debug.Log("Render Platyerana");
                         OnPlayerNameChanged();
                         break;
                     case nameof(LastPublicChat):
