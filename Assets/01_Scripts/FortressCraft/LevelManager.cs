@@ -75,7 +75,7 @@ namespace Agit.FortressCraft
 				SceneManager.UnloadSceneAsync(_loadedScene.AsIndex);
 				_loadedScene = SceneRef.None;
 			}
-			_scoreManager.ResetAllGameScores();
+			// _scoreManager.ResetAllGameScores();
 			base.Shutdown();
 		}
 
@@ -142,7 +142,7 @@ namespace Agit.FortressCraft
 				{
 					_scoreManager.ShowIntermediateLevelScore( gameManager );
 					yield return new WaitForSeconds(1.5f);
-					_scoreManager.ResetAllGameScores();
+					// _scoreManager.ResetAllGameScores();
 				}
 			}
 

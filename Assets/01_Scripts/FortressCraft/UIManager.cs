@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Agit.FortressCraft 
 {
-    public class UIManager : Singleton<UIManager>
+    public class UIManager : MonoBehaviour
     {
         #region UI - INTRO
 
@@ -43,7 +43,14 @@ namespace Agit.FortressCraft
 
 
         #region UI - IN GAME
+        public GameObject uI_InGame;
+        public GameObject defeatPanel;
 
+        public void OnDefeatPanel()
+        { 
+            uI_InGame.SetActive(true);
+            defeatPanel.SetActive(true);
+        }
 
         #endregion
 

@@ -51,9 +51,9 @@ namespace FusionHelpers
 
 		public override void Despawned(NetworkRunner runner, bool hasState)
 		{
-      Debug.Log($"Despawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
+			Debug.Log($"Despawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 
-      Runner.WaitForSingleton<FusionSession>(session => session.RemovePlayerAvatar(this));
+			Runner.WaitForSingleton<FusionSession>(session => session.RemovePlayerAvatar(this));
 		}
 
 		protected void RegisterEventListener<T>(Action<T> listener) where T : unmanaged, INetworkEvent

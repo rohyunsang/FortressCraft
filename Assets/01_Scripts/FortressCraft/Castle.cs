@@ -22,7 +22,6 @@ namespace Agit.FortressCraft{
 
         public Team team;
 
-
         public override void Spawned()
         {
             base.Spawned();
@@ -47,7 +46,14 @@ namespace Agit.FortressCraft{
 
         private void DestroyCastle()
         {
-            Debug.Log("체력 0 이하 죽음!");
+            Debug.Log("Castle Destroyed!");
+
+            //if (Object.HasInputAuthority) // 현재 클라이언트가 입력 권한을 가진 객체인지 확인
+            //{
+
+            FindObjectOfType<UIManager>().OnDefeatPanel();
+            //}
+
             // UI Call : Defeat Panel -> OnClilk -> 
             // Delete Input Auth
             // Delete Playter   

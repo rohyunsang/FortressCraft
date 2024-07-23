@@ -206,7 +206,6 @@ namespace Agit.FortressCraft
             }
 
             var interpolated = new NetworkBehaviourBufferInterpolator(this);
-
         }
 
         public void OnPlayerNameChanged()
@@ -348,7 +347,7 @@ namespace Agit.FortressCraft
 
 		private void SpawnTeleportOutFx()
 		{
-			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
+			// TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
 		}
 
 		private void ResetPlayer()

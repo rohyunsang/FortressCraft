@@ -158,5 +158,25 @@ namespace Agit.FortressCraft
 		{
 			return score[player.PlayerIndex];
 		}
+
+		public void Defeat(string team)
+		{
+			switch (team)
+			{
+				case "A":
+					break;
+                case "B":
+                    break;
+                case "C":
+                    break;
+                case "D":
+                    break;
+            }
+
+			// 1. Player안에 Canvas를 넣어서 플레이어를 찾고 Defeat Canvas를 뛰움. 
+			// 2. RPC 를 이용. 
+			// 3. 플레이어는 Castle HP에 대한 참조를 가지고 있고, 자신의 성이 파괴될시 자신의 판넬에서 Defeat 판넬을 켬. 
+			// 4. Castle은 플레이어에 대한 참조를 가지고 있고, 
+		}
 	}
 }
