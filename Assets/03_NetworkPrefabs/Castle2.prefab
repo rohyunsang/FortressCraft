@@ -637,11 +637,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2b078aed09c478c93c208eee6d5168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab: {fileID: 3261838686935695687, guid: 1fe22e38493b948af8f90f8bf79cef7a, type: 3}
+  UnitPrefab: {fileID: 5210533129529175386, guid: 0aa75b624633e485787e038a388457f9, type: 3}
+  Arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
   player: {fileID: 0}
+  poolManager: {fileID: 0}
   initialTarget: C
-  defaultCapacity: 5
-  maxPoolSize: 10
+  id:
+    RawValue: 0
+  arrowId:
+    RawValue: 0
 --- !u!114 &3011124483476639218
 MonoBehaviour:
   m_ObjectHideFlags: 0

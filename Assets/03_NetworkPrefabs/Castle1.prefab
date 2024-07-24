@@ -722,10 +722,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitPrefab: {fileID: 8013978271138280693, guid: ee912bbe7b6884806b13cd793b4d29ad, type: 3}
+  Arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
   player: {fileID: 0}
+  poolManager: {fileID: 0}
   initialTarget: B
-  defaultCapacity: 5
-  maxPoolSize: 10
+  id:
+    RawValue: 0
+  arrowId:
+    RawValue: 0
 --- !u!114 &6243358051450147233
 MonoBehaviour:
   m_ObjectHideFlags: 0

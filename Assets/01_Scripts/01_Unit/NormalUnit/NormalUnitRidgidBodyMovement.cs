@@ -88,7 +88,7 @@ namespace Agit.FortressCraft
 
             animatorState = animator.GetCurrentAnimatorStateInfo(0);
 
-            if (animatorState.fullPathHash != animAttackBow)
+            if (animatorState.fullPathHash != animAttackBow )
             {
                 if (_rb.Rigidbody.velocity.x != 0.0f || _rb.Rigidbody.velocity.y != 0.0f)
                 {
