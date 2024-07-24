@@ -1,32 +1,35 @@
 using Fusion;
 using UnityEngine;
 
-public class NormalUnitGenerator : NetworkBehaviour
+namespace Agit.FortressCraft
 {
-    private TickTimer spawnTimer { get; set; }
-    [SerializeField] int spwanTime = 5;
-    NormalUintSpawner spawner;
-
-    public override void Spawned()
+    public class NormalUnitGenerator : NetworkBehaviour
     {
-        spawner = GetComponent<NormalUintSpawner>();
-        if( spawner.Usable ) SetWaitingTime();
-    }
+        private TickTimer spawnTimer { get; set; }
+        [SerializeField] int spwanTime = 5;
+        NormalUintSpawner spawner;
 
-    public override void FixedUpdateNetwork()
-    {
-        //Debug.Log("Generating");
-        //Debug.Log( Id );
-        if (spawnTimer.Expired(Runner))
+        public override void Spawned()
         {
-            //Debug.Log(Id);
-            SetWaitingTime();
-            spawner.SpawnUnit();
+            spawner = GetComponent<NormalUintSpawner>();
+            if (spawner.Usable) SetWaitingTime();
         }
-    }
 
-    private void SetWaitingTime()
-    {
-        spawnTimer = TickTimer.CreateFromSeconds(Runner, spwanTime);
+        public override void FixedUpdateNetwork()
+        {
+            //Debug.Log("Generating");
+            //Debug.Log( Id );
+            if (spawnTimer.Expired(Runner))
+            {
+                //Debug.Log(Id);
+                SetWaitingTime();
+                spawner.SpawnUnit();
+            }
+        }
+
+        private void SetWaitingTime()
+        {
+            spawnTimer = TickTimer.CreateFromSeconds(Runner, spwanTime);
+        }
     }
 }

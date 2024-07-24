@@ -3,127 +3,129 @@ using Fusion;
 using Agit.FortressCraft;
 using FusionHelpers;
 
-public class NormalUintSpawner : NetworkBehaviour
+namespace Agit.FortressCraft
 {
-    public NetworkObject UnitPrefab;
-    public NetworkObject Arrow;
-    public Player player = null;
-    public bool Usable { get; private set; }
-    public NetworkObjectPoolManager poolManager;
-    [SerializeField] private string initialTarget = "";
-
-    // RPC property
-    public string Target { get; set; }
-    public bool AttackEnabled { get; set; }
-    public float Damage { get; set; }
-    public float Defense { get; set; }
-
-    public NetworkPrefabId id;
-    public NetworkPrefabId arrowId;
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPCTargetChange(string t)
+    public class NormalUintSpawner : NetworkBehaviour
     {
-        Debug.Log("target: " + t);
-        Target = t;
-    }
+        public NetworkObject UnitPrefab;
+        public NetworkObject Arrow;
+        public Player player = null;
+        public bool Usable { get; private set; }
+        public NetworkObjectPoolManager poolManager;
+        [SerializeField] private string initialTarget = "";
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPCSettingAttackEnabled(string s)
-    {
-        if (s == "Off")
+        // RPC property
+        public string Target { get; set; }
+        public bool AttackEnabled { get; set; }
+        public float Damage { get; set; }
+        public float Defense { get; set; }
+
+        public NetworkPrefabId id;
+        public NetworkPrefabId arrowId;
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPCTargetChange(string t)
         {
-            Debug.Log("Change AttackEnabled - Off");
-            AttackEnabled = false;
+            Debug.Log("target: " + t);
+            Target = t;
         }
-        else
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPCSettingAttackEnabled(string s)
         {
-            Debug.Log("Change AttackEnabled - On");
-            AttackEnabled = true;
-        }
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPCSettingDamage(float newDefense)
-    {
-        Damage = newDefense;
-        Debug.Log("Damage: " + newDefense);
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPCSettingDefense(float newDamage)
-    {
-        Damage = newDamage;
-        Debug.Log("Defense: " + Damage);
-    }
-
-    public override void Spawned()
-    {
-        Usable = false;
-
-        poolManager = NetworkObjectPoolManager.Instance;
-        Target = initialTarget;
-        AttackEnabled = true;
-        Damage = 20.0f;
-        Defense = 1.0f;
-
-        Player[] players = GameObject.FindObjectsOfType<Player>();
-        foreach (Player p in players)
-        {
-            if (p.PlayerIndex == 0 && Target == "B" ||
-                p.PlayerIndex == 1 && Target == "C" ||
-                p.PlayerIndex == 2 && Target == "D" ||
-                p.PlayerIndex == 3 && Target == "A")
+            if (s == "Off")
             {
-                player = p;
-                Usable = true;
-            }
-        }
-
-        NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
-        id = temp.NetworkTypeId.AsPrefabId;
-        Destroy(temp.gameObject);
-        poolManager.AddPoolTable(id);
-
-        temp = Runner.Spawn(Arrow, (Vector2)transform.position, Quaternion.identity);
-        arrowId = temp.NetworkTypeId.AsPrefabId;
-        Destroy(temp.gameObject);
-        poolManager.AddPoolTable(arrowId);
-    }
-
-    public void SpawnUnit()
-    {
-
-        if (Runner.IsSharedModeMasterClient)
-        {
-            NetworkObject unitObj = null;
-
-            NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
-            var result = poolManager.AcquirePrefabInstance(Runner, context, out unitObj);
-
-            if (result == NetworkObjectAcquireResult.Success)
-            {
-                unitObj.transform.position = transform.position;
-
-                NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
-                NetworkMecanimAnimator animator = unitObj.GetComponent<NetworkMecanimAnimator>();
-                normalUnitRigidBodyMovement.TargetString = Target;
-                normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
-                normalUnitRigidBodyMovement.Damage = Damage;
-                normalUnitRigidBodyMovement.Defense = Defense;
-                normalUnitRigidBodyMovement.Spawner = this;
-                animator.Animator.Play("IdleState");
-                normalUnitRigidBodyMovement.Initializing();
-
-                normalUnitRigidBodyMovement.RPCSetPos(transform.position);
-                
-                normalUnitRigidBodyMovement.RPCSetActive();
+                Debug.Log("Change AttackEnabled - Off");
+                AttackEnabled = false;
             }
             else
             {
-                Debug.LogError("Pooling Failed");
+                Debug.Log("Change AttackEnabled - On");
+                AttackEnabled = true;
+            }
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPCSettingDamage(float newDefense)
+        {
+            Damage = newDefense;
+            Debug.Log("Damage: " + newDefense);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPCSettingDefense(float newDamage)
+        {
+            Damage = newDamage;
+            Debug.Log("Defense: " + Damage);
+        }
+
+        public override void Spawned()
+        {
+            Usable = false;
+
+            poolManager = NetworkObjectPoolManager.Instance;
+            Target = initialTarget;
+            AttackEnabled = true;
+            Damage = 20.0f;
+            Defense = 1.0f;
+
+            Player[] players = GameObject.FindObjectsOfType<Player>();
+            foreach (Player p in players)
+            {
+                if (p.PlayerIndex == 0 && Target == "B" ||
+                    p.PlayerIndex == 1 && Target == "C" ||
+                    p.PlayerIndex == 2 && Target == "D" ||
+                    p.PlayerIndex == 3 && Target == "A")
+                {
+                    player = p;
+                    Usable = true;
+                }
+            }
+
+            NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
+            id = temp.NetworkTypeId.AsPrefabId;
+            Destroy(temp.gameObject);
+            poolManager.AddPoolTable(id);
+
+            temp = Runner.Spawn(Arrow, (Vector2)transform.position, Quaternion.identity);
+            arrowId = temp.NetworkTypeId.AsPrefabId;
+            Destroy(temp.gameObject);
+            poolManager.AddPoolTable(arrowId);
+        }
+
+        public void SpawnUnit()
+        {
+
+            if (Runner.IsSharedModeMasterClient)
+            {
+                NetworkObject unitObj = null;
+
+                NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
+                var result = poolManager.AcquirePrefabInstance(Runner, context, out unitObj);
+
+                if (result == NetworkObjectAcquireResult.Success)
+                {
+                    unitObj.transform.position = transform.position;
+
+                    NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+                    NetworkMecanimAnimator animator = unitObj.GetComponent<NetworkMecanimAnimator>();
+                    normalUnitRigidBodyMovement.TargetString = Target;
+                    normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
+                    normalUnitRigidBodyMovement.Damage = Damage;
+                    normalUnitRigidBodyMovement.Defense = Defense;
+                    normalUnitRigidBodyMovement.Spawner = this;
+                    animator.Animator.Play("IdleState");
+                    normalUnitRigidBodyMovement.Initializing();
+
+                    normalUnitRigidBodyMovement.RPCSetPos(transform.position);
+
+                    normalUnitRigidBodyMovement.RPCSetActive();
+                }
+                else
+                {
+                    Debug.LogError("Pooling Failed");
+                }
             }
         }
     }
-
 }

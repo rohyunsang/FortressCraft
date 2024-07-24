@@ -2,115 +2,119 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChangeTarget : NetworkBehaviour
+namespace Agit.FortressCraft
 {
-    private NormalUintSpawner[] spawners;
-    private NormalUintSpawner targetSpawner;
-    private Button[] btns;
-
-    private void Awake()
+    public class ChangeTarget : NetworkBehaviour
     {
-        spawners = GameObject.FindObjectsOfType<NormalUintSpawner>();
-        btns = GetComponentsInChildren<Button>();
+        private NormalUintSpawner[] spawners;
+        private NormalUintSpawner targetSpawner;
+        private Button[] btns;
 
-        foreach (Button btn in btns)
+        private void Awake()
         {
-            if (btn.transform.name == "Button_A")
+            spawners = GameObject.FindObjectsOfType<NormalUintSpawner>();
+            btns = GetComponentsInChildren<Button>();
+
+            foreach (Button btn in btns)
             {
-                btn.onClick.AddListener(setTargetA);
+                if (btn.transform.name == "Button_A")
+                {
+                    btn.onClick.AddListener(setTargetA);
+                }
+                else if (btn.transform.name == "Button_B")
+                {
+                    btn.onClick.AddListener(setTargetB);
+                }
+                else if (btn.transform.name == "Button_C")
+                {
+                    btn.onClick.AddListener(setTargetC);
+                }
+                else if (btn.transform.name == "Button_D")
+                {
+                    btn.onClick.AddListener(setTargetD);
+                }
+                else if (btn.transform.name == "Button_Attack")
+                {
+                    btn.onClick.AddListener(SetAttack);
+                }
             }
-            else if (btn.transform.name == "Button_B")
+        }
+
+
+
+        private void FixedUpdate()
+        {
+            if (targetSpawner == null) SettingSpawner();
+        }
+
+        private void SettingSpawner()
+        {
+            foreach (NormalUintSpawner spawner in spawners)
             {
-                btn.onClick.AddListener(setTargetB);
+                if (spawner.player == null) continue;
+
+                if (spawner.player.PlayerId.PlayerId == Runner.LocalPlayer.PlayerId)
+                {
+                    targetSpawner = spawner;
+                    break;
+                }
             }
-            else if (btn.transform.name == "Button_C")
+        }
+
+        public void setTargetA()
+        {
+            if (targetSpawner == null) return;
+            Debug.Log("Set as A");
+            targetSpawner.RPCTargetChange("A");
+        }
+
+
+        public void setTargetB()
+        {
+            if (targetSpawner == null) return;
+            Debug.Log("Set as B");
+            targetSpawner.RPCTargetChange("B");
+        }
+
+        public void setTargetC()
+        {
+            if (targetSpawner == null) return;
+            Debug.Log("Set as C");
+            targetSpawner.RPCTargetChange("C");
+        }
+
+        public void setTargetD()
+        {
+            if (targetSpawner == null) return;
+            Debug.Log("Set as D");
+            targetSpawner.RPCTargetChange("D");
+        }
+
+        public void SetAttack()
+        {
+            if (targetSpawner == null) return;
+
+            if (targetSpawner.AttackEnabled == true)
             {
-                btn.onClick.AddListener(setTargetC);
+                OffAttack();
             }
-            else if (btn.transform.name == "Button_D")
+            else
             {
-                btn.onClick.AddListener(setTargetD);
+                OnAttack();
             }
-            else if(btn.transform.name == "Button_Attack")
-            {
-                btn.onClick.AddListener(SetAttack);
-            }
+        }
+
+        private void OffAttack()
+        {
+            Debug.Log("Off Attack");
+            targetSpawner.RPCSettingAttackEnabled("Off");
+        }
+
+        private void OnAttack()
+        {
+            Debug.Log("On Attack");
+            targetSpawner.RPCSettingAttackEnabled("On");
         }
     }
 
-    
-
-    private void FixedUpdate()
-    {
-        if (targetSpawner == null) SettingSpawner();
-    }
-
-    private void SettingSpawner()
-    {
-        foreach (NormalUintSpawner spawner in spawners)
-        {
-            if (spawner.player == null) continue;
-
-            if (spawner.player.PlayerId.PlayerId == Runner.LocalPlayer.PlayerId)
-            {
-                targetSpawner = spawner;
-                break;
-            }
-        }
-    }
-
-    public void setTargetA()
-    {
-        if (targetSpawner == null) return;
-        Debug.Log("Set as A");
-        targetSpawner.RPCTargetChange("A");
-    }
-
-
-    public void setTargetB()
-    {
-        if (targetSpawner == null) return;
-        Debug.Log("Set as B");
-        targetSpawner.RPCTargetChange("B");
-    }
-
-    public void setTargetC()
-    {
-        if (targetSpawner == null) return;
-        Debug.Log("Set as C");
-        targetSpawner.RPCTargetChange("C");
-    }
-
-    public void setTargetD()
-    {
-        if (targetSpawner == null) return;
-        Debug.Log("Set as D");
-        targetSpawner.RPCTargetChange("D");
-    }
-
-    public void SetAttack()
-    {
-        if (targetSpawner == null) return;
-
-        if( targetSpawner.AttackEnabled == true )
-        {
-            OffAttack();
-        }
-        else
-        {
-            OnAttack();
-        }
-    }
-
-    private void OffAttack()
-    {
-        Debug.Log("Off Attack");
-        targetSpawner.RPCSettingAttackEnabled("Off");
-    }
-
-    private void OnAttack()
-    {
-        Debug.Log("On Attack");
-        targetSpawner.RPCSettingAttackEnabled("On");
-    }
 }

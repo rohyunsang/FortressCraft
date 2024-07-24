@@ -2,27 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowAttackCollider : AttackCollider
+namespace Agit.FortressCraft
 {
-    private Arrow arrow;
-
-    private void Awake()
+    public class ArrowAttackCollider : AttackCollider
     {
-        arrow = GetComponent<Arrow>();
-    }
+        private Arrow arrow;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (TargetUnit == null) return;
-        if (collision.CompareTag(TargetUnit))
+        private void Awake()
         {
-            if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycoliider))
+            arrow = GetComponent<Arrow>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (TargetUnit == null) return;
+            if (collision.CompareTag(TargetUnit))
             {
-                bodycoliider.Damaged = Damage;
-                //Debug.Log("Hit!");
-                arrow.Release();
+                if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycoliider))
+                {
+                    bodycoliider.Damaged = Damage;
+                    //Debug.Log("Hit!");
+                    arrow.Release();
+                }
+
             }
-            
         }
     }
 }
+

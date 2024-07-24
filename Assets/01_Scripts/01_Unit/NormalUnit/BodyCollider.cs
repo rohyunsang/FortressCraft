@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyCollider : MonoBehaviour
+namespace Agit.FortressCraft
 {
-    public float Damaged { get; set; }
-
-    private void Awake()
+    public class BodyCollider : MonoBehaviour
     {
-        Damaged = 0.0f;
+        public float Damaged { get; set; }
+
+        private void Awake()
+        {
+            Damaged = 0.0f;
+        }
     }
 }
+
