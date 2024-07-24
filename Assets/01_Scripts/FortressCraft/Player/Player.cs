@@ -47,6 +47,7 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+		
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -67,8 +68,9 @@ namespace Agit.FortressCraft
 		private NetworkInputData _oldInput;
 		public GameObject camera;
 		public CinemachineVirtualCamera vCam;
-
 		public Animator anim;
+		public GameObject weapon;
+		public BoxCollider2D weaponCollider;
 
 		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
@@ -88,9 +90,14 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
+
+			weapon = GetComponentInChildren<PlayerWeapon>().gameObject;
+			weaponCollider = weapon.GetComponent<BoxCollider2D>();
+
 			camera = GameObject.Find("Virtual Camera");
 			vCam = camera.GetComponent<CinemachineVirtualCamera>();
 			vCam.Follow = this.gameObject.transform;
+			weaponCollider.enabled = false;
 		}
 
 		public override void InitNetworkState()
@@ -109,6 +116,7 @@ namespace Agit.FortressCraft
 			_changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
 			ready = false;
+
 
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
@@ -145,6 +153,7 @@ namespace Agit.FortressCraft
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					{
+						Attack();
 						anim.SetTrigger("Attack");
                     }
 
@@ -234,6 +243,18 @@ namespace Agit.FortressCraft
 				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
 		}
 
+// attack test
+		private void Attack()
+		{
+			weaponCollider.enabled = true;
+			Debug.Log("Do Attack");
+		}
+
+		private void OnDrawGizmos()
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawWireSphere(gameObject.transform.position,0.32f);	
+		}
 
 		public void Reset()
 		{

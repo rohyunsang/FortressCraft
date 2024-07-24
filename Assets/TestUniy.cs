@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 namespace Agit.FortressCraft{
 
-    public enum Team{
+    /*public enum Team{
         A, B, C, D
-    }
+    }*/
 
-    public class Castle : NetworkBehaviour
+    public class TestUniy : NetworkBehaviour
     {
         [Networked] public float CurrentHP { get; set; } 
 
@@ -18,7 +18,7 @@ namespace Agit.FortressCraft{
         
         private ChangeDetector changes;
 
-        public Slider HpBarSlider;
+        //public Slider HpBarSlider;
 
         public Team team;
 
@@ -37,14 +37,15 @@ namespace Agit.FortressCraft{
             if (maxHP == 0 || CurrentHP <= 0) //* �̹� ü�� 0���ϸ� �н�
                 return;
             CurrentHP -= damage;
-            AsycHp(); //* ü�� ����
+            //AsycHp(); //* ü�� ����
             if (CurrentHP <= 0)
             {
-                Debug.Log("ü�� 0 ���� ����!");
+                Debug.Log("Die!");
+                gameObject.SetActive(false);
             }
         }
 
-        public override void Render()
+       /* public override void Render()
         {
 
             base.Render();
@@ -54,7 +55,7 @@ namespace Agit.FortressCraft{
                 switch (change)
                 {
                     case nameof(CurrentHP):
-                        AsycHp();
+                        //AsycHp();
                         break;
                 }
             }
@@ -65,25 +66,26 @@ namespace Agit.FortressCraft{
             if (HpBarSlider != null)
                 HpBarSlider.value = CurrentHP / maxHP;
         }
-
+        */
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag(team.ToString()))
+            if (collision.CompareTag("Player"))
             {
                 return;
             }
             Debug.Log("Trigger");
-            //성의 Team Tag와 플레이어의 Tag가 같을 때 데미지 들어가면 안된다.
-            
-            if (collision.TryGetComponent<PlayerWeapon>(out PlayerWeapon weapon) && !gameObject.CompareTag("A")) 
-            // 임시로 Tag A를 넣어보자
+
+            // PlayerWeapon ������Ʈ�� �õ��Ͽ� ��������, ������ ������ ó��
+            // 플레이어와 같은 팀(태그)를 가졌을 경우 데미지가 들어가지 않게 해야함.
+            // 네트워크 단에서 어떻게 팀 태그를 지정해주는지가 선행되어야 할듯.
+            if (collision.TryGetComponent<PlayerWeapon>(out PlayerWeapon weapon))
             {
                 Damage(weapon.damage);
             }
             else
             {
-                Debug.Log("This is Not PlayerWeapon");
+
             }
         }
     }
