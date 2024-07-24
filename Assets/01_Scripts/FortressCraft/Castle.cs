@@ -7,99 +7,42 @@ using UnityEngine.UI;
 
 namespace Agit.FortressCraft{
 
-    public enum Team{
-        A, B, C, D
-    }
-
-    public class Castle : NetworkBehaviour
+    public class Castle : MonoBehaviour
     {
-        [Networked] public float CurrentHP { get; set; }
-
-        private float maxHP = 100f; //* 최대 체력
-
-        private ChangeDetector changes;
-
+        public float CurrentHP { get; private set; }
+        public float maxHP = 100f; // 최대 체력
+        public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
 
         public Team team;
 
-        [Networked] public bool isDefeated { get; set; }
-        [Networked] public bool isVictory { get; set; }
-
-        public override void Spawned()
+        private void Awake()
         {
-            base.Spawned();
-            changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
-
             CurrentHP = maxHP;
-            isDefeated = false;
-            isVictory = false;
+            IsDestroyed = false;
         }
 
-        public void Damage(float damage) //* 데미지 받는 함수
+        public void Damage(float damage)
         {
-            if (maxHP == 0 || CurrentHP <= 0) //* 이미 체력 0이하면 패스
-                return;
+            if (IsDestroyed || CurrentHP <= 0) return;
             CurrentHP -= damage;
-            if (CurrentHP <= 0)
+
+            // Update HP in CastleManager
+            var manager = FindObjectOfType<CastleManager>();
+            if (manager != null)
             {
-                isDefeated = true;
+                manager.UpdateCastleHP(team, CurrentHP);
             }
         }
 
-        private void DestroyCastle()
+        public void DestroyCastle()
         {
-            if (isDefeated)
-            {
-                FindObjectOfType<UIManager>().OnDefeatPanel();
-            }
-        }
-
-        private void Victroy()
-        {
-            if (isVictory)
-            {
-                FindObjectOfType<UIManager>().OnVictoryPanel();
-            }
-        }
-
-        public override void Render()
-        {
-            base.Render();
-
-            foreach (var change in changes.DetectChanges(this))
-            {
-                switch (change)
-                {
-                    case nameof(CurrentHP):
-                        AsycHp();
-                        break;
-                    case nameof(isDefeated):
-                        DestroyCastle();
-                        break;
-                    case nameof(isVictory):
-                        Victroy();
-                        break;
-                }
-            }
-        }
-
-        public void AsycHp() //*HP 갱신
-        {
-            Debug.Log(CurrentHP + " " + team.ToString());
-
-            if (HpBarSlider != null)
-                HpBarSlider.value = CurrentHP / maxHP;
+            Debug.Log("성파괴됨!");
         }
 
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag(team.ToString()))
-            {
-                return;
-            }
-
             // PlayerWeapon 컴포넌트를 시도하여 가져오고, 있으면 데미지 처리
             if (collision.TryGetComponent<PlayerWeapon>(out PlayerWeapon weapon))
             {
