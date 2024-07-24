@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using TMPro;
+using System.Linq;
 
 namespace Agit.FortressCraft
 {
@@ -127,15 +128,17 @@ namespace Agit.FortressCraft
 
 				// Despawn players with a small delay between each one
 				Debug.Log("De-spawning all players");
-				foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
-				{
-					Player player = (Player) fusionPlayer;
-					Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
-					// player.TeleportOut();
-					yield return new WaitForSeconds(0.1f);
-				}
+                var players = gameManager.AllPlayers.ToList(); // ToList()로 복사본 생성
+                foreach (FusionPlayer fusionPlayer in players)
+                {
+                    Player player = (Player)fusionPlayer;
+                    Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
+                    // player.TeleportOut();
+                    yield return new WaitForSeconds(0.1f);
+                }
 
-				yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
+
+                yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
 
 				// _scoreManager.ResetAllGameScores();
 				if (gameManager.lastPlayerStanding != null)

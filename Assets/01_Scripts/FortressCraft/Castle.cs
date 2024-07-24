@@ -1,4 +1,5 @@
 using Fusion;
+using FusionHelpers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,25 +13,27 @@ namespace Agit.FortressCraft{
 
     public class Castle : NetworkBehaviour
     {
-        [Networked] public float CurrentHP { get; set; } 
+        [Networked] public float CurrentHP { get; set; }
 
         private float maxHP = 100f; //* 최대 체력
-        
+
         private ChangeDetector changes;
 
         public Slider HpBarSlider;
 
         public Team team;
 
-        [Networked] public bool isDefeated { get; set;}
+        [Networked] public bool isDefeated { get; set; }
+        [Networked] public bool isVictory { get; set; }
 
         public override void Spawned()
         {
             base.Spawned();
-            isDefeated = false;
             changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
             CurrentHP = maxHP;
+            isDefeated = false;
+            isVictory = false;
         }
 
         public void Damage(float damage) //* 데미지 받는 함수
@@ -38,42 +41,30 @@ namespace Agit.FortressCraft{
             if (maxHP == 0 || CurrentHP <= 0) //* 이미 체력 0이하면 패스
                 return;
             CurrentHP -= damage;
-            AsycHp(); //* 체력 갱신
             if (CurrentHP <= 0)
             {
-                
-                DestroyCastle();
+                isDefeated = true;
             }
         }
 
         private void DestroyCastle()
         {
-            Debug.Log("Castle Destroyed!");
-            isDefeated = true;
-            FindObjectOfType<CastleManager>().DefeatCnt();
-
-            FindObjectOfType<UIManager>().OnDefeatPanel();
-            
-
-            // UI Call : Defeat Panel -> OnClilk -> 
-            // Delete Input Auth
-            // Delete Playter   
+            if (isDefeated)
+            {
+                FindObjectOfType<UIManager>().OnDefeatPanel();
+            }
         }
 
-        public void IsWinner()
+        private void Victroy()
         {
-            Debug.Log(team.ToString());
-
-            if (!isDefeated)
+            if (isVictory)
             {
-                Debug.Log("Debug" + team.ToString());
                 FindObjectOfType<UIManager>().OnVictoryPanel();
             }
         }
 
         public override void Render()
         {
-
             base.Render();
 
             foreach (var change in changes.DetectChanges(this))
@@ -83,12 +74,20 @@ namespace Agit.FortressCraft{
                     case nameof(CurrentHP):
                         AsycHp();
                         break;
+                    case nameof(isDefeated):
+                        DestroyCastle();
+                        break;
+                    case nameof(isVictory):
+                        Victroy();
+                        break;
                 }
             }
         }
 
         public void AsycHp() //*HP 갱신
         {
+            Debug.Log(CurrentHP + " " + team.ToString());
+
             if (HpBarSlider != null)
                 HpBarSlider.value = CurrentHP / maxHP;
         }

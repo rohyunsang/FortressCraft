@@ -36,8 +36,8 @@ namespace Agit.FortressCraft
 		{
 			base.Spawned();
 			Runner.RegisterSingleton(this);
-			
-			if (Object.HasStateAuthority)
+
+            if (Object.HasStateAuthority)
 			{
 				LoadLevel(-1);
 			}
@@ -91,6 +91,8 @@ namespace Agit.FortressCraft
 				}
 			}
 		}
+
+		
 
 		public void Restart(ShutdownReason shutdownReason)
 		{

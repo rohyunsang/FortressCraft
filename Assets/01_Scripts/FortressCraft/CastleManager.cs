@@ -7,7 +7,7 @@ namespace Agit.FortressCraft
 {
     public class CastleManager : MonoBehaviour
     {
-        public int defeatCnt = 0;
+        // public int defeatCnt = 0;
 
         public void Awake()
         {
@@ -16,24 +16,7 @@ namespace Agit.FortressCraft
 
         private void Init()
         {
-            defeatCnt = 0;
-        }
-
-        public void DefeatCnt()
-        {
-            defeatCnt++;
-            if(defeatCnt > 0)
-                DefeatCntCallBack();
-        }
-
-        private void DefeatCntCallBack()
-        {
-            Castle[] castles = FindObjectsOfType<Castle>();
-
-            foreach (Castle castle in castles)
-            {
-                castle.IsWinner();
-            }
+            // defeatCnt = 0;
         }
     }
 }
