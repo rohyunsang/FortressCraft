@@ -117,7 +117,11 @@ namespace Agit.FortressCraft
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();
 
-                    normalUnitRigidBodyMovement.RPCSetPos(transform.position);
+                    Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f),
+                                                 Random.Range(-1.0f, 1.0f) + 1.0f,
+                                                 0.0f);
+
+                    normalUnitRigidBodyMovement.RPCSetPos(transform.position + offset);
 
                     normalUnitRigidBodyMovement.RPCSetActive();
                 }
