@@ -3962,7 +3962,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 540d9b6a2fc194c1f90502b5de66daa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrow: {fileID: 964096301469327314, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+  arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+  poolManager: {fileID: 0}
+  id:
+    RawValue: 0
 --- !u!50 &2837900422923331179
 Rigidbody2D:
   serializedVersion: 4

@@ -6,13 +6,11 @@ using FusionHelpers;
 public class NormalUintSpawner : NetworkBehaviour
 {
     public NetworkObject UnitPrefab;
+    public NetworkObject Arrow;
     public Player player = null;
     public bool Usable { get; private set; }
     public NetworkObjectPoolManager poolManager;
     [SerializeField] private string initialTarget = "";
-
-    [SerializeField] private int defaultCapacity = 5;
-    [SerializeField] private int maxPoolSize = 10;
 
     // RPC property
     public string Target { get; set; }
@@ -21,6 +19,7 @@ public class NormalUintSpawner : NetworkBehaviour
     public float Defense { get; set; }
 
     public NetworkPrefabId id;
+    public NetworkPrefabId arrowId;
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPCTargetChange(string t)
@@ -28,7 +27,7 @@ public class NormalUintSpawner : NetworkBehaviour
         Debug.Log("target: " + t);
         Target = t;
     }
-    
+
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPCSettingAttackEnabled(string s)
     {
@@ -45,7 +44,7 @@ public class NormalUintSpawner : NetworkBehaviour
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPCSettingDamage( float newDefense )
+    public void RPCSettingDamage(float newDefense)
     {
         Damage = newDefense;
         Debug.Log("Defense: " + newDefense);
@@ -62,8 +61,7 @@ public class NormalUintSpawner : NetworkBehaviour
     {
         Usable = false;
 
-        //GetComponent<NetworkObject>().RequestStateAuthority();
-        poolManager = GetComponent<NetworkObjectPoolManager>();
+        poolManager = NetworkObjectPoolManager.Instance;
         Target = initialTarget;
         AttackEnabled = true;
         Damage = 20.0f;
@@ -86,31 +84,40 @@ public class NormalUintSpawner : NetworkBehaviour
         id = temp.NetworkTypeId.AsPrefabId;
         Destroy(temp.gameObject);
         poolManager.AddPoolTable(id);
+
+        temp = Runner.Spawn(Arrow, (Vector2)transform.position, Quaternion.identity);
+        arrowId = temp.NetworkTypeId.AsPrefabId;
+        Destroy(temp.gameObject);
+        poolManager.AddPoolTable(arrowId);
     }
 
     public void SpawnUnit()
     {
-        
+
         if (Runner.IsSharedModeMasterClient)
         {
             NetworkObject unitObj = null;
-            //NetworkPrefabId id = NetworkPrefabId.FromIndex(2);
-            
+
             NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
             var result = poolManager.AcquirePrefabInstance(Runner, context, out unitObj);
 
-            if(result == NetworkObjectAcquireResult.Success)
+            if (result == NetworkObjectAcquireResult.Success)
             {
-                NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+                unitObj.transform.position = transform.position;
 
+                NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+                NetworkMecanimAnimator animator = unitObj.GetComponent<NetworkMecanimAnimator>();
                 normalUnitRigidBodyMovement.TargetString = Target;
                 normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
                 normalUnitRigidBodyMovement.Damage = Damage;
                 normalUnitRigidBodyMovement.Defense = Defense;
-
                 normalUnitRigidBodyMovement.Spawner = this;
-                normalUnitRigidBodyMovement.IsActive = true;
+                animator.Animator.Play("IdleState");
                 normalUnitRigidBodyMovement.Initializing();
+
+                normalUnitRigidBodyMovement.RPCSetPos(transform.position);
+                
+                normalUnitRigidBodyMovement.RPCSetActive();
             }
             else
             {
@@ -119,15 +126,4 @@ public class NormalUintSpawner : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPCSetActive(NetworkObject NO)
-    {
-        NO.gameObject.SetActive(true);
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPCSetUnactive(NetworkObject NO)
-    {
-        NO.gameObject.SetActive(false);
-    }
 }

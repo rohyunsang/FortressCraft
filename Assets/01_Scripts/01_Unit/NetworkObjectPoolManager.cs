@@ -5,27 +5,29 @@ using Fusion;
 
 public class NetworkObjectPoolManager : NetworkObjectProviderDefault
 {
-	[SerializeField] private List<NetworkObject> _poolableObjects;
+	public static NetworkObjectPoolManager Instance { get; set; }
+
 	private Dictionary<NetworkObjectTypeId, Stack<NetworkObject>> _poolTable = new();
 
-	public void AddPoolTable(NetworkObjectTypeId id)
+    private void Awake()
     {
-		if( !_poolTable.ContainsKey(id) )
-        {
-			_poolTable.Add(id, new Stack<NetworkObject>() );
-        }
+		Instance = this;
     }
 
-    protected override NetworkObject InstantiatePrefab(NetworkRunner runner, NetworkObject prefab)
+    public void AddPoolTable(NetworkObjectTypeId id)
+	{
+		if (!_poolTable.ContainsKey(id))
+		{
+			_poolTable.Add(id, new Stack<NetworkObject>());
+		}
+	}
+
+	protected override NetworkObject InstantiatePrefab(NetworkRunner runner, NetworkObject prefab)
 	{
 		NetworkObject instance = null;
 
-
-		if (ShouldPool(prefab) == true)
-		{
-			instance = GetFromObjetPool(runner, prefab);
-			instance.transform.position = Vector3.zero;
-		}
+		instance = GetFromObjetPool(runner, prefab);
+		
 
 		if (instance == null)
 		{
@@ -44,6 +46,7 @@ public class NetworkObjectPoolManager : NetworkObjectProviderDefault
 			if (pool.TryPop(out var pooledObject) == true)
 			{
 				instance = pooledObject;
+				Debug.Log("Pop! - " + instance.name);
 			}
 		}
 
@@ -51,8 +54,7 @@ public class NetworkObjectPoolManager : NetworkObjectProviderDefault
 		{
 			instance = GetNewInstance(runner, prefab);
 		}
-
-		instance.gameObject.SetActive(true);
+		
 		return instance;
 	}
 
@@ -69,26 +71,18 @@ public class NetworkObjectPoolManager : NetworkObjectProviderDefault
 		return instance;
 	}
 
-	private bool ShouldPool(NetworkObject prefab)
-	{
-		foreach (var poolableObjct in _poolableObjects)
-		{
-			if (prefab == poolableObjct)
-				return true;
-		}
-		return false;
-	}
-
 	protected override void DestroyPrefabInstance(NetworkRunner runner, NetworkPrefabId prefabId, NetworkObject instance)
 	{
 		if (_poolTable.TryGetValue(prefabId, out var stack) == true)
 		{
 			Debug.Log("DestroyPrefabInstance - Pooling");
 			instance.transform.SetParent(null);
-			//instance.gameObject.SetActive(false);
-			Debug.Log("DestroyPrefabInstance" + " " + instance.gameObject.activeSelf);
+			instance.gameObject.SetActive(false);
+			if (instance.TryGetComponent<NormalUnitRigidBodyMovement>(out NormalUnitRigidBodyMovement normal))
+			{
+				normal.RPCSetUnactive();
+			}
 			stack.Push(instance);
-			Debug.Log(stack.Count);
 		}
 		else
 		{
@@ -96,4 +90,6 @@ public class NetworkObjectPoolManager : NetworkObjectProviderDefault
 			Destroy(instance.gameObject);
 		}
 	}
+
+
 }

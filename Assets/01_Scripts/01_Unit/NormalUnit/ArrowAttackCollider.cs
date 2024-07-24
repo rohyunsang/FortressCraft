@@ -20,7 +20,7 @@ public class ArrowAttackCollider : AttackCollider
             {
                 bodycoliider.Damaged = Damage;
                 //Debug.Log("Hit!");
-                arrow.DestroySelf();
+                arrow.Release();
             }
             
         }

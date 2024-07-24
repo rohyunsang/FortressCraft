@@ -6,8 +6,6 @@ using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 public class NormalUnitRigidBodyMovement : NetworkBehaviour
 {
-    [Networked] public bool IsActive { get; set; }
-
     public NormalUintSpawner Spawner { get; set; }
     private Transform ground_A;
     private Transform ground_B;
@@ -49,7 +47,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         initialized = false;
         _rb = GetComponent<NetworkRigidbody2D>();
-        
+
         _netAnimator = GetComponent<NetworkMecanimAnimator>();
         animator = GetComponent<Animator>();
         bodyCollider = GetComponentInChildren<BodyCollider>();
@@ -81,18 +79,14 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (!IsActive) return;
         if (!initialized) return;
-        //Debug.Log("Attack: " + AttackEnabled);
-        //Debug.Log("NormalUnitRigidBodyMovement is working");
-        //Debug.Log( Spawner.AttackEnabled + " / " + AttackEnabled);
-        
+
         if (!Attack()) MoveToTarget();
         else _rb.Rigidbody.velocity = Vector2.zero;
-        
+
         animatorState = animator.GetCurrentAnimatorStateInfo(0);
 
-        if( animatorState.fullPathHash != animAttackBow )
+        if (animatorState.fullPathHash != animAttackBow)
         {
             if (_rb.Rigidbody.velocity.x != 0.0f || _rb.Rigidbody.velocity.y != 0.0f)
             {
@@ -106,17 +100,13 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
         CheckDamaged();
 
-        if( dieTimer.Expired(Runner) )
+        if (dieTimer.Expired(Runner))
         {
-            transform.position = new Vector3(20000.0f, 20000.0f);
-            IsActive = false;
-
-            NetworkObjectReleaseContext context = new NetworkObjectReleaseContext( Object, Spawner.id, false, false );
+            dieTimer = TickTimer.None;
+            NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, Spawner.id, false, false);
             Spawner.poolManager.ReleaseInstance(Runner, context);
-            //LocalObjectPool.Release(Object);
-            //Destroy(this.gameObject);
         }
-        
+
         Initializing();
     }
 
@@ -137,7 +127,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
                 //Debug.Log("Target in");
                 normalUnitFire.TargetTranform = col.transform;
 
-                if( col.transform.position.x > transform.position.x )
+                if (col.transform.position.x > transform.position.x)
                 {
                     transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
                 }
@@ -146,10 +136,11 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
                     transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
                 }
 
-                if (animatorState.fullPathHash != animAttackBow) {
+                if (animatorState.fullPathHash != animAttackBow)
+                {
                     _netAnimator.Animator.SetTrigger("Attack");
                 }
-                
+
                 return true;
             }
         }
@@ -206,7 +197,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
 
         Vector3 movDir = targetGround.position - transform.position;
         Vector3 movDirNormalized = movDir.normalized;
-        
+
         _rb.Rigidbody.velocity = movDirNormalized * testSpeed;
 
         if (movDir.x > 0)
@@ -249,5 +240,24 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
         {
             nowGround = "Ground_D";
         }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPCSetActive()
+    {
+        gameObject.SetActive(true);
+        Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPCSetUnactive()
+    {
+        gameObject.SetActive(false);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPCSetPos( Vector3 pos )
+    {
+        transform.position = pos;
     }
 }

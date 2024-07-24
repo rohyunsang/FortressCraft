@@ -802,6 +802,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193935805}
   m_CullTransparentMesh: 1
+--- !u!1 &300025441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 300025443}
+  - component: {fileID: 300025442}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &300025442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300025441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3621e0f0f09324fa5936cf6d0fe51f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayIfSceneManagerIsBusy: 1
+  _poolableObjects: []
+--- !u!4 &300025443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300025441}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19998.574, y: 19998.85, z: -0.043530095}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &309217437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,6 +1655,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 135369399474149061, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
+      propertyPath: Arrow
+      value: 
+      objectReference: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+    - target: {fileID: 135369399474149061, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: UnitPrefab
       value: 
       objectReference: {fileID: 8013978271138280693, guid: ee912bbe7b6884806b13cd793b4d29ad, type: 3}
@@ -1659,30 +1709,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8470256032204031623, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 769254547}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
---- !u!1 &769254546 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8470256032204031623, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
-  m_PrefabInstance: {fileID: 769254545}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &769254547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769254546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3621e0f0f09324fa5936cf6d0fe51f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayIfSceneManagerIsBusy: 1
-  _poolableObjects: []
 --- !u!1 &770657415
 GameObject:
   m_ObjectHideFlags: 0
@@ -6076,36 +6104,18 @@ PrefabInstance:
       value: Castle2
       objectReference: {fileID: 0}
     - target: {fileID: 7453605011642941100, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+      propertyPath: Arrow
+      value: 
+      objectReference: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+    - target: {fileID: 7453605011642941100, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
       propertyPath: UnitPrefab
       value: 
       objectReference: {fileID: 3261838686935695687, guid: 1fe22e38493b948af8f90f8bf79cef7a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8238177989284133006, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 557409478590294609}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
---- !u!1 &557409478590294608 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8238177989284133006, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-  m_PrefabInstance: {fileID: 557409478590294607}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &557409478590294609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557409478590294608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3621e0f0f09324fa5936cf6d0fe51f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayIfSceneManagerIsBusy: 1
-  _poolableObjects: []
 --- !u!1001 &2244037041897001223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6155,6 +6165,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1518262231074708236, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
+      propertyPath: Arrow
+      value: 
+      objectReference: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+    - target: {fileID: 1518262231074708236, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
       propertyPath: UnitPrefab
       value: 
       objectReference: {fileID: 3407368337148128817, guid: 24e0f43151afd4a67878812ee8872f77, type: 3}
@@ -6165,30 +6179,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9108081303334721746, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2244037041897001225}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
---- !u!1 &2244037041897001224 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9108081303334721746, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
-  m_PrefabInstance: {fileID: 2244037041897001223}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2244037041897001225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244037041897001224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3621e0f0f09324fa5936cf6d0fe51f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayIfSceneManagerIsBusy: 1
-  _poolableObjects: []
 --- !u!1001 &2675241787494613389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6315,36 +6307,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7278009121461960068, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
+      propertyPath: Arrow
+      value: 
+      objectReference: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
+    - target: {fileID: 7278009121461960068, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
       propertyPath: UnitPrefab
       value: 
       objectReference: {fileID: 8036923545313351618, guid: 3f0bbddaaf792489b85450e599278580, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6626777200061236412, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3994628211877826145}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
---- !u!1 &3994628211877826144 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6626777200061236412, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
-  m_PrefabInstance: {fileID: 3994628211877826143}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3994628211877826145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3994628211877826144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3621e0f0f09324fa5936cf6d0fe51f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DelayIfSceneManagerIsBusy: 1
-  _poolableObjects: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -6356,3 +6330,4 @@ SceneRoots:
   - {fileID: 2244037041897001223}
   - {fileID: 3994628211877826143}
   - {fileID: 967538247}
+  - {fileID: 300025443}

@@ -4,25 +4,44 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using FusionHelpers;
 
 public class NormalUnitFire : MonoBehaviour, INetworkRunnerCallbacks
 {
-    [SerializeField] private GameObject arrow;
+    [SerializeField] private NetworkObject arrow;
     public Transform TargetTranform { get; set; }
     public string TargetUnit { get; set; }
     private NormalUnitRigidBodyMovement normalUnit;
+    public NetworkObjectPoolManager poolManager;
+
+    public NetworkPrefabId id;
 
     private void Awake()
     {
+        poolManager = NetworkObjectPoolManager.Instance;
         normalUnit = GetComponent<NormalUnitRigidBodyMovement>();
     }
 
+
     public void Fire(NetworkRunner runner)
     {
+        if (normalUnit.Spawner == null) return;
+        id = normalUnit.Spawner.arrowId;
+        poolManager.AddPoolTable(id);
         TargetUnit = normalUnit.TargetUnit;
-        NetworkObject networkObject = runner.Spawn(arrow, transform.position, Quaternion.identity);
 
-        networkObject.GetComponent<Arrow>().TargetTransform = TargetTranform;
+        NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
+        NetworkObject networkObject;
+        poolManager.AcquirePrefabInstance(runner, context, out networkObject);
+
+        networkObject.transform.position = transform.position;
+        Arrow arrow = networkObject.GetComponent<Arrow>();
+        arrow.transform.position = transform.position;
+        arrow.TargetTransform = TargetTranform;
+        arrow.ID = id;
+        arrow.Normal = normalUnit;
+        arrow.RPCSetActive();
+
         AttackCollider attackCollider = networkObject.GetComponentInChildren<AttackCollider>();
         attackCollider.TargetUnit = TargetUnit;
         attackCollider.Damage = normalUnit.Damage;
