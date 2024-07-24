@@ -70,6 +70,7 @@ public class NormalUnitRigidBodyMovement : NetworkBehaviour
             TargetString = Spawner.Target;
             AttackEnabled = Spawner.AttackEnabled;
             Damage = Spawner.Damage;
+            Defense = Spawner.Defense;
         }
 
         TargetGround = "Ground_" + TargetString;

@@ -56,6 +56,6 @@ public class UpgradeUnit : NetworkBehaviour
     {
         if (targetSpawner == null) return;
         Debug.Log("Upgrade Defense");
-        targetSpawner.RPCSettingDamage(1.0f);
+        targetSpawner.RPCSettingDamage(0.5f);
     }
 }

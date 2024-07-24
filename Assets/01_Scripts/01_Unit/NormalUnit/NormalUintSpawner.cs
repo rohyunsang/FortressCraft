@@ -47,14 +47,14 @@ public class NormalUintSpawner : NetworkBehaviour
     public void RPCSettingDamage(float newDefense)
     {
         Damage = newDefense;
-        Debug.Log("Defense: " + newDefense);
+        Debug.Log("Damage: " + newDefense);
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPCSettingDefense(float newDamage)
     {
         Damage = newDamage;
-        Debug.Log("Damage: " + Damage);
+        Debug.Log("Defense: " + Damage);
     }
 
     public override void Spawned()
@@ -65,7 +65,7 @@ public class NormalUintSpawner : NetworkBehaviour
         Target = initialTarget;
         AttackEnabled = true;
         Damage = 20.0f;
-        Defense = 0.5f;
+        Defense = 1.0f;
 
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player p in players)
