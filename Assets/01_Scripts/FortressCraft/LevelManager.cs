@@ -189,7 +189,7 @@ namespace Agit.FortressCraft
 			if (gameManager.matchWinner!=null && newScene.AsIndex == _lobby)
 			{
 				// Show lobby scores and reset the score ui.
-				_scoreManager.ShowFinalGameScore(gameManager);
+				//_scoreManager.ShowFinalGameScore(gameManager);
 			}
 
 			gameManager.lastPlayerStanding = null;

@@ -22,10 +22,12 @@ namespace Agit.FortressCraft{
 
         public Team team;
 
+        [Networked] public bool isDefeated { get; set;}
+
         public override void Spawned()
         {
             base.Spawned();
-
+            isDefeated = false;
             changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
             CurrentHP = maxHP;
@@ -47,16 +49,26 @@ namespace Agit.FortressCraft{
         private void DestroyCastle()
         {
             Debug.Log("Castle Destroyed!");
-
-            //if (Object.HasInputAuthority) // 현재 클라이언트가 입력 권한을 가진 객체인지 확인
-            //{
+            isDefeated = true;
+            FindObjectOfType<CastleManager>().DefeatCnt();
 
             FindObjectOfType<UIManager>().OnDefeatPanel();
-            //}
+            
 
             // UI Call : Defeat Panel -> OnClilk -> 
             // Delete Input Auth
             // Delete Playter   
+        }
+
+        public void IsWinner()
+        {
+            Debug.Log(team.ToString());
+
+            if (!isDefeated)
+            {
+                Debug.Log("Debug" + team.ToString());
+                FindObjectOfType<UIManager>().OnVictoryPanel();
+            }
         }
 
         public override void Render()
