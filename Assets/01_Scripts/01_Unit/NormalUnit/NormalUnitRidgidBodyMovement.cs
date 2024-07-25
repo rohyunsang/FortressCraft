@@ -232,6 +232,7 @@ namespace Agit.FortressCraft
             //Debug.Log(HP);
             if (HP <= 0.0f)
             {
+                --Spawner.NowUnitCount;
                 _netAnimator.Animator.SetTrigger("Die");
                 dieTimer = TickTimer.CreateFromSeconds(Runner, 0.26f);
             }

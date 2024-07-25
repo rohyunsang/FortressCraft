@@ -47,6 +47,7 @@ namespace Agit.FortressCraft
             //NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, ID, false, false);
             //NetworkObjectPoolManager.Instance.ReleaseInstance(Runner, context);
             //RPCSetUnactive();
+            //Release();
         }
 
         public void Release()

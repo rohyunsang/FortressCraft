@@ -15,6 +15,8 @@ namespace Agit.FortressCraft
         [SerializeField] private string initialTarget = "";
         public Transform Center { get; set; }
         private string spawnerType;
+        [SerializeField] private int maxUnitCount = 5;
+        public int NowUnitCount { get; set; }
 
         // RPC property
         public string Target { get; set; }
@@ -61,7 +63,7 @@ namespace Agit.FortressCraft
             AttackEnabled = true;
             Damage = 20.0f;
             Defense = 1.0f;
-
+            NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
             Player[] players = GameObject.FindObjectsOfType<Player>();
@@ -105,7 +107,7 @@ namespace Agit.FortressCraft
 
         public void SpawnUnit()
         {
-
+            if (NowUnitCount >= maxUnitCount) return;
             if (Runner.IsSharedModeMasterClient)
             {
                 NetworkObject unitObj = null;
@@ -135,6 +137,7 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.RPCSetPos(transform.position + offset);
 
                     normalUnitRigidBodyMovement.RPCSetActive();
+                    ++NowUnitCount;
                 }
                 else
                 {
