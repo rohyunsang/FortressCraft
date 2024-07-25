@@ -21,6 +21,14 @@ namespace Agit.FortressCraft
             Dead
         }
 
+		public enum PlayerClass
+		{
+			Warrior,
+			Archer,
+			Mage,
+			Rogue
+		}
+
         private const int MAX_LIVES = 3;
 		private const int MAX_HEALTH = 100;
 
@@ -71,7 +79,8 @@ namespace Agit.FortressCraft
 		public Animator anim;
 		public GameObject weapon;
 		public BoxCollider2D weaponCollider;
-
+		public PlayerClass playerClass;
+		public PlayerClass currentClass;
 		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
@@ -98,6 +107,9 @@ namespace Agit.FortressCraft
 			vCam = camera.GetComponent<CinemachineVirtualCamera>();
 			vCam.Follow = this.gameObject.transform;
 			weaponCollider.enabled = false;
+			//TEST...
+			currentClass = PlayerClass.Warrior;
+
 		}
 
 		public override void InitNetworkState()
@@ -156,6 +168,24 @@ namespace Agit.FortressCraft
 						Attack();
 						anim.SetTrigger("Attack");
                     }
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
+					{
+						Skill01();
+						anim.SetTrigger("Attack");
+					}
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_TERTIARY))
+					{
+						Skill02();
+						anim.SetTrigger("Attack");
+					}
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_FORTH))
+					{
+						Skill03();
+						anim.SetTrigger("Attack");
+					}
 
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
@@ -248,6 +278,54 @@ namespace Agit.FortressCraft
 		{
 			weaponCollider.enabled = true;
 			Debug.Log("Do Attack");
+		}
+
+		private void Skill01()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//1. 돌진하며 이동
+				
+				//2. 범위 내 적에게 피해
+				
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill01");
+		}
+
+		private void Skill02()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//3번째 공격마다 회복
+				//Attack 함수에 조금 추가해주면 될듯
+				//Button은 Disabled 되어야함.
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill02");
+		}
+
+		private void Skill03()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//현재 체력의 40%를 소모해서 
+				//공격력 방어력 상승
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill03");
 		}
 
 		private void OnDrawGizmos()
