@@ -14,6 +14,7 @@ namespace Agit.FortressCraft
         public NetworkObjectPoolManager poolManager;
         [SerializeField] private string initialTarget = "";
         public Transform Center { get; set; }
+        private string spawnerType;
 
         // RPC property
         public string Target { get; set; }
@@ -82,6 +83,21 @@ namespace Agit.FortressCraft
                 {
                     player = p;
                     Usable = true;
+                    switch( p.PlayerIndex )
+                    {
+                        case 0:
+                            spawnerType = "A";
+                            break;
+                        case 1:
+                            spawnerType = "B";
+                            break;
+                        case 2:
+                            spawnerType = "C";
+                            break;
+                        case 3:
+                            spawnerType = "D";
+                            break;
+                    }
                 }
             }
 
@@ -117,6 +133,7 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.Damage = Damage;
                     normalUnitRigidBodyMovement.Defense = Defense;
                     normalUnitRigidBodyMovement.Spawner = this;
+                    normalUnitRigidBodyMovement.OwnType = spawnerType;
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();
 

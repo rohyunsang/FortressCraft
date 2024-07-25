@@ -5,6 +5,8 @@ using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 namespace Agit.FortressCraft
 {
+    
+
     public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         public NormalUintSpawner Spawner { get; set; }
@@ -19,6 +21,7 @@ namespace Agit.FortressCraft
         public string TargetUnit { get; set; }
         public float Damage { get; set; }
         public float Defense { get; set; }  // 0~1 사이 값으로 사용, 받은 대미지에 곱해서 적용
+        public string OwnType { get; set; }
 
         private readonly static int animAttackBow =
             Animator.StringToHash("Base Layer.2_Attack_Bow");
@@ -73,7 +76,7 @@ namespace Agit.FortressCraft
             {   
                 if( TargetString != Spawner.Target  ) // 타겟 변경됐는데 다리 위
                 {
-                    if(nowGround == "Bridge")
+                    if( nowGround == "Bridge" )
                     {
                         float minDist = GetDistanceXYSquared(grounds[0]);
                         int idx = 0;
@@ -81,7 +84,7 @@ namespace Agit.FortressCraft
                         {
                             float tempDist = GetDistanceXYSquared(grounds[i]);
 
-                            if (tempDist < minDist)
+                            if ( tempDist < minDist )
                             {
                                 minDist = tempDist;
                                 idx = i;
@@ -141,11 +144,51 @@ namespace Agit.FortressCraft
             Initializing();
         }
 
+        protected bool AttackAllTarget()
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 3.0f);
+
+            // 적 탐색 
+            foreach (Collider2D col in cols)
+            {
+                if (col.tag.StartsWith("Unit"))
+                {
+                    if (col.CompareTag("Unit_" + OwnType)) continue;
+
+                    normalUnitFire.TargetTranform = col.transform;
+                    normalUnitFire.SecondTargetUnit = col.tag;
+
+                    if (col.transform.position.x > transform.position.x)
+                    {
+                        transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+                    }
+                    else
+                    {
+                        transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
+                    }
+
+                    if (animatorState.fullPathHash != animAttackBow)
+                    {
+                        _netAnimator.Animator.SetTrigger("Attack");
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected bool Attack()
         {
-            if (!AttackEnabled)
+            if (!AttackEnabled )
             {
                 return false;
+            }
+
+            if(Spawner.Target.CompareTo(OwnType) == 0)
+            {
+                return AttackAllTarget(); ;
             }
 
             Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 3.0f);

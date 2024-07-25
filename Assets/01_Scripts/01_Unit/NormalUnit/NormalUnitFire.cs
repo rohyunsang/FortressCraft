@@ -12,6 +12,7 @@ namespace Agit.FortressCraft
         [SerializeField] private NetworkObject arrow;
         public Transform TargetTranform { get; set; }
         public string TargetUnit { get; set; }
+        public string SecondTargetUnit { get; set; }
         private NormalUnitRigidBodyMovement normalUnit;
         public NetworkObjectPoolManager poolManager;
 
@@ -31,6 +32,11 @@ namespace Agit.FortressCraft
             poolManager.AddPoolTable(id);
             TargetUnit = normalUnit.TargetUnit;
 
+            if( TargetUnit.CompareTo(normalUnit.OwnType) == 0 )
+            {
+                TargetUnit = SecondTargetUnit;
+            }
+
             NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
             NetworkObject networkObject;
             poolManager.AcquirePrefabInstance(runner, context, out networkObject);
@@ -47,6 +53,8 @@ namespace Agit.FortressCraft
             attackCollider.TargetUnit = TargetUnit;
             attackCollider.Damage = normalUnit.Damage;
         }
+
+
 
         #region unused Callbacks
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
