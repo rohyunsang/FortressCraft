@@ -8,10 +8,8 @@ namespace Agit.FortressCraft
     public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         public NormalUintSpawner Spawner { get; set; }
-        private Transform ground_A;
-        private Transform ground_B;
-        private Transform ground_C;
-        private Transform ground_D;
+        private Transform[] grounds = new Transform[4];
+        private Transform middlePoint = null;
         [SerializeField] private int testSpeed;
 
         public string TargetString { get; set; }
@@ -39,11 +37,6 @@ namespace Agit.FortressCraft
 
         private TickTimer dieTimer;
 
-        public override void Spawned()
-        {
-            Debug.Log("Unit Spawned");
-        }
-
         void Awake()
         {
             initialized = false;
@@ -58,16 +51,52 @@ namespace Agit.FortressCraft
             AttackEnabled = true;
             HP = 100;
 
-            ground_A = GameObject.Find("Castle1").transform;
-            ground_B = GameObject.Find("Castle2").transform;
-            ground_C = GameObject.Find("Castle3").transform;
-            ground_D = GameObject.Find("Castle4").transform;
+            grounds[0] = GameObject.Find("Castle1").transform;
+            grounds[1] = GameObject.Find("Castle2").transform;
+            grounds[2] = GameObject.Find("Castle3").transform;
+            grounds[3] = GameObject.Find("Castle4").transform;
+        }
+
+        private float GetDistanceXYSquared(Transform t)
+        {
+            float result = 0.0f;
+
+            result = Mathf.Pow((t.position.x - transform.position.x), 2) +
+                     Mathf.Pow((t.position.y - transform.position.y), 2);
+
+            return result;
         }
 
         public void Initializing()
         {
             if (initialized)
-            {   // RPC Properties
+            {   
+                if( TargetString != Spawner.Target  ) // 타겟 변경됐는데 다리 위
+                {
+                    if(nowGround == "Bridge")
+                    {
+                        float minDist = GetDistanceXYSquared(grounds[0]);
+                        int idx = 0;
+                        for (int i = 1; i < 4; ++i)
+                        {
+                            float tempDist = GetDistanceXYSquared(grounds[i]);
+
+                            if (tempDist < minDist)
+                            {
+                                minDist = tempDist;
+                                idx = i;
+                            }
+                        }
+                        middlePoint = grounds[idx];
+                    }
+                    else if( nowGround == "CrossBridge" )
+                    {
+                        middlePoint = Spawner.Center;
+                    }
+                }
+
+                
+                // RPC Properties
                 TargetString = Spawner.Target;
                 AttackEnabled = Spawner.AttackEnabled;
                 Damage = Spawner.Damage;
@@ -170,31 +199,48 @@ namespace Agit.FortressCraft
         {
             Transform targetGround;
 
-            if (TargetGround.CompareTo("Ground_A") == 0)
+            if( middlePoint == null )
             {
-                targetGround = ground_A;
-            }
-            else if (TargetGround.CompareTo("Ground_B") == 0)
-            {
-                targetGround = ground_B;
-            }
-            else if (TargetGround.CompareTo("Ground_C") == 0)
-            {
-                targetGround = ground_C;
+                if (TargetGround.CompareTo("Ground_A") == 0)
+                {
+                    targetGround = grounds[0];
+                }
+                else if (TargetGround.CompareTo("Ground_B") == 0)
+                {
+                    targetGround = grounds[1];
+                }
+                else if (TargetGround.CompareTo("Ground_C") == 0)
+                {
+                    targetGround = grounds[2];
+                }
+                else
+                {
+                    targetGround = grounds[3];
+                }
+
+                if (TargetGround.CompareTo(nowGround) == 0)
+                {
+                    _rb.Rigidbody.velocity = Vector2.zero;
+                    return;
+                }
             }
             else
             {
-                targetGround = ground_D;
+                targetGround = middlePoint;
             }
 
-            //Debug.Log(targetGround);
-            //Debug.Log(TargetGround + " " + nowGround);
-            if (TargetGround.CompareTo(nowGround) == 0)
+            if( Mathf.Sqrt( GetDistanceXYSquared(targetGround) ) < 0.3f )
             {
-                //Debug.Log("Stoped");
-                _rb.Rigidbody.velocity = Vector2.zero;
-                //_netAnimator.Animator.SetTrigger("Idle");
-                return;
+                if( middlePoint == null )
+                {
+                    _rb.Rigidbody.velocity = Vector2.zero;
+                    return;
+                }
+                else
+                {
+                    middlePoint = null;
+                    return;
+                }
             }
 
             Vector3 movDir = targetGround.position - transform.position;
@@ -220,7 +266,6 @@ namespace Agit.FortressCraft
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");
                 Die();
-                //Debug.Log(HP);
             }
         }
 
@@ -241,6 +286,14 @@ namespace Agit.FortressCraft
             else if (collision.CompareTag("Ground_D"))
             {
                 nowGround = "Ground_D";
+            }
+            else if( collision.CompareTag("Bridge") )
+            {
+                nowGround = "Bridge";
+            }
+            else if (collision.CompareTag("CrossBridge"))
+            {
+                nowGround = "CrossBridge";
             }
         }
 

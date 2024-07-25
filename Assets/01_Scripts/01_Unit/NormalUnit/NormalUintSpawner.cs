@@ -13,6 +13,7 @@ namespace Agit.FortressCraft
         public bool Usable { get; private set; }
         public NetworkObjectPoolManager poolManager;
         [SerializeField] private string initialTarget = "";
+        public Transform Center { get; set; }
 
         // RPC property
         public string Target { get; set; }
@@ -68,6 +69,8 @@ namespace Agit.FortressCraft
             AttackEnabled = true;
             Damage = 20.0f;
             Defense = 1.0f;
+
+            Center = GameObject.Find("Center").transform;
 
             Player[] players = GameObject.FindObjectsOfType<Player>();
             foreach (Player p in players)

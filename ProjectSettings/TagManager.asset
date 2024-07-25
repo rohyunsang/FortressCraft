@@ -13,6 +13,8 @@ TagManager:
   - Ground_C
   - Ground_D
   - Attack
+  - Bridge
+  - CrossBridge
   layers:
   - Default
   - TransparentFX
