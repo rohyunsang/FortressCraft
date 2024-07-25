@@ -33,18 +33,9 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPCSettingAttackEnabled(string s)
+        public void RPCChangeAttackEnabled()
         {
-            if (s == "Off")
-            {
-                Debug.Log("Change AttackEnabled - Off");
-                AttackEnabled = false;
-            }
-            else
-            {
-                Debug.Log("Change AttackEnabled - On");
-                AttackEnabled = true;
-            }
+            AttackEnabled = !AttackEnabled;
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

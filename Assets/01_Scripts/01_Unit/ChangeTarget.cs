@@ -92,29 +92,9 @@ namespace Agit.FortressCraft
 
         public void SetAttack()
         {
-            if (targetSpawner == null) return;
-
-            if (targetSpawner.AttackEnabled == true)
-            {
-                OffAttack();
-            }
-            else
-            {
-                OnAttack();
-            }
+            targetSpawner.RPCChangeAttackEnabled();
         }
 
-        private void OffAttack()
-        {
-            Debug.Log("Off Attack");
-            targetSpawner.RPCSettingAttackEnabled("Off");
-        }
-
-        private void OnAttack()
-        {
-            Debug.Log("On Attack");
-            targetSpawner.RPCSettingAttackEnabled("On");
-        }
     }
 
 }
