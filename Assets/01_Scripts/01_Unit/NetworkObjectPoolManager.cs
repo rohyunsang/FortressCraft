@@ -48,7 +48,7 @@ namespace Agit.FortressCraft
 				if (pool.TryPop(out var pooledObject) == true)
 				{
 					instance = pooledObject;
-					Debug.Log("Pop! - " + instance.name);
+					//Debug.Log("Pop! - " + instance.name);
 				}
 			}
 
@@ -84,11 +84,16 @@ namespace Agit.FortressCraft
 				{
 					normal.RPCSetUnactive();
 				}
+				else if (instance.TryGetComponent<Arrow>(out Arrow arrow))
+                {
+					Debug.Log("Arrow unactive");
+					arrow.RPCSetUnactive();
+                }
 				stack.Push(instance);
 			}
 			else
 			{
-				Debug.Log("DestroyPrefabInstance - Destroy");
+				//Debug.Log("DestroyPrefabInstance - Destroy");
 				Destroy(instance.gameObject);
 			}
 		}

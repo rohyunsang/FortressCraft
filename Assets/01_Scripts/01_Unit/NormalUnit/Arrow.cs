@@ -13,17 +13,23 @@ namespace Agit.FortressCraft
         public NetworkPrefabId ID { get; set; }
         public NormalUnitRigidBodyMovement Normal { get; set; }
         public bool Fired { get; set; }
-        //private TickTimer destroyTimer;
+        private TickTimer destroyTimer;
 
         public override void Spawned()
         {
             _rb = GetComponent<NetworkRigidbody2D>();
-            Invoke("DestroySelf", 1.3f);
         }
 
         public override void FixedUpdateNetwork()
         {
             if (TargetTransform == null) return;
+            if( destroyTimer.Expired(Runner) )
+            {
+                if( gameObject.activeSelf == true )
+                {
+                    Release();
+                }
+            }
 
             if (Mathf.Abs(TargetTransform.position.x - transform.position.x) < 0.05f &&
                 Mathf.Abs(TargetTransform.position.y - transform.position.y) < 0.05f)
@@ -41,26 +47,23 @@ namespace Agit.FortressCraft
             transform.rotation = targetRotation;
         }
 
-        public void DestroySelf()
+        public void ReserveRelease()
         {
-            Destroy(this.gameObject);
-            //NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, ID, false, false);
-            //NetworkObjectPoolManager.Instance.ReleaseInstance(Runner, context);
-            //RPCSetUnactive();
-            //Release();
+            destroyTimer = TickTimer.CreateFromSeconds(Runner, 1.3f);
+            //Invoke("DestroySelf", 1.3f);
         }
 
         public void Release()
         {
+            destroyTimer = TickTimer.None;
             NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, ID, false, false);
             NetworkObjectPoolManager.Instance.ReleaseInstance(Runner, context);
-            RPCSetUnactive();
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPCSetActive()
+        public void RPCSetActive(Vector3 pos)
         {
-            //gameObject.transform.position = Normal.transform.position;
+            transform.position = pos;
             gameObject.SetActive(true);
         }
 
@@ -71,5 +74,3 @@ namespace Agit.FortressCraft
         }
     }
 }
-
-

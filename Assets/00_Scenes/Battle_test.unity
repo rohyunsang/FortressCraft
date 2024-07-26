@@ -7224,6 +7224,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 135369399474149061, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
+      propertyPath: maxUnitCount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1598311985349938072, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: m_Name
       value: Castle1
@@ -9562,6 +9566,73 @@ Transform:
   - {fileID: 864060175}
   m_Father: {fileID: 355447637}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &881844445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881844446}
+  - component: {fileID: 881844447}
+  m_Layer: 20
+  m_Name: Trigger (2)
+  m_TagString: Unit_B
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &881844446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881844445}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 557409478590294608}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &881844447
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881844445}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 1}
+  serializedVersion: 2
+  m_Radius: 1.61
 --- !u!1 &937217098
 GameObject:
   m_ObjectHideFlags: 0
@@ -26001,6 +26072,86 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611893672}
   m_Mesh: {fileID: -2901807609038394867, guid: fc0f0df0d8fac874c9e51025cfc1b606, type: 3}
+--- !u!1 &1618854142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618854143}
+  - component: {fileID: 1618854145}
+  - component: {fileID: 1618854146}
+  m_Layer: 20
+  m_Name: Trigger (1)
+  m_TagString: Unit_B
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1618854143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618854142}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 557409478590294608}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1618854145
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618854142}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 1}
+  serializedVersion: 2
+  m_Radius: 1.61
+--- !u!114 &1618854146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618854142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d9fee443ad5340e9bd802a1b5d46c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1622273077
 GameObject:
   m_ObjectHideFlags: 0
@@ -47019,11 +47170,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle2
       objectReference: {fileID: 0}
+    - target: {fileID: 7453605011642941100, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+      propertyPath: maxUnitCount
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1618854143}
+    - targetCorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 881844446}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+--- !u!4 &557409478590294608 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
+  m_PrefabInstance: {fileID: 557409478590294607}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2244037041897001223
 PrefabInstance:
   m_ObjectHideFlags: 0

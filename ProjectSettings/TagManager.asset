@@ -15,6 +15,7 @@ TagManager:
   - Attack
   - Bridge
   - CrossBridge
+  - ArrowBreaker
   layers:
   - Default
   - TransparentFX

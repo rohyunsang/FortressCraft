@@ -24,7 +24,6 @@ namespace Agit.FortressCraft
                     //Debug.Log("Hit!");
                     arrow.Release();
                 }
-
             }
         }
     }

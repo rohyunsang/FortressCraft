@@ -28,11 +28,12 @@ namespace Agit.FortressCraft
         public void Fire(NetworkRunner runner)
         {
             if (normalUnit.Spawner == null) return;
+            Debug.Log("Fire");
             id = normalUnit.Spawner.arrowId;
             poolManager.AddPoolTable(id);
             TargetUnit = normalUnit.TargetUnit;
 
-            if( TargetUnit.CompareTo(normalUnit.OwnType) == 0 )
+            if (TargetUnit.CompareTo(normalUnit.OwnType) == 0)
             {
                 TargetUnit = SecondTargetUnit;
             }
@@ -40,14 +41,15 @@ namespace Agit.FortressCraft
             NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
             NetworkObject networkObject;
             poolManager.AcquirePrefabInstance(runner, context, out networkObject);
-
+            Debug.Log(networkObject);
             networkObject.transform.position = transform.position;
             Arrow arrow = networkObject.GetComponent<Arrow>();
-            arrow.transform.position = transform.position;
+            //arrow.transform.position = transform.position;
             arrow.TargetTransform = TargetTranform;
             arrow.ID = id;
             arrow.Normal = normalUnit;
-            arrow.RPCSetActive();
+            arrow.RPCSetActive(transform.position);
+            arrow.ReserveRelease();
 
             AttackCollider attackCollider = networkObject.GetComponentInChildren<AttackCollider>();
             attackCollider.TargetUnit = TargetUnit;

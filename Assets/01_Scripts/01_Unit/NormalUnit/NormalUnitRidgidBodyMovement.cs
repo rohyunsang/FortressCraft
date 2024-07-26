@@ -5,7 +5,7 @@ using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 namespace Agit.FortressCraft
 {
-    
+
 
     public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
@@ -73,10 +73,10 @@ namespace Agit.FortressCraft
         public void Initializing()
         {
             if (initialized)
-            {   
-                if( TargetString != Spawner.Target  ) // 타겟 변경됐는데 다리 위
+            {
+                if (TargetString != Spawner.Target) // 타겟 변경됐는데 다리 위
                 {
-                    if( nowGround == "Bridge" )
+                    if (nowGround == "Bridge")
                     {
                         float minDist = GetDistanceXYSquared(grounds[0]);
                         int idx = 0;
@@ -84,7 +84,7 @@ namespace Agit.FortressCraft
                         {
                             float tempDist = GetDistanceXYSquared(grounds[i]);
 
-                            if ( tempDist < minDist )
+                            if (tempDist < minDist)
                             {
                                 minDist = tempDist;
                                 idx = i;
@@ -92,13 +92,13 @@ namespace Agit.FortressCraft
                         }
                         middlePoint = grounds[idx];
                     }
-                    else if( nowGround == "CrossBridge" )
+                    else if (nowGround == "CrossBridge")
                     {
                         middlePoint = Spawner.Center;
                     }
                 }
 
-                
+
                 // RPC Properties
                 TargetString = Spawner.Target;
                 AttackEnabled = Spawner.AttackEnabled;
@@ -120,7 +120,7 @@ namespace Agit.FortressCraft
 
             animatorState = animator.GetCurrentAnimatorStateInfo(0);
 
-            if (animatorState.fullPathHash != animAttackBow )
+            if (animatorState.fullPathHash != animAttackBow)
             {
                 if (_rb.Rigidbody.velocity.x != 0.0f || _rb.Rigidbody.velocity.y != 0.0f)
                 {
@@ -181,12 +181,12 @@ namespace Agit.FortressCraft
 
         protected bool Attack()
         {
-            if (!AttackEnabled )
+            if (!AttackEnabled)
             {
                 return false;
             }
 
-            if(Spawner.Target.CompareTo(OwnType) == 0)
+            if (Spawner.Target.CompareTo(OwnType) == 0)
             {
                 return AttackAllTarget(); ;
             }
@@ -243,7 +243,7 @@ namespace Agit.FortressCraft
         {
             Transform targetGround;
 
-            if( middlePoint == null )
+            if (middlePoint == null)
             {
                 if (TargetGround.CompareTo("Ground_A") == 0)
                 {
@@ -273,9 +273,9 @@ namespace Agit.FortressCraft
                 targetGround = middlePoint;
             }
 
-            if( Mathf.Sqrt( GetDistanceXYSquared(targetGround) ) < 0.3f )
+            if (Mathf.Sqrt(GetDistanceXYSquared(targetGround)) < 0.3f)
             {
-                if( middlePoint == null )
+                if (middlePoint == null)
                 {
                     _rb.Rigidbody.velocity = Vector2.zero;
                     return;
@@ -331,7 +331,7 @@ namespace Agit.FortressCraft
             {
                 nowGround = "Ground_D";
             }
-            else if( collision.CompareTag("Bridge") )
+            else if (collision.CompareTag("Bridge"))
             {
                 nowGround = "Bridge";
             }
