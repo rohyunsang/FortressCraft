@@ -80,6 +80,11 @@ namespace Agit.FortressCraft
         [Networked] public NetworkString<_256> LastPublicChat { get; set; }
         string currentChat = "";
 
+		[Networked] public bool IsDestroyCastle { get; set; }
+
+		public GameObject IN_GAME_Panel;
+		public GameObject Defeat_Panel;
+
         public void ToggleReady()
 		{
 			ready = !ready;
@@ -101,7 +106,8 @@ namespace Agit.FortressCraft
 			stage = Stage.New;
 			lives = MAX_LIVES;
 			life = MAX_HEALTH;
-		}
+			IsDestroyCastle = false;
+        }
 
 		public override void Spawned()
 		{
@@ -202,10 +208,23 @@ namespace Agit.FortressCraft
                         Debug.Log("Render");
                         OnChatChanged();
                         break;
+					case nameof(IsDestroyCastle):
+                        break;
                 }
             }
 
             var interpolated = new NetworkBehaviourBufferInterpolator(this);
+        }
+
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPCSetDestroyCastle(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+                IsDestroyCastle = true;
+                GameObject.Find("UIManager").GetComponent<UIManager>().OnDefeatPanel();
+            }
+
         }
 
         public void OnPlayerNameChanged()

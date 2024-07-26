@@ -1,9 +1,8 @@
 using Fusion;
+using FusionHelpers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Agit.FortressCraft.CastleManager;
-using static Fusion.NetworkBehaviour;
 
 
 namespace Agit.FortressCraft
@@ -25,10 +24,27 @@ namespace Agit.FortressCraft
         public Castle D_Castle;
 
         private ChangeDetector changes;
+
+        [Networked] public int team_id { get; set; }
+
         public override void Spawned()
         {
             base.Spawned();
+
             changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
+
+            if (HasStateAuthority)
+            {
+                A_CurrentHP = 50f;
+                B_CurrentHP = 50f;
+                C_CurrentHP = 50f;
+                D_CurrentHP = 50f;
+
+                A_Castle.Init(A_CurrentHP);
+                B_Castle.Init(B_CurrentHP);
+                C_Castle.Init(C_CurrentHP);
+                D_Castle.Init(D_CurrentHP);
+            }
         }
 
         public override void Render()
@@ -54,14 +70,32 @@ namespace Agit.FortressCraft
                 }
             }
         }
-        public void UpdateCastleHP(Team team, float hp)
+        public void UpdateCastleHP(Team team, float damage)
         {
             switch (team)
             {
-                case Team.A: A_CurrentHP = hp; break;
-                case Team.B: B_CurrentHP = hp; break;
-                case Team.C: C_CurrentHP = hp; break;
-                case Team.D: D_CurrentHP = hp; break;
+                case Team.A: A_CurrentHP -= damage;
+                    if (A_CurrentHP <= 0)
+                    {
+                        if (Runner.TryGetSingleton(out GameManager gameManager))
+                        {
+                            team_id = 1;
+                            gameManager.GetPlayerRef(team_id.ToString());
+                        }
+                    }
+                    break;
+                case Team.B: B_CurrentHP -= damage;
+                    if (B_CurrentHP <= 0)
+                    {
+                        if (Runner.TryGetSingleton(out GameManager gameManager))
+                        {
+                            team_id = 2;
+                            gameManager.GetPlayerRef(team_id.ToString());
+                        }
+                    }
+                    break;
+                case Team.C: C_CurrentHP -= damage; break;
+                case Team.D: D_CurrentHP -= damage; break;
             }
         }
 
@@ -69,8 +103,12 @@ namespace Agit.FortressCraft
         {
             if (castle != null && castle.HpBarSlider != null)
             {
-                castle.HpBarSlider.value = currentHp / castle.maxHP;
+                castle.HpBarSlider.value = currentHp / 50f;
             }
         }
+        
+        
+         
+
     }
 }

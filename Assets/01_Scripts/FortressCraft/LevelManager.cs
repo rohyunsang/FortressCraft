@@ -24,7 +24,7 @@ namespace Agit.FortressCraft
 	/// TODO: This is partially left over from previous SDK versions which had a less capable SceneManager, so could probably be simplified quite a bit
 	public class LevelManager : NetworkSceneManagerDefault
 	{
-		[SerializeField] private ScoreManager _scoreManager;
+		// [SerializeField] private ScoreManager _scoreManager;
 		[FormerlySerializedAs("_readyupManager")] [SerializeField] private ReadyUpManager _readyUpManager;
 		[SerializeField] private CountdownManager _countdownManager;
 
@@ -128,8 +128,7 @@ namespace Agit.FortressCraft
 
 				// Despawn players with a small delay between each one
 				Debug.Log("De-spawning all players");
-                var players = gameManager.AllPlayers.ToList(); // ToList()로 복사본 생성
-                foreach (FusionPlayer fusionPlayer in players)
+                foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
                 {
                     Player player = (Player)fusionPlayer;
                     Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
@@ -140,12 +139,12 @@ namespace Agit.FortressCraft
 
                 yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
 
-				// _scoreManager.ResetAllGameScores();
+				 //_scoreManager.ResetAllGameScores();
 				if (gameManager.lastPlayerStanding != null)
 				{
-					_scoreManager.ShowIntermediateLevelScore( gameManager );
+					// _scoreManager.ShowIntermediateLevelScore( gameManager );
 					yield return new WaitForSeconds(1.5f);
-					// _scoreManager.ResetAllGameScores();
+					 // _scoreManager.ResetAllGameScores();
 				}
 			}
 

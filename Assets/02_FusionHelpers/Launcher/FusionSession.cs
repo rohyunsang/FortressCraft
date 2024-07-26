@@ -36,7 +36,7 @@ namespace FusionHelpers
 
 		public override void Render()
 		{
-			if(Runner && Runner.Topology==Topologies.Shared && _players.Count!=playerRefByIndex.Count)
+			if(Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
 				MaybeSpawnNextAvatar();
 		}
 

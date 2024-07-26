@@ -139,7 +139,7 @@ namespace FusionHelpers
 		{
 			Debug.Log($"Player {player} Joined");
 			if (runner.IsServer || runner.IsSharedModeMasterClient) {
-				if(!runner.TryGetSingleton(out FusionSession session) && _sessionPrefab!=null)
+				if(!runner.TryGetSingleton(out FusionSession session) && _sessionPrefab != null)
 				{
 					Debug.Log($"I am {(runner.IsServer ? "Server":"Master")} and I do not have a session - Spawning Session");
 					session = runner.Spawn(_sessionPrefab);

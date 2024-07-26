@@ -8,10 +8,8 @@ namespace Agit.FortressCraft
 	{
 		public enum PlayState { LOBBY, LEVEL, TRANSITION }
 
-
 		[Networked] public PlayState currentPlayState { get; set; }
 		[Networked, Capacity(4)] private NetworkArray<int> score => default;
-		[Networked] public int DefeatCnt { get; set; }
 
 		public Player lastPlayerStanding { get; set; }
 		public Player matchWinner
@@ -41,7 +39,6 @@ namespace Agit.FortressCraft
 			if (Object.HasStateAuthority)
 			{
 				LoadLevel(-1);
-				DefeatCnt = 0;
 
             }
 			else if (currentPlayState != PlayState.LOBBY)
@@ -51,7 +48,41 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
+
+        /*
+		 Player[] players = FindObjectsOfType<Player>();
+
+            foreach (Player player in players)
+            {
+                if (player != null && player.PlayerName.ToString() == "222")
+                {
+                    player.SetDestroyCastle();
+                    break;
+                }
+                else
+                {
+                    Debug.Log("Player 컴포넌트를 찾을 수 없습니다.");
+                }
+            }
+		 */
+        public void GetPlayerRef(string team)
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+				if (player.PlayerId.ToString().Contains(team))
+				{
+					Debug.Log(player.PlayerId.ToString() + "       " + team);
+					player.RPCSetDestroyCastle(player.PlayerId);
+                    break;
+				}
+            }
+        }
+
+
+
+
+        protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{
 			// Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
 		}
@@ -60,7 +91,6 @@ namespace Agit.FortressCraft
 		{
 			// Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
 		}
-
         public void OnCommanderDeath()
 		{
 			if (currentPlayState != PlayState.LOBBY)
@@ -70,6 +100,7 @@ namespace Agit.FortressCraft
 
 				foreach (FusionPlayer fusionPlayer in AllPlayers)
 				{
+					
 					Player player = (Player)fusionPlayer;
 					if (player.isActivated || player.lives > 0)
 					{
@@ -111,10 +142,6 @@ namespace Agit.FortressCraft
 
 		private void Update()
 		{
-
-			LevelManager lm = Runner.GetLevelManager();
-			lm.readyUpManager.UpdateUI(currentPlayState, AllPlayers, OnAllPlayersReady);
-
 			if (_restart || DisconnectByPrompt)
 			{
 				Restart(_restart ? ShutdownReason_GameAlreadyRunning : ShutdownReason.Ok);
@@ -122,6 +149,11 @@ namespace Agit.FortressCraft
 
 				DisconnectByPrompt = true;
 			}
+
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				GameStartButton();
+            }
 
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
@@ -140,9 +172,9 @@ namespace Agit.FortressCraft
 		}
 
 		// Transition from lobby to level
-		public void OnAllPlayersReady()
+		public void GameStartButton()
 		{
-			Debug.Log("All players are ready");
+			Debug.Log("Lets go Start");
 
 			// close and hide the session from matchmaking / lists. this demo does not allow late join.
 			Runner.SessionInfo.IsOpen = false;

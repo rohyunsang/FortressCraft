@@ -10,15 +10,14 @@ namespace Agit.FortressCraft{
     public class Castle : MonoBehaviour
     {
         public float CurrentHP { get; private set; }
-        public float maxHP = 100f; // ÃÖ´ë Ã¼·Â
         public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
 
         public Team team;
 
-        private void Awake()
+        public void Init(float currntHP)
         {
-            CurrentHP = maxHP;
+            CurrentHP = currntHP;
             IsDestroyed = false;
         }
 
@@ -31,15 +30,9 @@ namespace Agit.FortressCraft{
             var manager = FindObjectOfType<CastleManager>();
             if (manager != null)
             {
-                manager.UpdateCastleHP(team, CurrentHP);
+                manager.UpdateCastleHP(team, damage);
             }
         }
-
-        public void DestroyCastle()
-        {
-            Debug.Log("¼ºÆÄ±«µÊ!");
-        }
-
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
