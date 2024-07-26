@@ -5,8 +5,6 @@ using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 namespace Agit.FortressCraft
 {
-
-
     public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
         public NormalUintSpawner Spawner { get; set; }
@@ -24,7 +22,9 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
 
         private readonly static int animAttackBow =
-            Animator.StringToHash("Base Layer.2_Attack_Bow");
+            Animator.StringToHash("Base Layer.AttackState");
+        private readonly static int animDie =
+            Animator.StringToHash("Base Layer.Death");
         private AnimatorStateInfo animatorState;
 
         private bool initialized = false;
@@ -134,8 +134,9 @@ namespace Agit.FortressCraft
 
             CheckDamaged();
 
-            if (dieTimer.Expired(Runner))
+            if (dieTimer.Expired(Runner) && animatorState.fullPathHash == animDie)
             {
+                --Spawner.NowUnitCount;
                 dieTimer = TickTimer.None;
                 NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, Spawner.id, false, false);
                 Spawner.poolManager.ReleaseInstance(Runner, context);
@@ -232,9 +233,8 @@ namespace Agit.FortressCraft
             //Debug.Log(HP);
             if (HP <= 0.0f)
             {
-                --Spawner.NowUnitCount;
                 _netAnimator.Animator.SetTrigger("Die");
-                dieTimer = TickTimer.CreateFromSeconds(Runner, 0.26f);
+                dieTimer = TickTimer.CreateFromSeconds(Runner, 0.4f);
             }
         }
 
