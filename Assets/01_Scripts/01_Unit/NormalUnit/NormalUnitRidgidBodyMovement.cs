@@ -1,6 +1,7 @@
 using UnityEngine;
 using Fusion;
 using FusionHelpers;
+//using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 namespace Agit.FortressCraft
