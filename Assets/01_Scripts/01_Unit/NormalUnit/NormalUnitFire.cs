@@ -24,7 +24,6 @@ namespace Agit.FortressCraft
             normalUnit = GetComponent<NormalUnitRigidBodyMovement>();
         }
 
-
         public void Fire(NetworkRunner runner)
         {
             if (normalUnit.Spawner == null) return;
@@ -33,7 +32,7 @@ namespace Agit.FortressCraft
             poolManager.AddPoolTable(id);
             TargetUnit = normalUnit.TargetUnit;
 
-            if (TargetUnit.CompareTo(normalUnit.OwnType) == 0)
+            if (TargetUnit.CompareTo("Unit_" + normalUnit.OwnType) == 0)
             {
                 TargetUnit = SecondTargetUnit;
             }
@@ -43,8 +42,8 @@ namespace Agit.FortressCraft
             poolManager.AcquirePrefabInstance(runner, context, out networkObject);
             Debug.Log(networkObject);
             networkObject.transform.position = transform.position;
+
             Arrow arrow = networkObject.GetComponent<Arrow>();
-            //arrow.transform.position = transform.position;
             arrow.TargetTransform = TargetTranform;
             arrow.ID = id;
             arrow.Normal = normalUnit;

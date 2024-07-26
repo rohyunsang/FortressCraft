@@ -156,7 +156,7 @@ namespace Agit.FortressCraft
                 if (col.tag.StartsWith("Unit"))
                 {
                     if (col.CompareTag("Unit_" + OwnType)) continue;
-
+                    //Debug.Log(col.tag + " " + OwnType);
                     normalUnitFire.TargetTranform = col.transform;
                     normalUnitFire.SecondTargetUnit = col.tag;
 
@@ -190,17 +190,19 @@ namespace Agit.FortressCraft
 
             if (Spawner.Target.CompareTo(OwnType) == 0)
             {
-                return AttackAllTarget(); ;
+                return AttackAllTarget();
             }
+
+            // Debug.Log("Setting: " + Spawner.Target + " " + OwnType);
 
             Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 3.0f);
 
             // 적 탐색 
             foreach (Collider2D col in cols)
             {
-                if (col.CompareTag(TargetUnit))
+                if (col.CompareTag(TargetUnit) && TargetUnit != "Unit_"+ OwnType )
                 {
-                    //Debug.Log("Target in");
+                    // Debug.Log(TargetUnit + " " + OwnType);
                     normalUnitFire.TargetTranform = col.transform;
 
                     if (col.transform.position.x > transform.position.x)
