@@ -15,25 +15,8 @@ namespace Agit.FortressCraft
 
 		[SerializeField] private LevelLighting _levelLighting;
 
-		private SpawnPoint[] _playerSpawnPoints;
+		public SpawnPoint[] _playerSpawnPoints;
 		
-		private void Awake()
-		{
-			_playerSpawnPoints = GetComponentsInChildren<SpawnPoint>(true);
-		}
-		
-		public void Activate()
-		{
-			SetLevelLighting();
-		}
-
-		private void SetLevelLighting()
-		{
-			RenderSettings.ambientLight = _levelLighting.ambientColor;
-			RenderSettings.fogColor = _levelLighting.fogColor;
-			RenderSettings.fog = _levelLighting.fog;
-		}
-
 		public SpawnPoint GetPlayerSpawnPoint(int plyIndex)
 		{
 			return _playerSpawnPoints[plyIndex].GetComponent<SpawnPoint>();

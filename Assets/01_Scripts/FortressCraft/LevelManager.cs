@@ -5,14 +5,16 @@ using FusionHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using TMPro;
+using System.Linq;
 
 namespace Agit.FortressCraft
 {
 	public enum SceneIndex
 	{
 		Main = 0,
-		Lobby,
-		Battle
+		Lobby = 1,
+		Battle = 2
 	}
 
 
@@ -22,10 +24,9 @@ namespace Agit.FortressCraft
 	/// TODO: This is partially left over from previous SDK versions which had a less capable SceneManager, so could probably be simplified quite a bit
 	public class LevelManager : NetworkSceneManagerDefault
 	{
-		[SerializeField] private ScoreManager _scoreManager;
+		// [SerializeField] private ScoreManager _scoreManager;
 		[FormerlySerializedAs("_readyupManager")] [SerializeField] private ReadyUpManager _readyUpManager;
 		[SerializeField] private CountdownManager _countdownManager;
-		[SerializeField] private AudioEmitter _audioEmitter;
 
 		[SerializeField] private int _lobby;
 		[SerializeField] private int[] _levels;
@@ -36,17 +37,36 @@ namespace Agit.FortressCraft
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
 		public ReadyUpManager readyUpManager => _readyUpManager;
 
-		[Networked] public string roomCode { get; set; }
+        [SerializeField] public TextMeshProUGUI roomCodeTMP;
+
+        [Networked, OnChangedRender(nameof(SetRoomCode))] public NetworkString<_32> RoomCode { get; set; }
 
 
 
-		private void Awake()
+        private void Awake()
 		{
 			_countdownManager.Reset();
-//			_scoreManager.ResetAllGameScores();
 		}
 
-		public override void Shutdown()
+		public void SetRoomCode(string roomCode)
+		{
+			RoomCode = roomCode;
+			RoomCodeUISync();
+        }
+
+		public void RoomCodeUISync()
+		{
+            roomCodeTMP.text = "Room Code : " + RoomCode.ToString();
+        }
+
+        public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
+        {
+            if (_currentLevel != null)
+                return _currentLevel.GetPlayerSpawnPoint(playerIndex);
+            return null;
+        }
+
+        public override void Shutdown()
 		{
 			Debug.Log("LevelManager.Shutdown();");
 			_currentLevel = null;
@@ -56,23 +76,14 @@ namespace Agit.FortressCraft
 				SceneManager.UnloadSceneAsync(_loadedScene.AsIndex);
 				_loadedScene = SceneRef.None;
 			}
-			_scoreManager.ResetAllGameScores();
+			// _scoreManager.ResetAllGameScores();
 			base.Shutdown();
 		}
 
-		// Get a random level
 		public int GetBattleSceneIndex()
 		{
 			int idx = (int)SceneIndex.Battle;
-			// Make sure it's not the same level again. This is partially because it's more fun to try different levels and partially because scene handling breaks if trying to load the same scene again.
 			return idx;
-		}
-
-		public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
-		{
-			if (_currentLevel!=null)
-				return _currentLevel.GetPlayerSpawnPoint(playerIndex);
-			return null;
 		}
 
 		public void LoadLevel(int nextLevelIndex)
@@ -82,10 +93,9 @@ namespace Agit.FortressCraft
 			{
 				Debug.Log($"LevelManager.UnloadLevel(); - _currentLevel={_currentLevel} _loadedScene={_loadedScene}");
 				Runner.UnloadScene(_loadedScene);
-				//UnloadScene();
 				_loadedScene = SceneRef.None;
 			}
-			Debug.Log($"LevelManager.LoadLevel({nextLevelIndex});");
+			// Debug.Log($"LevelManager.LoadLevel({nextLevelIndex});");
 			if (nextLevelIndex < 0)
 			{
 				Runner.LoadScene(SceneRef.FromIndex(_lobby), new LoadSceneParameters(LoadSceneMode.Additive), true);
@@ -118,22 +128,23 @@ namespace Agit.FortressCraft
 
 				// Despawn players with a small delay between each one
 				Debug.Log("De-spawning all players");
-				foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
-				{
-					Player player = (Player) fusionPlayer;
-					Debug.Log($"De-spawning tank {fusionPlayer.PlayerIndex}:{fusionPlayer}");
-					player.TeleportOut();
-					yield return new WaitForSeconds(0.1f);
-				}
+                foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
+                {
+                    Player player = (Player)fusionPlayer;
+                    Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
+                    // player.TeleportOut();
+                    yield return new WaitForSeconds(0.1f);
+                }
 
-				yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
 
-				_scoreManager.ResetAllGameScores();
+                yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
+
+				 //_scoreManager.ResetAllGameScores();
 				if (gameManager.lastPlayerStanding != null)
 				{
-					_scoreManager.ShowIntermediateLevelScore( gameManager );
+					// _scoreManager.ShowIntermediateLevelScore( gameManager );
 					yield return new WaitForSeconds(1.5f);
-					_scoreManager.ResetAllGameScores();
+					 // _scoreManager.ResetAllGameScores();
 				}
 			}
 
@@ -149,7 +160,6 @@ namespace Agit.FortressCraft
 			if (newScene.AsIndex == 0)
 				yield break;
 			
-			_audioEmitter.Play();
 			
 			onStatusUpdate?.Invoke( Runner, FusionLauncher.ConnectionStatus.Loading, "");
 
@@ -165,13 +175,11 @@ namespace Agit.FortressCraft
 			
 			// Activate the next level
 			_currentLevel = FindObjectOfType<LevelBehaviour>();
-			if(_currentLevel!=null)
-				_currentLevel.Activate();
-			MusicPlayer.instance.SetLowPassTranstionDirection( newScene.AsIndex>_lobby ? 1f : -1f);
+			//if(_currentLevel != null)
+				//_currentLevel.Activate();
 
 			yield return new WaitForSeconds(0.3f);
 
-			_audioEmitter.Stop();
 
 			GameManager gameManager;
 			while (!Runner.TryGetSingleton(out gameManager))
@@ -183,10 +191,10 @@ namespace Agit.FortressCraft
 			if (gameManager.matchWinner!=null && newScene.AsIndex == _lobby)
 			{
 				// Show lobby scores and reset the score ui.
-				_scoreManager.ShowFinalGameScore(gameManager);
+				//_scoreManager.ShowFinalGameScore(gameManager);
 			}
 
-			gameManager.lastPlayerStanding = null;
+			// gameManager.lastPlayerStanding = null;
 			
 			// Respawn with slight delay between each player
 			Debug.Log($"Respawning All {gameManager.PlayerCount} Players");
@@ -196,7 +204,7 @@ namespace Agit.FortressCraft
 				Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
 				player.Reset();
 				player.Respawn();
-				yield return new WaitForSeconds(0.3f);
+				yield return new WaitForSeconds(0.5f);
 			}
 
 			// Set state to playing level
@@ -205,7 +213,6 @@ namespace Agit.FortressCraft
 				if(Runner.IsServer || Runner.IsSharedModeMasterClient)
 					gameManager.currentPlayState = GameManager.PlayState.LOBBY;
 				InputController.fetchInput = true;
-//				Debug.Log($"Switched Scene from {prevScene} to {newScene}");
 			}
 			else
 			{

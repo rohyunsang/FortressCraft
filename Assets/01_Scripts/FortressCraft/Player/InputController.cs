@@ -152,7 +152,6 @@ namespace Agit.FortressCraft
 			
 				_mobileInput.gameObject.SetActive(true);
 				_mobileInput.SetLeft(leftIsDown, _leftDown, _leftPos);
-				_mobileInput.SetRight(rightIsDown,_rightDown, _rightPos);
 
 				_leftTouchWasDown = leftIsDown;
 				_rightTouchWasDown = rightIsDown;

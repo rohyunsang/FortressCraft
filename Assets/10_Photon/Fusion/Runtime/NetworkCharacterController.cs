@@ -38,6 +38,7 @@ namespace Fusion {
   public sealed unsafe class NetworkCharacterController : NetworkTRSP, INetworkTRSPTeleport, IBeforeAllTicks, IAfterAllTicks, IBeforeCopyPreviousState {
     new ref NetworkCCData Data => ref ReinterpretState<NetworkCCData>();
 
+
     [Header("Character Controller Settings")]
     public float gravity = -20.0f;
     public float jumpImpulse   = 8.0f;
@@ -47,7 +48,7 @@ namespace Fusion {
     public float rotationSpeed = 15.0f;
 
     Tick                _initial;
-    CharacterController _controller;
+    public CharacterController _controller;
 
     public Vector3 Velocity {
       get => Data.Velocity;
@@ -74,7 +75,9 @@ namespace Fusion {
       }
     }
 
-    public void Move(Vector3 direction) {
+    public void Move(Vector3 direction) 
+    {
+      // Debug.Log("NetworkCharacterController Move");
       var deltaTime    = Runner.DeltaTime;
       var previousPos  = transform.position;
       var moveVelocity = Data.Velocity;
@@ -85,21 +88,24 @@ namespace Fusion {
         moveVelocity.y = 0f;
       }
 
-      moveVelocity.y += gravity * Runner.DeltaTime;
+      //moveVelocity.y += gravity * Runner.DeltaTime;
 
       var horizontalVel = default(Vector3);
       horizontalVel.x = moveVelocity.x;
-      horizontalVel.z = moveVelocity.z;
+      horizontalVel.y = moveVelocity.y;
 
-      if (direction == default) {
+      if (direction == default) 
+      {
         horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
-      } else {
+      } 
+      else 
+      {
         horizontalVel      = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
       }
 
       moveVelocity.x = horizontalVel.x;
-      moveVelocity.z = horizontalVel.z;
+      moveVelocity.y = horizontalVel.y;
 
       _controller.Move(moveVelocity * deltaTime);
 

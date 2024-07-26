@@ -1,14 +1,14 @@
 using UnityEngine;
 using Fusion;
 using FusionHelpers;
+using JetBrains.Annotations;
+using Photon.Realtime;
 
 namespace Agit.FortressCraft
 {
 	public class GameManager : FusionSession
 	{
 		public enum PlayState { LOBBY, LEVEL, TRANSITION }
-
-		[SerializeField] private ForceField _forceField;
 
 		[Networked] public PlayState currentPlayState { get; set; }
 		[Networked, Capacity(4)] private NetworkArray<int> score => default;
@@ -24,9 +24,9 @@ namespace Agit.FortressCraft
 						return GetPlayerByIndex<Player>(i);
 				}
 				return null;
-			}	
+			}
 		}
-		
+
 		public const byte MAX_SCORE = 3;
 
 		private bool _restart;
@@ -37,19 +37,46 @@ namespace Agit.FortressCraft
 		{
 			base.Spawned();
 			Runner.RegisterSingleton(this);
-			
+
 			if (Object.HasStateAuthority)
 			{
 				LoadLevel(-1);
-			}
-			else if(currentPlayState != PlayState.LOBBY)
+
+            }
+			else if (currentPlayState != PlayState.LOBBY)
 			{
 				Debug.Log("Rejecting Player, game is already running!");
 				_restart = true;
 			}
 		}
+        
+        public void GetDestroyCastlePlayerRef(string team)
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+				if (player.PlayerId.ToString().Contains(team))
+				{
+					player.RPC_SetDestroyCastle(player.PlayerId);
+                    break;
+				}
+            }
+        }
 
-		protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
+		public void GetWinnerPlayerRef(string team)
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+                if (player.PlayerId.ToString().Contains(team))
+                {
+                    player.RPC_Winner(player.PlayerId);
+                    break;
+                }
+            }
+        }
+
+        protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{
 			// Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
 		}
@@ -58,8 +85,7 @@ namespace Agit.FortressCraft
 		{
 			// Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
 		}
-
-		public void OnCommanderDeath()
+        public void OnCommanderDeath()
 		{
 			if (currentPlayState != PlayState.LOBBY)
 			{
@@ -68,7 +94,8 @@ namespace Agit.FortressCraft
 
 				foreach (FusionPlayer fusionPlayer in AllPlayers)
 				{
-					Player player = (Player) fusionPlayer;
+					
+					Player player = (Player)fusionPlayer;
 					if (player.isActivated || player.lives > 0)
 					{
 						lastPlayerStanding = player;
@@ -78,27 +105,29 @@ namespace Agit.FortressCraft
 
 				if (playersLeft > 1)
 					lastPlayerStanding = null;
-				
+
 				Debug.Log($"Someone died - {playersLeft} left");
 				if (lastPlayerStanding != null)
 				{
 					int nextLevelIndex = Runner.GetLevelManager().GetBattleSceneIndex();
 					int newScore = score[lastPlayerStanding.PlayerIndex] + 1;
-					if(HasStateAuthority)
+					if (HasStateAuthority)
 						score.Set(lastPlayerStanding.PlayerIndex, newScore);
 					if (newScore >= MAX_SCORE)
 						nextLevelIndex = -1;
-					LoadLevel( nextLevelIndex );
+					LoadLevel(nextLevelIndex);
 				}
 			}
 		}
+
+
 
 		public void Restart(ShutdownReason shutdownReason)
 		{
 			if (!Runner.IsShutdown)
 			{
 				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
-				Runner.Shutdown(false,shutdownReason);
+				Runner.Shutdown(false, shutdownReason);
 				_restart = false;
 			}
 		}
@@ -107,28 +136,25 @@ namespace Agit.FortressCraft
 
 		private void Update()
 		{
-			for (int i = 0; i < 4; i++)
-			{
-				_forceField.SetPlayer(i, GetPlayerByIndex<Player>(i));
-			}
-
-			LevelManager lm = Runner.GetLevelManager();
-			lm.readyUpManager.UpdateUI(currentPlayState, AllPlayers, OnAllPlayersReady);
-			
 			if (_restart || DisconnectByPrompt)
 			{
-				Restart( _restart ? ShutdownReason_GameAlreadyRunning : ShutdownReason.Ok);
+				Restart(_restart ? ShutdownReason_GameAlreadyRunning : ShutdownReason.Ok);
 				_restart = false;
 
 				DisconnectByPrompt = true;
 			}
 
-			 if (Input.GetKeyDown(KeyCode.Escape))
-			 {
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				GameStartButton();
+            }
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
 				var readyUpManager = FindObjectOfType<ReadyUpManager>();
 				if (readyUpManager && !readyUpManager.DisconnectPrompt.activeSelf)
 					readyUpManager.DisconnectPrompt.SetActive(true);
-             }
+			}
 		}
 
 		private void ResetStats()
@@ -136,13 +162,13 @@ namespace Agit.FortressCraft
 			if (!HasStateAuthority)
 				return;
 			for (int i = 0; i < score.Length; i++)
-				score.Set(i,0);
+				score.Set(i, 0);
 		}
 
 		// Transition from lobby to level
-		public void OnAllPlayersReady()
+		public void GameStartButton()
 		{
-			Debug.Log("All players are ready");
+			Debug.Log("Lets go Start");
 
 			// close and hide the session from matchmaking / lists. this demo does not allow late join.
 			Runner.SessionInfo.IsOpen = false;
@@ -152,7 +178,7 @@ namespace Agit.FortressCraft
 			ResetStats();
 			LoadLevel(Runner.GetLevelManager().GetBattleSceneIndex());
 		}
-		
+
 		private void LoadLevel(int nextLevelIndex)
 		{
 			if (Object.HasStateAuthority)

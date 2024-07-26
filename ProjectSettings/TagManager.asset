@@ -16,6 +16,11 @@ TagManager:
   - Bridge
   - CrossBridge
   - ArrowBreaker
+  - Recorder
+  - A
+  - B
+  - C
+  - D
   layers:
   - Default
   - TransparentFX

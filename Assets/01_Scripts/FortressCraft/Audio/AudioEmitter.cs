@@ -58,20 +58,20 @@ namespace Agit.FortressCraft
 
 		public void PlayOneShot()
 		{
-			SetAudioClipAndPitch();
-			audioSource.PlayOneShot(audioSource.clip);
+			// SetAudioClipAndPitch();
+			// audioSource.PlayOneShot(audioSource.clip);
 		}
 
 		public void PlayOneShot(AudioClipData audioClip)
 		{
-			this.audioClip = audioClip;
-			PlayOneShot();
+			// this.audioClip = audioClip;
+			// PlayOneShot();
 		}
 
 		private void PlayClip()
 		{
-			SetAudioClipAndPitch();
-			audioSource.Play();
+			// SetAudioClipAndPitch();
+			// audioSource.Play();
 		}
 
 		private void SetAudioClipAndPitch()
@@ -82,7 +82,7 @@ namespace Agit.FortressCraft
 
 		private void StopClip()
 		{
-			audioSource.Stop();
+			// audioSource.Stop();
 		}
 	}
 }

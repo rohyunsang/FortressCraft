@@ -4,6 +4,11 @@ using FusionHelpers;
 using Tanknarok.UI;
 using TMPro;
 using UnityEngine;
+using System;
+using static UnityEngine.Random;
+using Random = UnityEngine.Random;
+using Photon.Voice.Unity.UtilityScripts;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
@@ -14,23 +19,21 @@ namespace Agit.FortressCraft
 	{
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
-		[SerializeField] private TMP_InputField _room;
-		[SerializeField] private TextMeshProUGUI _progress;
-		[SerializeField] private Panel _uiCurtain;
+		[SerializeField] private InputField _room;
+        [SerializeField] private InputField _playerName;
+        [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
-		[SerializeField] private Panel _uiRoom;
+		[SerializeField] private GameObject _uiRoom;
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
-		[SerializeField] private TextMeshProUGUI _audioText;
-        [SerializeField] private TMP_InputField playerName;
 
+
+		public string roomCode = "";
 
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
-		private int _nextPlayerIndex;
-
 
 
 		private void Awake()
@@ -38,7 +41,9 @@ namespace Agit.FortressCraft
 			Application.targetFrameRate = 60;
 			DontDestroyOnLoad(this);
 			_levelManager.onStatusUpdate = OnConnectionStatusUpdate;
-		}
+
+            SetGameMode(GameMode.Shared);
+        }
 
 		private void Start()
 		{
@@ -62,49 +67,66 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		// What mode to play - Called from the start menu
-		public void OnHostOptions()
-		{
-			SetGameMode(GameMode.Host);
-		}
+		public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
+        {
+			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
+			roomCode = _room.text;
 
-		public void OnJoinOptions()
-		{
-			SetGameMode(GameMode.Client);
-		}
+            SetVoiceRoomName();
+        }
 
-		public void OnSharedOptions()
+        public void CreateRoom()  // using  App - UI Intro - Start Panel - CreateRoom
+        {
+            CreateRandomRoomCode();
+        }
+
+        private void CreateRandomRoomCode()
 		{
-			SetGameMode(GameMode.Shared);
+            // 0에서 99999 사이의 랜덤 숫자 생성
+            int randomNumber = Random.Range(0, 100000);
+            // 숫자를 문자열로 변환하면서 5자리 포맷을 유지
+            string randomCode = randomNumber.ToString("D5");
+			
+			roomCode = randomCode;
+            _room.text = randomCode;
+
+			Debug.Log(_room.text);
+
+            _levelManager.SetRoomCode(_room.text);
+
+			// SetVoiceRoomName();
+
+        }
+
+		private void SetVoiceRoomName()
+		{
+			GameObject recorder = GameObject.FindGameObjectWithTag("Recorder");
+			if (recorder != null)
+			{
+				recorder.GetComponent<ConnectAndJoin>().RoomName = roomCode;
+			}
 		}
 
 		public void OnCancel()
         {
-			if (GateUI(_uiRoom))
-				_uiStart.SetVisible(true);
+			_uiStart.SetVisible(true);
         }
 
 		private void SetGameMode(GameMode gamemode)
 		{
 			_gameMode = gamemode;
-			if (GateUI(_uiStart))
-				_uiRoom.SetVisible(true);
 		}
 
 		public void OnEnterRoom()
 		{
-			if (GateUI(_uiRoom))
-			{
-				// Get region from dropdown
-				string region = string.Empty;
-				if (_regionDropdown.value > 0)
-                {
-					region = _regionDropdown.options[_regionDropdown.value].text;
-					region = region.Split(" (")[0];
-                }
-
-				FusionLauncher.Launch(_gameMode, region, _room.text, playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
-			}
+			// Get region from dropdown
+			string region = string.Empty;
+			if (_regionDropdown.value > 0)
+            {
+				region = _regionDropdown.options[_regionDropdown.value].text;
+				region = region.Split(" (")[0];
+            }
+            FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		/// <summary>
@@ -138,6 +160,9 @@ namespace Agit.FortressCraft
 					case FusionLauncher.ConnectionStatus.Failed:
 						ErrorBox.Show("Error!", reason, () => { });
 						break;
+					case FusionLauncher.ConnectionStatus.Loaded:
+                        // _chatManager.Init();
+						break;
 				}
 			}
 
@@ -147,8 +172,8 @@ namespace Agit.FortressCraft
 
 		public void ToggleAudio()
         {
-			AudioListener.volume = 1f - AudioListener.volume;
-			_audioText.text = AudioListener.volume > 0.5f ? "ON" : "OFF";
+			// AudioListener.volume = 1f - AudioListener.volume;
+			//_audioText.text = AudioListener.volume > 0.5f ? "ON" : "OFF";
         }
 
 		private void UpdateUI()
@@ -184,13 +209,10 @@ namespace Agit.FortressCraft
 					break;
 			}
 
-			_uiCurtain.SetVisible(!running);
 			_uiStart.SetVisible(intro);
 			_uiProgress.SetVisible(progress);
 			_uiGame.SetActive(running);
 			
-			if(intro)
-				MusicPlayer.instance.SetLowPassTranstionDirection( -1f);
 		}
 	}
 }
