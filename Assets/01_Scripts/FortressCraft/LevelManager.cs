@@ -194,7 +194,7 @@ namespace Agit.FortressCraft
 				//_scoreManager.ShowFinalGameScore(gameManager);
 			}
 
-			gameManager.lastPlayerStanding = null;
+			// gameManager.lastPlayerStanding = null;
 			
 			// Respawn with slight delay between each player
 			Debug.Log($"Respawning All {gameManager.PlayerCount} Players");
@@ -204,7 +204,7 @@ namespace Agit.FortressCraft
 				Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
 				player.Reset();
 				player.Respawn();
-				yield return new WaitForSeconds(0.3f);
+				yield return new WaitForSeconds(0.5f);
 			}
 
 			// Set state to playing level

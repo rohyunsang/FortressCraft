@@ -18,6 +18,8 @@ namespace Agit.FortressCraft
         [Networked] public float C_CurrentHP { get; set; }
         [Networked] public float D_CurrentHP { get; set; }
 
+        [Networked] public float DestroyCnt {  get; set; }
+
         public Castle A_Castle;
         public Castle B_Castle;
         public Castle C_Castle;
@@ -25,7 +27,9 @@ namespace Agit.FortressCraft
 
         private ChangeDetector changes;
 
-        [Networked] public int team_id { get; set; }
+        public int team_id { get; set; }
+
+
 
         public override void Spawned()
         {
@@ -39,6 +43,8 @@ namespace Agit.FortressCraft
                 B_CurrentHP = 50f;
                 C_CurrentHP = 50f;
                 D_CurrentHP = 50f;
+                
+                DestroyCnt = 0;
 
                 A_Castle.Init(A_CurrentHP);
                 B_Castle.Init(B_CurrentHP);
@@ -67,9 +73,32 @@ namespace Agit.FortressCraft
                     case nameof(D_CurrentHP):
                         SyncHp(D_CurrentHP, D_Castle);
                         break;
+                    case nameof(DestroyCnt):
+                        if (DestroyCnt >= 3)
+                            CheckWinner();
+                        break;
                 }
             }
+            // Debug.Log("DestroyCnt" + DestroyCnt);
         }
+
+        public void CheckWinner()
+        {
+            if (A_CurrentHP > 0)
+                team_id = 1;
+            if (B_CurrentHP > 0)
+                team_id = 2;
+            if (C_CurrentHP > 0)
+                team_id = 3;
+            if (D_CurrentHP > 0)
+                team_id = 4;
+
+            if (Runner.TryGetSingleton(out GameManager gameManager))
+            {
+                gameManager.GetWinnerPlayerRef(team_id.ToString());
+            }
+        }
+
         public void UpdateCastleHP(Team team, float damage)
         {
             switch (team)
@@ -80,7 +109,8 @@ namespace Agit.FortressCraft
                         if (Runner.TryGetSingleton(out GameManager gameManager))
                         {
                             team_id = 1;
-                            gameManager.GetPlayerRef(team_id.ToString());
+                            DestroyCnt++;
+                            gameManager.GetDestroyCastlePlayerRef(team_id.ToString());
                         }
                     }
                     break;
@@ -90,12 +120,36 @@ namespace Agit.FortressCraft
                         if (Runner.TryGetSingleton(out GameManager gameManager))
                         {
                             team_id = 2;
-                            gameManager.GetPlayerRef(team_id.ToString());
+                            DestroyCnt++;
+
+                            gameManager.GetDestroyCastlePlayerRef(team_id.ToString());
                         }
                     }
                     break;
-                case Team.C: C_CurrentHP -= damage; break;
-                case Team.D: D_CurrentHP -= damage; break;
+                case Team.C: C_CurrentHP -= damage;
+                    if (C_CurrentHP <= 0)
+                    {
+                        if (Runner.TryGetSingleton(out GameManager gameManager))
+                        {
+                            team_id = 3;
+                            DestroyCnt++;
+
+                            gameManager.GetDestroyCastlePlayerRef(team_id.ToString());
+                        }
+                    }
+                    break;
+                case Team.D: D_CurrentHP -= damage;
+                    if (D_CurrentHP <= 0)
+                    {
+                        if (Runner.TryGetSingleton(out GameManager gameManager))
+                        {
+                            team_id = 4;
+                            DestroyCnt++;
+
+                            gameManager.GetDestroyCastlePlayerRef(team_id.ToString());
+                        }
+                    }
+                    break;
             }
         }
 
@@ -106,9 +160,5 @@ namespace Agit.FortressCraft
                 castle.HpBarSlider.value = currentHp / 50f;
             }
         }
-        
-        
-         
-
     }
 }

@@ -217,14 +217,22 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
-        public void RPCSetDestroyCastle(PlayerRef playerRef)
+        public void RPC_SetDestroyCastle(PlayerRef playerRef)
 		{
 			if (PlayerId == playerRef && HasStateAuthority)
 			{
                 IsDestroyCastle = true;
                 GameObject.Find("UIManager").GetComponent<UIManager>().OnDefeatPanel();
             }
+        }
 
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPC_Winner(PlayerRef playerRef)
+        {
+            if (PlayerId == playerRef && HasStateAuthority)
+            {
+                GameObject.Find("UIManager").GetComponent<UIManager>().OnVictoryPanel();
+            }
         }
 
         public void OnPlayerNameChanged()

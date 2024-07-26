@@ -1,6 +1,8 @@
 using UnityEngine;
 using Fusion;
 using FusionHelpers;
+using JetBrains.Annotations;
+using Photon.Realtime;
 
 namespace Agit.FortressCraft
 {
@@ -47,40 +49,32 @@ namespace Agit.FortressCraft
 				_restart = true;
 			}
 		}
-
-
-        /*
-		 Player[] players = FindObjectsOfType<Player>();
-
-            foreach (Player player in players)
-            {
-                if (player != null && player.PlayerName.ToString() == "222")
-                {
-                    player.SetDestroyCastle();
-                    break;
-                }
-                else
-                {
-                    Debug.Log("Player 컴포넌트를 찾을 수 없습니다.");
-                }
-            }
-		 */
-        public void GetPlayerRef(string team)
+        
+        public void GetDestroyCastlePlayerRef(string team)
 		{
             foreach (FusionPlayer fusionPlayer in AllPlayers)
             {
                 Player player = (Player)fusionPlayer;
 				if (player.PlayerId.ToString().Contains(team))
 				{
-					Debug.Log(player.PlayerId.ToString() + "       " + team);
-					player.RPCSetDestroyCastle(player.PlayerId);
+					player.RPC_SetDestroyCastle(player.PlayerId);
                     break;
 				}
             }
         }
 
-
-
+		public void GetWinnerPlayerRef(string team)
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+                if (player.PlayerId.ToString().Contains(team))
+                {
+                    player.RPC_Winner(player.PlayerId);
+                    break;
+                }
+            }
+        }
 
         protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{

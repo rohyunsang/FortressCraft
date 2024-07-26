@@ -55,6 +55,8 @@ namespace Agit.FortressCraft
 
         public void OnVictoryPanel()
         {
+            uI_InGame.SetActive(true);
+            victoryPanel.SetActive(true);
         }
 
         #endregion
