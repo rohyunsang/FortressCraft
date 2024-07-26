@@ -4,6 +4,18 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Unit_A
+  - Unit_B
+  - Unit_C
+  - Unit_D
+  - Ground_A
+  - Ground_B
+  - Ground_C
+  - Ground_D
+  - Attack
+  - Bridge
+  - CrossBridge
+  - ArrowBreaker
   - Recorder
   - A
   - B

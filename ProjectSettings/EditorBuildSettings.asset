@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/00_Scenes/Lobby.unity
     guid: e7073f19ee8574db19f8808196062ff8
   - enabled: 1
+    path: Assets/00_Scenes/Battle_test.unity
+    guid: 61aca9aff11d24b3f9ad03fe3cf9073d
+  - enabled: 1
     path: Assets/00_Scenes/Battle.unity
     guid: c8e8f95c091b64329b97fba535292c16
   - enabled: 0
@@ -20,4 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/00_Scenes/Level2.unity
     guid: 6e19821baef78417da7d17a921d05fcb
+  - enabled: 1
+    path: Assets/00_Scenes/MainScene.unity
+    guid: c1d29642babf7ca4aa05a23ae68468a9
   m_configObjects: {}
