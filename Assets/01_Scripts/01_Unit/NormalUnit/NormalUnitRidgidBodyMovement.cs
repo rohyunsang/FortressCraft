@@ -32,7 +32,7 @@ namespace Agit.FortressCraft
         private string nowGround;
 
         private Animator animator;
-        private NetworkMecanimAnimator _netAnimator;
+        public NetworkMecanimAnimator _netAnimator;
         private BodyCollider bodyCollider;
         private NormalUnitFire normalUnitFire;
 
@@ -54,7 +54,6 @@ namespace Agit.FortressCraft
             // test
             AttackEnabled = true;
             HP = 100;
-
             grounds[0] = GameObject.Find("Castle1").transform;
             grounds[1] = GameObject.Find("Castle2").transform;
             grounds[2] = GameObject.Find("Castle3").transform;
@@ -99,7 +98,6 @@ namespace Agit.FortressCraft
                     }
                 }
 
-
                 // RPC Properties
                 TargetString = Spawner.Target;
                 AttackEnabled = Spawner.AttackEnabled;
@@ -135,7 +133,7 @@ namespace Agit.FortressCraft
 
             CheckDamaged();
 
-            if (dieTimer.Expired(Runner) && animatorState.fullPathHash == animDie)
+            if (dieTimer.Expired(Runner))
             {
                 --Spawner.NowUnitCount;
                 dieTimer = TickTimer.None;
@@ -237,10 +235,9 @@ namespace Agit.FortressCraft
             if (HP <= 0.0f)
             {
                 _netAnimator.Animator.SetTrigger("Die");
-                dieTimer = TickTimer.CreateFromSeconds(Runner, 0.4f);
+                dieTimer = TickTimer.CreateFromSeconds(Runner, 0.26f);
             }
         }
-
 
         private void MoveToTarget()
         {
@@ -309,6 +306,7 @@ namespace Agit.FortressCraft
         {
             if (bodyCollider.Damaged > 0.0f)
             {
+                Debug.Log("HP: " + HP);
                 HP -= Defense * bodyCollider.Damaged;
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");

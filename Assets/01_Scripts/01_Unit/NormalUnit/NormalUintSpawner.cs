@@ -127,6 +127,7 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.Defense = Defense;
                     normalUnitRigidBodyMovement.Spawner = this;
                     normalUnitRigidBodyMovement.OwnType = spawnerType;
+                    normalUnitRigidBodyMovement.HP = 100.0f;
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();
 
