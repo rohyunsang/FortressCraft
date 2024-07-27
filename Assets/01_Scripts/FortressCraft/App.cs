@@ -37,10 +37,9 @@ namespace Agit.FortressCraft
 
 
         public string roomCode = "";
-		public string roomCodeOverride = "";
 		public void SetRoomCodeOverride(string roomCodeOverride)
 		{
-			this.roomCodeOverride = roomCodeOverride;
+			this.roomCode = roomCodeOverride;
 			_levelManager.roomCode.text = "ROOM CODE : " + roomCodeOverride;
         }
 
@@ -94,7 +93,7 @@ namespace Agit.FortressCraft
                 region = region.Split(" (")[0];
             }
 
-            FusionLauncher.ConnectToSession(region, _levelManager, roomCodeOverride, OnConnectionStatusUpdate);
+            FusionLauncher.ConnectToSession(region, _levelManager, roomCode, OnConnectionStatusUpdate);
 
             // UI SetActive false
 			selectJoinModePanel.SetActive(false);

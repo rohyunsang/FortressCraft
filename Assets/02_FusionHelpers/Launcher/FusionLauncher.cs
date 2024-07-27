@@ -52,8 +52,8 @@ namespace FusionHelpers
 			Loading,
 			Loaded
 		}
-
-		public static FusionLauncher ConnectToLobby(string playerName, FusionSession sessionPrefab)
+        #region Lobby List 
+        public static FusionLauncher ConnectToLobby(string playerName, FusionSession sessionPrefab)
 		{
             FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
 			launcher.playerName = playerName;
@@ -106,7 +106,10 @@ namespace FusionHelpers
             });
         }
 
-		public static FusionLauncher Launch(GameMode mode, string region, string room, string playerName  , FusionSession sessionPrefab,
+        #endregion
+
+        #region Create And Join
+        public static FusionLauncher Launch(GameMode mode, string region, string room, string playerName  , FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
@@ -153,8 +156,8 @@ namespace FusionHelpers
 				PlayerCount = 4 // Max Player is 4 
 			});
 		}
-
-		public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
+        #endregion
+        public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
 		{
 			if (_connectionCallback != null)
 				_connectionCallback(runner, status, message);
