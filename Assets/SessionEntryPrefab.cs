@@ -21,7 +21,7 @@ namespace Agit.FortressCraft {
 
         public void ConnectToSession()
         {
-            GameObject.Find("App").GetComponent<App>().roomCodeOverride = roomName.text;
+            GameObject.Find("App").GetComponent<App>().SetRoomCodeOverride(roomName.text);
             GameObject.Find("App").GetComponent<App>().ConnectToSession();
         }
     }

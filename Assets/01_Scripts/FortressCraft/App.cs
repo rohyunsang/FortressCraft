@@ -38,6 +38,11 @@ namespace Agit.FortressCraft
 
         public string roomCode = "";
 		public string roomCodeOverride = "";
+		public void SetRoomCodeOverride(string roomCodeOverride)
+		{
+			this.roomCodeOverride = roomCodeOverride;
+			_levelManager.roomCode.text = "ROOM CODE : " + roomCodeOverride;
+        }
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
@@ -89,7 +94,7 @@ namespace Agit.FortressCraft
                 region = region.Split(" (")[0];
             }
 
-            FusionLauncher.ConnectToSession(region, _levelManager, roomCodeOverride);
+            FusionLauncher.ConnectToSession(region, _levelManager, roomCodeOverride, OnConnectionStatusUpdate);
 
             // UI SetActive false
 			selectJoinModePanel.SetActive(false);
@@ -99,7 +104,7 @@ namespace Agit.FortressCraft
 
         public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
         {
-			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
+			_levelManager.roomCode.text = "Room Code : " + _room.text;
 			roomCode = _room.text;
 
             SetVoiceRoomName();
@@ -152,20 +157,6 @@ namespace Agit.FortressCraft
 				region = region.Split(" (")[0];
             }
             FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
-		}
-
-		/// <summary>
-		/// Call this method from button events to close the current UI panel and check the return value to decide
-		/// if it's ok to proceed with handling the button events. Prevents double-actions and makes sure UI panels are closed. 
-		/// </summary>
-		/// <param name="ui">Currently visible UI that should be closed</param>
-		/// <returns>True if UI is in fact visible and action should proceed</returns>
-		private bool GateUI(Panel ui)
-		{
-			if (!ui.isShowing)
-				return false;
-			ui.SetVisible(false);
-			return true;
 		}
 
 		private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)

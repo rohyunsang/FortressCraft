@@ -72,16 +72,15 @@ namespace FusionHelpers
 			runner.ProvideInput = true;
 
             runner.JoinSessionLobby(SessionLobby.Shared);
-
         }
 
-		public static void ConnectToSession(string region, INetworkSceneManager sceneManager, string room)
+		public static void ConnectToSession(string region, INetworkSceneManager sceneManager, string room, Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			FusionLauncher launcher = GameObject.Find("Launcher").GetComponent<FusionLauncher>();
-			launcher.InternalConnectToSession(region, sceneManager, room);
+			launcher.InternalConnectToSession(region, sceneManager, room, onConnect);
         }
 
-		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager,string room)
+		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager,string room, Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			NetworkRunner runner = GetComponent<NetworkRunner>();
 
@@ -107,7 +106,7 @@ namespace FusionHelpers
             });
         }
 
-		public static FusionLauncher Launch(GameMode mode, string region, string room,string playerName  ,FusionSession sessionPrefab,
+		public static FusionLauncher Launch(GameMode mode, string region, string room, string playerName  , FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{

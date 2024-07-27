@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using TMPro;
 using System.Linq;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
@@ -37,7 +38,7 @@ namespace Agit.FortressCraft
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
 		public ReadyUpManager readyUpManager => _readyUpManager;
 
-        [SerializeField] public TextMeshProUGUI roomCodeTMP;
+        [SerializeField] public Text roomCode;
 
         [Networked, OnChangedRender(nameof(SetRoomCode))] public NetworkString<_32> RoomCode { get; set; }
 
@@ -56,7 +57,7 @@ namespace Agit.FortressCraft
 
 		public void RoomCodeUISync()
 		{
-            roomCodeTMP.text = "Room Code : " + RoomCode.ToString();
+            roomCode.text = "ROOM CODE : " + RoomCode.ToString();
         }
 
         public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
