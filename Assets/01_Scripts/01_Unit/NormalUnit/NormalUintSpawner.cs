@@ -41,16 +41,16 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPCSettingDamage(float newDefense)
+        public void RPCSettingDamage(float newDamage)
         {
-            Damage = newDefense;
-            Debug.Log("Damage: " + newDefense);
+            Damage = newDamage;
+            Debug.Log("Damage: " + newDamage);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPCSettingDefense(float newDamage)
+        public void RPCSettingDefense(float newDefense)
         {
-            Damage = newDamage;
+            Defense = newDefense;
             Debug.Log("Defense: " + Damage);
         }
 

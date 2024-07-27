@@ -58,7 +58,7 @@ namespace Agit.FortressCraft
         {
             if (targetSpawner == null) return;
             Debug.Log("Upgrade Defense");
-            targetSpawner.RPCSettingDamage(0.5f);
+            targetSpawner.RPCSettingDefense(0.5f);
         }
     }
 }

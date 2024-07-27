@@ -306,10 +306,10 @@ namespace Agit.FortressCraft
         {
             if (bodyCollider.Damaged > 0.0f)
             {
-                Debug.Log("HP: " + HP);
                 HP -= Defense * bodyCollider.Damaged;
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");
+                Debug.Log("HP: " + HP);
                 Die();
             }
         }
