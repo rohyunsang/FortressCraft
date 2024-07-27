@@ -37,6 +37,8 @@ namespace Agit.FortressCraft
 
 
         #region UI - LOBBY
+        public Button startButton;
+
 
 
         #endregion
