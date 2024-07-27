@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +11,8 @@ namespace Agit.FortressCraft
     {
         [Header("Objects")]
         public GameObject chatEntryCanvas;
-        public TMP_InputField chatInputField;
-        public TextMeshProUGUI chatDisplay;
+        public InputField chatInputField;
+        public Text chatDisplay;
         public string playerName = "";
 
         public static ChatSystem instance;
