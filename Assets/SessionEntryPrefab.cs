@@ -1,0 +1,31 @@
+using FusionHelpers;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Agit.FortressCraft {
+    public class SessionEntryPrefab : MonoBehaviour
+    {
+        public Text roomName;
+        public Text playerCount;
+        public Button joinButton;
+
+        public void init(string roomName, string playerCount, string maxPlayer)
+        {
+            this.roomName.text = roomName;
+            this.playerCount.text = playerCount + " / " + maxPlayer;
+            joinButton.onClick.AddListener(ConnectToSession);
+        }
+
+        public void ConnectToSession()
+        {
+            GameObject.Find("App").GetComponent<App>().roomCodeOverride = roomName.text;
+            GameObject.Find("App").GetComponent<App>().ConnectToSession();
+        }
+    }
+
+}
+
+
