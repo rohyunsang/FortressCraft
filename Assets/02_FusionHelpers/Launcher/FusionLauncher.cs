@@ -157,6 +157,13 @@ namespace FusionHelpers
 			});
 		}
         #endregion
+
+		public void ShutDownCustom()
+		{
+			GetComponent<NetworkRunner>().Shutdown();
+		}
+
+
         public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
 		{
 			if (_connectionCallback != null)
@@ -247,24 +254,24 @@ namespace FusionHelpers
 		public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) {
             Debug.Log($"Session List Updated with {sessionList.Count} session(s)");
 
+            // RoomListPanel - Content - Destroy
+
+            RoomListPanel roomListPanel = FindObjectOfType<RoomListPanel>();
+            if (roomListPanel != null && roomListPanel._scrollViewContent != null)
+            {
+                // _scrollViewContent의 모든 자식 오브젝트를 순회하며 삭제
+                foreach (Transform child in roomListPanel._scrollViewContent.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            else
+            {
+                Debug.Log("RoomListPanel or _scrollViewContent is not found!");
+            }
+
             if (sessionList.Count > 0)
             {
-                // RoomListPanel - Content - Destroy
-                
-				RoomListPanel roomListPanel = FindObjectOfType<RoomListPanel>();
-                if (roomListPanel != null && roomListPanel._scrollViewContent != null)
-                {
-                    // _scrollViewContent의 모든 자식 오브젝트를 순회하며 삭제
-                    foreach (Transform child in roomListPanel._scrollViewContent.transform)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                }
-                else
-                {
-                    Debug.LogError("RoomListPanel or _scrollViewContent is not found!");
-                }
-
                 // Prefab Spawning 
 
                 foreach (var session in sessionList)

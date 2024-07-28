@@ -50,7 +50,7 @@ namespace Agit.FortressCraft
 			}
 
 			FindObjectOfType<UIManager>().startButton.onClick.AddListener(GameStartButtonCallback);
-
+			FindObjectOfType<UIManager>().leaveToSessionButton.onClick.AddListener(DisconnectSession);
 
         }
         
@@ -145,14 +145,14 @@ namespace Agit.FortressCraft
 
 				DisconnectByPrompt = true;
 			}
-
-			if (Input.GetKeyDown(KeyCode.Escape))
-			{
-				var readyUpManager = FindObjectOfType<ReadyUpManager>();
-				if (readyUpManager && !readyUpManager.DisconnectPrompt.activeSelf)
-					readyUpManager.DisconnectPrompt.SetActive(true);
-			}
 		}
+
+		public void DisconnectSession() // using Button 
+		{
+            var DisconnectManager = FindObjectOfType<DisconnectManager>();
+            if (DisconnectManager && !DisconnectManager.DisconnectPrompt.activeSelf)
+                DisconnectManager.DisconnectPrompt.SetActive(true);
+        }
 
 		private void ResetStats()
 		{

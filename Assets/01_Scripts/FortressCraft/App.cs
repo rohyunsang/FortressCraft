@@ -35,7 +35,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject roomListPanel;
 
 
-
         public string roomCode = "";
 		public void SetRoomCodeOverride(string roomCodeOverride)
 		{
