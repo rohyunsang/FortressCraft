@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/MainSceneMobile_test.unity
-    guid: 8ada12bb11bab4c5697076af8b855382
+    path: Assets/00_Scenes/MainSceneMobile.unity
+    guid: cb85ad1545da3da429a974e595281593
   - enabled: 1
     path: Assets/00_Scenes/Lobby.unity
     guid: e7073f19ee8574db19f8808196062ff8
@@ -17,7 +17,4 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/00_Scenes/Battle_test.unity
     guid: 61aca9aff11d24b3f9ad03fe3cf9073d
-  - enabled: 0
-    path: Assets/00_Scenes/MainSceneMobile.unity
-    guid: cb85ad1545da3da429a974e595281593
   m_configObjects: {}
