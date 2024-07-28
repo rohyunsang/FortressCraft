@@ -1553,12 +1553,16 @@ MonoBehaviour:
   _gameManagerPrefab: {fileID: 592953329146046646, guid: cebdea494ca74974e809d626e5e9f63e, type: 3}
   _room: {fileID: 1898750881}
   _playerName: {fileID: 1736339990}
+  _playerNameOverride: {fileID: 0}
   _progress: {fileID: 604924949}
   _uiStart: {fileID: 556233617}
   _uiProgress: {fileID: 148003028}
   _uiRoom: {fileID: 757041939}
   _uiGame: {fileID: 7620482187611796560}
   _regionDropdown: {fileID: 990872702}
+  selectJoinModePanel: {fileID: 0}
+  nickNamePanel: {fileID: 0}
+  roomListPanel: {fileID: 0}
   roomCode: 
 --- !u!4 &322567093
 Transform:
@@ -1645,6 +1649,8 @@ MonoBehaviour:
   _playerName: {fileID: 1736339990}
   createButton: {fileID: 807486144}
   joinButton: {fileID: 1732962014}
+  startButton: {fileID: 0}
+  leaveToSessionButton: {fileID: 0}
   uI_InGame: {fileID: 2234900463790853020}
   victoryPanel: {fileID: 131873423815505487}
   defeatPanel: {fileID: 2129842477}
@@ -6288,7 +6294,7 @@ MonoBehaviour:
   _countdownManager: {fileID: 5203584005505685294}
   _lobby: 1
   _levels: 0200000003000000
-  roomCodeTMP: {fileID: 245539439}
+  roomCode: {fileID: 0}
 --- !u!4 &1353448200
 Transform:
   m_ObjectHideFlags: 0
@@ -13474,8 +13480,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatEntryCanvas: {fileID: 3231526487032485922}
-  chatInputField: {fileID: 1357189309255407362}
-  chatDisplay: {fileID: 5713730124770211578}
+  chatInputField: {fileID: 0}
+  chatDisplay: {fileID: 0}
   playerName: 
 --- !u!222 &8093863136602092774
 CanvasRenderer:
