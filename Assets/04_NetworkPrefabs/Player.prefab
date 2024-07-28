@@ -2274,13 +2274,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 1.2
+  m_Radius: 0.26
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &6052548211824699789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2323,6 +2323,10 @@ MonoBehaviour:
   camera: {fileID: 0}
   vCam: {fileID: 0}
   anim: {fileID: 5022701445885422978}
+  weapon: {fileID: 0}
+  weaponCollider: {fileID: 0}
+  playerClass: 0
+  currentClass: 0
 --- !u!114 &8838001341374833890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4067,6 +4071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35424aa0cf65fda4f8ae0557b4e1046e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 0}
   damage: 10
 --- !u!61 &2083548064717487808
 BoxCollider2D:
@@ -4100,7 +4105,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.03125, y: 0.40625}
+  m_Offset: {x: 0.015397675, y: 0.4854827}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.46875, y: 0.09375}
@@ -4111,7 +4116,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.39, y: 1}
+  m_Size: {x: 0.22189634, y: 0.8415346}
   m_EdgeRadius: 0
 --- !u!1 &9030256249960462141
 GameObject:

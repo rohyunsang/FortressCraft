@@ -112,6 +112,18 @@ namespace Fusion {
       Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
       Data.Grounded = _controller.isGrounded;
     }
+
+    public void WarriorSkill01()
+    {
+      var deltaTime    = Runner.DeltaTime;
+      var previousPos  = transform.position;
+      var moveVelocity = Data.Velocity;
+      
+      _controller.isTrigger = true;
+      _controller.Move()
+    
+      Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
+    }
     
     public override void Spawned() {
       _initial = default;
@@ -137,6 +149,7 @@ namespace Fusion {
     
     void Awake() {
       TryGetComponent(out _controller);
+      
     }
 
     void CopyToBuffer() {
