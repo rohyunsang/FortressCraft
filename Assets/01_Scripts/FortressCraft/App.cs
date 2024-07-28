@@ -77,6 +77,11 @@ namespace Agit.FortressCraft
 			}
 		}
 
+		public void ShutDownSession() // using button 
+		{
+			FindObjectOfType<FusionLauncher>().ShutDownCustom();
+        }
+
 		public void ConnectToLobby() // using Button
 		{
             FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab);

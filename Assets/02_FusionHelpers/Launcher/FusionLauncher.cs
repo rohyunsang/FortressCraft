@@ -158,11 +158,23 @@ namespace FusionHelpers
 		}
         #endregion
 
-		public void ShutDownCustom()
-		{
-			GetComponent<NetworkRunner>().Shutdown();
-		}
+        public void ShutDownCustom()
+        {
+            Invoke("ShutdownRunner", 2.0f);
+        }
 
+        private void ShutdownRunner()
+        {
+            NetworkRunner runner = GetComponent<NetworkRunner>();
+            if (runner != null)
+            {
+                runner.Shutdown();
+            }
+            else
+            {
+                Debug.LogError("NetworkRunner component not found on the GameObject.");
+            }
+        }
 
         public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
 		{

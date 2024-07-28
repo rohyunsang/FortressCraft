@@ -123,7 +123,6 @@ namespace FusionHelpers
 				// This means only on player remains
 				if (Runner.SessionInfo.PlayerCount >= 1)
                 {
-					Debug.Log("AAAAAAAAA" +  Runner.SessionInfo.PlayerCount);
                 }
 				else
 				{
