@@ -12,6 +12,7 @@ namespace Agit.FortressCraft
         private Button attackBtn;
         private Color orgColor;
         private Color unselectedColor;
+        private bool isAttackOn = true;
 
         private string buttonNameA = "Button_A";
         private string buttonNameB = "Button_B";
@@ -108,6 +109,17 @@ namespace Agit.FortressCraft
 
         private void UpdateAttackButtonColor()
         {
+            if( isAttackOn )
+            {
+                attackBtn.GetComponent<Image>().color = unselectedColor;
+            }
+            else
+            {
+                attackBtn.GetComponent<Image>().color = orgColor;
+            }
+
+            isAttackOn = !isAttackOn;
+            /*
             if(targetSpawner.AttackEnabled)
             {
                 attackBtn.GetComponent<Image>().color = orgColor;
@@ -116,6 +128,7 @@ namespace Agit.FortressCraft
             {
                 attackBtn.GetComponent<Image>().color = unselectedColor;
             }
+            */
         }
 
         public void SetTargetA()

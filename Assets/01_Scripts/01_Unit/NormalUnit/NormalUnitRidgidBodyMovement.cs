@@ -130,6 +130,13 @@ namespace Agit.FortressCraft
                     _netAnimator.Animator.SetTrigger("Idle");
                 }
             }
+            else
+            {
+                if (_rb.Rigidbody.velocity.x != 0.0f || _rb.Rigidbody.velocity.y != 0.0f)
+                {
+                    _netAnimator.Animator.SetTrigger("Run");
+                }
+            }
 
             CheckDamaged();
 
