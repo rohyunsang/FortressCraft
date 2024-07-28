@@ -61,7 +61,9 @@ namespace Agit.FortressCraft
 		}
 
 		private void Update()
-		{
+		{/*
+		  
+		  */
 			if (_uiProgress.isShowing)
 			{
 				if (Input.GetKeyUp(KeyCode.Escape))
@@ -84,7 +86,8 @@ namespace Agit.FortressCraft
 
 		public void ConnectToLobby() // using Button
 		{
-            FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab);
+
+            FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab, OnConnectionStatusUpdate);
         }
 
 		public void ConnectToSession()
@@ -97,7 +100,7 @@ namespace Agit.FortressCraft
                 region = region.Split(" (")[0];
             }
 
-            FusionLauncher.ConnectToSession(region, _levelManager, roomCode, OnConnectionStatusUpdate);
+            FusionLauncher.ConnectToSession(region, _levelManager, roomCode);
 
             // UI SetActive false
 			selectJoinModePanel.SetActive(false);

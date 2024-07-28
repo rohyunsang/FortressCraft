@@ -53,36 +53,43 @@ namespace FusionHelpers
 			Loaded
 		}
         #region Lobby List 
-        public static FusionLauncher ConnectToLobby(string playerName, FusionSession sessionPrefab)
+        public static FusionLauncher ConnectToLobby(string playerName, FusionSession sessionPrefab, Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
             FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
+
 			launcher.playerName = playerName;
 
-			launcher.InternalConnectToLobby(sessionPrefab);
+			launcher.InternalConnectToLobby(sessionPrefab, onConnect);
 
             return launcher;
 		}
 
-		private void InternalConnectToLobby(FusionSession sessionPrefab)
+		private void InternalConnectToLobby(FusionSession sessionPrefab, Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
             DontDestroyOnLoad(gameObject);
+
+			_sessionPrefab = sessionPrefab;
+            _connectionCallback = onConnect;
 
             NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
             runner.name = name;
 			runner.ProvideInput = true;
-
-            runner.JoinSessionLobby(SessionLobby.Shared);
+            
+			runner.JoinSessionLobby(SessionLobby.Shared);
         }
 
-		public static void ConnectToSession(string region, INetworkSceneManager sceneManager, string room, Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		public static void ConnectToSession(string region, INetworkSceneManager sceneManager, string room)
 		{
 			FusionLauncher launcher = GameObject.Find("Launcher").GetComponent<FusionLauncher>();
-			launcher.InternalConnectToSession(region, sceneManager, room, onConnect);
+
+			launcher.InternalConnectToSession(region, sceneManager, room);
         }
 
-		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager,string room, Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager, string room)
 		{
 			NetworkRunner runner = GetComponent<NetworkRunner>();
+
+			
 
             // Voice 
             gameObject.AddComponent<FusionVoiceClient>();
@@ -257,6 +264,7 @@ namespace FusionHelpers
 					message = shutdownReason.ToString();
 					break;
 			}
+
 			SetConnectionStatus(runner, ConnectionStatus.Disconnected, message);
 			runner.ClearRunnerSingletons();
 			Destroy(gameObject);
