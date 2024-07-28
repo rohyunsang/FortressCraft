@@ -9,6 +9,7 @@ using static UnityEngine.Random;
 using Random = UnityEngine.Random;
 using Photon.Voice.Unity.UtilityScripts;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 namespace Agit.FortressCraft
 {
@@ -21,6 +22,7 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameManager _gameManagerPrefab;
 		[SerializeField] private InputField _room;
         [SerializeField] private InputField _playerName;
+        [SerializeField] private InputField _playerNameOverride;
         [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
@@ -28,9 +30,17 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject _uiGame;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 
+		[SerializeField] private GameObject selectJoinModePanel;
+		[SerializeField] private GameObject nickNamePanel;
+		[SerializeField] private GameObject roomListPanel;
 
-		public string roomCode = "";
 
+        public string roomCode = "";
+		public void SetRoomCodeOverride(string roomCodeOverride)
+		{
+			this.roomCode = roomCodeOverride;
+			_levelManager.roomCode.text = "ROOM CODE : " + roomCodeOverride;
+        }
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
@@ -51,7 +61,9 @@ namespace Agit.FortressCraft
 		}
 
 		private void Update()
-		{
+		{/*
+		  
+		  */
 			if (_uiProgress.isShowing)
 			{
 				if (Input.GetKeyUp(KeyCode.Escape))
@@ -67,9 +79,38 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
+		public void ShutDownSession() // using button 
+		{
+			FindObjectOfType<FusionLauncher>().ShutDownCustom();
+        }
+
+		public void ConnectToLobby() // using Button
+		{
+
+            FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab, OnConnectionStatusUpdate);
+        }
+
+		public void ConnectToSession()
+		{
+            // Get region from dropdown
+            string region = string.Empty;
+            if (_regionDropdown.value > 0)
+            {
+                region = _regionDropdown.options[_regionDropdown.value].text;
+                region = region.Split(" (")[0];
+            }
+
+            FusionLauncher.ConnectToSession(region, _levelManager, roomCode);
+
+            // UI SetActive false
+			selectJoinModePanel.SetActive(false);
+            nickNamePanel.SetActive(false);
+            roomListPanel.SetActive(false);
+        }
+
+        public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
         {
-			_levelManager.roomCodeTMP.text = "Room Code : " + _room.text;
+			_levelManager.roomCode.text = "Room Code : " + _room.text;
 			roomCode = _room.text;
 
             SetVoiceRoomName();
@@ -90,12 +131,7 @@ namespace Agit.FortressCraft
 			roomCode = randomCode;
             _room.text = randomCode;
 
-			Debug.Log(_room.text);
-
             _levelManager.SetRoomCode(_room.text);
-
-			// SetVoiceRoomName();
-
         }
 
 		private void SetVoiceRoomName()
@@ -129,20 +165,6 @@ namespace Agit.FortressCraft
             FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
-		/// <summary>
-		/// Call this method from button events to close the current UI panel and check the return value to decide
-		/// if it's ok to proceed with handling the button events. Prevents double-actions and makes sure UI panels are closed. 
-		/// </summary>
-		/// <param name="ui">Currently visible UI that should be closed</param>
-		/// <returns>True if UI is in fact visible and action should proceed</returns>
-		private bool GateUI(Panel ui)
-		{
-			if (!ui.isShowing)
-				return false;
-			ui.SetVisible(false);
-			return true;
-		}
-
 		private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
 		{
 			if (!this)
@@ -161,7 +183,6 @@ namespace Agit.FortressCraft
 						ErrorBox.Show("Error!", reason, () => { });
 						break;
 					case FusionLauncher.ConnectionStatus.Loaded:
-                        // _chatManager.Init();
 						break;
 				}
 			}

@@ -121,10 +121,15 @@ namespace FusionHelpers
 				}
 				
 				// This means only on player remains
-				if (Runner.SessionInfo.PlayerCount == 1)
+				if (Runner.SessionInfo.PlayerCount >= 1)
                 {
-					Runner.Shutdown(false);
+
                 }
+				else
+				{
+                    Runner.Shutdown(false);
+                    Debug.Log("AAAAAAA" + Runner.SessionInfo.PlayerCount);
+				}
 			}
 		}
 

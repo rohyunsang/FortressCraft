@@ -160,7 +160,6 @@ namespace Agit.FortressCraft
 			{
                 if (GetInput(out NetworkInputData input))
 				{
-
                     MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))

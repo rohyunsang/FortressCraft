@@ -48,7 +48,11 @@ namespace Agit.FortressCraft
 				Debug.Log("Rejecting Player, game is already running!");
 				_restart = true;
 			}
-		}
+
+			FindObjectOfType<UIManager>().startButton.onClick.AddListener(GameStartButtonCallback);
+			FindObjectOfType<UIManager>().leaveToSessionButton.onClick.AddListener(DisconnectSession);
+
+        }
         
         public void GetDestroyCastlePlayerRef(string team)
 		{
@@ -120,8 +124,6 @@ namespace Agit.FortressCraft
 			}
 		}
 
-
-
 		public void Restart(ShutdownReason shutdownReason)
 		{
 			if (!Runner.IsShutdown)
@@ -143,19 +145,14 @@ namespace Agit.FortressCraft
 
 				DisconnectByPrompt = true;
 			}
-
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				GameStartButton();
-            }
-
-			if (Input.GetKeyDown(KeyCode.Escape))
-			{
-				var readyUpManager = FindObjectOfType<ReadyUpManager>();
-				if (readyUpManager && !readyUpManager.DisconnectPrompt.activeSelf)
-					readyUpManager.DisconnectPrompt.SetActive(true);
-			}
 		}
+
+		public void DisconnectSession() // using Button 
+		{
+            var DisconnectManager = FindObjectOfType<DisconnectManager>();
+            if (DisconnectManager && !DisconnectManager.DisconnectPrompt.activeSelf)
+                DisconnectManager.DisconnectPrompt.SetActive(true);
+        }
 
 		private void ResetStats()
 		{
@@ -166,7 +163,7 @@ namespace Agit.FortressCraft
 		}
 
 		// Transition from lobby to level
-		public void GameStartButton()
+		public void GameStartButtonCallback()
 		{
 			Debug.Log("Lets go Start");
 

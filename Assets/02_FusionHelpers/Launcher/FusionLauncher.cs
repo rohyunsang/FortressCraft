@@ -7,6 +7,9 @@ using Photon.Voice;
 using Photon.Voice.Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Agit.FortressCraft;
+using Photon.Realtime;
+
 
 namespace FusionHelpers
 {
@@ -49,8 +52,71 @@ namespace FusionHelpers
 			Loading,
 			Loaded
 		}
+        #region Lobby List 
+        public static FusionLauncher ConnectToLobby(string playerName, FusionSession sessionPrefab, Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+            FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
 
-		public static FusionLauncher Launch(GameMode mode, string region, string room,string playerName  ,FusionSession sessionPrefab,
+			launcher.playerName = playerName;
+
+			launcher.InternalConnectToLobby(sessionPrefab, onConnect);
+
+            return launcher;
+		}
+
+		private void InternalConnectToLobby(FusionSession sessionPrefab, Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+            DontDestroyOnLoad(gameObject);
+
+			_sessionPrefab = sessionPrefab;
+            _connectionCallback = onConnect;
+
+            NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
+            runner.name = name;
+			runner.ProvideInput = true;
+            
+			runner.JoinSessionLobby(SessionLobby.Shared);
+        }
+
+		public static void ConnectToSession(string region, INetworkSceneManager sceneManager, string room)
+		{
+			FusionLauncher launcher = GameObject.Find("Launcher").GetComponent<FusionLauncher>();
+
+			launcher.InternalConnectToSession(region, sceneManager, room);
+        }
+
+		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager, string room)
+		{
+			NetworkRunner runner = GetComponent<NetworkRunner>();
+
+			
+
+            // Voice 
+            gameObject.AddComponent<FusionVoiceClient>();
+
+            NetworkSceneInfo scene = new NetworkSceneInfo();
+            scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
+
+            // An empty region will use the best region.
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice에도 PhotonAppSettings가 있어서 모호 참조 에러뜬다. 
+
+            SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
+
+            await runner.StartGame(new StartGameArgs()
+            {
+                GameMode = GameMode.Shared,
+                SessionName = room,
+                ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>(),
+                SceneManager = sceneManager,
+                Scene = scene,
+                PlayerCount = 4 // Max Player is 4 
+            });
+        }
+
+        #endregion
+
+        #region Create And Join
+        public static FusionLauncher Launch(GameMode mode, string region, string room, string playerName  , FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
@@ -97,8 +163,27 @@ namespace FusionHelpers
 				PlayerCount = 4 // Max Player is 4 
 			});
 		}
+        #endregion
 
-		public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
+        public void ShutDownCustom()
+        {
+            Invoke("ShutdownRunner", 2.0f);
+        }
+
+        private void ShutdownRunner()
+        {
+            NetworkRunner runner = GetComponent<NetworkRunner>();
+            if (runner != null)
+            {
+                runner.Shutdown();
+            }
+            else
+            {
+                Debug.LogError("NetworkRunner component not found on the GameObject.");
+            }
+        }
+
+        public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
 		{
 			if (_connectionCallback != null)
 				_connectionCallback(runner, status, message);
@@ -179,13 +264,49 @@ namespace FusionHelpers
 					message = shutdownReason.ToString();
 					break;
 			}
+
 			SetConnectionStatus(runner, ConnectionStatus.Disconnected, message);
 			runner.ClearRunnerSingletons();
 			Destroy(gameObject);
 		}
 
 		public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-		public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+		public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) {
+            Debug.Log($"Session List Updated with {sessionList.Count} session(s)");
+
+            // RoomListPanel - Content - Destroy
+
+            RoomListPanel roomListPanel = FindObjectOfType<RoomListPanel>();
+            if (roomListPanel != null && roomListPanel._scrollViewContent != null)
+            {
+                // _scrollViewContent의 모든 자식 오브젝트를 순회하며 삭제
+                foreach (Transform child in roomListPanel._scrollViewContent.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            else
+            {
+                Debug.Log("RoomListPanel or _scrollViewContent is not found!");
+            }
+
+            if (sessionList.Count > 0)
+            {
+                // Prefab Spawning 
+
+                foreach (var session in sessionList)
+				{
+                    Debug.Log($"SessionName {session.Name}");
+                    Debug.Log($"SessionPlayerCount {session.PlayerCount}");
+                    Debug.Log($"SessionPlayerCount {session.MaxPlayers}");
+
+                    GameObject sessionEntryPrefab =  Instantiate(FindObjectOfType<RoomListPanel>()._sessionEntryPrefab, FindObjectOfType<RoomListPanel>()._scrollViewContent);
+					sessionEntryPrefab.GetComponent<SessionEntryPrefab>().init(session.Name, session.PlayerCount.ToString(), session.MaxPlayers.ToString());
+                }
+            }
+        }
+
+
 		public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
 		public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
 		public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
