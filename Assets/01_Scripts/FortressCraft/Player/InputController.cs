@@ -75,29 +75,39 @@ namespace Agit.FortressCraft
 
 			if (Input.mousePresent)
 			{
-				if (Input.GetMouseButton(0) )
-					_buttonSample |= NetworkInputData.BUTTON_FIRE_PRIMARY;
-
-				if (Input.GetMouseButton(1) )
-					_buttonSample |= NetworkInputData.BUTTON_FIRE_SECONDARY;
-
-				if (Input.GetKey(KeyCode.R))
+                if (Input.GetKey(KeyCode.J))
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_PRIMARY;
+                if (Input.GetKey(KeyCode.K))
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_SECONDARY;
+                if (Input.GetKey(KeyCode.L))
+                    _buttonSample |= NetworkInputData.BUTTON_FIRE_TERTIARY;
+				if (Input.GetKey(KeyCode.Q))
+					_buttonSample |= NetworkInputData.BUTTON_FIRE_FORTH;
+                if (Input.GetKey(KeyCode.R))
 					_buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
 
 				_moveDelta = Vector2.zero;
 				
 				if (Input.GetKey(KeyCode.W))
-					_moveDelta += Vector2.up;
+					{
+						_moveDelta += Vector2.up;
+					}
 
 				if (Input.GetKey(KeyCode.S))
-					_moveDelta += Vector2.down;
+					{
+						_moveDelta += Vector2.down;
+					}
 
 				if (Input.GetKey(KeyCode.A))
-					_moveDelta += Vector2.left;
+					{
+						_moveDelta += Vector2.left;
+					}
 
 				if (Input.GetKey(KeyCode.D))
-					_moveDelta += Vector2.right;
-
+					{
+						_moveDelta += Vector2.right;
+					}
+				
 				Vector3 mousePos = Input.mousePosition;
 
 				RaycastHit hit;
@@ -113,9 +123,8 @@ namespace Agit.FortressCraft
 					}
 				}
 
-				// Vector3 aimDirection = mouseCollisionPoint - _player.turretPosition;
-				// _aimDelta = new Vector2(aimDirection.x,aimDirection.z );
 			}
+
 			else if (Input.touchSupported)
 			{
 				bool leftIsDown = false;
@@ -161,7 +170,6 @@ namespace Agit.FortressCraft
 				_mobileInput.gameObject.SetActive(false);
 			}
 		}
-
 		public void ToggleReady()
 		{
 			_buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
@@ -193,7 +201,9 @@ namespace Agit.FortressCraft
 	{
 		public const uint BUTTON_FIRE_PRIMARY = 1 << 0;
 		public const uint BUTTON_FIRE_SECONDARY = 1 << 1;
-		public const uint BUTTON_TOGGLE_READY = 1 << 2;
+		public const uint BUTTON_FIRE_TERTIARY = 1 << 2;
+        public const uint BUTTON_TOGGLE_READY = 1 << 3;
+		public const uint BUTTON_FIRE_FORTH = 1 << 4;
 
 		public uint Buttons;
 		public Vector2 aimDirection;

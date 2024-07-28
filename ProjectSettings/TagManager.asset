@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Unit_A
   - Unit_B
   - Unit_C
@@ -17,6 +18,8 @@ TagManager:
   - CrossBridge
   - ArrowBreaker
   - Recorder
+=======
+>>>>>>> Seong_0.01
   - A
   - B
   - C
@@ -33,7 +36,7 @@ TagManager:
   - Player
   - Pickup
   - Explosion
-  - 
+  - Enemy
   - 
   - 
   - 

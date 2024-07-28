@@ -292,8 +292,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf22f4563437c345b77e65224ea096e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   maxHP: 100
   HpBarSlider: {fileID: 1521518489167026119}
+=======
+  _CurrentHP: 0
+  HpBarSlider: {fileID: 1521518489167026119}
+  team: 0
+>>>>>>> Seong_0.01
 --- !u!114 &3225645976391736003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +316,12 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
+<<<<<<< HEAD
   NetworkedBehaviours: []
+=======
+  NetworkedBehaviours:
+  - {fileID: 6051903310663013930}
+>>>>>>> Seong_0.01
 --- !u!50 &7883682871855343710
 Rigidbody2D:
   serializedVersion: 4

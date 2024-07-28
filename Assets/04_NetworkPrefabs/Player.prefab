@@ -207,6 +207,7 @@ Transform:
   - {fileID: 8464174953638139817}
   m_Father: {fileID: 813921100955822600}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &252908932130421286
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,6 +243,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+>>>>>>> Seong_0.01
 --- !u!1 &504057478287497394
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +309,7 @@ Transform:
   - {fileID: 8819345945135568818}
   m_Father: {fileID: 7706103985476236547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &770175450456764327
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +481,8 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2447293874054251969}
   m_maskType: 0
+=======
+>>>>>>> Seong_0.01
 --- !u!1 &801230806501385758
 GameObject:
   m_ObjectHideFlags: 0
@@ -2390,10 +2396,16 @@ GameObject:
   - component: {fileID: 2207852679990085300}
   - component: {fileID: 7781708162755150858}
   - component: {fileID: 4423126997026053310}
+<<<<<<< HEAD
   - component: {fileID: 6727204430707573400}
   m_Layer: 5
   m_Name: Player
   m_TagString: Player
+=======
+  m_Layer: 5
+  m_Name: Player
+  m_TagString: A
+>>>>>>> Seong_0.01
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2411,9 +2423,12 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7706103985476236547}
+<<<<<<< HEAD
   - {fileID: 4392240630860763171}
   - {fileID: 4761200173271245654}
   - {fileID: 7743029938713473220}
+=======
+>>>>>>> Seong_0.01
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2465,7 +2480,10 @@ MonoBehaviour:
   - {fileID: 8838001341374833890}
   - {fileID: 2653525218152594309}
   - {fileID: 4423126997026053310}
+<<<<<<< HEAD
   - {fileID: 5085728961093323480}
+=======
+>>>>>>> Seong_0.01
 --- !u!143 &-3928054935676406298
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2485,13 +2503,18 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
+<<<<<<< HEAD
   m_Height: 2
   m_Radius: 0.5
+=======
+  m_Height: 1.2
+  m_Radius: 0.26
+>>>>>>> Seong_0.01
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &6052548211824699789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2531,6 +2554,7 @@ MonoBehaviour:
   _stage: 0
   _lives: 0
   _ready: 0
+<<<<<<< HEAD
   anim: {fileID: 5022701445885422978}
   _PlayerName:
     _length: 0
@@ -2544,6 +2568,15 @@ MonoBehaviour:
   _IsDestroyCastle: 0
   IN_GAME_Panel: {fileID: 0}
   Defeat_Panel: {fileID: 0}
+=======
+  camera: {fileID: 0}
+  vCam: {fileID: 0}
+  anim: {fileID: 5022701445885422978}
+  weapon: {fileID: 0}
+  weaponCollider: {fileID: 0}
+  playerClass: 0
+  currentClass: 0
+>>>>>>> Seong_0.01
 --- !u!114 &8838001341374833890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2636,6 +2669,7 @@ MonoBehaviour:
   SyncSettings: 79
   StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90b95b3bae5f77bcf
   TriggerHashes: 000000002afa86260d286c4073cbfc9f
+<<<<<<< HEAD
 --- !u!114 &6727204430707573400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2651,6 +2685,8 @@ MonoBehaviour:
   camera: {fileID: 0}
   vCam: {fileID: 0}
   playerCameraRoot: {fileID: 7743029938713473220}
+=======
+>>>>>>> Seong_0.01
 --- !u!1 &5629812651216997283
 GameObject:
   m_ObjectHideFlags: 0
@@ -4263,8 +4299,13 @@ GameObject:
   m_Component:
   - component: {fileID: 246906491124488991}
   - component: {fileID: 7388031067840910534}
+<<<<<<< HEAD
   - component: {fileID: 2083548064717487808}
   - component: {fileID: 3537590598215619407}
+=======
+  - component: {fileID: 1497900246841122083}
+  - component: {fileID: 2083548064717487808}
+>>>>>>> Seong_0.01
   m_Layer: 0
   m_Name: R_Weapon
   m_TagString: Untagged
@@ -4339,6 +4380,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+<<<<<<< HEAD
 --- !u!61 &2083548064717487808
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4385,6 +4427,9 @@ BoxCollider2D:
   m_Size: {x: 0.39, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &3537590598215619407
+=======
+--- !u!114 &1497900246841122083
+>>>>>>> Seong_0.01
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4393,10 +4438,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 8740356089611302805}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: 5fd43587b9bcc394aa7328a2851c057d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+=======
+  m_Script: {fileID: 11500000, guid: 35424aa0cf65fda4f8ae0557b4e1046e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  col: {fileID: 0}
+  damage: 10
+--- !u!61 &2083548064717487808
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8740356089611302805}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.015397675, y: 0.4854827}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.46875, y: 0.09375}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.22189634, y: 0.8415346}
+  m_EdgeRadius: 0
+>>>>>>> Seong_0.01
 --- !u!1 &9030256249960462141
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,10 @@ using FusionHelpers;
 using UnityEngine;
 using Cinemachine;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using TMPro;
+=======
+>>>>>>> Seong_0.01
 
 namespace Agit.FortressCraft
 {
@@ -22,7 +25,19 @@ namespace Agit.FortressCraft
             Dead
         }
 
+<<<<<<< HEAD
         private const int MAX_LIVES = 100;
+=======
+		public enum PlayerClass
+		{
+			Warrior,
+			Archer,
+			Mage,
+			Rogue
+		}
+
+        private const int MAX_LIVES = 3;
+>>>>>>> Seong_0.01
 		private const int MAX_HEALTH = 100;
 
 		[SerializeField] private Transform _commander;
@@ -48,6 +63,10 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+<<<<<<< HEAD
+=======
+		
+>>>>>>> Seong_0.01
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -62,6 +81,23 @@ namespace Agit.FortressCraft
 		private NetworkCharacterController _cc;
 		private Collider _collider;
 		private float _respawnInSeconds = -1;
+<<<<<<< HEAD
+=======
+
+		private ChangeDetector _changes;
+
+		private NetworkInputData _oldInput;
+		public GameObject camera;
+		public CinemachineVirtualCamera vCam;
+		public Animator anim;
+		public GameObject weapon;
+		public BoxCollider2D weaponCollider;
+		public PlayerClass playerClass;
+		public PlayerClass currentClass;
+		// Hit Info
+		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
+
+>>>>>>> Seong_0.01
 
 		private ChangeDetector changes;
 
@@ -99,6 +135,17 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
+
+			weapon = GetComponentInChildren<PlayerWeapon>().gameObject;
+			weaponCollider = weapon.GetComponent<BoxCollider2D>();
+
+			camera = GameObject.Find("Virtual Camera");
+			vCam = camera.GetComponent<CinemachineVirtualCamera>();
+			vCam.Follow = this.gameObject.transform;
+			weaponCollider.enabled = false;
+			//TEST...
+			currentClass = PlayerClass.Warrior;
+
 		}
 
 		public override void InitNetworkState()
@@ -119,6 +166,10 @@ namespace Agit.FortressCraft
 
 			ready = false;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Seong_0.01
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
 
@@ -160,6 +211,7 @@ namespace Agit.FortressCraft
 			{
                 if (GetInput(out NetworkInputData input))
 				{
+<<<<<<< HEAD
                     MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
@@ -167,6 +219,35 @@ namespace Agit.FortressCraft
 						anim.SetTrigger("Attack");
                     }
 
+=======
+
+                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+
+					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+					{
+						Attack();
+						anim.SetTrigger("Attack");
+                    }
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
+					{
+						Skill01();
+						anim.SetTrigger("Attack");
+					}
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_TERTIARY))
+					{
+						Skill02();
+						anim.SetTrigger("Attack");
+					}
+
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_FORTH))
+					{
+						Skill03();
+						anim.SetTrigger("Attack");
+					}
+
+>>>>>>> Seong_0.01
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 
@@ -234,6 +315,7 @@ namespace Agit.FortressCraft
             }
         }
 
+<<<<<<< HEAD
         public void OnPlayerNameChanged()
         {
             playerNameLabel.text = PlayerName.ToString();
@@ -260,6 +342,16 @@ namespace Agit.FortressCraft
         /// <param name="damage"></param>
         /// <param name="attacker"></param>
         public void ApplyAreaDamage(Vector3 impulse, int damage)
+=======
+		
+		/// <summary>
+		/// Apply damage to Tank with an associated impact impulse
+		/// </summary>
+		/// <param name="impulse"></param>
+		/// <param name="damage"></param>
+		/// <param name="attacker"></param>
+		public void ApplyAreaDamage(Vector3 impulse, int damage)
+>>>>>>> Seong_0.01
 		{
 			if (!isActivated)
 				return;
@@ -283,6 +375,81 @@ namespace Agit.FortressCraft
 					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
 				}
 			}
+<<<<<<< HEAD
+=======
+		}
+
+		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
+		{
+			if (!isActivated)
+				return;
+
+			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
+
+			if (aimVector.sqrMagnitude > 0)
+				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
+		}
+
+// attack test
+		private void Attack()
+		{
+			weaponCollider.enabled = true;
+			Debug.Log("Do Attack");
+		}
+
+		private void Skill01()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//1. 돌진하며 이동
+				
+				//2. 범위 내 적에게 피해
+				
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill01");
+		}
+
+		private void Skill02()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//3번째 공격마다 회복
+				//Attack 함수에 조금 추가해주면 될듯
+				//Button은 Disabled 되어야함.
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill02");
+		}
+
+		private void Skill03()
+		{
+			if(currentClass == PlayerClass.Warrior)
+			{
+				//현재 체력의 40%를 소모해서 
+				//공격력 방어력 상승
+			}
+			else
+			{
+				//TEST...
+				Debug.Log("currentClass is not Warrior");
+			}
+			Debug.Log(currentClass + " : Skill03");
+		}
+
+		private void OnDrawGizmos()
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawWireSphere(gameObject.transform.position,0.32f);	
+>>>>>>> Seong_0.01
 		}
 
 		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
@@ -361,6 +528,10 @@ namespace Agit.FortressCraft
 				case Stage.Active:
 					break;
 				case Stage.Dead:
+<<<<<<< HEAD
+=======
+					
+>>>>>>> Seong_0.01
 					if(Runner.TryGetSingleton( out GameManager gameManager))
 						gameManager.OnCommanderDeath();
 					break;
@@ -373,7 +544,11 @@ namespace Agit.FortressCraft
 
 		private void SpawnTeleportOutFx()
 		{
+<<<<<<< HEAD
 			// TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
+=======
+			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
+>>>>>>> Seong_0.01
 		}
 
 		private void ResetPlayer()

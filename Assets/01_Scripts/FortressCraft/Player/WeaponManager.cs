@@ -100,7 +100,7 @@ namespace Agit.FortressCraft
 
 			byte ammo = weaponType == WeaponInstallationType.PRIMARY ? primaryAmmo : secondaryAmmo;
 
-			TickTimer tickTimer = weaponType==WeaponInstallationType.PRIMARY ? primaryFireDelay : secondaryFireDelay;
+			TickTimer tickTimer = weaponType == WeaponInstallationType.PRIMARY ? primaryFireDelay : secondaryFireDelay;
 			if (tickTimer.ExpiredOrNotRunning(Runner) && ammo > 0)
 			{
 				byte weaponIndex = weaponType == WeaponInstallationType.PRIMARY ? _activePrimaryWeapon : _activeSecondaryWeapon;
