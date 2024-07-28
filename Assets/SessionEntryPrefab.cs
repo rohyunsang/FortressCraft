@@ -14,7 +14,7 @@ namespace Agit.FortressCraft {
 
         public void init(string roomName, string playerCount, string maxPlayer)
         {
-            this.roomName.text = roomName;
+            this.roomName.text = "Room - " + roomName;
             this.playerCount.text = playerCount + " / " + maxPlayer;
             joinButton.onClick.AddListener(ConnectToSession);
         }

@@ -39,7 +39,7 @@ namespace Agit.FortressCraft
 		public void SetRoomCodeOverride(string roomCodeOverride)
 		{
 			this.roomCode = roomCodeOverride;
-			_levelManager.roomCode.text = "ROOM CODE : " + roomCodeOverride;
+			_levelManager.roomCode.text = "Room : " + roomCodeOverride;
         }
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
@@ -110,7 +110,7 @@ namespace Agit.FortressCraft
 
         public void SetRoomName()  // using    App - UI Intro - RoomOptionPanel - Launch 
         {
-			_levelManager.roomCode.text = "Room Code : " + _room.text;
+			_levelManager.roomCode.text = "Room : " + _room.text;
 			roomCode = _room.text;
 
             SetVoiceRoomName();
