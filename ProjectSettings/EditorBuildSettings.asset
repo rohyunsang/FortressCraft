@@ -17,13 +17,4 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/00_Scenes/Battle_test.unity
     guid: 61aca9aff11d24b3f9ad03fe3cf9073d
-  - enabled: 0
-    path: Assets/00_Scenes/MainScene.unity
-    guid: c1d29642babf7ca4aa05a23ae68468a9
-  - enabled: 0
-    path: Assets/00_Scenes/Level2.unity
-    guid: 6e19821baef78417da7d17a921d05fcb
-  - enabled: 0
-    path: Assets/00_Scenes/MainScene.unity
-    guid: c1d29642babf7ca4aa05a23ae68468a9
   m_configObjects: {}
