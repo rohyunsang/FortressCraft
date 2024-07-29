@@ -1,4 +1,5 @@
 using FusionHelpers;
+using Photon.Voice.Unity.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Agit.FortressCraft {
             this.roomName.text = roomName;
             this.playerCount.text = playerCount + " / " + maxPlayer;
             joinButton.onClick.AddListener(ConnectToSession);
+            FindObjectOfType<ConnectAndJoin>().RoomName = roomName; 
         }
 
         public void ConnectToSession()
