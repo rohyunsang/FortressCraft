@@ -26,7 +26,6 @@ namespace Agit.FortressCraft
 	public class LevelManager : NetworkSceneManagerDefault
 	{
 		// [SerializeField] private ScoreManager _scoreManager;
-		[FormerlySerializedAs("_readyupManager")] [SerializeField] private ReadyUpManager _readyUpManager;
 		[SerializeField] private CountdownManager _countdownManager;
 
 		[SerializeField] private int _lobby;
@@ -36,7 +35,6 @@ namespace Agit.FortressCraft
 		private SceneRef _loadedScene = SceneRef.None;
 
 		public Action<NetworkRunner,FusionLauncher.ConnectionStatus, string> onStatusUpdate { get; set; }
-		public ReadyUpManager readyUpManager => _readyUpManager;
 
         [SerializeField] public Text roomCode;
 

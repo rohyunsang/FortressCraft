@@ -26,8 +26,7 @@ namespace Agit.FortressCraft
         [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
-		[SerializeField] private GameObject _uiRoom;
-		[SerializeField] private GameObject _uiGame;
+		[SerializeField] private GameObject _uiLevel;
 		[SerializeField] private TMP_Dropdown _regionDropdown;
 
 		[SerializeField] private GameObject selectJoinModePanel;
@@ -61,22 +60,7 @@ namespace Agit.FortressCraft
 		}
 
 		private void Update()
-		{/*
-		  
-		  */
-			if (_uiProgress.isShowing)
-			{
-				if (Input.GetKeyUp(KeyCode.Escape))
-				{
-					NetworkRunner runner = FindObjectOfType<NetworkRunner>();
-					if (runner != null && !runner.IsShutdown)
-					{
-						// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
-						runner.Shutdown(false);
-					}
-				}
-				UpdateUI();
-			}
+		{
 		}
 
 		public void ShutDownSession() // using button 
@@ -191,12 +175,6 @@ namespace Agit.FortressCraft
 			UpdateUI();
 		}
 
-		public void ToggleAudio()
-        {
-			// AudioListener.volume = 1f - AudioListener.volume;
-			//_audioText.text = AudioListener.volume > 0.5f ? "ON" : "OFF";
-        }
-
 		private void UpdateUI()
 		{
 			bool intro = false;
@@ -232,8 +210,7 @@ namespace Agit.FortressCraft
 
 			_uiStart.SetVisible(intro);
 			_uiProgress.SetVisible(progress);
-			_uiGame.SetActive(running);
-			
+			_uiLevel.SetActive(running);
 		}
 	}
 }

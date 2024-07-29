@@ -21,5 +21,15 @@ namespace Agit.FortressCraft
 		{
 			return _playerSpawnPoints[plyIndex].GetComponent<SpawnPoint>();
 		}
-	}
+
+        public void Start()  // UI Changer Call
+		{
+			Debug.Log("AAAAAAAA" + gameObject.name);
+
+			if (gameObject.name == "Battle")
+			{
+				FindObjectOfType<LevelUIController>().BattleSceneUIChange();
+            }
+        }
+    }
 }

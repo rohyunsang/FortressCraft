@@ -36,28 +36,20 @@ namespace Agit.FortressCraft
         #endregion
 
 
-        #region UI - LOBBY
+        #region UI - LOBBY And INGAME
         public Button startButton;
         public Button leaveToSessionButton;
 
-
-        #endregion
-
-
-        #region UI - IN GAME
-        public GameObject uI_InGame;
         public GameObject victoryPanel;
         public GameObject defeatPanel;
 
         public void OnDefeatPanel()
         { 
-            uI_InGame.SetActive(true);
             defeatPanel.SetActive(true);
         }
 
         public void OnVictoryPanel()
         {
-            uI_InGame.SetActive(true);
             victoryPanel.SetActive(true);
         }
 
