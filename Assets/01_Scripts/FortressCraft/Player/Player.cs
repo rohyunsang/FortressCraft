@@ -3,10 +3,8 @@ using FusionHelpers;
 using UnityEngine;
 using Cinemachine;
 using System.Collections.Generic;
-<<<<<<< HEAD
 using TMPro;
-=======
->>>>>>> Seong_0.01
+
 
 namespace Agit.FortressCraft
 {
@@ -24,10 +22,6 @@ namespace Agit.FortressCraft
             Active,
             Dead
         }
-
-<<<<<<< HEAD
-        private const int MAX_LIVES = 100;
-=======
 		public enum PlayerClass
 		{
 			Warrior,
@@ -35,15 +29,12 @@ namespace Agit.FortressCraft
 			Mage,
 			Rogue
 		}
-
         private const int MAX_LIVES = 3;
->>>>>>> Seong_0.01
 		private const int MAX_HEALTH = 100;
 
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
-
 		[SerializeField] private float _respawnTime;
 
 		public struct DamageEvent : INetworkEvent
@@ -63,26 +54,16 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
-<<<<<<< HEAD
-=======
-		
->>>>>>> Seong_0.01
-
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
 
 		public Vector3 velocity => Object != null && Object.IsValid ? _cc.Velocity : Vector3.zero;
 		public Vector3 commanderPosition => _commander.position;
-
 		public Quaternion commanderRotation => _commander.rotation;
-
 		public GameObject cameraTarget => _cc.gameObject;
-
 		private NetworkCharacterController _cc;
 		private Collider _collider;
 		private float _respawnInSeconds = -1;
-<<<<<<< HEAD
-=======
 
 		private ChangeDetector _changes;
 
@@ -96,20 +77,7 @@ namespace Agit.FortressCraft
 		public PlayerClass currentClass;
 		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
-
->>>>>>> Seong_0.01
-
-		private ChangeDetector changes;
-
-		private NetworkInputData _oldInput;
-		
-
-		public Animator anim;
-
 		// Hit Info
-		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
-
-
         [Networked] public NetworkString<_32> PlayerName { get; set; }
         [SerializeField] TextMeshPro playerNameLabel;
 
@@ -162,14 +130,10 @@ namespace Agit.FortressCraft
 
 			DontDestroyOnLoad(gameObject);
 
-			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
+			_changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
 			ready = false;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> Seong_0.01
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
 
@@ -211,16 +175,6 @@ namespace Agit.FortressCraft
 			{
                 if (GetInput(out NetworkInputData input))
 				{
-<<<<<<< HEAD
-                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
-
-					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
-					{
-						anim.SetTrigger("Attack");
-                    }
-
-=======
-
                     MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
@@ -247,7 +201,6 @@ namespace Agit.FortressCraft
 						anim.SetTrigger("Attack");
 					}
 
->>>>>>> Seong_0.01
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 
@@ -274,7 +227,7 @@ namespace Agit.FortressCraft
         /// </summary>
         public override void Render()
         {
-            foreach (var change in changes.DetectChanges(this))
+            foreach (var change in _changes.DetectChanges(this))
             {
                 switch (change)
                 {
@@ -314,8 +267,6 @@ namespace Agit.FortressCraft
                 GameObject.Find("UIManager").GetComponent<UIManager>().OnVictoryPanel();
             }
         }
-
-<<<<<<< HEAD
         public void OnPlayerNameChanged()
         {
             playerNameLabel.text = PlayerName.ToString();
@@ -333,25 +284,13 @@ namespace Agit.FortressCraft
             ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
             ChatSystem.instance.chatInputField.text = "";
         }
-
-
         /// <summary>
         /// Apply damage to Tank with an associated impact impulse
         /// </summary>
         /// <param name="impulse"></param>
         /// <param name="damage"></param>
         /// <param name="attacker"></param>
-        public void ApplyAreaDamage(Vector3 impulse, int damage)
-=======
-		
-		/// <summary>
-		/// Apply damage to Tank with an associated impact impulse
-		/// </summary>
-		/// <param name="impulse"></param>
-		/// <param name="damage"></param>
-		/// <param name="attacker"></param>
 		public void ApplyAreaDamage(Vector3 impulse, int damage)
->>>>>>> Seong_0.01
 		{
 			if (!isActivated)
 				return;
@@ -375,8 +314,7 @@ namespace Agit.FortressCraft
 					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
 				}
 			}
-<<<<<<< HEAD
-=======
+
 		}
 
 		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
@@ -449,21 +387,7 @@ namespace Agit.FortressCraft
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawWireSphere(gameObject.transform.position,0.32f);	
->>>>>>> Seong_0.01
 		}
-
-		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
-		{
-			if (!isActivated)
-				return;
-
-			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
-
-			if (aimVector.sqrMagnitude > 0)
-				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
-		}
-
-
 		public void Reset()
 		{
 			Debug.Log($"Resetting player #{PlayerIndex} ID:{PlayerId}");
@@ -528,10 +452,6 @@ namespace Agit.FortressCraft
 				case Stage.Active:
 					break;
 				case Stage.Dead:
-<<<<<<< HEAD
-=======
-					
->>>>>>> Seong_0.01
 					if(Runner.TryGetSingleton( out GameManager gameManager))
 						gameManager.OnCommanderDeath();
 					break;
@@ -544,11 +464,7 @@ namespace Agit.FortressCraft
 
 		private void SpawnTeleportOutFx()
 		{
-<<<<<<< HEAD
 			// TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
-=======
-			TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
->>>>>>> Seong_0.01
 		}
 
 		private void ResetPlayer()

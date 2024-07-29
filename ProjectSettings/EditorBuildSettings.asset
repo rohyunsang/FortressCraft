@@ -4,22 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-<<<<<<< HEAD
-    path: Assets/00_Scenes/MainSceneMobile.unity
-    guid: cb85ad1545da3da429a974e595281593
-=======
-    path: Assets/00_Scenes/MainScene2.unity
-    guid: c1d29642babf7ca4aa05a23ae68468a9
->>>>>>> Seong_0.01
-  - enabled: 1
-    path: Assets/00_Scenes/Lobby2.unity
-    guid: e7073f19ee8574db19f8808196062ff8
-  - enabled: 1
-    path: Assets/00_Scenes/Battle2.unity
-    guid: c8e8f95c091b64329b97fba535292c16
-  - enabled: 0
-    path: Assets/00_Scenes/Battle_test.unity
-    guid: 61aca9aff11d24b3f9ad03fe3cf9073d
+  m_Scenes: []
   m_configObjects: {}

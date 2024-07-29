@@ -34,11 +34,6 @@ namespace Agit.FortressCraft
 
 			_tankDummyTurret = _tankDummy.transform.Find("EnergyTankIn_Turret");
 			_tankDummyHull = _tankDummy.transform.Find("EnergyTankIn_Hull");
-
-<<<<<<< HEAD
-=======
-
->>>>>>> Seong_0.01
 			ResetTeleporter();
 		}
 

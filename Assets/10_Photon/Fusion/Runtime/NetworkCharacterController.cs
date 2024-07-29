@@ -120,7 +120,7 @@ namespace Fusion {
       var moveVelocity = Data.Velocity;
       
       _controller.isTrigger = true;
-      _controller.Move()
+      //_controller.Move();
     
       Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
     }

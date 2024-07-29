@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-<<<<<<< HEAD
-
-    public float damage = 10f;
-}
-=======
     public BoxCollider2D col;
     public float damage = 10f;
     void Awake()
@@ -30,4 +25,3 @@ public class PlayerWeapon : MonoBehaviour
         
     }
 }
->>>>>>> Seong_0.01
