@@ -248,7 +248,7 @@ namespace Agit.FortressCraft
 
         public void OnChatChanged()
         {
-            ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
+            ChatSystem.instance.chatDisplay.text += "\n" + PlayerName.ToString() + " : " + LastPublicChat.ToString();
             ChatSystem.instance.chatInputField.text = "";
         }
 
