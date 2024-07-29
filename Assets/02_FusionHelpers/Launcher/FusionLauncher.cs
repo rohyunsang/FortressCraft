@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Agit.FortressCraft;
 using Photon.Realtime;
-
+using System.Threading.Tasks;
 
 namespace FusionHelpers
 {
@@ -82,15 +82,21 @@ namespace FusionHelpers
 		{
 			FusionLauncher launcher = GameObject.Find("Launcher").GetComponent<FusionLauncher>();
 
-			launcher.InternalConnectToSession(region, sceneManager, room);
+            launcher.InternalConnectToSession(region, sceneManager, room);
         }
 
 		private async void InternalConnectToSession(string region, INetworkSceneManager sceneManager, string room)
 		{
 			NetworkRunner runner = GetComponent<NetworkRunner>();
 
-			
+            while (runner.State == NetworkRunner.States.Shutdown)
+            {
+				Debug.Log("대기중");
+				Debug.Log(runner.State);
+                await Task.Delay(100); // 100ms 대기 후 다시 체크
+            }
 
+			Debug.Log("대기끝");
             // Voice 
             gameObject.AddComponent<FusionVoiceClient>();
 
@@ -109,7 +115,8 @@ namespace FusionHelpers
                 ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>(),
                 SceneManager = sceneManager,
                 Scene = scene,
-                PlayerCount = 4 // Max Player is 4 
+                PlayerCount = 4
+                
             });
         }
 

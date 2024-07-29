@@ -44,6 +44,9 @@ namespace FusionHelpers
 		{
 			foreach (KeyValuePair<int,PlayerRef> refByIndex in playerRefByIndex)
 			{
+				Debug.Log("Key" + refByIndex.Key);
+				Debug.Log("Value" + refByIndex.Value);
+
 				if (Runner.IsServer || (Runner.Topology == Topologies.Shared && refByIndex.Value == Runner.LocalPlayer))
 				{
 					if (!_players.TryGetValue(refByIndex.Value, out _))
@@ -75,9 +78,11 @@ namespace FusionHelpers
 		{
 			Debug.Log($"Removing PlayerRef {fusionPlayer.PlayerId}");
 			_players.Remove(fusionPlayer.PlayerId);
-			if(Object!=null && Object.IsValid)
+			if(Object != null && Object.IsValid)
 				playerRefByIndex.Remove(fusionPlayer.PlayerIndex);
 			OnPlayerAvatarRemoved(fusionPlayer);
+
+
 		}
 
 		public T GetPlayer<T>(PlayerRef plyRef) where T: FusionPlayer

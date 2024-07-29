@@ -53,6 +53,7 @@ namespace FusionHelpers
 		{
 			Debug.Log($"Despawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 
+			Debug.Log("Despawned is RUN?");
 			Runner.WaitForSingleton<FusionSession>(session => session.RemovePlayerAvatar(this));
 		}
 
