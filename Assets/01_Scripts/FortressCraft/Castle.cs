@@ -10,7 +10,7 @@ namespace Agit.FortressCraft
 
     public class Castle : NetworkBehaviour
     {
-        [Networked] public float CurrentHP { get; set; } 
+        /*[Networked] */public float CurrentHP { get; set; } 
         public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
 

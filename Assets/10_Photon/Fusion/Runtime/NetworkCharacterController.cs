@@ -113,16 +113,41 @@ namespace Fusion {
       Data.Grounded = _controller.isGrounded;
     }
 
-    public void WarriorSkill01()
+    public void WarriorSkill01(Vector3 direction)
     {
       var deltaTime    = Runner.DeltaTime;
       var previousPos  = transform.position;
       var moveVelocity = Data.Velocity;
-      
-      _controller.isTrigger = true;
-      //_controller.Move();
-    
+
+      direction = direction.normalized;
+
+      if (Data.Grounded && moveVelocity.y < 0) {
+        moveVelocity.y = 0f;
+      }
+
+      //moveVelocity.y += gravity * Runner.DeltaTime;
+
+      var horizontalVel = default(Vector3);
+      horizontalVel.x = moveVelocity.x;
+      horizontalVel.y = moveVelocity.y;
+
+      if (direction == default) 
+      {
+        horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
+      } 
+      else 
+      {
+        horizontalVel      = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
+      }
+
+      moveVelocity.x = horizontalVel.x;
+      moveVelocity.y = horizontalVel.y;
+
+      _controller.Move(moveVelocity * 0.7f);
+
       Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
+      Data.Grounded = _controller.isGrounded;
     }
     
     public override void Spawned() {

@@ -31,6 +31,7 @@ namespace Agit.FortressCraft
 		}
         private const int MAX_LIVES = 3;
 		private const int MAX_HEALTH = 100;
+		private const float DEFAULT_DEFENSE = 0.0f;
 
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
@@ -49,11 +50,36 @@ namespace Agit.FortressCraft
 		}
 
 		[Networked] public Stage stage { get; set; }
-		[Networked] private int life { get; set; }
+		
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
-		[Networked] public int lives { get; set; }
+		[Networked] private TickTimer Skill01CoolDown {get;set;}
+		[Networked] private TickTimer Skill02CoolDown {get;set;}
+		[Networked] public int lives { get; set; } //리스폰 몇번 가능한지에 대한 횟수
 		[Networked] public bool ready { get; set; }
+
+		/// <summary>
+		/// Player의 스탯
+		/// </summary>
+		private int lv{get;set;}
+		private int life { get; set; } //HP
+		private int mp {get;set;} 
+		public float attack { get; set; }
+		public float attSpeed{get;set;}
+		public float attDly{get;set;}
+		private float currentExp{get;set;}
+		private float expToLvUp{get;set;}
+		public float moveSpeed{get;set;}
+		public float healPerSec{get;set;}
+		public bool buffEnabled{get;set;}
+		public float skill01CoolDownTime;
+		public float skill02CoolDownTime;
+
+		public float defense { get; set; } //Data Sheet로 컨트롤 x
+		public float defenseBeforeBuff{get;set;}
+		
+		///////////////////////////////////////////////////////////
+
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
 
@@ -73,6 +99,8 @@ namespace Agit.FortressCraft
 		public Animator anim;
 		public GameObject weapon;
 		public BoxCollider2D weaponCollider;
+		public GameObject warriorSkill01;
+		public BoxCollider2D warriorSkill01Collider;
 		public PlayerClass playerClass;
 		public PlayerClass currentClass;
 		// Hit Info
@@ -107,13 +135,16 @@ namespace Agit.FortressCraft
 			weapon = GetComponentInChildren<PlayerWeapon>().gameObject;
 			weaponCollider = weapon.GetComponent<BoxCollider2D>();
 
+			warriorSkill01 = GameObject.Find("SkillCollider");
+			warriorSkill01Collider = warriorSkill01.GetComponent<BoxCollider2D>();
+
 			camera = GameObject.Find("Virtual Camera");
 			vCam = camera.GetComponent<CinemachineVirtualCamera>();
 			vCam.Follow = this.gameObject.transform;
 			weaponCollider.enabled = false;
+			warriorSkill01Collider.enabled = false;
 			//TEST...
 			currentClass = PlayerClass.Warrior;
-
 		}
 
 		public override void InitNetworkState()
@@ -121,6 +152,7 @@ namespace Agit.FortressCraft
 			stage = Stage.New;
 			lives = MAX_LIVES;
 			life = MAX_HEALTH;
+		
 			IsDestroyCastle = false;
         }
 
@@ -185,19 +217,13 @@ namespace Agit.FortressCraft
 
 					if(input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
 					{
-						Skill01();
-						anim.SetTrigger("Attack");
+						Skill01(input.moveDirection.normalized);
+						anim.SetTrigger("Attack");//스킬 애니메이션 생기면 변경
 					}
 
 					if(input.IsDown(NetworkInputData.BUTTON_FIRE_TERTIARY))
-					{
+					{	
 						Skill02();
-						anim.SetTrigger("Attack");
-					}
-
-					if(input.IsDown(NetworkInputData.BUTTON_FIRE_FORTH))
-					{
-						Skill03();
 						anim.SetTrigger("Attack");
 					}
 
@@ -335,14 +361,12 @@ namespace Agit.FortressCraft
 			Debug.Log("Do Attack");
 		}
 
-		private void Skill01()
+		private void Skill01(Vector2 moveVector)
 		{
 			if(currentClass == PlayerClass.Warrior)
 			{
-				//1. 돌진하며 이동
-				
-				//2. 범위 내 적에게 피해
-				
+				warriorSkill01Collider.enabled = true;
+				_cc.WarriorSkill01(new Vector3(moveVector.x, moveVector.y, 0));
 			}
 			else
 			{
@@ -350,39 +374,48 @@ namespace Agit.FortressCraft
 				Debug.Log("currentClass is not Warrior");
 			}
 			Debug.Log(currentClass + " : Skill01");
+			warriorSkill01Collider.enabled = false;
 		}
 
 		private void Skill02()
 		{
 			if(currentClass == PlayerClass.Warrior)
 			{
-				//3번째 공격마다 회복
-				//Attack 함수에 조금 추가해주면 될듯
-				//Button은 Disabled 되어야함.
+				//체력회복 
+				//방어력 증가
+				life = 10;
+				if(buffEnabled == false)
+				{
+					buffEnabled = true;
+					Debug.Log("Before Buff Status / " + "life :" + life + " Defense : " + defense);
+					life += 50;
+					if(life >= MAX_HEALTH)
+					{
+						life = MAX_HEALTH;
+					}
+					defenseBeforeBuff = defense;
+					defense += 0.1f;
+					Debug.Log("After Buff Status / " + "life :" + life + " Defense : " + defense);
+					Invoke("BuffEnd",7f); //7초후 버프 종료
+				}
+				else
+				{
+					Debug.Log("You Can't Use Buff now");
+				}
 			}
 			else
 			{
-				//TEST...
 				Debug.Log("currentClass is not Warrior");
 			}
 			Debug.Log(currentClass + " : Skill02");
 		}
 
-		private void Skill03()
+		private void BuffEnd()
 		{
-			if(currentClass == PlayerClass.Warrior)
-			{
-				//현재 체력의 40%를 소모해서 
-				//공격력 방어력 상승
-			}
-			else
-			{
-				//TEST...
-				Debug.Log("currentClass is not Warrior");
-			}
-			Debug.Log(currentClass + " : Skill03");
+			defense = defenseBeforeBuff;
+			buffEnabled = false;
+			Debug.Log("Warrior Buff End");
 		}
-
 		private void OnDrawGizmos()
 		{
 			Gizmos.color = Color.red;

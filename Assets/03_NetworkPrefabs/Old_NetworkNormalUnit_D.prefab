@@ -2655,6 +2655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSpeed: 3
+  _netAnimator: {fileID: 0}
 --- !u!114 &2341991649406233688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2713,7 +2714,7 @@ MonoBehaviour:
   TotalWords: 7
   ApplyTiming: 2
   SyncSettings: 111
-  StateHashes: 00000000a4d79b1920f44df6dec3f04e7b8717f196b0ff5a8c21c5b029bdc670c27e4e8d497ab0cd9b2400f777967513ab4ce551
+  StateHashes: 000000002afa8626a8b5caa3dec3f04e7b8717f196b0ff5a8c21c5b029bdc670c27e4e8d497ab0cd9b2400f777967513ab4ce551958341e2dc70caa9
   TriggerHashes: 000000002b1a167c20e23b680d286c4037b9350177967513
 --- !u!1 &5943304329288923704
 GameObject:
