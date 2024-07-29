@@ -51,7 +51,9 @@ namespace Agit.FortressCraft
 
 			FindObjectOfType<UIManager>().startButton.onClick.AddListener(GameStartButtonCallback);
 			FindObjectOfType<UIManager>().leaveToSessionButton.onClick.AddListener(DisconnectSession);
-
+            FindObjectOfType<UIManager>().leaveToGameButtonVictoryPanel.onClick.AddListener(DisconnectSession);
+            FindObjectOfType<UIManager>().leaveToGameButtonDefeatPanel.onClick.AddListener(DisconnectSession);
+            
         }
         
         public void GetDestroyCastlePlayerRef(string team)
