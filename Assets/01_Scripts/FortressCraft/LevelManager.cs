@@ -57,7 +57,7 @@ namespace Agit.FortressCraft
 
 		public void RoomCodeUISync()
 		{
-            roomCode.text = "ROOM CODE : " + RoomCode.ToString();
+            roomCode.text = "Room : " + RoomCode.ToString();
         }
 
         public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
