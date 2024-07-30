@@ -8,5 +8,6 @@ namespace Agit.FortressCraft
     {
         public float Damage { get; set; }
         public string TargetUnit { get; set; }
+        public string OwnType { get; set; }
     }
 }

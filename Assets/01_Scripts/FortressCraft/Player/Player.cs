@@ -25,10 +25,11 @@ namespace Agit.FortressCraft
         private const int MAX_LIVES = 100;
 		private const int MAX_HEALTH = 100;
 
+		private float HP = 100.0f;
+
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
-
 		[SerializeField] private float _respawnTime;
 
 		public struct DamageEvent : INetworkEvent
@@ -66,13 +67,22 @@ namespace Agit.FortressCraft
 		private ChangeDetector changes;
 
 		private NetworkInputData _oldInput;
-		
 
-		public Animator anim;
+		private NetworkMecanimAnimator _netAnimator;
+		private AnimatorStateInfo animState;
+		private readonly static int animAttack =
+			Animator.StringToHash("Base Layer.AttackState");
+		//public Animator anim;
+		private TickTimer attackInputTimer;
+		private Vector2 lastDir = Vector2.left;
+		private ArcherFire archerFire;
+		private ArrowVector arrowVector;
+		private CommanderBodyCollider bodyCollider;
+
+		public string OwnType { get; set; }
 
 		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
-
 
         [Networked] public NetworkString<_32> PlayerName { get; set; }
         [SerializeField] TextMeshPro playerNameLabel;
@@ -99,6 +109,10 @@ namespace Agit.FortressCraft
 		{
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
+			_netAnimator = GetComponent<NetworkMecanimAnimator>();
+			archerFire = GetComponentInChildren<ArcherFire>();
+			arrowVector = GetComponentInChildren<ArrowVector>();
+			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
 		}
 
 		public override void InitNetworkState()
@@ -112,7 +126,7 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
-
+			
 			DontDestroyOnLoad(gameObject);
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
@@ -137,6 +151,27 @@ namespace Agit.FortressCraft
             }
 
             ChatSystem.instance.playerName = fusionLauncher.playerName;
+
+			switch (PlayerIndex)
+			{
+				case 0:
+					OwnType = "A";
+					break;
+				case 1:
+					OwnType = "B";
+					break;
+				case 2:
+					OwnType = "C";
+					break;
+				case 3:
+					OwnType = "D";
+					break;
+			}
+
+			transform.Find("UnitRoot").gameObject.tag = "Unit_" + OwnType;
+			archerFire.OwnType = OwnType;
+
+			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
         }
 
 		public override void Despawned(NetworkRunner runner, bool hasState)
@@ -154,17 +189,65 @@ namespace Agit.FortressCraft
 				life = MAX_HEALTH;
 		}
 
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetScale(Vector3 scale)
+        {
+			transform.localScale = scale;
+        }
+
 		public override void FixedUpdateNetwork()
 		{
+			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 			if (InputController.fetchInput)
 			{
                 if (GetInput(out NetworkInputData input))
 				{
-                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+					if( lastDir.x > 0.0f )
+                    {
+						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
+									transform.localScale.y, transform.localScale.z));
+                    }
+					else
+                    {
+						RPCSetScale(new Vector3(Mathf.Abs(transform.localScale.x),
+									transform.localScale.y, transform.localScale.z));
+					}
+
+					if( animState.fullPathHash != animAttack )
+                    {
+						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+					}
+
+					if(input.moveDirection.normalized != Vector2.zero)
+                    {
+						lastDir = input.moveDirection.normalized;
+					}
+
+					if( arrowVector != null )
+                    {
+						arrowVector.TargetDirection = lastDir;
+					}
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					{
-						anim.SetTrigger("Attack");
+						if( attackInputTimer.Expired(Runner) )
+                        {
+							archerFire.FireDirection = lastDir;
+							Debug.Log(lastDir);
+							_netAnimator.Animator.SetTrigger("Attack");
+							attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
+						}
+                    }
+					else
+                    {
+						if( input.moveDirection.normalized != Vector2.zero )
+                        {
+							_netAnimator.Animator.SetBool("isMove", true);
+						}
+						else
+                        {
+							_netAnimator.Animator.SetBool("isMove", false);
+						}
                     }
 
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
@@ -390,5 +473,15 @@ namespace Agit.FortressCraft
 			if (Object.HasStateAuthority)
 				stage = Stage.TeleportOut;
 		}
+
+		public void CheckDamaged()
+        {
+			if( bodyCollider.Damaged > 0.0f )
+            {
+				HP -= bodyCollider.Damaged;
+				bodyCollider.Damaged = 0.0f;
+				Debug.Log(HP);
+            }
+        }
 	}
 }

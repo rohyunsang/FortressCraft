@@ -52,6 +52,7 @@ namespace Agit.FortressCraft
 
             AttackCollider attackCollider = networkObject.GetComponentInChildren<AttackCollider>();
             attackCollider.TargetUnit = TargetUnit;
+            attackCollider.OwnType = normalUnit.OwnType;
             attackCollider.Damage = normalUnit.Damage;
         }
 

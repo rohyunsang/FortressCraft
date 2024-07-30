@@ -167,11 +167,13 @@ namespace Agit.FortressCraft
 
                     if (col.transform.position.x > transform.position.x)
                     {
-                        transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
+                                                transform.localScale.y, transform.localScale.z);
                     }
                     else
                     {
-                        transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
+                                                transform.localScale.y, transform.localScale.z);
                     }
 
                     if (animatorState.fullPathHash != animAttackBow)
@@ -212,11 +214,13 @@ namespace Agit.FortressCraft
 
                     if (col.transform.position.x > transform.position.x)
                     {
-                        transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
+                                                transform.localScale.y, transform.localScale.z);
                     }
                     else
                     {
-                        transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
+                                                transform.localScale.y, transform.localScale.z);
                     }
 
                     if (animatorState.fullPathHash != animAttackBow)
@@ -301,11 +305,13 @@ namespace Agit.FortressCraft
 
             if (movDir.x > 0)
             {
-                transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
+                                            transform.localScale.y, transform.localScale.z);
             }
             else
             {
-                transform.localScale = new Vector3(1.0f, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
+                                            transform.localScale.y, transform.localScale.z);
             }
         }
 
