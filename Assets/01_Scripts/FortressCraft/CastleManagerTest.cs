@@ -14,6 +14,7 @@ namespace Agit.FortressCraft
         public Castle castle;
 
         private ChangeDetector changes;
+
         public int team_id { get; set; }
 
         public override void Spawned()

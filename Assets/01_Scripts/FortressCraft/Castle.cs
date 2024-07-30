@@ -20,6 +20,10 @@ namespace Agit.FortressCraft{
             CurrentHP = currntHP;
             IsDestroyed = false;
         }
+        public void SliderInit()
+        {
+            HpBarSlider.gameObject.SetActive(true);
+        }
 
         public void Damage(float damage)
         {

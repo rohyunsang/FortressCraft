@@ -25,6 +25,7 @@ namespace Agit.FortressCraft
         private const int MAX_LIVES = 100;
 		private const int MAX_HEALTH = 100;
 
+		[SerializeField] private SpawnCastle _spawnCastle;
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
@@ -82,8 +83,7 @@ namespace Agit.FortressCraft
 
 		[Networked] public bool IsDestroyCastle { get; set; }
 
-		public GameObject IN_GAME_Panel;
-		public GameObject Defeat_Panel;
+		public bool isBuildCastle;
 
         public void ToggleReady()
 		{
@@ -170,7 +170,10 @@ namespace Agit.FortressCraft
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 
-					_oldInput = input;
+					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
+						_spawnCastle.SpawnCastleObject();
+
+                    _oldInput = input;
 				}
 			}
 

@@ -54,11 +54,9 @@ namespace Agit.FortressCraft
         public override void Render()
         {
             base.Render();
-            Debug.Log("a");
-
+            
             foreach (var change in changes.DetectChanges(this))
             {
-                Debug.Log("B");
                 switch (change)
                 {
                     case nameof(A_CurrentHP):

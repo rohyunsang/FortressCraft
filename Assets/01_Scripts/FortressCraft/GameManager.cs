@@ -100,7 +100,6 @@ namespace Agit.FortressCraft
 
 				foreach (FusionPlayer fusionPlayer in AllPlayers)
 				{
-					
 					Player player = (Player)fusionPlayer;
 					if (player.isActivated || player.lives > 0)
 					{
