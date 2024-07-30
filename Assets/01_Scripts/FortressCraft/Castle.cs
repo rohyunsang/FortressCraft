@@ -27,7 +27,8 @@ namespace Agit.FortressCraft{
             CurrentHP -= damage;
 
             // Update HP in CastleManager
-            var manager = FindObjectOfType<CastleManager>();
+            var manager = GetComponent<CastleManagerTest>(); // 이러면 원래 Castle이 작동안함. 
+
             if (manager != null)
             {
                 manager.UpdateCastleHP(team, damage);
