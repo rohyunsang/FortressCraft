@@ -222,7 +222,6 @@ namespace Agit.FortressCraft
 			{
                 IsDestroyCastle = true;
                 GameObject.Find("UIManager").GetComponent<UIManager>().OnDefeatPanel();
-				Debug.Log("UIManager?");
             }
         }
 

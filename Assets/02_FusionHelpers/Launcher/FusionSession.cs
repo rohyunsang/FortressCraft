@@ -44,9 +44,6 @@ namespace FusionHelpers
 		{
 			foreach (KeyValuePair<int,PlayerRef> refByIndex in playerRefByIndex)
 			{
-				Debug.Log("Key" + refByIndex.Key);
-				Debug.Log("Value" + refByIndex.Value);
-
 				if (Runner.IsServer || (Runner.Topology == Topologies.Shared && refByIndex.Value == Runner.LocalPlayer))
 				{
 					if (!_players.TryGetValue(refByIndex.Value, out _))
