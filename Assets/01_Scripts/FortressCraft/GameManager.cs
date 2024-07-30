@@ -3,6 +3,8 @@ using Fusion;
 using FusionHelpers;
 using JetBrains.Annotations;
 using Photon.Realtime;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Agit.FortressCraft
 {
@@ -12,6 +14,8 @@ namespace Agit.FortressCraft
 
 		[Networked] public PlayState currentPlayState { get; set; }
 		[Networked, Capacity(4)] private NetworkArray<int> score => default;
+
+		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
 		public Player lastPlayerStanding { get; set; }
 		public Player matchWinner
@@ -36,6 +40,7 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
+
 			Runner.RegisterSingleton(this);
 
 			if (Object.HasStateAuthority)
@@ -80,6 +85,38 @@ namespace Agit.FortressCraft
                     break;
                 }
             }
+        }
+
+		private void MakeDictionaryPlayerIdUsingPlayerRef()
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+                playerRef_playerIdx.Add(player.PlayerId.ToString() , player.PlayerId.PlayerId);
+
+                Debug.Log(player.PlayerId);
+				Debug.Log(player.PlayerId.PlayerId);
+            }
+            var sortedDict = playerRef_playerIdx.OrderBy(pair => pair.Value).ToList();
+
+            int i = 0;
+
+            foreach (var pair in sortedDict)
+            {
+                Debug.Log($"Key: {pair.Key}, Value: {pair.Value}");
+				playerRef_playerIdx.Set(pair.Key ,i);
+				i++;
+            }
+
+            foreach (KeyValuePair<string, int> entry in playerRef_playerIdx)
+            {
+                Debug.Log($"playerRef: {entry.Key}, PlayerId: {entry.Value}");
+            }
+        }
+
+		public int TryGetPlayerId(PlayerRef playerRef)
+		{
+			return playerRef_playerIdx[playerRef.ToString()];
         }
 
         protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
@@ -168,8 +205,11 @@ namespace Agit.FortressCraft
 		{
 			Debug.Log("Lets go Start");
 
-			// close and hide the session from matchmaking / lists. this demo does not allow late join.
-			Runner.SessionInfo.IsOpen = false;
+			if(Object.HasStateAuthority)
+				MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
+
+            // close and hide the session from matchmaking / lists. this demo does not allow late join.
+            Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
 
 			// Reset stats and transition to level.
