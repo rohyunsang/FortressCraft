@@ -78,6 +78,7 @@ namespace Agit.FortressCraft
 		private ArcherFire archerFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
+		private bool died = false;
 
 		public string OwnType { get; set; }
 
@@ -199,7 +200,7 @@ namespace Agit.FortressCraft
 
 		public override void FixedUpdateNetwork()
 		{
-			Debug.Log("Player HP - : " + HP);
+			if (died) return;
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 			if (InputController.fetchInput)
 			{
@@ -483,13 +484,18 @@ namespace Agit.FortressCraft
             {
 				HP -= bodyCollider.Damaged;
 				bodyCollider.Damaged = 0.0f;
-				//Debug.Log("Player HP: " + HP);
+
+				if( HP <= 0.0f )
+                {
+					Die();
+                }
             }
         }
 
 		public void Die()
         {
-
+			died = true;
+			_netAnimator.Animator.SetTrigger("Death");
         }
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
