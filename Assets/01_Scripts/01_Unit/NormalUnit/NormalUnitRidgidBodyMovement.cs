@@ -322,7 +322,7 @@ namespace Agit.FortressCraft
                 HP -= Defense * bodyCollider.Damaged;
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");
-                Debug.Log("HP: " + HP);
+                //Debug.Log("HP: " + HP);
                 Die();
             }
         }

@@ -2655,6 +2655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSpeed: 3
+  _netAnimator: {fileID: 0}
 --- !u!114 &2341991649406233688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2697,6 +2698,7 @@ MonoBehaviour:
   - {fileID: 5995037457569243938}
   - {fileID: 2341991649406233688}
   - {fileID: 1105983235076489025}
+  - {fileID: 7662894730826539601}
 --- !u!114 &1105983235076489025
 MonoBehaviour:
   m_ObjectHideFlags: 0

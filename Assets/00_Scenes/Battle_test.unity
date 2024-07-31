@@ -6378,7 +6378,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 135369399474149061, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: maxUnitCount
-      value: 1000
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1598311985349938072, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: m_Name
@@ -44556,7 +44556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7453605011642941100, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
       propertyPath: maxUnitCount
-      value: 1000
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44624,7 +44624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1518262231074708236, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
       propertyPath: maxUnitCount
-      value: 1000
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3958209781144954194, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
       propertyPath: m_Radius
@@ -44697,7 +44697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278009121461960068, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
       propertyPath: maxUnitCount
-      value: 1000
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
