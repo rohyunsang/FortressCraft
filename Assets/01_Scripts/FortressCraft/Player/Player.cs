@@ -53,8 +53,8 @@ namespace Agit.FortressCraft
 		
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
-		[Networked] private TickTimer Skill01CoolDown {get;set;}
-		[Networked] private TickTimer Skill02CoolDown {get;set;}
+		[Networked] private TickTimer skill01CoolDown {get;set;}
+		[Networked] private TickTimer skill02CoolDown {get;set;}
 		[Networked] public int lives { get; set; } //리스폰 몇번 가능한지에 대한 횟수
 		[Networked] public bool ready { get; set; }
 
@@ -74,6 +74,8 @@ namespace Agit.FortressCraft
 		public bool buffEnabled{get;set;}
 		public float skill01CoolDownTime;
 		public float skill02CoolDownTime;
+		public bool skill01usable;
+		public bool skill02usable;
 
 		public float defense { get; set; } //Data Sheet로 컨트롤 x
 		public float defenseBeforeBuff{get;set;}
@@ -103,7 +105,6 @@ namespace Agit.FortressCraft
 		public BoxCollider2D warriorSkill01Collider;
 		public PlayerClass playerClass;
 		public PlayerClass currentClass;
-		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 		// Hit Info
         [Networked] public NetworkString<_32> PlayerName { get; set; }
@@ -215,13 +216,13 @@ namespace Agit.FortressCraft
 						anim.SetTrigger("Attack");
                     }
 
-					if(input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY))
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_SECONDARY) && skill01usable == true)
 					{
 						Skill01(input.moveDirection.normalized);
 						anim.SetTrigger("Attack");//스킬 애니메이션 생기면 변경
 					}
 
-					if(input.IsDown(NetworkInputData.BUTTON_FIRE_TERTIARY))
+					if(input.IsDown(NetworkInputData.BUTTON_FIRE_TERTIARY) && skill02usable == true)
 					{	
 						Skill02();
 						anim.SetTrigger("Attack");
@@ -232,6 +233,15 @@ namespace Agit.FortressCraft
 
 					_oldInput = input;
 				}
+			}
+
+			if(skill01CoolDown.Expired(Runner))
+			{
+				skill01usable = true;
+			}
+			else if(skill02CoolDown.Expired(Runner))
+			{
+				skill02usable = true;
 			}
 
 			if (Object.HasStateAuthority)
@@ -363,6 +373,8 @@ namespace Agit.FortressCraft
 
 		private void Skill01(Vector2 moveVector)
 		{
+			skill01usable = false;
+
 			if(currentClass == PlayerClass.Warrior)
 			{
 				warriorSkill01Collider.enabled = true;
@@ -375,12 +387,15 @@ namespace Agit.FortressCraft
 			}
 			Debug.Log(currentClass + " : Skill01");
 			warriorSkill01Collider.enabled = false;
+
+			skill01CoolDown = TickTimer.CreateFromSeconds(Runner,5f);
 		}
 
 		private void Skill02()
 		{
 			if(currentClass == PlayerClass.Warrior)
 			{
+				skill02usable = false;
 				//체력회복 
 				//방어력 증가
 				life = 10;
@@ -396,7 +411,7 @@ namespace Agit.FortressCraft
 					defenseBeforeBuff = defense;
 					defense += 0.1f;
 					Debug.Log("After Buff Status / " + "life :" + life + " Defense : " + defense);
-					Invoke("BuffEnd",7f); //7초후 버프 종료
+					//Invoke("BuffEnd",7f); //7초후 버프 종료
 				}
 				else
 				{
@@ -408,6 +423,7 @@ namespace Agit.FortressCraft
 				Debug.Log("currentClass is not Warrior");
 			}
 			Debug.Log(currentClass + " : Skill02");
+			skill01CoolDown = TickTimer.CreateFromSeconds(Runner,5f);
 		}
 
 		private void BuffEnd()
