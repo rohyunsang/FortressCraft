@@ -14,15 +14,19 @@ namespace Agit.FortressCraft
         public NetworkPrefabId ID { get; set; }
         public bool Fired { get; set; }
         private TickTimer destroyTimer;
+        private ArcherArrowAttackCollider attackCollider;
 
         public override void Spawned()
         {
             _rb = GetComponent<NetworkRigidbody2D>();
+            attackCollider = GetComponent<ArcherArrowAttackCollider>();
             Invoke("DestroySelf", 0.8f);
         }
 
         public override void FixedUpdateNetwork()
         {
+            if (attackCollider.OwnType == null) return;
+
             float angle = Mathf.Atan2(FireDirection.y, FireDirection.x) * Mathf.Rad2Deg;
             Quaternion FireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
             transform.rotation = FireRotation;

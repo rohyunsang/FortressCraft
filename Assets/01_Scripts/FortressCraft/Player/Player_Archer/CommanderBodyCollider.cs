@@ -19,14 +19,10 @@ namespace Agit.FortressCraft
             {
                 if( collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider) )
                 {
-                    //Debug.Log("Test:  " + attackCollider.OwnType);
-                    //Debug.Log("Test:  " + player.OwnType);
-                    if (attackCollider.OwnType.CompareTo(player.OwnType) == 0) return;
-                    player.CheckDamaged();
+                    player.RPCCheckDamaged();
                 }
             }
         }
     }
-
 }
 

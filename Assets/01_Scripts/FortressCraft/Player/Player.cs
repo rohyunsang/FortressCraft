@@ -23,9 +23,9 @@ namespace Agit.FortressCraft
         }
 
         private const int MAX_LIVES = 100;
-		private const int MAX_HEALTH = 100;
+		private const int MAX_HEALTH = 1000;
 
-		private float HP = 100.0f;
+		public float HP { get; set; }
 
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
@@ -126,7 +126,9 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
-			
+
+			HP = (float)MAX_HEALTH;
+
 			DontDestroyOnLoad(gameObject);
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
@@ -197,6 +199,7 @@ namespace Agit.FortressCraft
 
 		public override void FixedUpdateNetwork()
 		{
+			Debug.Log("Player HP - : " + HP);
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 			if (InputController.fetchInput)
 			{
@@ -480,8 +483,19 @@ namespace Agit.FortressCraft
             {
 				HP -= bodyCollider.Damaged;
 				bodyCollider.Damaged = 0.0f;
-				Debug.Log(HP);
+				//Debug.Log("Player HP: " + HP);
             }
+        }
+
+		public void Die()
+        {
+
+        }
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCCheckDamaged()
+        {
+			CheckDamaged();
         }
 	}
 }

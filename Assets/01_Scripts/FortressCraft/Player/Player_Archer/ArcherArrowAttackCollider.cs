@@ -27,7 +27,7 @@ namespace Agit.FortressCraft
                 {
                     //bodycollider.Damaged = Damage;
                     bodycollider.RPCSetDamage(Damage);
-                    Debug.Log("Damage: " + bodycollider.Damaged + " id: " + Runner.LocalPlayer.PlayerId );
+                    //Debug.Log("Damage: " + bodycollider.Damaged + " id: " + Runner.LocalPlayer.PlayerId );
                 }
                 
             }
