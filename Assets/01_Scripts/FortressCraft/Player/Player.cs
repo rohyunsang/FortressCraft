@@ -25,7 +25,7 @@ namespace Agit.FortressCraft
         private const int MAX_LIVES = 100;
 		private const int MAX_HEALTH = 100;
 
-		[SerializeField] private SpawnCastle _spawnCastle;
+		public SpawnCastle _spawnCastle;
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
@@ -123,23 +123,27 @@ namespace Agit.FortressCraft
 			OnStageChanged();
 
 			_respawnInSeconds = 0;
-			
-			RegisterEventListener( (DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage) );
-			RegisterEventListener( (PickupEvent evt) => OnPickup(evt));
 
-            // PlayerName Change
+			RegisterEventListener((DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage));
+			RegisterEventListener((PickupEvent evt) => OnPickup(evt));
 
-            var fusionLauncher = FindObjectOfType<FusionLauncher>();
+			// PlayerName Change
 
-            if (fusionLauncher != null)
-            {
-                PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
-            }
+
+			var fusionLauncher = FindObjectOfType<FusionLauncher>();
+
+			if (fusionLauncher != null)
+			{
+				PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
+			}
+
+            if (!HasStateAuthority) return;
 
             ChatSystem.instance.playerName = fusionLauncher.playerName;
+
         }
 
-		public override void Despawned(NetworkRunner runner, bool hasState)
+        public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
@@ -207,7 +211,6 @@ namespace Agit.FortressCraft
                         OnPlayerNameChanged();
                         break;
                     case nameof(LastPublicChat):
-                        Debug.Log("Render");
                         OnChatChanged();
                         break;
 					case nameof(IsDestroyCastle):

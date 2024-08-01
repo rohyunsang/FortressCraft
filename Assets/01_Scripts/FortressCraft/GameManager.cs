@@ -58,7 +58,6 @@ namespace Agit.FortressCraft
 			FindObjectOfType<UIManager>().leaveToSessionButton.onClick.AddListener(DisconnectSession);
             FindObjectOfType<UIManager>().leaveToGameButtonVictoryPanel.onClick.AddListener(DisconnectSession);
             FindObjectOfType<UIManager>().leaveToGameButtonDefeatPanel.onClick.AddListener(DisconnectSession);
-            
         }
         
         public void GetDestroyCastlePlayerRef(string team)
@@ -192,28 +191,18 @@ namespace Agit.FortressCraft
                 DisconnectManager.DisconnectPrompt.SetActive(true);
         }
 
-		private void ResetStats()
-		{
-			if (!HasStateAuthority)
-				return;
-			for (int i = 0; i < score.Length; i++)
-				score.Set(i, 0);
-		}
-
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
-			Debug.Log("Lets go Start");
-
-			if(Object.HasStateAuthority)
-				MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
+			if (!Object.HasStateAuthority) return;
+			
+			MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
 
             // close and hide the session from matchmaking / lists. this demo does not allow late join.
             Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
 
 			// Reset stats and transition to level.
-			ResetStats();
 			LoadLevel(Runner.GetLevelManager().GetBattleSceneIndex());
 		}
 

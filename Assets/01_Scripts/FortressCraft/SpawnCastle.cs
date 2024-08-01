@@ -14,8 +14,11 @@ namespace Agit.FortressCraft
         
         public void SpawnCastleObject()
         {
+            if (!HasStateAuthority) return;
+
             NetworkObject NO = Runner.Spawn(castle, new Vector3(0f,0f,0f), Quaternion.identity);
             string tag = "";
+            tag = "A"; // Default
 
             int idx = 0;
             if (Runner.TryGetSingleton(out GameManager gameManager))
