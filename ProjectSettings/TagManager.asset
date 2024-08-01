@@ -21,6 +21,7 @@ TagManager:
   - B
   - C
   - D
+  - CastleBuildArea
   layers:
   - Default
   - TransparentFX

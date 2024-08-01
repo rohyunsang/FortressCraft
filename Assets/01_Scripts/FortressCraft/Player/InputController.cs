@@ -84,7 +84,10 @@ namespace Agit.FortressCraft
 				if (Input.GetKey(KeyCode.R))
 					_buttonSample |= NetworkInputData.BUTTON_TOGGLE_READY;
 
-				_moveDelta = Vector2.zero;
+                if (Input.GetKey(KeyCode.Q))
+                    _buttonSample |= NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE;
+
+                _moveDelta = Vector2.zero;
 				
 				if (Input.GetKey(KeyCode.W))
 					_moveDelta += Vector2.up;
@@ -194,6 +197,7 @@ namespace Agit.FortressCraft
 		public const uint BUTTON_FIRE_PRIMARY = 1 << 0;
 		public const uint BUTTON_FIRE_SECONDARY = 1 << 1;
 		public const uint BUTTON_TOGGLE_READY = 1 << 2;
+		public const uint BUTTON_TOGGLE_SPAWNCASTLE = 1 << 3;
 
 		public uint Buttons;
 		public Vector2 aimDirection;

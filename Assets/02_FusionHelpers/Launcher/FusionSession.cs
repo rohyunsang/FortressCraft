@@ -75,9 +75,11 @@ namespace FusionHelpers
 		{
 			Debug.Log($"Removing PlayerRef {fusionPlayer.PlayerId}");
 			_players.Remove(fusionPlayer.PlayerId);
-			if(Object!=null && Object.IsValid)
+			if(Object != null && Object.IsValid)
 				playerRefByIndex.Remove(fusionPlayer.PlayerIndex);
 			OnPlayerAvatarRemoved(fusionPlayer);
+
+
 		}
 
 		public T GetPlayer<T>(PlayerRef plyRef) where T: FusionPlayer

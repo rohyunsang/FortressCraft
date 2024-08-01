@@ -3,6 +3,8 @@ using Fusion;
 using FusionHelpers;
 using JetBrains.Annotations;
 using Photon.Realtime;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Agit.FortressCraft
 {
@@ -12,6 +14,8 @@ namespace Agit.FortressCraft
 
 		[Networked] public PlayState currentPlayState { get; set; }
 		[Networked, Capacity(4)] private NetworkArray<int> score => default;
+
+		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
 		public Player lastPlayerStanding { get; set; }
 		public Player matchWinner
@@ -36,6 +40,7 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
+
 			Runner.RegisterSingleton(this);
 
 			if (Object.HasStateAuthority)
@@ -51,7 +56,8 @@ namespace Agit.FortressCraft
 
 			FindObjectOfType<UIManager>().startButton.onClick.AddListener(GameStartButtonCallback);
 			FindObjectOfType<UIManager>().leaveToSessionButton.onClick.AddListener(DisconnectSession);
-
+            FindObjectOfType<UIManager>().leaveToGameButtonVictoryPanel.onClick.AddListener(DisconnectSession);
+            FindObjectOfType<UIManager>().leaveToGameButtonDefeatPanel.onClick.AddListener(DisconnectSession);
         }
         
         public void GetDestroyCastlePlayerRef(string team)
@@ -80,6 +86,38 @@ namespace Agit.FortressCraft
             }
         }
 
+		private void MakeDictionaryPlayerIdUsingPlayerRef()
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+                playerRef_playerIdx.Add(player.PlayerId.ToString() , player.PlayerId.PlayerId);
+
+                Debug.Log(player.PlayerId);
+				Debug.Log(player.PlayerId.PlayerId);
+            }
+            var sortedDict = playerRef_playerIdx.OrderBy(pair => pair.Value).ToList();
+
+            int i = 0;
+
+            foreach (var pair in sortedDict)
+            {
+                Debug.Log($"Key: {pair.Key}, Value: {pair.Value}");
+				playerRef_playerIdx.Set(pair.Key ,i);
+				i++;
+            }
+
+            foreach (KeyValuePair<string, int> entry in playerRef_playerIdx)
+            {
+                Debug.Log($"playerRef: {entry.Key}, PlayerId: {entry.Value}");
+            }
+        }
+
+		public int TryGetPlayerId(PlayerRef playerRef)
+		{
+			return playerRef_playerIdx[playerRef.ToString()];
+        }
+
         protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{
 			// Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
@@ -98,7 +136,6 @@ namespace Agit.FortressCraft
 
 				foreach (FusionPlayer fusionPlayer in AllPlayers)
 				{
-					
 					Player player = (Player)fusionPlayer;
 					if (player.isActivated || player.lives > 0)
 					{
@@ -154,25 +191,18 @@ namespace Agit.FortressCraft
                 DisconnectManager.DisconnectPrompt.SetActive(true);
         }
 
-		private void ResetStats()
-		{
-			if (!HasStateAuthority)
-				return;
-			for (int i = 0; i < score.Length; i++)
-				score.Set(i, 0);
-		}
-
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
-			Debug.Log("Lets go Start");
+			if (!Object.HasStateAuthority) return;
+			
+			MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
 
-			// close and hide the session from matchmaking / lists. this demo does not allow late join.
-			Runner.SessionInfo.IsOpen = false;
+            // close and hide the session from matchmaking / lists. this demo does not allow late join.
+            Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
 
 			// Reset stats and transition to level.
-			ResetStats();
 			LoadLevel(Runner.GetLevelManager().GetBattleSceneIndex());
 		}
 

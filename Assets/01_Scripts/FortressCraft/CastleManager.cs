@@ -29,8 +29,6 @@ namespace Agit.FortressCraft
 
         public int team_id { get; set; }
 
-
-
         public override void Spawned()
         {
             base.Spawned();
@@ -56,7 +54,7 @@ namespace Agit.FortressCraft
         public override void Render()
         {
             base.Render();
-
+            
             foreach (var change in changes.DetectChanges(this))
             {
                 switch (change)

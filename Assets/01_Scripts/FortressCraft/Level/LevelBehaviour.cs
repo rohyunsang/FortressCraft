@@ -16,10 +16,33 @@ namespace Agit.FortressCraft
 		[SerializeField] private LevelLighting _levelLighting;
 
 		public SpawnPoint[] _playerSpawnPoints;
+
+		public string currentSceneName = "";
 		
 		public SpawnPoint GetPlayerSpawnPoint(int plyIndex)
 		{
 			return _playerSpawnPoints[plyIndex].GetComponent<SpawnPoint>();
 		}
-	}
+
+        public void Start()  // UI Changer Call
+		{
+			currentSceneName = gameObject.name;
+
+			if (gameObject.name == "Battle")
+			{
+				FindObjectOfType<LevelUIController>().BattleSceneUIChange();
+
+				Invoke("SpawnCastle", 3f);
+
+            }
+        }
+		private void SpawnCastle()
+		{
+            Player[] players = FindObjectsOfType<Player>();
+            foreach (Player player in players)
+            {
+                player._spawnCastle.SpawnCastleObject();
+            }
+        }
+    }
 }

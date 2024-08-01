@@ -28,6 +28,7 @@ namespace Agit.FortressCraft
 		//public float HP { get; set; }
 		public SpawnCastle _spawnCastle;
 
+		public SpawnCastle _spawnCastle;
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
@@ -96,8 +97,6 @@ namespace Agit.FortressCraft
 
 		public bool isBuildCastle;
 
-
-
         public void ToggleReady()
 		{
 			ready = !ready;
@@ -140,20 +139,23 @@ namespace Agit.FortressCraft
 			OnStageChanged();
 
 			_respawnInSeconds = 0;
-			
-			RegisterEventListener( (DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage) );
-			RegisterEventListener( (PickupEvent evt) => OnPickup(evt));
 
-            // PlayerName Change
+			RegisterEventListener((DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage));
+			RegisterEventListener((PickupEvent evt) => OnPickup(evt));
 
-            var fusionLauncher = FindObjectOfType<FusionLauncher>();
+			// PlayerName Change
 
-            if (fusionLauncher != null)
-            {
-                PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
-            }
 
-            ChatSystem.instance.playerName = fusionLauncher.playerName;
+			var fusionLauncher = FindObjectOfType<FusionLauncher>();
+
+			if (fusionLauncher != null)
+			{
+				PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
+			}
+
+      if (!HasStateAuthority) return;
+
+      ChatSystem.instance.playerName = fusionLauncher.playerName;
 
 			switch (PlayerIndex)
 			{
@@ -175,9 +177,10 @@ namespace Agit.FortressCraft
 			archerFire.OwnType = OwnType;
 
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+
         }
 
-		public override void Despawned(NetworkRunner runner, bool hasState)
+        public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
@@ -268,7 +271,10 @@ namespace Agit.FortressCraft
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
 						_spawnCastle.SpawnCastleObject();
 
-					_oldInput = input;
+					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
+						_spawnCastle.SpawnCastleObject();
+
+                    _oldInput = input;
 				}
 			}
 			/*
@@ -303,7 +309,6 @@ namespace Agit.FortressCraft
                         OnPlayerNameChanged();
                         break;
                     case nameof(LastPublicChat):
-                        Debug.Log("Render");
                         OnChatChanged();
 							break;
 					case nameof(IsDestroyCastle):
@@ -347,7 +352,7 @@ namespace Agit.FortressCraft
 
         public void OnChatChanged()
         {
-            ChatSystem.instance.chatDisplay.text += PlayerName.ToString() + " :" + LastPublicChat.ToString() + "\n";
+            ChatSystem.instance.chatDisplay.text += "\n" + PlayerName.ToString() + " : " + LastPublicChat.ToString();
             ChatSystem.instance.chatInputField.text = "";
         }
 
