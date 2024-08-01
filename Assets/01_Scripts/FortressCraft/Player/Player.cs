@@ -27,8 +27,6 @@ namespace Agit.FortressCraft
 
 		//public float HP { get; set; }
 		public SpawnCastle _spawnCastle;
-
-		public SpawnCastle _spawnCastle;
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
