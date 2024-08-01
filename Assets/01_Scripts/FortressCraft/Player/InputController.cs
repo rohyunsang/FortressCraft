@@ -215,7 +215,7 @@ namespace Agit.FortressCraft
 
 		public bool WasPressed(uint button, NetworkInputData oldInput)
 		{
-			return (oldInput.Buttons & button) == 0 && (Buttons&button)==button;
+			return (oldInput.Buttons & button) == 0 && (Buttons & button) == button;
 		}
 	}
 }

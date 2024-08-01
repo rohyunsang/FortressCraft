@@ -70,8 +70,7 @@ namespace Agit.FortressCraft
 
 		private NetworkMecanimAnimator _netAnimator;
 		private AnimatorStateInfo animState;
-		private readonly static int animAttack =
-			Animator.StringToHash("Base Layer.AttackState");
+		private readonly static int animAttack = Animator.StringToHash("Base Layer.AttackState");
 		//public Animator anim;
 		private TickTimer attackInputTimer;
 		private Vector2 lastDir = Vector2.left;
@@ -151,9 +150,9 @@ namespace Agit.FortressCraft
 				PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
 			}
 
-      if (!HasStateAuthority) return;
+			if (!HasStateAuthority) return;
 
-      ChatSystem.instance.playerName = fusionLauncher.playerName;
+			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
 			switch (PlayerIndex)
 			{
@@ -175,7 +174,6 @@ namespace Agit.FortressCraft
 			archerFire.OwnType = OwnType;
 
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-
         }
 
         public override void Despawned(NetworkRunner runner, bool hasState)
@@ -265,10 +263,8 @@ namespace Agit.FortressCraft
 
                     if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
+					
 						
-					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
-						_spawnCastle.SpawnCastleObject();
-
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
 						_spawnCastle.SpawnCastleObject();
 

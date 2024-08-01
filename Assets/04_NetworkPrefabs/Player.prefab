@@ -2532,9 +2532,9 @@ MonoBehaviour:
   _teleportOutPrefab: {fileID: 0}
   _respawnTime: 0
   _stage: 0
+  _life: 0
   _lives: 0
   _ready: 0
-  anim: {fileID: 5022701445885422978}
   _PlayerName:
     _length: 0
     _data:
