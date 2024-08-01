@@ -7,14 +7,17 @@ namespace Agit.FortressCraft
 {
     public class NormalUnitSpawner : NetworkBehaviour
     {
-        public NetworkObject[] UnitPrefab;
+        public NetworkObject UnitPrefab_A;
+        public NetworkObject UnitPrefab_B;
+        public NetworkObject UnitPrefab_C;
+        public NetworkObject UnitPrefab_D;
+        private NetworkObject UnitPrefab;
         public NetworkObject Arrow;
         public Player player = null;
         public bool Usable { get; private set; }
         public NetworkObjectPoolManager poolManager;
-        [SerializeField] private string initialTarget = "";
         public Transform Center { get; set; }
-        public string SpawnerType { get; set; }
+        [SerializeField] public string SpawnerType { get; set; }
         [SerializeField] private int maxUnitCount = 5;
         public int NowUnitCount { get; set; }
 
@@ -58,12 +61,11 @@ namespace Agit.FortressCraft
 
         public override void Spawned()
         {
-            Object.RequestStateAuthority();
+            //Object.RequestStateAuthority();
             
             Usable = false;
 
             poolManager = NetworkObjectPoolManager.Instance;
-            Target = initialTarget;
             AttackEnabled = true;
             Damage = 20.0f;
             Defense = 1.0f;
@@ -78,19 +80,48 @@ namespace Agit.FortressCraft
                 {
                     case 0:
                         SpawnerType = "A";
+                        UnitPrefab = UnitPrefab_A;
                         break;
                     case 1:
                         SpawnerType = "B";
+                        UnitPrefab = UnitPrefab_B;
                         break;
                     case 2:
                         SpawnerType = "C";
+                        UnitPrefab = UnitPrefab_C;
                         break;
                     case 3:
                         SpawnerType = "D";
+                        UnitPrefab = UnitPrefab_D;
                         break;
                 }
+
+
+                Debug.Log("Spawner Type: " + SpawnerType);
             }
-            //Target = SpawnerType;
+
+            ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
+            if( changeTarget.OwnType == null )
+            {
+                changeTarget.OwnType = SpawnerType;
+                string targetBtnName = "";
+                switch( SpawnerType )
+                {
+                    case "A":
+                        targetBtnName = "Button_2";
+                        break;
+                    case "B":
+                        targetBtnName = "Button_3";
+                        break;
+                    case "C":
+                        targetBtnName = "Button_4";
+                        break;
+                    case "D":
+                        targetBtnName = "Button_1";
+                        break;
+                }
+                changeTarget.UpdateTargetButtonColor(targetBtnName);
+            }
 
             if(idx > -1)
             {
@@ -113,36 +144,7 @@ namespace Agit.FortressCraft
                 }
             }
 
-            /*
-            Player[] players = GameObject.FindObjectsOfType<Player>();
-            foreach (Player p in players)
-            {
-                if (p.PlayerIndex == 0 && Target == "B" ||
-                    p.PlayerIndex == 1 && Target == "C" ||
-                    p.PlayerIndex == 2 && Target == "D" ||
-                    p.PlayerIndex == 3 && Target == "A")
-                {
-                    player = p;
-                    Usable = true;
-                    switch( p.PlayerIndex )
-                    {
-                        case 0:
-                            spawnerType = "A";
-                            break;
-                        case 1:
-                            spawnerType = "B";
-                            break;
-                        case 2:
-                            spawnerType = "C";
-                            break;
-                        case 3:
-                            spawnerType = "D";
-                            break;
-                    }
-                }
-            }
-            */
-            NetworkObject temp = Runner.Spawn(UnitPrefab[idx], (Vector2)transform.position, Quaternion.identity);
+            NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
             id = temp.NetworkTypeId.AsPrefabId;
             Destroy(temp.gameObject);
             poolManager.AddPoolTable(id);

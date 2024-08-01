@@ -19,7 +19,7 @@ namespace Agit.FortressCraft
             {
                 if (collision.CompareTag("Unit_" + OwnType))
                 {
-                    Debug.Log("Unit_" + OwnType);
+                    //Debug.Log("Unit_" + OwnType);
                     return;
                 }
 

@@ -78,6 +78,7 @@ namespace Agit.FortressCraft
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
+		private ChangeTarget changeTarget;
 
 		public string OwnType { get; set; }
 
@@ -154,27 +155,35 @@ namespace Agit.FortressCraft
 
 			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
-			switch (PlayerIndex)
-			{
-				case 0:
-					OwnType = "A";
-					break;
-				case 1:
-					OwnType = "B";
-					break;
-				case 2:
-					OwnType = "C";
-					break;
-				case 3:
-					OwnType = "D";
-					break;
-			}
-
-			transform.Find("UnitRoot").gameObject.tag = "Unit_" + OwnType;
-			archerFire.OwnType = OwnType;
-
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
         }
+
+        public void UpdateOwnType()
+        {
+			if ( !UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle") ) return;
+
+			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
+			{
+				switch (gameManager.TryGetPlayerId(Runner.LocalPlayer))
+				{
+					case 0:
+						OwnType = "A";
+						break;
+					case 1:
+						OwnType = "B";
+						break;
+					case 2:
+						OwnType = "C";
+						break;
+					case 3:
+						OwnType = "D";
+						break;
+				}
+
+				transform.Find("UnitRoot").gameObject.tag = "Unit_" + OwnType;
+				archerFire.OwnType = OwnType;
+			}
+		}
 
         public override void Despawned(NetworkRunner runner, bool hasState)
 		{
@@ -199,6 +208,8 @@ namespace Agit.FortressCraft
 
 		public override void FixedUpdateNetwork()
 		{
+			if (OwnType == null) UpdateOwnType();
+
 			if (Object.HasStateAuthority)
 			{
 				CheckRespawn();
@@ -244,7 +255,7 @@ namespace Agit.FortressCraft
 						if( attackInputTimer.Expired(Runner) )
                         {
 							archerFire.FireDirection = lastDir;
-							Debug.Log(lastDir);
+							//Debug.Log(lastDir);
 							_netAnimator.Animator.SetTrigger("Attack");
 							attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 						}
