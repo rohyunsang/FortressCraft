@@ -4043,7 +4043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 2785758865
   ObjectInterest: 1
-  Flags: 786433
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 6578668480952218198}

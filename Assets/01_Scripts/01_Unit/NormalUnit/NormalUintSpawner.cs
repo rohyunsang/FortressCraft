@@ -56,6 +56,8 @@ namespace Agit.FortressCraft
 
         public override void Spawned()
         {
+            Object.RequestStateAuthority();
+            
             Usable = false;
 
             poolManager = NetworkObjectPoolManager.Instance;
@@ -108,7 +110,7 @@ namespace Agit.FortressCraft
         public void SpawnUnit()
         {
             if (NowUnitCount >= maxUnitCount) return;
-            if (Runner.IsSharedModeMasterClient)
+            if (Object.HasStateAuthority)
             {
                 NetworkObject unitObj = null;
 

@@ -66,7 +66,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 1}
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 1.61
 --- !u!1 &1113190547345055790
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,6 +642,7 @@ MonoBehaviour:
   player: {fileID: 0}
   poolManager: {fileID: 0}
   initialTarget: C
+  maxUnitCount: 5
   id:
     RawValue: 0
   arrowId:
@@ -673,7 +674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 3037595695
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 7453605011642941100}

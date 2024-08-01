@@ -113,7 +113,7 @@ namespace Agit.FortressCraft
         public override void FixedUpdateNetwork()
         {
             if (!initialized) return;
-
+            
             if (!Attack()) MoveToTarget();
             else _rb.Rigidbody.velocity = Vector2.zero;
 
