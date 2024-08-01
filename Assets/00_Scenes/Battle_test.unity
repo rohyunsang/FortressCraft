@@ -262,7 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 868752892
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 17082237}
@@ -6378,15 +6378,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 135369399474149061, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: maxUnitCount
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1598311985349938072, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: m_Name
       value: Castle1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2612699413883038280, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
-      propertyPath: m_Radius
-      value: 1.61
       objectReference: {fileID: 0}
     - target: {fileID: 8448464183793736217, guid: 4a0663722d8ef4743a9f75f969cba4ed, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8369,73 +8365,6 @@ PolygonCollider2D:
       - {x: -1.220142, y: 0.06026852}
       - {x: -1.3790257, y: 0.78695893}
   m_UseDelaunayMesh: 0
---- !u!1 &881844445
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 881844446}
-  - component: {fileID: 881844447}
-  m_Layer: 20
-  m_Name: Trigger (2)
-  m_TagString: Unit_B
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &881844446
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881844445}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 557409478590294608}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &881844447
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881844445}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1}
-  serializedVersion: 2
-  m_Radius: 1.61
 --- !u!1 &916162604
 GameObject:
   m_ObjectHideFlags: 0
@@ -23439,7 +23368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1414981377
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1346373421}
@@ -23939,86 +23868,6 @@ MonoBehaviour:
   - {fileID: 1441393001}
   - {fileID: 1172277}
   - {fileID: 562626002}
---- !u!1 &1618854142
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1618854143}
-  - component: {fileID: 1618854145}
-  - component: {fileID: 1618854146}
-  m_Layer: 20
-  m_Name: Trigger (1)
-  m_TagString: Unit_B
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1618854143
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618854142}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 557409478590294608}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1618854145
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618854142}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1}
-  serializedVersion: 2
-  m_Radius: 1.61
---- !u!114 &1618854146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618854142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d9fee443ad5340e9bd802a1b5d46c11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1640449328
 GameObject:
   m_ObjectHideFlags: 0
@@ -44546,34 +44395,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4197238505315720056, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-      propertyPath: m_Radius
-      value: 1.61
-      objectReference: {fileID: 0}
     - target: {fileID: 7003067885987363238, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
       propertyPath: m_Name
       value: Castle2
       objectReference: {fileID: 0}
     - target: {fileID: 7453605011642941100, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
       propertyPath: maxUnitCount
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1618854143}
-    - targetCorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 881844446}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
---- !u!4 &557409478590294608 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1686075787078117711, guid: 7e2051560fac74dfda3bcd650f37ef6b, type: 3}
-  m_PrefabInstance: {fileID: 557409478590294607}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2244037041897001223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44624,11 +44458,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1518262231074708236, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
       propertyPath: maxUnitCount
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 3958209781144954194, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
-      propertyPath: m_Radius
-      value: 1.61
+    - target: {fileID: 5488691365717580997, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
+      propertyPath: Flags
+      value: 524289
       objectReference: {fileID: 0}
     - target: {fileID: 8345881030527466458, guid: d9749752ab7104ffba2c41f23a3b4422, type: 3}
       propertyPath: m_Name
@@ -44651,9 +44485,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle4
       objectReference: {fileID: 0}
-    - target: {fileID: 5539138224603773291, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
-      propertyPath: m_Radius
-      value: 1.61
+    - target: {fileID: 4066599998653631347, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
+      propertyPath: Flags
+      value: 524289
       objectReference: {fileID: 0}
     - target: {fileID: 5908615872478903042, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -44697,7 +44531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278009121461960068, guid: 76a2eb937d73745328400a12cbd4430c, type: 3}
       propertyPath: maxUnitCount
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

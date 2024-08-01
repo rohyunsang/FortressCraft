@@ -14,7 +14,7 @@ Shader "PaintWhite"
         BindChannels
 
         {
-            Bind "Color", color
+            Bind "Color", colora
             Bind "Vertex", vertex
             Bind "TexCoord", texcoord
 

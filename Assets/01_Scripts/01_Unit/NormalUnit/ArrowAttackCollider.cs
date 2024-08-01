@@ -20,8 +20,7 @@ namespace Agit.FortressCraft
             {
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycoliider))
                 {
-                    bodycoliider.Damaged = Damage;
-                    //Debug.Log("Hit!");
+                    bodycoliider.RPCSetDamage(Damage);
                     arrow.Release();
                 }
             }

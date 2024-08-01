@@ -10,14 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 2452885639213071737}
   - component: {fileID: 3158538489564204770}
-  - component: {fileID: 8545353730260550191}
+  - component: {fileID: 3026148050930945407}
   - component: {fileID: 4933910990928210708}
   - component: {fileID: 8141485208395208099}
   - component: {fileID: 3755286179555273714}
   - component: {fileID: 4894933982693379610}
   - component: {fileID: 4176844000210064690}
+  - component: {fileID: 3981073563118731113}
   m_Layer: 0
-  m_Name: arrow
+  m_Name: ArcherArrow
   m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: -0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,7 +91,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8545353730260550191
+--- !u!114 &3026148050930945407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 964096301469327314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23698b809af604f399329252792e57c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 41671207ca1b54f2a93b6f3357b1763c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   arrowSpeed: 5
@@ -158,7 +159,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.1}
+  m_Size: {x: 0.82, y: 0.81}
   m_EdgeRadius: 0
 --- !u!50 &3755286179555273714
 Rigidbody2D:
@@ -199,14 +200,15 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2863950496
+  SortKey: 3758625073
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 8545353730260550191}
+  - {fileID: 3026148050930945407}
   - {fileID: 4933910990928210708}
   - {fileID: 4176844000210064690}
+  - {fileID: 3981073563118731113}
 --- !u!114 &4176844000210064690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,3 +231,15 @@ MonoBehaviour:
     Position: 0.01
     Rotation: 0.01
     Scale: 0.01
+--- !u!114 &3981073563118731113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964096301469327314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2817088b8e2404a9cfa087d8912939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
