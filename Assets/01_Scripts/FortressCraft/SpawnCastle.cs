@@ -23,39 +23,41 @@ namespace Agit.FortressCraft
                 // gameManager.MakeDictionaryPlayerIdUsingPlayerRef();
                 idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
             }
-            
-            Debug.Log("AAAAAAAAA" + idx);
-
+            Team team;
+            team = Team.A; // Default
             switch (idx)
             {
                 case 0 :
                     tag = "A";
+                    team = Team.A;
                     break;
                 case 1:
                     tag = "B";
+                    team = Team.B;
                     break;
                 case 2:
                     tag = "C";
+                    team = Team.C;
                     break;
                 case 3:
                     tag = "D";
+                    team = Team.D;
                     break;
             }
                 
 
-            RPC_SpawnCastleTransformSync(NO,tag);
+            RPC_SpawnCastleTransformSync(NO, tag, team);
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
-        public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag)
+        public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team)
         {
             NO.gameObject.tag = tag;
             NO.transform.position = transform.parent.position;
             NO.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             NO.gameObject.GetComponent<Castle>().SliderInit();
-
+            NO.gameObject.GetComponent<Castle>().team = team;
         }
     }
-
 }
 
