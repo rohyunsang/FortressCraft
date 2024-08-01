@@ -25,7 +25,7 @@ namespace Agit.FortressCraft
         private const int MAX_LIVES = 100;
 		private const int MAX_HEALTH = 1000;
 
-		public float HP { get; set; }
+		//public float HP { get; set; }
 
 		[SerializeField] private Transform _commander;
 		[SerializeField] private TankTeleportInEffect _teleportIn;
@@ -44,7 +44,7 @@ namespace Agit.FortressCraft
 		}
 
 		[Networked] public Stage stage { get; set; }
-		[Networked] private int life { get; set; }
+		[Networked] public float life { get; set; }
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
@@ -128,8 +128,6 @@ namespace Agit.FortressCraft
 		{
 			base.Spawned();
 
-			HP = (float)MAX_HEALTH;
-
 			DontDestroyOnLoad(gameObject);
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
@@ -200,6 +198,14 @@ namespace Agit.FortressCraft
 
 		public override void FixedUpdateNetwork()
 		{
+			if (Object.HasStateAuthority)
+			{
+				CheckRespawn();
+
+				if (isRespawningDone)
+					ResetPlayer();
+			}
+
 			if (died) return;
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 			if (InputController.fetchInput)
@@ -260,7 +266,7 @@ namespace Agit.FortressCraft
 					_oldInput = input;
 				}
 			}
-
+			/*
 			if (Object.HasStateAuthority)
 			{
 				CheckRespawn();
@@ -268,6 +274,7 @@ namespace Agit.FortressCraft
 				if (isRespawningDone)
 					ResetPlayer();
 			}
+			*/
 		}
 
         /// <summary>
@@ -293,7 +300,7 @@ namespace Agit.FortressCraft
                     case nameof(LastPublicChat):
                         Debug.Log("Render");
                         OnChatChanged();
-                        break;
+							break;
 					case nameof(IsDestroyCastle):
                         break;
                 }
@@ -383,7 +390,6 @@ namespace Agit.FortressCraft
 				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
 		}
 
-
 		public void Reset()
 		{
 			Debug.Log($"Resetting player #{PlayerIndex} ID:{PlayerId}");
@@ -400,10 +406,13 @@ namespace Agit.FortressCraft
 		{
 			if (_respawnInSeconds >= 0)
 			{
+				Debug.Log("Respawn Time: " + _respawnInSeconds);
 				_respawnInSeconds -= Runner.DeltaTime;
 
 				if (_respawnInSeconds <= 0)
 				{
+					_netAnimator.Animator.SetTrigger("Idle");
+					died = false;
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
 
 					if (spawnpt == null)
@@ -482,10 +491,10 @@ namespace Agit.FortressCraft
         {
 			if( bodyCollider.Damaged > 0.0f )
             {
-				HP -= bodyCollider.Damaged;
+				life -= bodyCollider.Damaged;
 				bodyCollider.Damaged = 0.0f;
 
-				if( HP <= 0.0f )
+				if( life <= 0.0f )
                 {
 					Die();
                 }
@@ -496,6 +505,8 @@ namespace Agit.FortressCraft
         {
 			died = true;
 			_netAnimator.Animator.SetTrigger("Death");
+			//stage = Stage.Dead;
+			Respawn(5);
         }
 
 		[Rpc(RpcSources.All, RpcTargets.All)]

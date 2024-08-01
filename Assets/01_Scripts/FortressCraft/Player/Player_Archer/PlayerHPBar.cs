@@ -18,7 +18,7 @@ namespace Agit.FortressCraft
 
         private void FixedUpdate()
         {
-            HP = player.HP;
+            HP = player.life;
             HpBarSlider.value = HP / 1000.0f;
         }
     }
