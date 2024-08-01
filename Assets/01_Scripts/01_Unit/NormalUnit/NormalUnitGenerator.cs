@@ -7,11 +7,11 @@ namespace Agit.FortressCraft
     {
         private TickTimer spawnTimer { get; set; }
         [SerializeField] int spwanTime = 5;
-        NormalUintSpawner spawner;
+        NormalUnitSpawner spawner;
 
         public override void Spawned()
         {
-            spawner = GetComponent<NormalUintSpawner>();
+            spawner = GetComponent<NormalUnitSpawner>();
             if (spawner.Usable) SetWaitingTime();
         }
 

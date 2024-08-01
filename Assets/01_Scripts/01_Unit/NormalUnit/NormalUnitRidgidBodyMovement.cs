@@ -8,7 +8,7 @@ namespace Agit.FortressCraft
 {
     public class NormalUnitRigidBodyMovement : NetworkBehaviour
     {
-        public NormalUintSpawner Spawner { get; set; }
+        public NormalUnitSpawner Spawner { get; set; }
         private Transform[] grounds = new Transform[4];
         private Transform middlePoint = null;
         [SerializeField] private int testSpeed;
@@ -54,10 +54,10 @@ namespace Agit.FortressCraft
             // test
             AttackEnabled = true;
             HP = 100;
-            grounds[0] = GameObject.Find("Castle1").transform;
-            grounds[1] = GameObject.Find("Castle2").transform;
-            grounds[2] = GameObject.Find("Castle3").transform;
-            grounds[3] = GameObject.Find("Castle4").transform;
+            grounds[0] = GameObject.Find("SpawnPoint 1").transform;
+            grounds[1] = GameObject.Find("SpawnPoint 2").transform;
+            grounds[2] = GameObject.Find("SpawnPoint 3").transform;
+            grounds[3] = GameObject.Find("SpawnPoint 4").transform;
         }
 
         private float GetDistanceXYSquared(Transform t)

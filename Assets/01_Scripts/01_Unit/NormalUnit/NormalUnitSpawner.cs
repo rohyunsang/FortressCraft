@@ -5,16 +5,16 @@ using FusionHelpers;
 
 namespace Agit.FortressCraft
 {
-    public class NormalUintSpawner : NetworkBehaviour
+    public class NormalUnitSpawner : NetworkBehaviour
     {
-        public NetworkObject UnitPrefab;
+        public NetworkObject[] UnitPrefab;
         public NetworkObject Arrow;
         public Player player = null;
         public bool Usable { get; private set; }
         public NetworkObjectPoolManager poolManager;
         [SerializeField] private string initialTarget = "";
         public Transform Center { get; set; }
-        private string spawnerType;
+        public string SpawnerType { get; set; }
         [SerializeField] private int maxUnitCount = 5;
         public int NowUnitCount { get; set; }
 
@@ -26,6 +26,8 @@ namespace Agit.FortressCraft
 
         public NetworkPrefabId id;
         public NetworkPrefabId arrowId;
+
+        private int idx = -1;
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPCTargetChange(string t)
@@ -68,6 +70,50 @@ namespace Agit.FortressCraft
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
+            if( Runner.TryGetSingleton<GameManager>( out GameManager gameManager ) )
+            {
+                idx = gameManager.TryGetPlayerId( Runner.LocalPlayer );
+
+                switch (idx)
+                {
+                    case 0:
+                        SpawnerType = "A";
+                        break;
+                    case 1:
+                        SpawnerType = "B";
+                        break;
+                    case 2:
+                        SpawnerType = "C";
+                        break;
+                    case 3:
+                        SpawnerType = "D";
+                        break;
+                }
+            }
+            //Target = SpawnerType;
+
+            if(idx > -1)
+            {
+                Usable = true;
+
+                switch (idx)
+                {
+                    case 0:
+                        Target = "B";
+                        break;
+                    case 1:
+                        Target = "C";
+                        break;
+                    case 2:
+                        Target = "D";
+                        break;
+                    case 3:
+                        Target = "A";
+                        break;
+                }
+            }
+
+            /*
             Player[] players = GameObject.FindObjectsOfType<Player>();
             foreach (Player p in players)
             {
@@ -95,8 +141,8 @@ namespace Agit.FortressCraft
                     }
                 }
             }
-
-            NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
+            */
+            NetworkObject temp = Runner.Spawn(UnitPrefab[idx], (Vector2)transform.position, Quaternion.identity);
             id = temp.NetworkTypeId.AsPrefabId;
             Destroy(temp.gameObject);
             poolManager.AddPoolTable(id);
@@ -128,13 +174,14 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.Damage = Damage;
                     normalUnitRigidBodyMovement.Defense = Defense;
                     normalUnitRigidBodyMovement.Spawner = this;
-                    normalUnitRigidBodyMovement.OwnType = spawnerType;
+                    normalUnitRigidBodyMovement.OwnType = SpawnerType;
                     normalUnitRigidBodyMovement.HP = 100.0f;
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();
 
-                    Vector3 offset = new Vector3(Random.Range(-1.0f, 1.0f),
-                                                 Random.Range(-1.0f, 1.0f) + 1.0f,
+                    float range = 0.4f;
+                    Vector3 offset = new Vector3(Random.Range(-range, range),
+                                                 Random.Range(-range, range),
                                                  0.0f);
 
                     normalUnitRigidBodyMovement.RPCSetPos(transform.position + offset);

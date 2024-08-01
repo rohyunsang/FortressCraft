@@ -23868,6 +23868,7 @@ MonoBehaviour:
   - {fileID: 1441393001}
   - {fileID: 1172277}
   - {fileID: 562626002}
+  currentSceneName: 
 --- !u!1 &1640449328
 GameObject:
   m_ObjectHideFlags: 0

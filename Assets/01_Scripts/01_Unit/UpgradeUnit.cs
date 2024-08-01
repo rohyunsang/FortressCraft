@@ -6,13 +6,13 @@ namespace Agit.FortressCraft
 {
     public class UpgradeUnit : NetworkBehaviour
     {
-        private NormalUintSpawner[] spawners;
-        private NormalUintSpawner targetSpawner;
+        private NormalUnitSpawner[] spawners;
+        private NormalUnitSpawner targetSpawner;
         private Button[] btns;
 
         private void Awake()
         {
-            spawners = GameObject.FindObjectsOfType<NormalUintSpawner>();
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
             btns = GetComponentsInChildren<Button>();
 
             foreach (Button btn in btns)
@@ -35,7 +35,7 @@ namespace Agit.FortressCraft
 
         private void SettingSpawner()
         {
-            foreach (NormalUintSpawner spawner in spawners)
+            foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.player == null) continue;
 

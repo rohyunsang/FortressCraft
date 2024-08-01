@@ -1,30 +1,32 @@
 using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
+using FusionHelpers;
 
 namespace Agit.FortressCraft
 {
     public class ChangeTarget : NetworkBehaviour
     {
-        private NormalUintSpawner[] spawners;
-        private NormalUintSpawner targetSpawner;
+        private NormalUnitSpawner[] spawners;
+        private NormalUnitSpawner targetSpawner;
         private Button[] btns;
         private Button attackBtn;
         private Color orgColor;
         private Color unselectedColor;
         private bool isAttackOn = true;
 
-        private string buttonNameA = "Button_A";
-        private string buttonNameB = "Button_B";
-        private string buttonNameC = "Button_C";
-        private string buttonNameD = "Button_D";
+        private string ownType;
+
+        private string buttonNameA = "Button_1";
+        private string buttonNameB = "Button_2";
+        private string buttonNameC = "Button_3";
+        private string buttonNameD = "Button_4";
         private string buttonNameAttack = "Button_Attack";
 
         private void Awake()
         {
-            spawners = GameObject.FindObjectsOfType<NormalUintSpawner>();
             btns = GetComponentsInChildren<Button>();
-
+            
             foreach (Button btn in btns)
             {
                 if (btn.transform.name == buttonNameA )
@@ -49,44 +51,31 @@ namespace Agit.FortressCraft
                     btn.onClick.AddListener(SetAttack);
                 }
             }
-
-            orgColor = btns[0].GetComponent<Image>().color;
-            unselectedColor = new Color(0.5f, 0.5f, 0.5f);
-        }
-
-        private void FixedUpdate()
-        {
-            if (targetSpawner == null) SettingSpawner();
-        }
-
-        private void SettingSpawner()
-        {
-            foreach (NormalUintSpawner spawner in spawners)
+            /*
+            int idx = -1;
+            if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
             {
-                if (spawner.player == null) continue;
+                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
 
-                if (spawner.player.PlayerId.PlayerId == Runner.LocalPlayer.PlayerId)
+                switch (idx)
                 {
-                    targetSpawner = spawner;
-                    break;
+                    case 0:
+                        ownType = "A";
+                        break;
+                    case 1:
+                        ownType = "B";
+                        break;
+                    case 2:
+                        ownType = "C";
+                        break;
+                    case 3:
+                        ownType = "D";
+                        break;
                 }
             }
-
-            switch( targetSpawner.Target )
-            {
-                case "A":
-                    UpdateTargetButtonColor(buttonNameA);
-                    break;
-                case "B":
-                    UpdateTargetButtonColor(buttonNameB);
-                    break;
-                case "C":
-                    UpdateTargetButtonColor(buttonNameC);
-                    break;
-                case "D":
-                    UpdateTargetButtonColor(buttonNameD);
-                    break;
-            }
+            */
+            //orgColor = btns[0].GetComponent<Image>().color;
+            //unselectedColor = new Color(0.5f, 0.5f, 0.5f);
         }
 
         // 골라진 타겟만 색을 바꾸도록 설정 
@@ -119,54 +108,95 @@ namespace Agit.FortressCraft
             }
 
             isAttackOn = !isAttackOn;
-            /*
-            if(targetSpawner.AttackEnabled)
-            {
-                attackBtn.GetComponent<Image>().color = orgColor;
-            }
-            else
-            {
-                attackBtn.GetComponent<Image>().color = unselectedColor;
-            }
-            */
         }
 
         public void SetTargetA()
         {
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach (NormalUnitSpawner spawner in spawners)
+            {
+                if (spawner.SpawnerType.CompareTo(ownType) != 0) continue;
+
+                Debug.Log("Set as A");
+                spawner.RPCTargetChange("A");
+                UpdateTargetButtonColor(buttonNameA);
+            }
+            /*
             if (targetSpawner == null) return;
             Debug.Log("Set as A");
             targetSpawner.RPCTargetChange("A");
             UpdateTargetButtonColor(buttonNameA);
+            */
         }
 
         public void SetTargetB()
         {
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach (NormalUnitSpawner spawner in spawners)
+            {
+                if (spawner.SpawnerType.CompareTo(ownType) != 0) continue;
+
+                Debug.Log("Set as B");
+                spawner.RPCTargetChange("B");
+                UpdateTargetButtonColor(buttonNameB);
+            }
+            /*
             if (targetSpawner == null) return;
             Debug.Log("Set as B");
             targetSpawner.RPCTargetChange("B");
             UpdateTargetButtonColor(buttonNameB);
+            */
         }
 
         public void SetTargetC()
         {
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach (NormalUnitSpawner spawner in spawners)
+            {
+                if (spawner.SpawnerType.CompareTo(ownType) != 0) continue;
+
+                Debug.Log("Set as C");
+                spawner.RPCTargetChange("C");
+                UpdateTargetButtonColor(buttonNameC);
+            }
+            /*
             if (targetSpawner == null) return;
             Debug.Log("Set as C");
             targetSpawner.RPCTargetChange("C");
             UpdateTargetButtonColor(buttonNameC);
+            */
         }
 
         public void SetTargetD()
         {
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach( NormalUnitSpawner spawner in spawners )
+            {
+                if (spawner.SpawnerType.CompareTo(ownType) != 0) continue;
+
+                Debug.Log("Set as D");
+                spawner.RPCTargetChange("D");
+                UpdateTargetButtonColor(buttonNameD);
+            }
+
+            /*
             if (targetSpawner == null) return;
             Debug.Log("Set as D");
             targetSpawner.RPCTargetChange("D");
             UpdateTargetButtonColor(buttonNameD);
+            */
         }
 
         public void SetAttack()
         {
+            /*
             targetSpawner.RPCChangeAttackEnabled();
             UpdateAttackButtonColor();
+            */
         }
 
     }
