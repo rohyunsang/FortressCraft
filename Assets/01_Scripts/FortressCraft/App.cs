@@ -57,6 +57,8 @@ namespace Agit.FortressCraft
 		private void Start()
 		{
 			OnConnectionStatusUpdate( null, FusionLauncher.ConnectionStatus.Disconnected, "");
+
+			StartCoroutine(GoogleSheetManager.Loader());
 		}
 
 		private void Update()
