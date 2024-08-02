@@ -85,6 +85,7 @@ namespace Agit.FortressCraft
 
 		private Button attackBtn;
 		private Button skill1Btn;
+		Image[] skillBtnImages;
 
 		public string OwnType { get; set; }
 
@@ -175,8 +176,10 @@ namespace Agit.FortressCraft
 
 			attackBtn = bunttonObject.GetComponentInChildren<Button>();
 			attackBtn.onClick.AddListener(Attack);
+
 			skill1Btn = GameObject.Find("SkillBtnGroups_001").GetComponentInChildren<Button>();
 			skill1Btn.onClick.AddListener(Skill1);
+			skillBtnImages = skill1Btn.GetComponentsInChildren<Image>();
 
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
 			{
@@ -245,6 +248,22 @@ namespace Agit.FortressCraft
 
 			if (died) return;
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
+
+			if( skill1CoolTimer.Expired(Runner) && skill1Btn != null )
+            {
+				foreach(Image btnImage in skillBtnImages)
+                {
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+				}
+            }
+			else if ( skill1Btn != null )
+            {
+				foreach (Image btnImage in skillBtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+				}
+			}
+
 			if (InputController.fetchInput)
 			{
                 if (GetInput(out NetworkInputData input))

@@ -47,7 +47,7 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             // Debug.Log("Skill1");
-            for( int i = 1; i < 10; ++i )
+            for( int i = 1; i < 11; ++i )
             {
                 NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
                 no.transform.SetParent(null);
