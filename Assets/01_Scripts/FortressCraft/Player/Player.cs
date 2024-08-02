@@ -180,9 +180,15 @@ namespace Agit.FortressCraft
 						break;
 				}
 
-				transform.Find("UnitRoot").gameObject.tag = "Unit_" + OwnType;
+				RPCSetType("Unit_" + OwnType);
 				archerFire.OwnType = OwnType;
 			}
+		}
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetType(string tag)
+        {
+			transform.Find("UnitRoot").gameObject.tag = tag;
 		}
 
         public override void Despawned(NetworkRunner runner, bool hasState)
@@ -504,6 +510,7 @@ namespace Agit.FortressCraft
 
 		public void CheckDamaged()
         {
+			if (died) return;
 			if( bodyCollider.Damaged > 0.0f )
             {
 				life -= bodyCollider.Damaged;
