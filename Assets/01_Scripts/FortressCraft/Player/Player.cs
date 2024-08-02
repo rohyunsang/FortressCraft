@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
@@ -79,6 +80,8 @@ namespace Agit.FortressCraft
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
 		private ChangeTarget changeTarget;
+
+		private Button attackBtn;
 
 		public string OwnType { get; set; }
 
@@ -183,6 +186,9 @@ namespace Agit.FortressCraft
 				RPCSetType("Unit_" + OwnType);
 				archerFire.OwnType = OwnType;
 			}
+
+			attackBtn = GameObject.Find("AttackBtnGroups").GetComponentInChildren<Button>();
+			attackBtn.onClick.AddListener(Attack);
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
@@ -256,15 +262,10 @@ namespace Agit.FortressCraft
 						arrowVector.TargetDirection = lastDir;
 					}
 
+					/*
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					{
-						if( attackInputTimer.Expired(Runner) )
-                        {
-							archerFire.FireDirection = lastDir;
-							//Debug.Log(lastDir);
-							_netAnimator.Animator.SetTrigger("Attack");
-							attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
-						}
+						Attack();
                     }
 					else
                     {
@@ -277,8 +278,17 @@ namespace Agit.FortressCraft
 							_netAnimator.Animator.SetBool("isMove", false);
 						}
                     }
+					*/
+					if (input.moveDirection.normalized != Vector2.zero)
+					{
+						_netAnimator.Animator.SetBool("isMove", true);
+					}
+					else
+					{
+						_netAnimator.Animator.SetBool("isMove", false);
+					}
 
-                    if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
+					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
 						ToggleReady();
 					
 						
@@ -288,15 +298,17 @@ namespace Agit.FortressCraft
                     _oldInput = input;
 				}
 			}
-			/*
-			if (Object.HasStateAuthority)
-			{
-				CheckRespawn();
+		}
 
-				if (isRespawningDone)
-					ResetPlayer();
+		public void Attack()
+        {
+			if (attackInputTimer.Expired(Runner))
+			{
+				archerFire.FireDirection = lastDir;
+				//Debug.Log(lastDir);
+				_netAnimator.Animator.SetTrigger("Attack");
+				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
-			*/
 		}
 
         /// <summary>

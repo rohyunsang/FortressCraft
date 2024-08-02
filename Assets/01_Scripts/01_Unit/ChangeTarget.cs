@@ -25,7 +25,7 @@ namespace Agit.FortressCraft
         private void Awake()
         {
             btns = GetComponentsInChildren<Button>();
-            Debug.Log("BTN: " + btns.Length);
+
             foreach (Button btn in btns)
             {
                 if (btn.transform.name == buttonNameA)
@@ -150,12 +150,15 @@ namespace Agit.FortressCraft
 
         public void SetAttack()
         {
-            /*
-            targetSpawner.RPCChangeAttackEnabled();
-            UpdateAttackButtonColor();
-            */
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach (NormalUnitSpawner spawner in spawners)
+            {
+                if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
+                Debug.Log("Attack Setting Changed");
+                spawner.RPCChangeAttackEnabled();
+                UpdateAttackButtonColor();
+            }
         }
-
     }
-
 }
