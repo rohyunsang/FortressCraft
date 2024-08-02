@@ -72,16 +72,19 @@ namespace Agit.FortressCraft
 		private NetworkMecanimAnimator _netAnimator;
 		private AnimatorStateInfo animState;
 		private readonly static int animAttack = Animator.StringToHash("Base Layer.AttackState");
+		private readonly static int animSkill1 = Animator.StringToHash("Base Layer.Skill1");
 		//public Animator anim;
 		private TickTimer attackInputTimer;
+		private TickTimer skill1CoolTimer;
+
 		private Vector2 lastDir = Vector2.left;
 		private ArcherFire archerFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
-		private ChangeTarget changeTarget;
 
 		private Button attackBtn;
+		private Button skill1Btn;
 
 		public string OwnType { get; set; }
 
@@ -159,11 +162,21 @@ namespace Agit.FortressCraft
 			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-        }
+			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+		}
 
-        public void UpdateOwnType()
+        public void UpdateBattleSetting()
         {
 			if ( !UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle") ) return;
+
+			GameObject bunttonObject = GameObject.Find("AttackBtnGroups");
+			
+			if (bunttonObject == null) return;
+
+			attackBtn = bunttonObject.GetComponentInChildren<Button>();
+			attackBtn.onClick.AddListener(Attack);
+			skill1Btn = GameObject.Find("SkillBtnGroups_001").GetComponentInChildren<Button>();
+			skill1Btn.onClick.AddListener(Skill1);
 
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
 			{
@@ -187,8 +200,8 @@ namespace Agit.FortressCraft
 				archerFire.OwnType = OwnType;
 			}
 
-			attackBtn = GameObject.Find("AttackBtnGroups").GetComponentInChildren<Button>();
-			attackBtn.onClick.AddListener(Attack);
+			//attackBtn = GameObject.Find("AttackBtnGroups").GetComponentInChildren<Button>();
+			
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
@@ -220,7 +233,7 @@ namespace Agit.FortressCraft
 
 		public override void FixedUpdateNetwork()
 		{
-			if (OwnType == null) UpdateOwnType();
+			if (attackBtn == null) UpdateBattleSetting();
 
 			if (Object.HasStateAuthority)
 			{
@@ -247,7 +260,8 @@ namespace Agit.FortressCraft
 									transform.localScale.y, transform.localScale.z));
 					}
 
-					if( animState.fullPathHash != animAttack )
+					if( animState.fullPathHash != animAttack &&
+						animState.fullPathHash != animSkill1)
                     {
 						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 					}
@@ -262,23 +276,6 @@ namespace Agit.FortressCraft
 						arrowVector.TargetDirection = lastDir;
 					}
 
-					/*
-					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
-					{
-						Attack();
-                    }
-					else
-                    {
-						if( input.moveDirection.normalized != Vector2.zero )
-                        {
-							_netAnimator.Animator.SetBool("isMove", true);
-						}
-						else
-                        {
-							_netAnimator.Animator.SetBool("isMove", false);
-						}
-                    }
-					*/
 					if (input.moveDirection.normalized != Vector2.zero)
 					{
 						_netAnimator.Animator.SetBool("isMove", true);
@@ -308,6 +305,16 @@ namespace Agit.FortressCraft
 				//Debug.Log(lastDir);
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
+			}
+		}
+
+		public void Skill1()
+        {
+			if (skill1CoolTimer.Expired(Runner))
+			{
+				archerFire.FireDirection = lastDir;
+				_netAnimator.Animator.SetTrigger("Skill1");
+				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 		}
 
