@@ -2800,7 +2800,7 @@ GameObject:
   - component: {fileID: 369062263461720187}
   m_Layer: 0
   m_Name: NetworkNormalUnit_C
-  m_TagString: Untagged
+  m_TagString: Unit_C
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
