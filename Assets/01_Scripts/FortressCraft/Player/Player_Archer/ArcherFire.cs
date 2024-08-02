@@ -14,19 +14,7 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
         [SerializeField] private float damage = 100.0f;
 
-        private Vector2[] skill1Vecs;
-        private int skill1VecsLength = 20;
-
-
-        public override void Spawned()
-        {
-            skill1Vecs = new Vector2[skill1VecsLength];
-            for( int i = 0; i < skill1VecsLength; ++i )
-            {
-                skill1Vecs[i] = new Vector2(-skill1VecsLength + i, skill1VecsLength - i);
-            }
-            
-        }
+        public int skill2ArrowCount = 36; 
 
         // 관통형 화살 1개 발사 
         public void FireArrow()
@@ -43,7 +31,7 @@ namespace Agit.FortressCraft
             arrowAttackCollider.OwnType = OwnType;
         }
 
-        // 관통형 화살 10개 연사
+        // 관통형 화살 n개 연사
         public void FireSkill1()
         {
             // Debug.Log("Skill1");
@@ -60,6 +48,25 @@ namespace Agit.FortressCraft
 
                 ArcherArrowAttackCollider arrowAttackCollider = no.GetComponent<ArcherArrowAttackCollider>();
                 arrowAttackCollider.Damage = damage / 2.0f;
+                arrowAttackCollider.OwnType = OwnType;
+            }
+        }
+
+        // 모든 방향으로 36개 화살 난사
+        public void FireSkill2()
+        {
+            Debug.Log("Skill2");
+            float offset = 360.0f / (float)skill2ArrowCount;
+            for( int i = 0; i < skill2ArrowCount; ++i )
+            {
+                NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
+                no.transform.SetParent(null);
+
+                ArcherArrow archerArrow = no.GetComponent<ArcherArrow>();
+                archerArrow.FireDirection = new Vector2(Mathf.Cos(i*offset) / 1.5f, Mathf.Sin(i*offset) / 1.5f);
+
+                ArcherArrowAttackCollider arrowAttackCollider = no.GetComponent<ArcherArrowAttackCollider>();
+                arrowAttackCollider.Damage = damage;
                 arrowAttackCollider.OwnType = OwnType;
             }
         }

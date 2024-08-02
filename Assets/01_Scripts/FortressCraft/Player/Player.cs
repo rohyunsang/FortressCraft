@@ -76,6 +76,7 @@ namespace Agit.FortressCraft
 		//public Animator anim;
 		private TickTimer attackInputTimer;
 		private TickTimer skill1CoolTimer;
+		private TickTimer skill2CoolTimer;
 
 		private Vector2 lastDir = Vector2.left;
 		private ArcherFire archerFire;
@@ -85,7 +86,9 @@ namespace Agit.FortressCraft
 
 		private Button attackBtn;
 		private Button skill1Btn;
-		Image[] skillBtnImages;
+		private Button skill2Btn;
+		Image[] skill1BtnImages;
+		Image[] skill2BtnImages;
 
 		public string OwnType { get; set; }
 
@@ -164,6 +167,7 @@ namespace Agit.FortressCraft
 
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 		}
 
         public void UpdateBattleSetting()
@@ -179,7 +183,11 @@ namespace Agit.FortressCraft
 
 			skill1Btn = GameObject.Find("SkillBtnGroups_001").GetComponentInChildren<Button>();
 			skill1Btn.onClick.AddListener(Skill1);
-			skillBtnImages = skill1Btn.GetComponentsInChildren<Image>();
+			skill1BtnImages = skill1Btn.GetComponentsInChildren<Image>();
+
+			skill2Btn = GameObject.Find("SkillBtnGroups_002").GetComponentInChildren<Button>();
+			skill2Btn.onClick.AddListener(Skill2);
+			skill2BtnImages = skill2Btn.GetComponentsInChildren<Image>();
 
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
 			{
@@ -202,9 +210,6 @@ namespace Agit.FortressCraft
 				RPCSetType("Unit_" + OwnType);
 				archerFire.OwnType = OwnType;
 			}
-
-			//attackBtn = GameObject.Find("AttackBtnGroups").GetComponentInChildren<Button>();
-			
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
@@ -249,20 +254,7 @@ namespace Agit.FortressCraft
 			if (died) return;
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 
-			if( skill1CoolTimer.Expired(Runner) && skill1Btn != null )
-            {
-				foreach(Image btnImage in skillBtnImages)
-                {
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-				}
-            }
-			else if ( skill1Btn != null )
-            {
-				foreach (Image btnImage in skillBtnImages)
-				{
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-				}
-			}
+			UpdateBtnColor();
 
 			if (InputController.fetchInput)
 			{
@@ -316,6 +308,39 @@ namespace Agit.FortressCraft
 			}
 		}
 
+		private void UpdateBtnColor()
+        {
+			if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
+			{
+				foreach (Image btnImage in skill1BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+				}
+			}
+			else if (skill1Btn != null)
+			{
+				foreach (Image btnImage in skill1BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+				}
+			}
+
+			if (skill2CoolTimer.Expired(Runner) && skill2Btn != null)
+			{
+				foreach (Image btnImage in skill2BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+				}
+			}
+			else if (skill2Btn != null)
+			{
+				foreach (Image btnImage in skill2BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+				}
+			}
+		}
+
 		public void Attack()
         {
 			if (attackInputTimer.Expired(Runner))
@@ -334,6 +359,15 @@ namespace Agit.FortressCraft
 				archerFire.FireDirection = lastDir;
 				_netAnimator.Animator.SetTrigger("Skill1");
 				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+			}
+		}
+
+		public void Skill2()
+        {
+			if (skill2CoolTimer.Expired(Runner))
+			{
+				_netAnimator.Animator.SetTrigger("Skill2");
+				skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 		}
 

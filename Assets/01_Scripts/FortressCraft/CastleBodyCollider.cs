@@ -12,9 +12,24 @@ namespace Agit.FortressCraft
         {
             base.Spawned();
             castle = transform.parent.GetComponent<Castle>();
-            transform.tag = "Unit_" + castle.team;
+
+            switch( castle.team )
+            {
+                case Team.A:
+                    transform.tag = "Unit_A";
+                    break;
+                case Team.B:
+                    transform.tag = "Unit_B";
+                    break;
+                case Team.C:
+                    transform.tag = "Unit_C";
+                    break;
+                case Team.D:
+                    transform.tag = "Unit_D";
+                    break;
+            }
         }
-        /*
+        
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if( Damaged >= 0.0f )
@@ -22,7 +37,7 @@ namespace Agit.FortressCraft
                 castle.Damage(Damaged);
             }
         }
-        */
+        
     }
 }
 
