@@ -61,8 +61,6 @@ namespace Agit.FortressCraft
 
         public override void Spawned()
         {
-            //Object.RequestStateAuthority();
-            
             Usable = false;
 
             poolManager = NetworkObjectPoolManager.Instance;
@@ -72,10 +70,11 @@ namespace Agit.FortressCraft
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
+            
             if( Runner.TryGetSingleton<GameManager>( out GameManager gameManager ) )
             {
                 idx = gameManager.TryGetPlayerId( Runner.LocalPlayer );
-
+                Debug.Log("idx: " + idx);
                 switch (idx)
                 {
                     case 0:
@@ -95,10 +94,9 @@ namespace Agit.FortressCraft
                         UnitPrefab = UnitPrefab_D;
                         break;
                 }
-
-
-                Debug.Log("Spawner Type: " + SpawnerType);
             }
+            
+            //Debug.Log("Spawner Type: " + SpawnerType);
 
             ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
             if( changeTarget.OwnType == null )

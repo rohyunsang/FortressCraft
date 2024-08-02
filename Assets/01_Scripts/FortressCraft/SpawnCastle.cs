@@ -47,7 +47,8 @@ namespace Agit.FortressCraft
                     team = Team.D;
                     break;
             }
-                
+
+            
 
             RPC_SpawnCastleTransformSync(NO, tag, team);
         }
@@ -60,6 +61,10 @@ namespace Agit.FortressCraft
             NO.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             NO.gameObject.GetComponent<Castle>().SliderInit();
             NO.gameObject.GetComponent<Castle>().team = team;
+
+            NormalUnitSpawner spawner = NO.GetComponentInChildren<NormalUnitSpawner>();
+            spawner.transform.tag = "Unit_" + tag;
+            spawner.SpawnerType = tag;
         }
     }
 }

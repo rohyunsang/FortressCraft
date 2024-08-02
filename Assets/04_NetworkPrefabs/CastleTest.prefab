@@ -458,7 +458,8 @@ GameObject:
   - component: {fileID: 3583619543568767048}
   - component: {fileID: 716415901889467955}
   - component: {fileID: 7120570684118470469}
-  - component: {fileID: 558610947610482165}
+  - component: {fileID: 81390881851382332}
+  - component: {fileID: 820594002501553363}
   m_Layer: 0
   m_Name: NormalUnitSpawner
   m_TagString: Untagged
@@ -537,7 +538,8 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3583619543568767048}
   - {fileID: 716415901889467955}
---- !u!58 &558610947610482165
+  - {fileID: 820594002501553363}
+--- !u!58 &81390881851382332
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -569,9 +571,21 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.44}
+  m_Offset: {x: 0, y: 0.45}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.3
+--- !u!114 &820594002501553363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7861337364685856309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 329fd4bbbfd9744bb87884ec3dabfa95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8663933851696591747
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,7 +96,7 @@ namespace Agit.FortressCraft
             foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-
+                Debug.Log("Spawner: " + spawner.SpawnerType + " . " + OwnType);
                 Debug.Log("Set as A");
                 spawner.RPCTargetChange("A");
                 UpdateTargetButtonColor(buttonNameA);
@@ -111,7 +111,7 @@ namespace Agit.FortressCraft
             foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-
+                Debug.Log("Spawner: " + spawner.SpawnerType + " . " + OwnType);
                 Debug.Log("Set as B");
                 spawner.RPCTargetChange("B");
                 UpdateTargetButtonColor(buttonNameB);
@@ -126,7 +126,7 @@ namespace Agit.FortressCraft
             foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-
+                Debug.Log("Spawner: " + spawner.SpawnerType + " . " + OwnType);
                 Debug.Log("Set as C");
                 spawner.RPCTargetChange("C");
                 UpdateTargetButtonColor(buttonNameC);
@@ -141,7 +141,7 @@ namespace Agit.FortressCraft
             foreach( NormalUnitSpawner spawner in spawners )
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-
+                Debug.Log("Spawner: " + spawner.SpawnerType + " . " + OwnType);
                 Debug.Log("Set as D");
                 spawner.RPCTargetChange("D");
                 UpdateTargetButtonColor(buttonNameD);
