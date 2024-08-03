@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 0}
-  _playerPrefabWarrior: {fileID: 8960233729958994200, guid: bd7431377cb3876458b468ae15231de9, type: 3}
+  _playerPrefabWarrior: {fileID: 8960233729958994200, guid: c7fc9c156a388d946a1ebfd0cff81284, type: 3}
   _playerPrefabArcher: {fileID: 8960233729958994200, guid: 033790961274843e5bfc4d51b1a86e35, type: 3}
   _playerPrefabMagician: {fileID: 8960233729958994200, guid: a50bd9aeb34f0294e8e5cbbe7bacd953, type: 3}
   _playerRefByIndex:

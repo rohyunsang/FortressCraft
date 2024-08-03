@@ -144,16 +144,12 @@ namespace Agit.FortressCraft
 			RegisterEventListener((PickupEvent evt) => OnPickup(evt));
 
 			// PlayerName Change
-
-
 			var fusionLauncher = FindObjectOfType<FusionLauncher>();
 
 			if (fusionLauncher != null)
 			{
 				PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
 			}
-
-			if (!HasStateAuthority) return;
 
 			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
