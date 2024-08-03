@@ -21,6 +21,9 @@ namespace Agit.FortressCraft
         public float Damage { get; set; }
         public float Defense { get; set; }  // 0~1 사이 값으로 사용, 받은 대미지에 곱해서 적용
         public string OwnType { get; set; }
+        public bool NoReward { get; set; }
+        public int gold = 10;
+        public int exp = 10;
 
         private readonly static int animAttackBow =
             Animator.StringToHash("Base Layer.AttackState");
@@ -150,6 +153,8 @@ namespace Agit.FortressCraft
 
             Initializing();
         }
+
+
 
         protected bool AttackAllTarget()
         {
@@ -320,11 +325,18 @@ namespace Agit.FortressCraft
             if (bodyCollider.Damaged > 0.0f)
             {
                 HP -= Defense * bodyCollider.Damaged;
+                RPCSyncHP(HP);
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");
                 //Debug.Log("HP: " + HP);
                 Die();
             }
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSyncHP(float HP)
+        {
+            this.HP = HP;
         }
 
         private void OnTriggerStay2D(Collider2D collision)

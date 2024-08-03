@@ -70,10 +70,10 @@ namespace Agit.FortressCraft
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
-            
-            if( Runner.TryGetSingleton<GameManager>( out GameManager gameManager ) )
+
+            if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
             {
-                idx = gameManager.TryGetPlayerId( Runner.LocalPlayer );
+                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
                 Debug.Log("idx: " + idx);
                 switch (idx)
                 {
@@ -95,15 +95,15 @@ namespace Agit.FortressCraft
                         break;
                 }
             }
-            
+
             //Debug.Log("Spawner Type: " + SpawnerType);
 
             ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
-            if( changeTarget.OwnType == null )
+            if (changeTarget.OwnType == null)
             {
                 changeTarget.OwnType = SpawnerType;
                 string targetBtnName = "";
-                switch( SpawnerType )
+                switch (SpawnerType)
                 {
                     case "A":
                         targetBtnName = "Button_2";
@@ -121,7 +121,7 @@ namespace Agit.FortressCraft
                 changeTarget.UpdateTargetButtonColor(targetBtnName);
             }
 
-            if(idx > -1)
+            if (idx > -1)
             {
                 Usable = true;
 
@@ -176,6 +176,7 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.Spawner = this;
                     normalUnitRigidBodyMovement.OwnType = SpawnerType;
                     normalUnitRigidBodyMovement.HP = 100.0f;
+                    RPCUnitSetting(normalUnitRigidBodyMovement);
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();
 
@@ -194,6 +195,12 @@ namespace Agit.FortressCraft
                     Debug.LogError("Pooling Failed");
                 }
             }
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCUnitSetting(NormalUnitRigidBodyMovement normal)
+        {
+            normal.NoReward = false;
         }
     }
 }
