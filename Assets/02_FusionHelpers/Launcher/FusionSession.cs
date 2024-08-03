@@ -31,6 +31,8 @@ namespace FusionHelpers
 		public IEnumerable<FusionPlayer> AllPlayers => _players.Values;
 		public int PlayerCount => _players.Count;
 		public int SessionCount => playerRefByIndex.Count;
+
+		private bool isSetCommanderType = false;
 		
 		public override void Spawned()
 		{
@@ -55,11 +57,14 @@ namespace FusionHelpers
                     Debug.LogError("default commander is Archer");
                     break;
             }
+			isSetCommanderType = true;
         }
 
 		public override void Render()
 		{
-			if(Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
+			if (!isSetCommanderType) return;
+
+            if (Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
 				MaybeSpawnNextAvatar();
 		}
 
