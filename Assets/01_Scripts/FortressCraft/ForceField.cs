@@ -13,6 +13,5 @@ namespace Agit.FortressCraft
             Destroy(gameObject, 10f);
         }
     }
-
 }
 

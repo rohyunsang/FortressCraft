@@ -43,9 +43,11 @@ namespace Agit.FortressCraft
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
+		
+		public JobType jobType;
 
 
-		private void Awake()
+        private void Awake()
 		{
 			Application.targetFrameRate = 60;
 			DontDestroyOnLoad(this);
@@ -63,8 +65,21 @@ namespace Agit.FortressCraft
 			// Test 
 			// Debug.Log("6" + PlayerNameValidator.IsValidName("나나나 나 "));
         }
-		private void Update()
+
+		public void SetJob(string jobType)   // using Button ;
 		{
+			switch (jobType)
+			{
+				case "Warrior":
+                    this.jobType = JobType.Warrior;
+                    break;
+				case "Archer":
+                    this.jobType = JobType.Archer;
+                    break;
+				case "Magician":
+                    this.jobType = JobType.Magician;
+                    break;
+			}
 		}
 
 		public void ShutDownSession() // using button 
@@ -243,5 +258,12 @@ namespace Agit.FortressCraft
 			_uiProgress.SetVisible(progress);
 			_uiLevel.SetActive(running);
 		}
+	}
+
+	public enum JobType
+	{
+		Warrior = 0,
+		Archer,
+		Magician
 	}
 }

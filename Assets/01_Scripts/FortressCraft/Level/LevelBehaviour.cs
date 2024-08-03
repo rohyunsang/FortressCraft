@@ -32,8 +32,8 @@ namespace Agit.FortressCraft
 			{
 				FindObjectOfType<LevelUIController>().BattleSceneUIChange();
 
+				Invoke("ChangeCommanderJob", 2f);
 				Invoke("SpawnCastle", 3f);
-
             }
         }
 		private void SpawnCastle()
@@ -42,6 +42,15 @@ namespace Agit.FortressCraft
             foreach (Player player in players)
             {
                 player._spawnCastle.SpawnCastleObject();
+            }
+        }
+
+		private void ChangeCommanderJob()
+		{
+            Player[] players = FindObjectsOfType<Player>();
+            foreach (Player player in players)
+            {
+                player.RPC_CommanderJobChanger();
             }
         }
     }

@@ -104,7 +104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &441903731612293437
 Transform:
   m_ObjectHideFlags: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 187263036767416338}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08ca2cbc2ac0540bd848f8b1b8960792, type: 3}
   m_Name: 
@@ -2546,7 +2546,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: 368e41a7d34b29e449e1425bbc77f840, type: 3}
-  m_Color: {r: 1, g: 1, b: 0.36320752, a: 1}
+  m_Color: {r: 1, g: 0.36470592, b: 0.37080544, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5691,7 +5691,7 @@ GameObject:
   - component: {fileID: 6727204430707573400}
   - component: {fileID: 8281999552098622695}
   m_Layer: 5
-  m_Name: Player_Archer
+  m_Name: Player_Wairror
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5736,7 +5736,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1627592137
+  SortKey: 3422356628
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -6239,7 +6239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5460704350121400631
 Transform:
   m_ObjectHideFlags: 0
