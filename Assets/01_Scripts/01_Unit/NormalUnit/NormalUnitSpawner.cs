@@ -65,8 +65,8 @@ namespace Agit.FortressCraft
 
             poolManager = NetworkObjectPoolManager.Instance;
             //AttackEnabled = true;
-            Damage = 20.0f;
-            Defense = 1.0f;
+            Damage = NormalUnitDataManager.Instance.Attack;
+            Defense = NormalUnitDataManager.Instance.Defense;
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 

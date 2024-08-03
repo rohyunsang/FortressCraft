@@ -152,6 +152,7 @@ namespace Agit.FortressCraft
             }
 
             Initializing();
+            Debug.Log("Unit Attack: " + Damage);
         }
 
 
