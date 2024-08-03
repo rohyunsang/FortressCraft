@@ -50,6 +50,7 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+		public int level { get; set; }
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -123,6 +124,7 @@ namespace Agit.FortressCraft
 			archerFire = GetComponentInChildren<ArcherFire>();
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
+			level = 1;
 		}
 
 		public override void InitNetworkState()
@@ -255,6 +257,15 @@ namespace Agit.FortressCraft
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 
 			UpdateBtnColor();
+
+			if( RewardManager.Instance != null )
+            {
+				if( RewardManager.Instance.Exp >= 100 )
+                {
+					RewardManager.Instance.Exp -= 100;
+					++level;
+				}
+            }
 
 			if (InputController.fetchInput)
 			{
