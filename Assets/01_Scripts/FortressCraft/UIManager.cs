@@ -16,6 +16,10 @@ namespace Agit.FortressCraft
         public InputField _playerName;
         public Button createButton;
         public Button joinButton;
+        public GameObject _nicknamePanel;
+        public GameObject _incorrectNicknamePanel;
+        public GameObject _roomListPanel;
+        public GameObject _roomOptionPanel;
 
         private void Awake()
         {

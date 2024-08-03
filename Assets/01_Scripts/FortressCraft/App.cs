@@ -56,11 +56,13 @@ namespace Agit.FortressCraft
 
 		private void Start()
 		{
-			OnConnectionStatusUpdate( null, FusionLauncher.ConnectionStatus.Disconnected, "");
+			OnConnectionStatusUpdate(null, FusionLauncher.ConnectionStatus.Disconnected, "");
 
 			StartCoroutine(GoogleSheetManager.Loader());
-		}
 
+			// Test 
+			// Debug.Log("6" + PlayerNameValidator.IsValidName("나나나 나 "));
+        }
 		private void Update()
 		{
 		}
@@ -70,9 +72,36 @@ namespace Agit.FortressCraft
 			FindObjectOfType<FusionLauncher>().ShutDownCustom();
         }
 
-		public void ConnectToLobby() // using Button
+		public void CheckNickname() // using Button 1. 방 목록보기 
 		{
+			if (PlayerNameValidator.IsValidName(_playerNameOverride.text))
+			{
+                ConnectToLobby();
+				FindObjectOfType<UIManager>()._nicknamePanel.SetActive(false);
+				FindObjectOfType<UIManager>()._roomListPanel.SetActive(true);
+            }
+			else
+			{
+				FindObjectOfType<UIManager>()._incorrectNicknamePanel.SetActive(true);
+            }
+        }
 
+		public void CheckNickNameOverride() // using Button 2. 방 만들기. 
+		{
+			if (PlayerNameValidator.IsValidName(_playerName.text))
+			{
+                OnEnterRoom();
+                SetRoomName();
+				FindObjectOfType<UIManager>()._roomOptionPanel.SetActive(false);
+            }
+			else
+			{
+                FindObjectOfType<UIManager>()._incorrectNicknamePanel.SetActive(true);
+            }
+        }
+
+		private void ConnectToLobby() // using Button
+		{
             FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab, OnConnectionStatusUpdate);
         }
 

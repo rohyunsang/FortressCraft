@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForceField : MonoBehaviour
+namespace Agit.FortressCraft
 {
-    // Force Field Destroy
-
-    public void Start()
+    public class ForceField : MonoBehaviour
     {
-        Destroy(gameObject, 10f);
+        // Force Field Destroy
+
+        public void Start()
+        {
+            Destroy(gameObject, 10f);
+        }
     }
+
 }
+
