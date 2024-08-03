@@ -12,9 +12,10 @@ namespace Agit.FortressCraft
         private Button attackBtn;
         private Color orgColor;
         private Color unselectedColor;
-        private bool isAttackOn = true;
+        public bool IsAttackOn { get; set; }
 
         public string OwnType { get; set; }
+        public string Target { get; set; }
 
         private string buttonNameA = "Button_1";
         private string buttonNameB = "Button_2";
@@ -24,6 +25,8 @@ namespace Agit.FortressCraft
 
         private void Awake()
         {
+            IsAttackOn = true;
+            Target = null;
             btns = GetComponentsInChildren<Button>();
 
             foreach (Button btn in btns)
@@ -76,7 +79,7 @@ namespace Agit.FortressCraft
 
         private void UpdateAttackButtonColor()
         {
-            if( isAttackOn )
+            if( IsAttackOn )
             {
                 attackBtn.GetComponent<Image>().color = unselectedColor;
             }
@@ -85,13 +88,14 @@ namespace Agit.FortressCraft
                 attackBtn.GetComponent<Image>().color = orgColor;
             }
 
-            isAttackOn = !isAttackOn;
+            IsAttackOn = !IsAttackOn;
         }
 
         public void SetTargetA()
         {
             Debug.Log("Owntype: " + OwnType);
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+            Target = "A";
 
             foreach (NormalUnitSpawner spawner in spawners)
             {
@@ -107,6 +111,7 @@ namespace Agit.FortressCraft
         {
             Debug.Log("Owntype: " + OwnType);
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+            Target = "B";
 
             foreach (NormalUnitSpawner spawner in spawners)
             {
@@ -122,6 +127,7 @@ namespace Agit.FortressCraft
         {
             Debug.Log("Owntype: " + OwnType);
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+            Target = "C";
 
             foreach (NormalUnitSpawner spawner in spawners)
             {
@@ -137,6 +143,7 @@ namespace Agit.FortressCraft
         {
             Debug.Log("Owntype: " + OwnType);
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+            Target = "D";
 
             foreach( NormalUnitSpawner spawner in spawners )
             {

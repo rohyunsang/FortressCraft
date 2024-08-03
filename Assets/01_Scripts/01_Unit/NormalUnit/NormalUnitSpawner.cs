@@ -64,7 +64,7 @@ namespace Agit.FortressCraft
             Usable = false;
 
             poolManager = NetworkObjectPoolManager.Instance;
-            AttackEnabled = true;
+            //AttackEnabled = true;
             Damage = 20.0f;
             Defense = 1.0f;
             NowUnitCount = 0;
@@ -125,22 +125,33 @@ namespace Agit.FortressCraft
             {
                 Usable = true;
 
-                switch (idx)
+                if( changeTarget.Target == null )
                 {
-                    case 0:
-                        Target = "B";
-                        break;
-                    case 1:
-                        Target = "C";
-                        break;
-                    case 2:
-                        Target = "D";
-                        break;
-                    case 3:
-                        Target = "A";
-                        break;
+                    switch (idx)
+                    {
+                        case 0:
+                            Target = "B";
+                            break;
+                        case 1:
+                            Target = "C";
+                            break;
+                        case 2:
+                            Target = "D";
+                            break;
+                        case 3:
+                            Target = "A";
+                            break;
+                    }
+                    changeTarget.Target = Target;
                 }
+                else
+                {
+                    Target = changeTarget.Target;
+                }
+                
             }
+
+            AttackEnabled = changeTarget.IsAttackOn;
 
             NetworkObject temp = Runner.Spawn(UnitPrefab, (Vector2)transform.position, Quaternion.identity);
             id = temp.NetworkTypeId.AsPrefabId;
