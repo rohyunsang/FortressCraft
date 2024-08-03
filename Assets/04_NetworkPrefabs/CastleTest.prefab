@@ -501,7 +501,7 @@ MonoBehaviour:
   Arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
   player: {fileID: 0}
   poolManager: {fileID: 0}
-  maxUnitCount: 5
+  maxUnitCount: 10
   id:
     RawValue: 0
   arrowId:
@@ -518,7 +518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00239d4de604247d990851363d773eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spwanTime: 5
 --- !u!114 &7120570684118470469
 MonoBehaviour:
   m_ObjectHideFlags: 0

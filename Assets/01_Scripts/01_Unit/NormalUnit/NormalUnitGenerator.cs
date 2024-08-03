@@ -6,12 +6,13 @@ namespace Agit.FortressCraft
     public class NormalUnitGenerator : NetworkBehaviour
     {
         private TickTimer spawnTimer { get; set; }
-        [SerializeField] int spwanTime = 5;
+        public float SpawnTime { get; set; }
         NormalUnitSpawner spawner;
 
         public override void Spawned()
         {
             spawner = GetComponent<NormalUnitSpawner>();
+            SpawnTime = NormalUnitDataManager.Instance.SpawnTime;
             if (spawner.Usable) SetWaitingTime();
         }
 
@@ -29,7 +30,7 @@ namespace Agit.FortressCraft
 
         private void SetWaitingTime()
         {
-            spawnTimer = TickTimer.CreateFromSeconds(Runner, spwanTime);
+            spawnTimer = TickTimer.CreateFromSeconds(Runner, SpawnTime);
         }
     }
 }

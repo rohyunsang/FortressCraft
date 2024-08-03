@@ -26,7 +26,7 @@ namespace Agit.FortressCraft
 
         [SerializeField] private int attackCost = 50;
         [SerializeField] private int defenseCost = 50;
-        [SerializeField] private int summonTimeCost = 500;
+        [SerializeField] private int timeCost = 500;
 
         public string OwnType { get; set; }
 
@@ -123,7 +123,30 @@ namespace Agit.FortressCraft
 
         public void UpgradeSpawnTime()
         {
+            if (timeLevel >= timeLevelLimit) return;
 
+            if (RewardManager.Instance.Gold < timeCost) return;
+            RewardManager.Instance.Gold -= timeCost;
+            ++timeLevel;
+            NormalUnitDataManager.Instance.SpawnTime = 3.0f;
+
+            spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
+
+            foreach (NormalUnitSpawner spawner in spawners)
+            {
+                if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
+
+                NormalUnitGenerator generator = spawner.GetComponent<NormalUnitGenerator>();
+                generator.SpawnTime = 3.0f;
+            }
+
+            if (timeLevel == timeLevelLimit)
+            {
+                foreach (Image image in btnTimeUpgradeImages)
+                {
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 0.5f);
+                }
+            }
         }
     }
 }
