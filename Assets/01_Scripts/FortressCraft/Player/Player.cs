@@ -153,6 +153,7 @@ namespace Agit.FortressCraft
 
 			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
+
 			switch (PlayerIndex)
 			{
 				case 0:

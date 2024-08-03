@@ -37,6 +37,8 @@ namespace Agit.FortressCraft
 
 		public bool DisconnectByPrompt { get; set; }
 
+		public bool isStarted = false;
+
 		public override void Spawned()
 		{
 			base.Spawned();
@@ -194,21 +196,31 @@ namespace Agit.FortressCraft
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
+			if (isStarted) return;
 			if (!Object.HasStateAuthority) return;
-			
+
+			isStarted = true;
+
 			MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
 
-            // close and hide the session from matchmaking / lists. this demo does not allow late join.
-            Runner.SessionInfo.IsOpen = false;
+			// close and hide the session from matchmaking / lists. this demo does not allow late join.
+			Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
 
 			// Reset stats and transition to level.
-			LoadLevel(Runner.GetLevelManager().GetBattleSceneIndex());
+			Invoke("InvokeLoadLevel",2f);
 		}
+
+		private void InvokeLoadLevel()
+		{
+            int nextLevelIndex = Runner.GetLevelManager().GetBattleSceneIndex();
+            if (Object.HasStateAuthority)
+                Runner.GetLevelManager().LoadLevel(nextLevelIndex);
+        }
 
 		private void LoadLevel(int nextLevelIndex)
 		{
-			if (Object.HasStateAuthority)
+            if (Object.HasStateAuthority)
 				Runner.GetLevelManager().LoadLevel(nextLevelIndex);
 		}
 
