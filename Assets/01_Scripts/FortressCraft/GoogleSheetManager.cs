@@ -161,6 +161,11 @@ namespace Agit.FortressCraft {
 
             return GoogleSheetManager.commanderDatas[level + offset];
         }
+
+        public static UnitData GetUnitData(int level)
+        {
+            return GoogleSheetManager.unitDatas[level - 1];
+        }
     }
 
     [System.Serializable]

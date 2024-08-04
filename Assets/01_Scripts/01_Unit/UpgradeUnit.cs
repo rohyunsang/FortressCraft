@@ -20,13 +20,9 @@ namespace Agit.FortressCraft
         private int attackLevel = 1;
         private int defenseLevel = 1;
         private int timeLevel = 1;
-        private int attackLevelLimit = 2;
-        private int defenseLevelLimit = 2;
-        private int timeLevelLimit = 2;
-
-        [SerializeField] private int attackCost = 50;
-        [SerializeField] private int defenseCost = 50;
-        [SerializeField] private int timeCost = 500;
+        private int attackLevelLimit = 11;
+        private int defenseLevelLimit = 11;
+        private int timeLevelLimit = 11;
 
         public string OwnType { get; set; }
 
@@ -70,19 +66,23 @@ namespace Agit.FortressCraft
         public void UpgradeDamage()
         {
             if (attackLevel >= attackLevelLimit) return;
-            
-            if (RewardManager.Instance.Gold < attackCost) return;
-            RewardManager.Instance.Gold -= attackCost;
+
+            UnitData unitData = GoogleSheetManager.GetUnitData(attackLevel);
+
+            if (RewardManager.Instance.Gold < unitData.UpgradeCost ) return;
+            RewardManager.Instance.Gold -= unitData.UpgradeCost;
             ++attackLevel;
-            NormalUnitDataManager.Instance.Attack = 100.0f;
+
+            unitData = GoogleSheetManager.GetUnitData(attackLevel);
+            NormalUnitDataManager.Instance.Attack = unitData.Attack;
 
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
 
             foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-                Debug.Log("Upgrade Damage");
-                spawner.RPCSettingDamage(100.0f);
+                Debug.Log("Upgrade Damage : " + unitData.Attack);
+                spawner.RPCSettingDamage( unitData.Attack );
             }
 
             if( attackLevel == attackLevelLimit )
@@ -97,19 +97,23 @@ namespace Agit.FortressCraft
         public void UpgradeDefense()
         {
             if (defenseLevel >= defenseLevelLimit) return;
-            
-            if (RewardManager.Instance.Gold < defenseCost) return;
-            RewardManager.Instance.Gold -= defenseCost;
+
+            UnitData unitData = GoogleSheetManager.GetUnitData(defenseLevel);
+
+            if (RewardManager.Instance.Gold < unitData.Defense ) return;
+            RewardManager.Instance.Gold -= unitData.UpgradeCost;
             ++defenseLevel;
-            NormalUnitDataManager.Instance.Defense = 0.5f;
+
+            unitData = GoogleSheetManager.GetUnitData(defenseLevel);
+            NormalUnitDataManager.Instance.Defense = unitData.Defense;
 
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
 
             foreach (NormalUnitSpawner spawner in spawners)
             {
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
-                Debug.Log("Upgrade Defense");
-                spawner.RPCSettingDefense(0.5f);
+                Debug.Log("Upgrade Defense - " + unitData.Defense);
+                spawner.RPCSettingDefense(unitData.Defense);
             }
 
             if( defenseLevel == defenseLevelLimit )
@@ -125,10 +129,14 @@ namespace Agit.FortressCraft
         {
             if (timeLevel >= timeLevelLimit) return;
 
-            if (RewardManager.Instance.Gold < timeCost) return;
-            RewardManager.Instance.Gold -= timeCost;
+            UnitData unitData = GoogleSheetManager.GetUnitData(timeLevel);
+
+            if (RewardManager.Instance.Gold < unitData.UpgradeCost) return;
+            RewardManager.Instance.Gold -= unitData.UpgradeCost;
             ++timeLevel;
-            NormalUnitDataManager.Instance.SpawnTime = 3.0f;
+
+            unitData = GoogleSheetManager.GetUnitData(timeLevel);
+            NormalUnitDataManager.Instance.SpawnTime = unitData.SpawnDelay;
 
             spawners = GameObject.FindObjectsOfType<NormalUnitSpawner>();
 
@@ -137,7 +145,7 @@ namespace Agit.FortressCraft
                 if (spawner.SpawnerType.CompareTo(OwnType) != 0) continue;
 
                 NormalUnitGenerator generator = spawner.GetComponent<NormalUnitGenerator>();
-                generator.SpawnTime = 3.0f;
+                generator.SpawnTime = unitData.SpawnDelay;
             }
 
             if (timeLevel == timeLevelLimit)

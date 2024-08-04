@@ -12,9 +12,4 @@ public class RewardManager : MonoBehaviour
     {
         Instance = this;
     }
-
-    private void FixedUpdate()
-    {
-        Debug.Log("Gold: " + Gold + " Exp: " + Exp);
-    }
 }

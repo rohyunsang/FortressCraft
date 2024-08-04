@@ -324,7 +324,7 @@ namespace Agit.FortressCraft
         {
             if (bodyCollider.Damaged > 0.0f)
             {
-                HP -= Defense * bodyCollider.Damaged;
+                HP -= ( 1 - 0.1f * Defense ) * bodyCollider.Damaged;
                 RPCSyncHP(HP);
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");
