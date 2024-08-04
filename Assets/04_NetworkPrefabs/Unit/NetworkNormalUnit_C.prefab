@@ -2886,6 +2886,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSpeed: 3
+  gold: 10
+  exp: 10
   _netAnimator: {fileID: 0}
 --- !u!114 &7966046597260627443
 MonoBehaviour:
