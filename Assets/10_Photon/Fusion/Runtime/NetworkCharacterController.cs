@@ -120,7 +120,6 @@ namespace Fusion
             moveVelocity.y = horizontalVel.y;
 
             _controller.Move(direction * 2 * deltaTime);
-            // _controller.Move(moveVelocity * deltaTime);
 
             Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
             Data.Grounded = _controller.isGrounded;
