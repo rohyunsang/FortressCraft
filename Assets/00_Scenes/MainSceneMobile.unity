@@ -4042,7 +4042,7 @@ MonoBehaviour:
   nickNamePanel: {fileID: 927308528}
   roomListPanel: {fileID: 462232561}
   roomCode: 
-  jobType: 0
+  jobType: 1
 --- !u!4 &322567093
 Transform:
   m_ObjectHideFlags: 0
