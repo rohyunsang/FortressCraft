@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
+using Agit.FortressCraft;
 
 namespace FusionHelpers
 {
@@ -17,8 +18,11 @@ namespace FusionHelpers
 		private const int MAX_PLAYERS = 4;
 		
 		[SerializeField] private FusionPlayer _playerPrefab;
+        [SerializeField] private FusionPlayer _playerPrefabWarrior;
+        [SerializeField] private FusionPlayer _playerPrefabArcher;
+		[SerializeField] private FusionPlayer _playerPrefabMagician;
 
-		[Networked, Capacity(MAX_PLAYERS)] public NetworkDictionary<int, PlayerRef> playerRefByIndex { get; }
+        [Networked, Capacity(MAX_PLAYERS)] public NetworkDictionary<int, PlayerRef> playerRefByIndex { get; }
 		private Dictionary<PlayerRef, FusionPlayer> _players = new();
 
 		protected abstract void OnPlayerAvatarAdded(FusionPlayer fusionPlayer);
@@ -27,16 +31,40 @@ namespace FusionHelpers
 		public IEnumerable<FusionPlayer> AllPlayers => _players.Values;
 		public int PlayerCount => _players.Count;
 		public int SessionCount => playerRefByIndex.Count;
+
+		private bool isSetCommanderType = false;
 		
 		public override void Spawned()
 		{
-			 Debug.Log($"Spawned Network Session for Runner: {Runner}");
-			 Runner.RegisterSingleton(this);
-		}
+			Debug.Log($"Spawned Network Session for Runner: {Runner}");
+			Runner.RegisterSingleton(this);
+
+            // App에서 플레이어 직업 타입을 정한다.
+            JobType jobType = FindObjectOfType<App>().jobType;
+            switch (jobType)
+            {
+                case JobType.Warrior:
+					_playerPrefab = _playerPrefabWarrior;
+                    break;
+                case JobType.Archer:
+					_playerPrefab = _playerPrefabArcher;
+                    break;
+                case JobType.Magician:
+					_playerPrefab = _playerPrefabMagician;
+                    break;
+                default:
+					_playerPrefab = _playerPrefabArcher; // default commander is Archer
+                    Debug.LogError("default commander is Archer");
+                    break;
+            }
+			isSetCommanderType = true;
+        }
 
 		public override void Render()
 		{
-			if(Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
+			if (!isSetCommanderType) return;
+
+            if (Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
 				MaybeSpawnNextAvatar();
 		}
 

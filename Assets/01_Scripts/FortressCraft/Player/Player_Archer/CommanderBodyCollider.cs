@@ -15,9 +15,9 @@ namespace Agit.FortressCraft
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if( collision.CompareTag("Attack") )
+            if(collision.CompareTag("Attack"))
             {
-                if( collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider) )
+                if(collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider) )
                 {
                     player.RPCCheckDamaged();
                 }

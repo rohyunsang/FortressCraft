@@ -106,6 +106,9 @@ namespace Agit.FortressCraft
 
 		public bool isBuildCastle;
 
+		[SerializeField] private GameObject _commanderRoot;
+		[SerializeField] private GameObject _commanderRootDefault;
+
         public void ToggleReady()
 		{
 			ready = !ready;
@@ -154,16 +157,12 @@ namespace Agit.FortressCraft
 			RegisterEventListener((PickupEvent evt) => OnPickup(evt));
 
 			// PlayerName Change
-
-
 			var fusionLauncher = FindObjectOfType<FusionLauncher>();
 
 			if (fusionLauncher != null)
 			{
 				PlayerName = new NetworkString<_32>(fusionLauncher.playerName);
 			}
-
-			if (!HasStateAuthority) return;
 
 			ChatSystem.instance.playerName = fusionLauncher.playerName;
 
@@ -307,10 +306,6 @@ namespace Agit.FortressCraft
 						_netAnimator.Animator.SetBool("isMove", false);
 					}
 
-					if (Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_READY, _oldInput))
-						ToggleReady();
-					
-						
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
 						_spawnCastle.SpawnCastleObject();
 
@@ -432,6 +427,16 @@ namespace Agit.FortressCraft
             }
         }
 
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPC_CommanderJobChanger()
+        {
+			if (!HasStateAuthority) return;
+
+			_commanderRootDefault.SetActive(false);
+			_commanderRoot.SetActive(true);
+        }
+
+
         public void OnPlayerNameChanged()
         {
             playerNameLabel.text = PlayerName.ToString();
@@ -489,8 +494,9 @@ namespace Agit.FortressCraft
 				return;
 
 			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
+			//_cc.Move(new Vector3(aimVector.x, aimVector.y, 0));
 
-			if (aimVector.sqrMagnitude > 0)
+            if (aimVector.sqrMagnitude > 0)
 				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
 		}
 
