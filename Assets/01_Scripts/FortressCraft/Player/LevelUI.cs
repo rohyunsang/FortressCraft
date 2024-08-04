@@ -18,7 +18,6 @@ namespace Agit.FortressCraft
 
         private void FixedUpdate()
         {
-            Debug.Log("Level: " + player.level);
             levelText.text = player.level.ToString();
         }
     }

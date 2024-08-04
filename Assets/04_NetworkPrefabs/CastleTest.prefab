@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 654316557737174267}
   - component: {fileID: 6303750289768696171}
   - component: {fileID: 5449087021937315122}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1419538053393007439}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6993420333033441161}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 3225645976391736003}
   - component: {fileID: 7883682871855343710}
   - component: {fileID: 2804369645508665532}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: CastleTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5498520672003592300}
   - component: {fileID: 1521518489167026119}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -597,7 +597,7 @@ GameObject:
   - component: {fileID: 1830120566690597681}
   - component: {fileID: 881085870746060389}
   - component: {fileID: 5772282187339525728}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 6804067141036469818}
   - component: {fileID: 8841595735757127777}
   - component: {fileID: 3171705327249326516}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

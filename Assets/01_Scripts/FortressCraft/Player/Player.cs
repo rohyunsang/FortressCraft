@@ -106,9 +106,6 @@ namespace Agit.FortressCraft
 
 		public bool isBuildCastle;
 
-		[SerializeField] private GameObject _commanderRoot;
-		[SerializeField] private GameObject _commanderRootDefault;
-
         public void ToggleReady()
 		{
 			ready = !ready;
@@ -425,15 +422,6 @@ namespace Agit.FortressCraft
             {
                 GameObject.Find("UIManager").GetComponent<UIManager>().OnVictoryPanel();
             }
-        }
-
-        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
-        public void RPC_CommanderJobChanger()
-        {
-			if (!HasStateAuthority) return;
-
-			_commanderRootDefault.SetActive(false);
-			_commanderRoot.SetActive(true);
         }
 
 
