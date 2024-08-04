@@ -6,12 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/MainSceneMobile 1.unity
+    path: Assets/00_Scenes/MainSceneMobile_test.unity
     guid: 9425afd3c04fe46aa8184348b2e4c019
   - enabled: 1
     path: Assets/00_Scenes/Lobby.unity
     guid: e7073f19ee8574db19f8808196062ff8
   - enabled: 1
+    path: Assets/00_Scenes/Battle_test_2.unity
+    guid: 3e13aeb632394485b889eacf555d1f09
+  - enabled: 0
     path: Assets/00_Scenes/Battle_test.unity
     guid: 615eea0d84fdf4efb90e66ab6d8647e6
   - enabled: 0
