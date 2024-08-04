@@ -171,7 +171,8 @@ namespace Agit.FortressCraft
 			}
 
 			transform.Find("UnitRoot").gameObject.tag = "Unit_" + OwnType;
-			archerFire.OwnType = OwnType;
+			if(gameObject.name.Contains("Archer"))
+				archerFire.OwnType = OwnType;
 
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
         }
@@ -241,13 +242,19 @@ namespace Agit.FortressCraft
 
 					if (input.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
 					{
-						if( attackInputTimer.Expired(Runner) )
+						if( attackInputTimer.Expired(Runner) && gameObject.name.Contains("Archer"))
                         {
 							archerFire.FireDirection = lastDir;
 							Debug.Log(lastDir);
 							_netAnimator.Animator.SetTrigger("Attack");
 							attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 						}
+						else if (attackInputTimer.Expired(Runner) && gameObject.name.Contains("Warrior"))
+						{
+                            Debug.Log(lastDir);
+                            _netAnimator.Animator.SetTrigger("Attack");
+                            attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
+                        }
                     }
 					else
                     {
@@ -395,8 +402,9 @@ namespace Agit.FortressCraft
 				return;
 
 			_cc.Move(new Vector3(moveVector.x, moveVector.y, 0));
+			//_cc.Move(new Vector3(aimVector.x, aimVector.y, 0));
 
-			if (aimVector.sqrMagnitude > 0)
+            if (aimVector.sqrMagnitude > 0)
 				_commander.forward = new Vector3(aimVector.x, 0, aimVector.y);
 		}
 

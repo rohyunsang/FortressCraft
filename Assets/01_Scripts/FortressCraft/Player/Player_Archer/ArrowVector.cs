@@ -36,12 +36,6 @@ namespace Agit.FortressCraft
 
             transform.position = transform.parent.position + pos;
         }
-
-        private void FixedUpdate()
-        {
-            
-        }
     }
-
 }
 

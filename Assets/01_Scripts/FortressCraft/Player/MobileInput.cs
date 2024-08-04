@@ -41,10 +41,12 @@ public class MobileInput : MonoBehaviour
 		joy.anchoredPosition = center;
 
 		current -= center;
-		if (current.magnitude > knob.rect.width / 2)
-			current = current.normalized * knob.rect.width / 2;
-		
-		knob.anchoredPosition = current;
+        // 노브가 조이스틱의 반지름을 넘어 30 더 갈 수 있도록 조정
+        float maxRadius = knob.rect.width / 2 + 30;
+        if (current.magnitude > maxRadius)
+            current = current.normalized * maxRadius;
+
+        knob.anchoredPosition = current;
 	}
 
 	public void SetLeft(bool active, Vector2 down, Vector2 current)
