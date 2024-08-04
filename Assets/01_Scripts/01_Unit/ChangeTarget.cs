@@ -27,8 +27,9 @@ namespace Agit.FortressCraft
         {
             IsAttackOn = true;
             Target = null;
+            OwnType = "";
             btns = GetComponentsInChildren<Button>();
-
+            Debug.Log("Change Target Start");
             foreach (Button btn in btns)
             {
                 if (btn.transform.name == buttonNameA)

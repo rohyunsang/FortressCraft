@@ -24,7 +24,7 @@ namespace Agit.FortressCraft
         }
 
         private const int MAX_LIVES = 100;
-		private const int MAX_HEALTH = 1000;
+		private float MAX_HEALTH;
 
 		//public float HP { get; set; }
 		public SpawnCastle _spawnCastle;
@@ -50,7 +50,9 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+		[Networked] public float Defense { get; set; }
 		public int level { get; set; }
+
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -84,6 +86,8 @@ namespace Agit.FortressCraft
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
+
+		public JobType Job { get; set; }
 
 		private Button attackBtn;
 		private Button skill1Btn;
@@ -125,6 +129,24 @@ namespace Agit.FortressCraft
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
 			level = 1;
+			Job = GameObject.Find("App").GetComponent<App>().jobType;
+			SetMaxHPByLevel(level, Job);
+		}
+
+		public void SetMaxHPByLevel(int level, JobType jobType)
+		{
+			MAX_HEALTH = GoogleSheetManager.GetCommanderData(level, jobType).HP;
+			Debug.Log("Max HP: " + MAX_HEALTH);
+		}
+
+		public void SetDefenseHPByLevel(int level, JobType jobType)
+		{
+			Defense = GoogleSheetManager.GetCommanderData(level, jobType).Defense;
+		}
+
+		public float GetNeedExpByLevel( int level, JobType jobType )
+        {
+			return GoogleSheetManager.GetCommanderData(level, jobType).NeedExp;
 		}
 
 		public override void InitNetworkState()
@@ -237,6 +259,30 @@ namespace Agit.FortressCraft
 			transform.localScale = scale;
         }
 
+		public void ExpCheck()
+        {
+			if (RewardManager.Instance != null)
+			{
+				float needExp = GetNeedExpByLevel(level, Job);
+				if (RewardManager.Instance.Exp >= needExp )
+				{
+					RewardManager.Instance.Exp -= needExp;
+					++level;
+					UpdateProperty();
+				}
+			}
+		}
+
+		public void UpdateProperty()
+        {
+			// HP
+			SetMaxHPByLevel(level, Job);
+			life = MAX_HEALTH;
+
+			// Defense
+			SetDefenseHPByLevel(level, Job);
+        }
+
 		public override void FixedUpdateNetwork()
 		{
 			if (attackBtn == null) UpdateBattleSetting();
@@ -253,15 +299,7 @@ namespace Agit.FortressCraft
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 
 			UpdateBtnColor();
-
-			if( RewardManager.Instance != null )
-            {
-				if( RewardManager.Instance.Exp >= 100 )
-                {
-					RewardManager.Instance.Exp -= 100;
-					++level;
-				}
-            }
+			ExpCheck();
 
 			if (InputController.fetchInput)
 			{
@@ -349,6 +387,7 @@ namespace Agit.FortressCraft
 			if (attackInputTimer.Expired(Runner))
 			{
 				archerFire.FireDirection = lastDir;
+				archerFire.SetDamageByLevel(level, Job);
 				//Debug.Log(lastDir);
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
@@ -360,6 +399,7 @@ namespace Agit.FortressCraft
 			if (skill1CoolTimer.Expired(Runner))
 			{
 				archerFire.FireDirection = lastDir;
+				archerFire.SetDamageByLevel(level, Job);
 				_netAnimator.Animator.SetTrigger("Skill1");
 				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
@@ -370,6 +410,7 @@ namespace Agit.FortressCraft
 			if (skill2CoolTimer.Expired(Runner))
 			{
 				_netAnimator.Animator.SetTrigger("Skill2");
+				archerFire.SetDamageByLevel(level, Job);
 				skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 		}
@@ -590,7 +631,7 @@ namespace Agit.FortressCraft
 			if (died) return;
 			if( bodyCollider.Damaged > 0.0f )
             {
-				life -= bodyCollider.Damaged;
+				life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
 				bodyCollider.Damaged = 0.0f;
 
 				if( life <= 0.0f )
