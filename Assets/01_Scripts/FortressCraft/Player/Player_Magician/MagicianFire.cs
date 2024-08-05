@@ -10,6 +10,8 @@ namespace Agit.FortressCraft
 	public class MagicianFire : NetworkBehaviour
     {
         [SerializeField] private NetworkObject spell;
+        [SerializeField] private Transform flare;
+        [SerializeField] private MagicianFlareAttackCollider magicianFlareAttackCollider;
         public Vector2 FireDirection { get; set; }
         public string OwnType { get; set; }
         [SerializeField] private float damage = 0.0f;
@@ -40,6 +42,14 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             if (OwnType == null) return;
+
+            magicianFlareAttackCollider.OwnType = OwnType;
+            magicianFlareAttackCollider.Damage = damage * 2;
+            Debug.Log("Damage? " + magicianFlareAttackCollider.Damage);
+
+            float angle = Mathf.Atan2(FireDirection.y, FireDirection.x) * Mathf.Rad2Deg;
+            Quaternion FireRotation = Quaternion.AngleAxis(angle - 90.0f, Vector3.forward);
+            flare.transform.parent.rotation = FireRotation;
         }
 
         public void FireSkill2()
