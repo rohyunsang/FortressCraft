@@ -21,6 +21,7 @@ namespace Agit.FortressCraft
         {
             //Debug.Log("Damage: " + damage);
             //Debug.Log("Fire!");
+            if (OwnType == null) return;
             NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
             no.transform.SetParent(null);
 
@@ -37,7 +38,8 @@ namespace Agit.FortressCraft
         {
             //Debug.Log("Damage: " + damage);
             // Debug.Log("Skill1");
-            for( int i = 1; i < 11; ++i )
+            if (OwnType == null) return;
+            for ( int i = 1; i < 11; ++i )
             {
                 NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
                 no.transform.SetParent(null);
@@ -59,6 +61,7 @@ namespace Agit.FortressCraft
         {
             //Debug.Log("Damage: " + damage);
             //Debug.Log("Skill2");
+            if (OwnType == null) return;
             float offset = 360.0f / (float)skill2ArrowCount;
             for( int i = 0; i < skill2ArrowCount; ++i )
             {

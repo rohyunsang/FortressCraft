@@ -83,6 +83,7 @@ namespace Agit.FortressCraft
 
 		private Vector2 lastDir = Vector2.left;
 		private ArcherFire archerFire;
+		private MagicianFire magicianFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
@@ -122,14 +123,15 @@ namespace Agit.FortressCraft
 
 		private void Awake()
 		{
+			Job = GameObject.Find("App").GetComponent<App>().jobType;
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
 			_netAnimator = GetComponent<NetworkMecanimAnimator>();
 			archerFire = GetComponentInChildren<ArcherFire>();
+			magicianFire = GetComponentInChildren<MagicianFire>();
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
 			level = 1;
-			Job = GameObject.Find("App").GetComponent<App>().jobType;
 			SetMaxHPByLevel(level, Job);
 		}
 
@@ -228,7 +230,15 @@ namespace Agit.FortressCraft
 				}
 
 				RPCSetType("Unit_" + OwnType);
-				archerFire.OwnType = OwnType;
+
+				if( Job == JobType.Archer )
+                {
+					archerFire.OwnType = OwnType;
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.OwnType = OwnType;
+                }
 			}
 		}
 
@@ -386,8 +396,16 @@ namespace Agit.FortressCraft
         {
 			if (attackInputTimer.Expired(Runner))
 			{
-				archerFire.FireDirection = lastDir;
-				archerFire.SetDamageByLevel(level, Job);
+				if( Job == JobType.Archer )
+                {
+					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.SetDamageByLevel(level, Job);
+                }
+				
 				//Debug.Log(lastDir);
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
@@ -398,10 +416,14 @@ namespace Agit.FortressCraft
         {
 			if (skill1CoolTimer.Expired(Runner))
 			{
-				archerFire.FireDirection = lastDir;
-				archerFire.SetDamageByLevel(level, Job);
+				if( Job == JobType.Archer )
+                {
+					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+				}
+				
 				_netAnimator.Animator.SetTrigger("Skill1");
-				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 		}
 
@@ -409,9 +431,12 @@ namespace Agit.FortressCraft
         {
 			if (skill2CoolTimer.Expired(Runner))
 			{
+				if( Job == JobType.Archer )
+                {
+					archerFire.SetDamageByLevel(level, Job);
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+				}
 				_netAnimator.Animator.SetTrigger("Skill2");
-				archerFire.SetDamageByLevel(level, Job);
-				skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 		}
 
