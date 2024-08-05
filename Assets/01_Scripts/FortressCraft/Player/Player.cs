@@ -105,6 +105,9 @@ namespace Agit.FortressCraft
 		[Networked] public bool IsDestroyCastle { get; set; }
 
 		public bool isBuildCastle;
+        JobType jobType;
+
+		public Vector2 previousAimDirection;
 
         public void ToggleReady()
 		{
@@ -166,11 +169,13 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-		}
+
+			jobType = FindObjectOfType<App>().GetComponent<App>().jobType;
+        }
 
         public void UpdateBattleSetting()
         {
-			if ( !UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle") ) return;
+			if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle") ) return;
 
 			GameObject bunttonObject = GameObject.Find("AttackBtnGroups");
 			
@@ -206,7 +211,8 @@ namespace Agit.FortressCraft
 				}
 
 				RPCSetType("Unit_" + OwnType);
-				archerFire.OwnType = OwnType;
+				if(jobType == JobType.Archer)
+					archerFire.OwnType = OwnType;
 			}
 		}
 
@@ -267,7 +273,9 @@ namespace Agit.FortressCraft
 			{
                 if (GetInput(out NetworkInputData input))
 				{
-					if( lastDir.x > 0.0f )
+					previousAimDirection = input.aimDirection.normalized;
+
+                    if ( lastDir.x > 0.0f )
                     {
 						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
 									transform.localScale.y, transform.localScale.z));
@@ -344,35 +352,53 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		public void Attack()
+		public void Attack()  // Archer
         {
 			if (attackInputTimer.Expired(Runner))
 			{
-				archerFire.FireDirection = lastDir;
-				//Debug.Log(lastDir);
+				if(jobType == JobType.Archer)
+					archerFire.FireDirection = lastDir;
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
 		}
 
-		public void Skill1()
+		public void Skill1()  // Archer
         {
-			if (skill1CoolTimer.Expired(Runner))
+			if (skill1CoolTimer.Expired(Runner) && jobType == JobType.Archer)
 			{
 				archerFire.FireDirection = lastDir;
 				_netAnimator.Animator.SetTrigger("Skill1");
 				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
-		}
+			else if(skill1CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
+			{
+				Debug.Log("스킬 버튼 작동함?");
+                _netAnimator.Animator.SetTrigger("Skill1");
+				_cc.isCharge = true;
+                skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+				Invoke("isChargeFalse", 0.15f);
+            }
+        }
+		private void isChargeFalse()
+		{
+			_cc.isCharge = false;
+        }
 
-		public void Skill2()
+
+
+		public void Skill2() // Archer
         {
-			if (skill2CoolTimer.Expired(Runner))
+            if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Archer)
 			{
 				_netAnimator.Animator.SetTrigger("Skill2");
 				skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
-		}
+            else if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
+            {
+
+            }
+        }
 
         /// <summary>
         /// Render is the Fusion equivalent of Unity's Update() and unlike FixedUpdateNetwork which is very different from FixedUpdate,

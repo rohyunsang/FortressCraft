@@ -61,9 +61,6 @@ namespace Agit.FortressCraft
 			OnConnectionStatusUpdate(null, FusionLauncher.ConnectionStatus.Disconnected, "");
 
 			StartCoroutine(GoogleSheetManager.Loader());
-
-			// Test 
-			// Debug.Log("6" + PlayerNameValidator.IsValidName("나나나 나 "));
         }
 
 		public void SetJob(string jobType)   // using Button ;

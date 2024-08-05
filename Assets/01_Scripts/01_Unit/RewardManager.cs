@@ -15,6 +15,6 @@ public class RewardManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log("Gold: " + Gold + " Exp: " + Exp);
+        // Debug.Log("Gold: " + Gold + " Exp: " + Exp);
     }
 }
