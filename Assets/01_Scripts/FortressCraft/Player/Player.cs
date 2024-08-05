@@ -123,7 +123,7 @@ namespace Agit.FortressCraft
 
 		private void Awake()
 		{
-			Job = GameObject.Find("App").GetComponent<App>().jobType;
+			//Job = GameObject.Find("App").GetComponent<App>().jobType;
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
 			_netAnimator = GetComponent<NetworkMecanimAnimator>();
@@ -132,6 +132,10 @@ namespace Agit.FortressCraft
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
 			level = 1;
+
+			if (archerFire != null) Job = JobType.Archer;
+			else if (magicianFire != null) Job = JobType.Magician;
+
 			SetMaxHPByLevel(level, Job);
 		}
 
