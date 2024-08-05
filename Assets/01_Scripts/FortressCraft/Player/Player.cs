@@ -442,6 +442,12 @@ namespace Agit.FortressCraft
 					archerFire.SetDamageByLevel(level, Job);
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.SetDamageByLevel(level, Job);
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
+
 				_netAnimator.Animator.SetTrigger("Skill2");
 			}
 		}

@@ -4687,6 +4687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spell: {fileID: 8967533905942532009, guid: ee51896699ba34b91936d9c6d96dbda4, type: 3}
+  twinkle: {fileID: 1241346971546189052, guid: bf2dbe01a0acd4d0bb8d9da24a3d4e90, type: 3}
   flare: {fileID: 6138173787998703216}
   magicianFlareAttackCollider: {fileID: 2930865251700202463}
   damage: 0

@@ -10,6 +10,7 @@ namespace Agit.FortressCraft
 	public class MagicianFire : NetworkBehaviour
     {
         [SerializeField] private NetworkObject spell;
+        [SerializeField] private NetworkObject twinkle;
         [SerializeField] private Transform flare;
         [SerializeField] private MagicianFlareAttackCollider magicianFlareAttackCollider;
         public Vector2 FireDirection { get; set; }
@@ -55,6 +56,13 @@ namespace Agit.FortressCraft
         public void FireSkill2()
         {
             if (OwnType == null) return;
+
+            NetworkObject no = Runner.Spawn(twinkle, transform.position, Quaternion.Euler(0.0f, 90.0f, 90.0f));
+            no.transform.SetParent(null);
+
+            MagicianTwinkleAttackCollider magicAttackCollider = no.GetComponentInChildren<MagicianTwinkleAttackCollider>();
+            magicAttackCollider.Damage = damage;
+            magicAttackCollider.OwnType = OwnType;
         }
 
         public void SetDamageByLevel(int level, JobType jobType)
