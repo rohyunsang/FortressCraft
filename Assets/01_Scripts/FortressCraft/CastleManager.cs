@@ -25,6 +25,8 @@ namespace Agit.FortressCraft
         public Castle C_Castle;
         public Castle D_Castle;
 
+        private float MaxHP = 1500.0f;
+
         private ChangeDetector changes;
 
         public int team_id { get; set; }
@@ -37,10 +39,10 @@ namespace Agit.FortressCraft
 
             if (HasStateAuthority)
             {
-                A_CurrentHP = 50f;
-                B_CurrentHP = 50f;
-                C_CurrentHP = 50f;
-                D_CurrentHP = 50f;
+                A_CurrentHP = MaxHP;
+                B_CurrentHP = MaxHP;
+                C_CurrentHP = MaxHP;
+                D_CurrentHP = MaxHP;
                 
                 DestroyCnt = 0;
 
@@ -155,7 +157,7 @@ namespace Agit.FortressCraft
         {
             if (castle != null && castle.HpBarSlider != null)
             {
-                castle.HpBarSlider.value = currentHp / 50f;
+                castle.HpBarSlider.value = currentHp / MaxHP;
             }
         }
     }

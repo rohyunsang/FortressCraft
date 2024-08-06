@@ -20,6 +20,7 @@ namespace Agit.FortressCraft
         {
             HP = player.life;
             HpBarSlider.value = HP / getMaxHPByLevel(player.level, player.Job);
+            Debug.Log("HP? " + HP + " , " + getMaxHPByLevel(player.level, player.Job));
         }
 
         public float getMaxHPByLevel(int level, JobType jobType)

@@ -178,27 +178,27 @@ namespace Agit.FortressCraft
                 {
                     unitObj.transform.position = transform.position;
 
-                    NormalUnitRigidBodyMovement normalUnitRigidBodyMovement = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
+                    NormalUnitRigidBodyMovement unit = unitObj.GetComponent<NormalUnitRigidBodyMovement>();
                     NetworkMecanimAnimator animator = unitObj.GetComponent<NetworkMecanimAnimator>();
-                    normalUnitRigidBodyMovement.TargetString = Target;
-                    normalUnitRigidBodyMovement.AttackEnabled = AttackEnabled;
-                    normalUnitRigidBodyMovement.Damage = Damage;
-                    normalUnitRigidBodyMovement.Defense = Defense;
-                    normalUnitRigidBodyMovement.Spawner = this;
-                    normalUnitRigidBodyMovement.OwnType = SpawnerType;
-                    normalUnitRigidBodyMovement.HP = 50.0f;
-                    RPCUnitSetting(normalUnitRigidBodyMovement);
+                    unit.TargetString = Target;
+                    unit.AttackEnabled = AttackEnabled;
+                    unit.Damage = Damage;
+                    unit.Defense = Defense;
+                    unit.Spawner = this;
+                    unit.OwnType = SpawnerType;
+                    unit.HP = GoogleSheetManager.GetUnitData(1).HP;
+                    RPCUnitSetting(unit);
                     animator.Animator.Play("IdleState");
-                    normalUnitRigidBodyMovement.Initializing();
+                    unit.Initializing();
 
                     float range = 0.4f;
                     Vector3 offset = new Vector3(Random.Range(-range, range),
                                                  Random.Range(-range, range),
                                                  0.0f);
 
-                    normalUnitRigidBodyMovement.RPCSetPos(transform.position + offset);
+                    unit.RPCSetPos(transform.position + offset);
 
-                    normalUnitRigidBodyMovement.RPCSetActive();
+                    unit.RPCSetActive();
                     ++NowUnitCount;
                 }
                 else

@@ -247,7 +247,13 @@ namespace Agit.FortressCraft
 			transform.Find("UnitRoot").gameObject.tag = tag;
 		}
 
-        public override void Despawned(NetworkRunner runner, bool hasState)
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetLevel(int level)
+		{
+			this.level = level;
+		}
+
+		public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
@@ -277,6 +283,7 @@ namespace Agit.FortressCraft
 				{
 					RewardManager.Instance.Exp -= needExp;
 					++level;
+					RPCSetLevel(level);
 					UpdateProperty();
 				}
 			}
