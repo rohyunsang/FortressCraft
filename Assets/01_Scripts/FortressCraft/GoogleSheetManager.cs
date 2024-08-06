@@ -126,7 +126,7 @@ namespace Agit.FortressCraft {
         }
         private static int ParseInt(string input)
         {
-                                    if (int.TryParse(input, out int result))
+            if (int.TryParse(input, out int result))
             {
                 return result;
             }

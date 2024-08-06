@@ -51,7 +51,8 @@ namespace Agit.FortressCraft
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
 		[Networked] public float Defense { get; set; }
-		public int level { get; set; }
+		[Networked] public float AttackDamage { get; set; }
+        public int level { get; set; }
 
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
@@ -140,6 +141,11 @@ namespace Agit.FortressCraft
 			Debug.Log("Max HP: " + MAX_HEALTH);
 		}
 
+		public void SetAttack(int level, JobType jobType)
+		{
+            AttackDamage = GoogleSheetManager.GetCommanderData(level,jobType).Attack;
+        }
+
 		public void SetDefenseHPByLevel(int level, JobType jobType)
 		{
 			Defense = GoogleSheetManager.GetCommanderData(level, jobType).Defense;
@@ -162,7 +168,7 @@ namespace Agit.FortressCraft
 		{
 			base.Spawned();
 
-			DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
@@ -189,6 +195,11 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+
+			if (Job == JobType.Warrior)
+			{
+
+			}
         }
 
         public void UpdateBattleSetting()
@@ -407,6 +418,10 @@ namespace Agit.FortressCraft
                 {
 					magicianFire.SetDamageByLevel(level, Job);
                 }
+				else if( Job == JobType.Warrior)
+				{
+					SetAttack(level, Job);
+				}
 				
 				//Debug.Log(lastDir);
 
@@ -438,7 +453,10 @@ namespace Agit.FortressCraft
 
                 if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
                 {
-                    Debug.Log("스킬 버튼 작동함?");
+					GameObject skillCollder = FindObjectOfType<WarriorChargeCollider>(true).gameObject;
+					skillCollder.SetActive(true);
+					skillCollder.GetComponent<WarriorChargeCollider>().Damage = AttackDamage * 2f;
+
                     _netAnimator.Animator.SetTrigger("Skill1");
                     _cc.isCharge = true;
                     skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
@@ -449,6 +467,8 @@ namespace Agit.FortressCraft
 		private void isChargeFalse()
 		{
 			_cc.isCharge = false;
+
+			FindObjectOfType<WarriorChargeCollider>().gameObject.SetActive(false);
         }
 
 		public void Skill2() // Archer
