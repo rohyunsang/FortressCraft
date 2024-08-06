@@ -30,7 +30,8 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼을 누르면
+       
+        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2) // 마우스 왼쪽 버튼을 누르면, 오른쪽 화면에서만.
         {
             dragOrigin = Input.mousePosition; // 드래그 시작 위치 저장
             isDragging = true;
