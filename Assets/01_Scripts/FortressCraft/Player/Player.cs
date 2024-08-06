@@ -444,15 +444,12 @@ namespace Agit.FortressCraft
                     skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
                     Invoke("isChargeFalse", 0.15f);
                 }
-
             }
         }
 		private void isChargeFalse()
 		{
 			_cc.isCharge = false;
         }
-
-
 
 		public void Skill2() // Archer
         {
