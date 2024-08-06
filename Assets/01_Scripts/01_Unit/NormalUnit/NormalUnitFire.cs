@@ -15,7 +15,7 @@ namespace Agit.FortressCraft
         public string SecondTargetUnit { get; set; }
         private NormalUnitRigidBodyMovement normalUnit;
         public NetworkObjectPoolManager poolManager;
-
+        
         public NetworkPrefabId id;
 
         private void Awake()

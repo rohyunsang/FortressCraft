@@ -12,7 +12,7 @@ namespace Agit.FortressCraft {
         public static List<CommanderData> commanderDatas = new List<CommanderData>();
         public static List<UnitData> unitDatas = new List<UnitData>();
 
-        // 링크 뒤 edit ~ 부분을 빼고 export?format=tsv 추가하기
+        // ???? ?? edit ~ ?????? ???? export?format=tsv ????????
 
         private static readonly List<string> _urls = new List<string>
         {
@@ -48,10 +48,10 @@ namespace Agit.FortressCraft {
         private static void ParseCommanderData(string data)
         {
             string[] lines = data.Split('\n');
-            for (int i = 1; i < lines.Length; i++) // 첫 번째 행은 제목 행으로 생략
+            for (int i = 1; i < lines.Length; i++) // ?? ???? ???? ???? ?????? ????
             {
                 string[] fields = lines[i].Split('\t');
-                if (fields.Length < 5) // 필요한 필드 수 미달 시 로그 출력 및 처리 중단
+                if (fields.Length < 5) // ?????? ???? ?? ???? ?? ???? ???? ?? ???? ????
                 {
                     Debug.LogError($"Line {i} has insufficient fields: {fields.Length} fields found.");
                     continue;
@@ -87,10 +87,10 @@ namespace Agit.FortressCraft {
         private static void ParseUnitData(string data)
         {
             string[] lines = data.Split('\n');
-            for (int i = 1; i < lines.Length; i++) // 첫 번째 행은 제목 행으로 생략
+            for (int i = 1; i < lines.Length; i++) // ?? ???? ???? ???? ?????? ????
             {
                 string[] fields = lines[i].Split('\t');
-                if (fields.Length < 11) // 필요한 필드 수 미달 시 로그 출력 및 처리 중단
+                if (fields.Length < 11) // ?????? ???? ?? ???? ?? ???? ???? ?? ???? ????
                 {
                     Debug.LogError($"Line {i} has insufficient fields: {fields.Length} fields found.");
                     continue;
@@ -126,7 +126,7 @@ namespace Agit.FortressCraft {
         }
         private static int ParseInt(string input)
         {
-            if (int.TryParse(input, out int result))
+                                    if (int.TryParse(input, out int result))
             {
                 return result;
             }
@@ -140,6 +140,31 @@ namespace Agit.FortressCraft {
                 return result;
             }
             throw new FormatException($"Unable to parse '{input}' as float.");
+        }
+
+        public static CommanderData GetCommanderData(int level, JobType jobType)
+        {
+            int offset = 0;
+
+            switch (jobType)
+            {
+                case JobType.Warrior:
+                    offset = -1;
+                    break;
+                case JobType.Magician:
+                    offset = 14;
+                    break;
+                case JobType.Archer:
+                    offset = 29;
+                    break;
+            }
+
+            return GoogleSheetManager.commanderDatas[level + offset];
+        }
+
+        public static UnitData GetUnitData(int level)
+        {
+            return GoogleSheetManager.unitDatas[level - 1];
         }
     }
 

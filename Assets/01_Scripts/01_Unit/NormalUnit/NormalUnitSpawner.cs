@@ -99,7 +99,7 @@ namespace Agit.FortressCraft
             //Debug.Log("Spawner Type: " + SpawnerType);
 
             ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
-            if (changeTarget.OwnType == null)
+            if (changeTarget.OwnType == "")
             {
                 changeTarget.OwnType = SpawnerType;
                 string targetBtnName = "";
@@ -186,7 +186,7 @@ namespace Agit.FortressCraft
                     normalUnitRigidBodyMovement.Defense = Defense;
                     normalUnitRigidBodyMovement.Spawner = this;
                     normalUnitRigidBodyMovement.OwnType = SpawnerType;
-                    normalUnitRigidBodyMovement.HP = 100.0f;
+                    normalUnitRigidBodyMovement.HP = 50.0f;
                     RPCUnitSetting(normalUnitRigidBodyMovement);
                     animator.Animator.Play("IdleState");
                     normalUnitRigidBodyMovement.Initializing();

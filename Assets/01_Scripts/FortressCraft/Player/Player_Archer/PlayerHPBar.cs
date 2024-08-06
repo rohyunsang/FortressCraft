@@ -19,7 +19,12 @@ namespace Agit.FortressCraft
         private void FixedUpdate()
         {
             HP = player.life;
-            HpBarSlider.value = HP / 1000.0f;
+            HpBarSlider.value = HP / getMaxHPByLevel(player.level, player.Job);
+        }
+
+        public float getMaxHPByLevel(int level, JobType jobType)
+        {
+            return GoogleSheetManager.GetCommanderData(level, jobType).HP;
         }
     }
 }

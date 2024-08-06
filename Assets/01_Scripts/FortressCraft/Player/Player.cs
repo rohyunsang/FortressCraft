@@ -24,7 +24,7 @@ namespace Agit.FortressCraft
         }
 
         private const int MAX_LIVES = 100;
-		private const int MAX_HEALTH = 1000;
+		private float MAX_HEALTH;
 
 		//public float HP { get; set; }
 		public SpawnCastle _spawnCastle;
@@ -50,7 +50,9 @@ namespace Agit.FortressCraft
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
+		[Networked] public float Defense { get; set; }
 		public int level { get; set; }
+
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
 		public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -81,9 +83,12 @@ namespace Agit.FortressCraft
 
 		private Vector2 lastDir = Vector2.left;
 		private ArcherFire archerFire;
+		private MagicianFire magicianFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
 		private bool died = false;
+
+		public JobType Job { get; set; }
 
 		private Button attackBtn;
 		private Button skill1Btn;
@@ -121,13 +126,36 @@ namespace Agit.FortressCraft
 
 		private void Awake()
 		{
+			//Job = GameObject.Find("App").GetComponent<App>().jobType;
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
 			_netAnimator = GetComponent<NetworkMecanimAnimator>();
 			archerFire = GetComponentInChildren<ArcherFire>();
+			magicianFire = GetComponentInChildren<MagicianFire>();
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
 			level = 1;
+
+			if (archerFire != null) Job = JobType.Archer;
+			else if (magicianFire != null) Job = JobType.Magician;
+
+			SetMaxHPByLevel(level, Job);
+		}
+
+		public void SetMaxHPByLevel(int level, JobType jobType)
+		{
+			MAX_HEALTH = GoogleSheetManager.GetCommanderData(level, jobType).HP;
+			Debug.Log("Max HP: " + MAX_HEALTH);
+		}
+
+		public void SetDefenseHPByLevel(int level, JobType jobType)
+		{
+			Defense = GoogleSheetManager.GetCommanderData(level, jobType).Defense;
+		}
+
+		public float GetNeedExpByLevel( int level, JobType jobType )
+        {
+			return GoogleSheetManager.GetCommanderData(level, jobType).NeedExp;
 		}
 
 		public override void InitNetworkState()
@@ -211,8 +239,17 @@ namespace Agit.FortressCraft
 				}
 
 				RPCSetType("Unit_" + OwnType);
-				if(jobType == JobType.Archer)
+
+				if( Job == JobType.Archer )
+                {
 					archerFire.OwnType = OwnType;
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.OwnType = OwnType;
+                }
+        
+
 			}
 		}
 
@@ -243,6 +280,30 @@ namespace Agit.FortressCraft
 			transform.localScale = scale;
         }
 
+		public void ExpCheck()
+        {
+			if (RewardManager.Instance != null)
+			{
+				float needExp = GetNeedExpByLevel(level, Job);
+				if (RewardManager.Instance.Exp >= needExp )
+				{
+					RewardManager.Instance.Exp -= needExp;
+					++level;
+					UpdateProperty();
+				}
+			}
+		}
+
+		public void UpdateProperty()
+        {
+			// HP
+			SetMaxHPByLevel(level, Job);
+			life = MAX_HEALTH;
+
+			// Defense
+			SetDefenseHPByLevel(level, Job);
+        }
+
 		public override void FixedUpdateNetwork()
 		{
 			if (attackBtn == null) UpdateBattleSetting();
@@ -259,15 +320,7 @@ namespace Agit.FortressCraft
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 
 			UpdateBtnColor();
-
-			if( RewardManager.Instance != null )
-            {
-				if( RewardManager.Instance.Exp >= 100 )
-                {
-					RewardManager.Instance.Exp -= 100;
-					++level;
-				}
-            }
+			ExpCheck();
 
 			if (InputController.fetchInput)
 			{
@@ -356,8 +409,18 @@ namespace Agit.FortressCraft
         {
 			if (attackInputTimer.Expired(Runner))
 			{
-				if(jobType == JobType.Archer)
+				if( Job == JobType.Archer )
+                {
 					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.SetDamageByLevel(level, Job);
+                }
+				
+				//Debug.Log(lastDir);
+
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
@@ -367,9 +430,20 @@ namespace Agit.FortressCraft
         {
 			if (skill1CoolTimer.Expired(Runner) && jobType == JobType.Archer)
 			{
-				archerFire.FireDirection = lastDir;
+				if( Job == JobType.Archer )
+                {
+					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.FireDirection = lastDir;
+					magicianFire.SetDamageByLevel(level, Job);
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+				}
+				
 				_netAnimator.Animator.SetTrigger("Skill1");
-				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
 			else if(skill1CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
 			{
@@ -391,8 +465,18 @@ namespace Agit.FortressCraft
         {
             if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Archer)
 			{
+				if( Job == JobType.Archer )
+                {
+					archerFire.SetDamageByLevel(level, Job);
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+				}
+				else if( Job == JobType.Magician )
+                {
+					magicianFire.SetDamageByLevel(level, Job);
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
+
 				_netAnimator.Animator.SetTrigger("Skill2");
-				skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 			}
             else if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
             {
@@ -616,7 +700,7 @@ namespace Agit.FortressCraft
 			if (died) return;
 			if( bodyCollider.Damaged > 0.0f )
             {
-				life -= bodyCollider.Damaged;
+				life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
 				bodyCollider.Damaged = 0.0f;
 
 				if( life <= 0.0f )

@@ -7,10 +7,7 @@ namespace Agit.FortressCraft
 {
     public class ArcherArrowAttackCollider : AttackCollider
     {
-        public override void Spawned()
-        {
-            base.Spawned();
-        }
+        
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -27,7 +24,7 @@ namespace Agit.FortressCraft
                     if ( collision.transform.parent.TryGetComponent<NormalUnitRigidBodyMovement>(
                         out NormalUnitRigidBodyMovement normal ) )
                     {
-                        if( normal.HP - Damage <= 0.0f && !normal.NoReward )
+                        if( normal.HP - Damage * normal.Defense <= 0.0f && !normal.NoReward )
                         {
                             normal.NoReward = true;
                             RewardManager.Instance.Gold += normal.gold;

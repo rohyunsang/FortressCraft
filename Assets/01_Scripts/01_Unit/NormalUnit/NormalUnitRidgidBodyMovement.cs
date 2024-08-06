@@ -23,7 +23,7 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
         public bool NoReward { get; set; }
         public int gold = 10;
-        public int exp = 10;
+        public float exp = 10;
 
         private readonly static int animAttackBow =
             Animator.StringToHash("Base Layer.AttackState");
@@ -152,7 +152,6 @@ namespace Agit.FortressCraft
             }
 
             Initializing();
-            // Debug.Log("Unit Attack: " + Damage);
         }
 
 
@@ -325,7 +324,7 @@ namespace Agit.FortressCraft
         {
             if (bodyCollider.Damaged > 0.0f)
             {
-                HP -= Defense * bodyCollider.Damaged;
+                HP -= ( 1 - 0.1f * Defense ) * bodyCollider.Damaged;
                 RPCSyncHP(HP);
                 bodyCollider.Damaged = 0.0f;
                 _netAnimator.Animator.SetTrigger("Damaged");

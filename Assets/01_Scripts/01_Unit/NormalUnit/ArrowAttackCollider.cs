@@ -24,7 +24,7 @@ namespace Agit.FortressCraft
                         out NormalUnitRigidBodyMovement normal))
                     {
                         Debug.Log("Hit! , " + normal.HP + ", "+ Damage);
-                        if (normal.HP - Damage <= 0.0f && !normal.NoReward)
+                        if (normal.HP - Damage * normal.Defense <= 0.0f && !normal.NoReward)
                         {
                             normal.NoReward = true;
                             RewardManager.Instance.Gold += normal.gold;
