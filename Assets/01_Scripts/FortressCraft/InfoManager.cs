@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,26 +9,26 @@ public class InfoManager : MonoBehaviour
     public List<string> infoTexts = new List<string>();
 
     private int currentTextIndex = 0;
-    private float textChangeInterval = 7.0f; // ÅØ½ºÆ® º¯°æ °£°İ (ÃÊ)
-    private float lastTextChangeTime; // ¸¶Áö¸·À¸·Î ÅØ½ºÆ® º¯°æÇÑ ½Ã°¢
+    private float textChangeInterval = 7.0f; // í…ìŠ¤íŠ¸ ë³€ê²½ ê°„ê²© (ì´ˆ)
+    private float lastTextChangeTime; // ë§ˆì§€ë§‰ìœ¼ë¡œ í…ìŠ¤íŠ¸ ë³€ê²½í•œ ì‹œê°
 
     public void Awake()
     {
-        infoTexts.Add("Á÷¾÷Àº Àü»ç, ±Ã¼ö, ¸¶¹ı»ç·Î ÀÌ·ç¾îÁ® ÀÖ½À´Ï´Ù.");
-        infoTexts.Add("Á¡·É °¡´É Áö¿ªÀ» Á¡·ÉÇØ ¿µÅä¸¦ È®ÀåÇÏ¼¼¿ä.");
-        infoTexts.Add("4¸íÀÇ ÇÃ·¹ÀÌ¾î°¡ ÀÔÀåÇÏ¸é °ÔÀÓÀ» ½ÃÀÛÇÒ ¼ö ÀÖ½À´Ï´Ù.");
-        infoTexts.Add("»ó´ëÀÇ Á¡·ÉÁö¿ªÀ» ¸ğµÎ ÆÄ±«ÇÏ¸é °ÔÀÓ¿¡¼­ ½Â¸®ÇÕ´Ï´Ù.");
+        infoTexts.Add("ì§ì—…ì€ ì „ì‚¬, ê¶ìˆ˜, ë§ˆë²•ì‚¬ë¡œ ì´ë£¨ì–´ì ¸ ìˆìŠµë‹ˆë‹¤.");
+        infoTexts.Add("ì ë ¹ ê°€ëŠ¥ ì§€ì—­ì„ ì ë ¹í•´ ì˜í† ë¥¼ í™•ì¥í•˜ì„¸ìš”.");
+        infoTexts.Add("4ëª…ì˜ í”Œë ˆì´ì–´ê°€ ì…ì¥í•˜ë©´ ê²Œì„ì„ ì‹œì‘í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.");
+        infoTexts.Add("ìƒëŒ€ì˜ ì ë ¹ì§€ì—­ì„ ëª¨ë‘ íŒŒê´´í•˜ë©´ ê²Œì„ì—ì„œ ìŠ¹ë¦¬í•©ë‹ˆë‹¤.");
 
-        lastTextChangeTime = Time.time; // ÃÊ±âÈ­
-        UpdateText(); // ÃÖÃÊ ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
+        lastTextChangeTime = Time.time; // ì´ˆê¸°í™”
+        UpdateText(); // ìµœì´ˆ í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
     }
 
     void Update()
     {
         if (Time.time - lastTextChangeTime >= textChangeInterval)
         {
-            UpdateText(); // ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
-            lastTextChangeTime = Time.time; // ½Ã°£ ¾÷µ¥ÀÌÆ®
+            UpdateText(); // í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+            lastTextChangeTime = Time.time; // ì‹œê°„ ì—…ë°ì´íŠ¸
         }
     }
 
@@ -36,8 +36,8 @@ public class InfoManager : MonoBehaviour
     {
         if (infoTexts.Count > 0)
         {
-            infoText.text = infoTexts[currentTextIndex]; // ÇöÀç ÀÎµ¦½ºÀÇ ÅØ½ºÆ®¸¦ UI¿¡ ¼³Á¤
-            currentTextIndex = (currentTextIndex + 1) % infoTexts.Count; // ´ÙÀ½ ÅØ½ºÆ® ÀÎµ¦½º·Î ÀÌµ¿
+            infoText.text = infoTexts[currentTextIndex]; // í˜„ì¬ ì¸ë±ìŠ¤ì˜ í…ìŠ¤íŠ¸ë¥¼ UIì— ì„¤ì •
+            currentTextIndex = (currentTextIndex + 1) % infoTexts.Count; // ë‹¤ìŒ í…ìŠ¤íŠ¸ ì¸ë±ìŠ¤ë¡œ ì´ë™
         }
     }
 }
