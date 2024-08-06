@@ -51,9 +51,12 @@ namespace Fusion
         public float braking = 10.0f;
         public float maxSpeed = 2.0f;
         public float rotationSpeed = 15.0f;
+        private float chargePower = 7.5f;
+        public bool isCharge = false;
 
         Tick _initial;
         public CharacterController _controller;
+
 
         public Vector3 Velocity
         {
@@ -74,21 +77,21 @@ namespace Fusion
             _controller.enabled = true;
         }
 
-
-        public void Jump(bool ignoreGrounded = false, float? overrideImpulse = null)
+        /*
+        public void Charge(Vector3 direction)
         {
-            if (Data.Grounded || ignoreGrounded)
-            {
-                var newVel = Data.Velocity;
-                newVel.y += overrideImpulse ?? jumpImpulse;
-                Data.Velocity = newVel;
-            }
+            var deltaTime = Runner.DeltaTime;
+            var previousPos = transform.position;
+
+            _controller.Move(direction * 10f * deltaTime);
+            Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
         }
+        */
 
         public void Move(Vector3 direction)
         {
             // Debug.Log("NetworkCharacterController Move");
-            Debug.Log(direction);
+            // Debug.Log(direction);
             var deltaTime = Runner.DeltaTime;
             var previousPos = transform.position;
             var moveVelocity = Data.Velocity;
@@ -105,7 +108,6 @@ namespace Fusion
             horizontalVel.y = moveVelocity.y;
 
 
-
             if (direction == default)
             {
                 horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
@@ -119,7 +121,15 @@ namespace Fusion
             moveVelocity.x = horizontalVel.x;
             moveVelocity.y = horizontalVel.y;
 
-            _controller.Move(direction * 2 * deltaTime);
+            if (isCharge)
+            {
+                _controller.Move(direction * chargePower * deltaTime);
+            }
+            else
+            {
+                _controller.Move(direction * 2f * deltaTime);
+            }
+
 
             Data.Velocity = (transform.position - previousPos) * Runner.TickRate;
             Data.Grounded = _controller.isGrounded;
