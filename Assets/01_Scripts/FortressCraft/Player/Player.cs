@@ -110,23 +110,11 @@ namespace Agit.FortressCraft
 		[Networked] public bool IsDestroyCastle { get; set; }
 
 		public bool isBuildCastle;
-        JobType jobType;
 
 		public Vector2 previousAimDirection;
 
-        public void ToggleReady()
-		{
-			ready = !ready;
-		}
-
-		public void ResetReady()
-		{
-			ready = false;
-		}
-
 		private void Awake()
 		{
-			//Job = GameObject.Find("App").GetComponent<App>().jobType;
 			_cc = GetComponent<NetworkCharacterController>();
 			_collider = GetComponentInChildren<Collider>();
 			_netAnimator = GetComponent<NetworkMecanimAnimator>();
@@ -138,6 +126,10 @@ namespace Agit.FortressCraft
 
 			if (archerFire != null) Job = JobType.Archer;
 			else if (magicianFire != null) Job = JobType.Magician;
+			else
+			{
+				Job = JobType.Warrior;
+			}
 
 			SetMaxHPByLevel(level, Job);
 		}
@@ -197,8 +189,6 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-
-			jobType = FindObjectOfType<App>().GetComponent<App>().jobType;
         }
 
         public void UpdateBattleSetting()
@@ -248,8 +238,6 @@ namespace Agit.FortressCraft
                 {
 					magicianFire.OwnType = OwnType;
                 }
-        
-
 			}
 		}
 
@@ -320,6 +308,7 @@ namespace Agit.FortressCraft
 			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
 
 			UpdateBtnColor();
+
 			ExpCheck();
 
 			if (InputController.fetchInput)
@@ -428,7 +417,7 @@ namespace Agit.FortressCraft
 
 		public void Skill1()  // Archer
         {
-			if (skill1CoolTimer.Expired(Runner) && jobType == JobType.Archer)
+			if (skill1CoolTimer.Expired(Runner))
 			{
 				if( Job == JobType.Archer )
                 {
@@ -438,20 +427,24 @@ namespace Agit.FortressCraft
 				}
 				else if( Job == JobType.Magician )
                 {
+					Debug.Log("isRUMN?)");
+
 					magicianFire.FireDirection = lastDir;
 					magicianFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 				}
 				
 				_netAnimator.Animator.SetTrigger("Skill1");
-			}
-			else if(skill1CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
-			{
-				Debug.Log("스킬 버튼 작동함?");
-                _netAnimator.Animator.SetTrigger("Skill1");
-				_cc.isCharge = true;
-                skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-				Invoke("isChargeFalse", 0.15f);
+
+                if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+                {
+                    Debug.Log("스킬 버튼 작동함?");
+                    _netAnimator.Animator.SetTrigger("Skill1");
+                    _cc.isCharge = true;
+                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+                    Invoke("isChargeFalse", 0.15f);
+                }
+
             }
         }
 		private void isChargeFalse()
@@ -463,7 +456,7 @@ namespace Agit.FortressCraft
 
 		public void Skill2() // Archer
         {
-            if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Archer)
+            if (skill2CoolTimer.Expired(Runner))
 			{
 				if( Job == JobType.Archer )
                 {
@@ -477,11 +470,10 @@ namespace Agit.FortressCraft
                 }
 
 				_netAnimator.Animator.SetTrigger("Skill2");
-			}
-            else if (skill2CoolTimer.Expired(Runner) && jobType == JobType.Warrior)
-            {
 
-            }
+
+				// need Warrior
+			}
         }
 
         /// <summary>
