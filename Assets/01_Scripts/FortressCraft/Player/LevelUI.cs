@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Agit.FortressCraft
 {
     public class LevelUI : MonoBehaviour
     {
-        private Text levelText;
-        private Player player;
+        private TextMeshProUGUI levelText;
+        [SerializeField] private Player player;
 
         private void Awake()
         {
-            levelText = GetComponent<Text>();
-            player = transform.parent.parent.GetComponent<Player>();
+            levelText = GetComponent<TextMeshProUGUI>();
         }
 
         private void FixedUpdate()
