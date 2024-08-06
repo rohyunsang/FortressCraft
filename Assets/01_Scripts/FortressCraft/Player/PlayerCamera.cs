@@ -16,10 +16,10 @@ public class PlayerCamera : MonoBehaviour
     private bool isDragging = false; // 드래그 상태
 
     private Coroutine followPlayerCoroutine; // 카메라 Follow를 재개하기 위한 코루틴
-
+    NetworkObject thisObject;
     void Start()
     {
-        NetworkObject thisObject = GetComponent<NetworkObject>();
+        thisObject = GetComponent<NetworkObject>();
         if (thisObject.HasStateAuthority)
         {
             camera = GameObject.Find("Virtual Camera");
@@ -30,7 +30,8 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-       
+        if (!thisObject.HasStateAuthority) return;
+
         if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2) // 마우스 왼쪽 버튼을 누르면, 오른쪽 화면에서만.
         {
             dragOrigin = Input.mousePosition; // 드래그 시작 위치 저장
