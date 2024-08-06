@@ -13,6 +13,8 @@ namespace Agit.FortressCraft
 
         public Castle castle;
 
+        private float MaxHP = 1500.0f;
+
         private ChangeDetector changes;
 
         public int team_id { get; set; }
@@ -25,7 +27,7 @@ namespace Agit.FortressCraft
 
             if (HasStateAuthority)
             {
-                CurrentHP = 50f;
+                CurrentHP = MaxHP;
 
                 castle.Init(CurrentHP);
             }
@@ -51,7 +53,7 @@ namespace Agit.FortressCraft
             CurrentHP -= damage;
             if (CurrentHP <= 0)
             {
-                Debug.Log("´ÔÁ×À½");
+                Debug.Log("??????");
             }
         }
 
@@ -59,7 +61,7 @@ namespace Agit.FortressCraft
         {
             if (castle != null && castle.HpBarSlider != null)
             {
-                castle.HpBarSlider.value = currentHp / 50f;
+                castle.HpBarSlider.value = currentHp / MaxHP;
             }
         }
     }

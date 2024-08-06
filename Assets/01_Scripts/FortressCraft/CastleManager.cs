@@ -158,6 +158,7 @@ namespace Agit.FortressCraft
             if (castle != null && castle.HpBarSlider != null)
             {
                 castle.HpBarSlider.value = currentHp / MaxHP;
+                Debug.Log(currentHp);
             }
         }
     }

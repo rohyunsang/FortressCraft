@@ -19,6 +19,8 @@ namespace Agit.FortressCraft
                     return;
                 }
 
+                Debug.Log("Hit!");
+
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycollider))
                 {
                     if ( collision.transform.parent.TryGetComponent<NormalUnitRigidBodyMovement>(
