@@ -18,6 +18,7 @@ namespace Agit.FortressCraft
         public void RPCSetDamage(float damage)
         {
             Damaged = damage;
+            Debug.Log(transform.parent.name + ": " + damage);
         }
     }
 }

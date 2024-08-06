@@ -87,7 +87,9 @@ namespace Agit.FortressCraft
 		private MagicianFire magicianFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
-		private bool died = false;
+		[SerializeField] private WarriorWeaponCollider wairrorWeapon;
+		[SerializeField] private WarriorChargeCollider warriorChargeCollider;
+        private bool died = false;
 
 		public JobType Job { get; set; }
 
@@ -123,7 +125,7 @@ namespace Agit.FortressCraft
 			magicianFire = GetComponentInChildren<MagicianFire>();
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
-			level = 1;
+            level = 1;
 
 			if (archerFire != null) Job = JobType.Archer;
 			else if (magicianFire != null) Job = JobType.Magician;
@@ -131,8 +133,9 @@ namespace Agit.FortressCraft
 			{
 				Job = JobType.Warrior;
 			}
+			
 
-			SetMaxHPByLevel(level, Job);
+            SetMaxHPByLevel(level, Job);
 		}
 
 		public void SetMaxHPByLevel(int level, JobType jobType)
@@ -195,11 +198,6 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-
-			if (Job == JobType.Warrior)
-			{
-
-			}
         }
 
         public void UpdateBattleSetting()
@@ -249,7 +247,12 @@ namespace Agit.FortressCraft
                 {
 					magicianFire.OwnType = OwnType;
                 }
-			}
+				else if (Job == JobType.Warrior)
+                {
+                    wairrorWeapon.OwnType = OwnType;
+					warriorChargeCollider.OwnType = OwnType;
+                }
+            }
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
@@ -421,10 +424,9 @@ namespace Agit.FortressCraft
 				else if( Job == JobType.Warrior)
 				{
 					SetAttack(level, Job);
+					wairrorWeapon.Damage = AttackDamage;
 				}
 				
-				//Debug.Log(lastDir);
-
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
@@ -442,8 +444,6 @@ namespace Agit.FortressCraft
 				}
 				else if( Job == JobType.Magician )
                 {
-					Debug.Log("isRUMN?)");
-
 					magicianFire.FireDirection = lastDir;
 					magicianFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
@@ -453,25 +453,44 @@ namespace Agit.FortressCraft
 
                 if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
                 {
-					GameObject skillCollder = FindObjectOfType<WarriorChargeCollider>(true).gameObject;
-					skillCollder.SetActive(true);
-					skillCollder.GetComponent<WarriorChargeCollider>().Damage = AttackDamage * 2f;
+					RPC_ChargeStartCallback();
+
+                    warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
 
                     _netAnimator.Animator.SetTrigger("Skill1");
                     _cc.isCharge = true;
                     skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-                    Invoke("isChargeFalse", 0.15f);
+                    Invoke("ChargeFinishCallback", 0.15f);
                 }
             }
         }
-		private void isChargeFalse()
+
+		private void ChargeFinishCallback()
 		{
 			_cc.isCharge = false;
-
-			FindObjectOfType<WarriorChargeCollider>().gameObject.SetActive(false);
+			RPC_ChargeEndCallback();
         }
 
-		public void Skill2() // Archer
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_ChargeStartCallback()
+        {
+            wairrorWeapon.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.layer = LayerMask.NameToLayer("WarriorCharging");
+            warriorChargeCollider.gameObject.SetActive(true);
+        }
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPC_ChargeEndCallback()
+        {
+            wairrorWeapon.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            warriorChargeCollider.gameObject.SetActive(false);
+            gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+
+
+
+        public void Skill2() // Archer
         {
             if (skill2CoolTimer.Expired(Runner))
 			{

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 namespace Agit.FortressCraft
 {
-    public class WarriorChargeCollider : AttackCollider
+    public class WarriorWeaponCollider : AttackCollider
     {
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (OwnType == null) return;
@@ -29,11 +29,11 @@ namespace Agit.FortressCraft
                             RewardManager.Instance.Exp += unit.exp;
                         }
                     }
-                    bodycollider.RPCSetDamage(Damage * 2);
+                    bodycollider.RPCSetDamage(Damage);
                 }
-
             }
         }
     }
 }
+
 
