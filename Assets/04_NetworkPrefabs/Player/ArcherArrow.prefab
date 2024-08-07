@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2452885639213071737}
   - component: {fileID: 3158538489564204770}
   - component: {fileID: 3026148050930945407}
-  - component: {fileID: 4933910990928210708}
   - component: {fileID: 8141485208395208099}
   - component: {fileID: 3755286179555273714}
   - component: {fileID: 4894933982693379610}
@@ -104,18 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrowSpeed: 5
---- !u!114 &4933910990928210708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 964096301469327314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc1efc73a08d1407399f2585ff438d32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &8141485208395208099
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -159,7 +146,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82, y: 0.81}
+  m_Size: {x: 1.4, y: 1.4}
   m_EdgeRadius: 0
 --- !u!50 &3755286179555273714
 Rigidbody2D:
@@ -206,7 +193,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3026148050930945407}
-  - {fileID: 4933910990928210708}
   - {fileID: 4176844000210064690}
   - {fileID: 3981073563118731113}
 --- !u!114 &4176844000210064690

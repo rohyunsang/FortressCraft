@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Fusion;
+using FusionHelpers;
 
 namespace Agit.FortressCraft
 {
-    public class PlayerHPBar : MonoBehaviour
+    public class PlayerHPBar : NetworkBehaviour
     {
-        public float HP { get; set; }
+        [Networked] public float HP { get; set; }
         public Slider HpBarSlider;
         private Player player;
 
-        private void Awake()
+        public override void Spawned()
         {
             player = gameObject.GetComponent<Player>();
         }
 
-        private void FixedUpdate()
+        public void SetHPBar(float life)
         {
-            HP = player.life;
+            HP = life;
             HpBarSlider.value = HP / getMaxHPByLevel(player.level, player.Job);
         }
 

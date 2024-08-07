@@ -5,7 +5,7 @@ using Cinemachine;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
-using Unity.Jobs.LowLevel.Unsafe;
+using System.Collections;
 
 namespace Agit.FortressCraft
 {
@@ -15,16 +15,16 @@ namespace Agit.FortressCraft
 	[RequireComponent(typeof(NetworkCharacterController))]
 	public class Player : FusionPlayer
 	{
-        public enum Stage
-        {
-            New,
-            TeleportOut,
-            TeleportIn,
-            Active,
-            Dead
-        }
+		public enum Stage
+		{
+			New,
+			TeleportOut,
+			TeleportIn,
+			Active,
+			Dead
+		}
 
-        private const int MAX_LIVES = 100;
+		private const int MAX_LIVES = 100;
 		private float MAX_HEALTH;
 
 		//public float HP { get; set; }
@@ -33,13 +33,14 @@ namespace Agit.FortressCraft
 		[SerializeField] private TankTeleportInEffect _teleportIn;
 		[SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
 		[SerializeField] private float _respawnTime;
+		[SerializeField] private PlayerHPBar playerHPBar;
 
 		public struct DamageEvent : INetworkEvent
 		{
 			public Vector3 impulse;
 			public int damage;
 		}
-		
+
 		public struct PickupEvent : INetworkEvent
 		{
 			public int powerup;
@@ -97,19 +98,21 @@ namespace Agit.FortressCraft
 		private Button attackBtn;
 		private Button skill1Btn;
 		private Button skill2Btn;
-		Image[] skill1BtnImages;
-		Image[] skill2BtnImages;
+		private Image[] skill1BtnImages;
+		private Image[] skill2BtnImages;
+
+		private DarkFilter darkFilter;
 
 		public string OwnType { get; set; }
 
 		// Hit Info
 		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
-        [Networked] public NetworkString<_32> PlayerName { get; set; }
-        [SerializeField] TextMeshPro playerNameLabel;
+		[Networked] public NetworkString<_32> PlayerName { get; set; }
+		[SerializeField] TextMeshPro playerNameLabel;
 
-        [Networked] public NetworkString<_256> LastPublicChat { get; set; }
-        string currentChat = "";
+		[Networked] public NetworkString<_256> LastPublicChat { get; set; }
+		string currentChat = "";
 
 		[Networked] public bool IsDestroyCastle { get; set; }
 
@@ -154,8 +157,8 @@ namespace Agit.FortressCraft
 			Defense = GoogleSheetManager.GetCommanderData(level, jobType).Defense;
 		}
 
-		public float GetNeedExpByLevel( int level, JobType jobType )
-        {
+		public float GetNeedExpByLevel(int level, JobType jobType)
+		{
 			return GoogleSheetManager.GetCommanderData(level, jobType).NeedExp;
 		}
 
@@ -165,7 +168,7 @@ namespace Agit.FortressCraft
 			lives = MAX_LIVES;
 			life = MAX_HEALTH;
 			IsDestroyCastle = false;
-        }
+		}
 
 		public override void Spawned()
 		{
@@ -198,14 +201,16 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-        }
 
-        public void UpdateBattleSetting()
-        {
-			if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle") ) return;
+			StartCoroutine(AutoHeal());
+		}
+
+		public void UpdateBattleSetting()
+		{
+			if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.StartsWith("Battle")) return;
 
 			GameObject bunttonObject = GameObject.Find("AttackBtnGroups");
-			
+
 			if (bunttonObject == null) return;
 
 			attackBtn = bunttonObject.GetComponentInChildren<Button>();
@@ -239,29 +244,75 @@ namespace Agit.FortressCraft
 
 				RPCSetType("Unit_" + OwnType);
 
-				if( Job == JobType.Archer )
-                {
+				if (Job == JobType.Archer)
+				{
 					archerFire.OwnType = OwnType;
 				}
-				else if( Job == JobType.Magician )
-                {
+				else if (Job == JobType.Magician)
+				{
 					magicianFire.OwnType = OwnType;
-                }
+				}
 				else if (Job == JobType.Warrior)
                 {
                     wairrorWeapon.OwnType = OwnType;
 					warriorChargeCollider.OwnType = OwnType;
                 }
-            }
+			}
+		}
+
+		private IEnumerator AutoHeal()
+		{
+			while (true)
+			{
+				if (!died)
+				{
+					CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
+					life *= (1.0f + 0.01f * commanderData.HealPerSecond);
+					if (life > commanderData.HP)
+					{
+						life = commanderData.HP;
+					}
+				}
+
+				yield return new WaitForSeconds(5.0f);
+			}
+		}
+
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetDark(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				if (PlayerId == playerRef && HasStateAuthority)
+				{
+					GameObject.Find("UIManager").GetComponent<UIManager>().OnDarkFilter();
+				}
+			}
+		}
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetBright(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				GameObject.Find("UIManager").GetComponent<UIManager>().OffDarkFilter();
+			}
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCSetType(string tag)
-        {
+		{
 			transform.Find("UnitRoot").gameObject.tag = tag;
 		}
 
-        public override void Despawned(NetworkRunner runner, bool hasState)
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetLevel(int level)
+		{
+			this.level = level;
+		}
+
+		public override void Despawned(NetworkRunner runner, bool hasState)
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
@@ -278,33 +329,34 @@ namespace Agit.FortressCraft
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCSetScale(Vector3 scale)
-        {
+		{
 			transform.localScale = scale;
-        }
+		}
 
 		public void ExpCheck()
-        {
+		{
 			if (RewardManager.Instance != null)
 			{
 				float needExp = GetNeedExpByLevel(level, Job);
-				if (RewardManager.Instance.Exp >= needExp )
+				if (RewardManager.Instance.Exp >= needExp)
 				{
 					RewardManager.Instance.Exp -= needExp;
 					++level;
+					RPCSetLevel(level);
 					UpdateProperty();
 				}
 			}
 		}
 
 		public void UpdateProperty()
-        {
+		{
 			// HP
 			SetMaxHPByLevel(level, Job);
 			life = MAX_HEALTH;
 
 			// Defense
 			SetDefenseHPByLevel(level, Job);
-        }
+		}
 
 		public override void FixedUpdateNetwork()
 		{
@@ -327,34 +379,34 @@ namespace Agit.FortressCraft
 
 			if (InputController.fetchInput)
 			{
-                if (GetInput(out NetworkInputData input))
+				if (GetInput(out NetworkInputData input))
 				{
 					previousAimDirection = input.aimDirection.normalized;
 
-                    if ( lastDir.x > 0.0f )
-                    {
+					if (lastDir.x > 0.0f)
+					{
 						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
 									transform.localScale.y, transform.localScale.z));
-                    }
+					}
 					else
-                    {
+					{
 						RPCSetScale(new Vector3(Mathf.Abs(transform.localScale.x),
 									transform.localScale.y, transform.localScale.z));
 					}
 
-					if( animState.fullPathHash != animAttack &&
+					if (animState.fullPathHash != animAttack &&
 						animState.fullPathHash != animSkill1)
-                    {
+					{
 						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 					}
 
-					if(input.moveDirection.normalized != Vector2.zero)
-                    {
+					if (input.moveDirection.normalized != Vector2.zero)
+					{
 						lastDir = input.moveDirection.normalized;
 					}
 
-					if( arrowVector != null )
-                    {
+					if (arrowVector != null)
+					{
 						arrowVector.TargetDirection = lastDir;
 					}
 
@@ -370,13 +422,13 @@ namespace Agit.FortressCraft
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
 						_spawnCastle.SpawnCastleObject();
 
-                    _oldInput = input;
+					_oldInput = input;
 				}
 			}
 		}
 
 		private void UpdateBtnColor()
-        {
+		{
 			if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
 			{
 				foreach (Image btnImage in skill1BtnImages)
@@ -409,60 +461,75 @@ namespace Agit.FortressCraft
 		}
 
 		public void Attack()  // Archer
-        {
+		{
 			if (attackInputTimer.Expired(Runner))
 			{
-				if( Job == JobType.Archer )
-                {
+				if (Job == JobType.Archer)
+				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
 				}
-				else if( Job == JobType.Magician )
-                {
+				else if (Job == JobType.Magician)
+				{
 					magicianFire.SetDamageByLevel(level, Job);
-                }
+				}
 				else if( Job == JobType.Warrior)
 				{
 					SetAttack(level, Job);
 					wairrorWeapon.Damage = AttackDamage;
 				}
-				
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
 		}
 
-		public void Skill1()  // Archer
-        {
+		public void Skill1()
+		{
 			if (skill1CoolTimer.Expired(Runner))
 			{
-				if( Job == JobType.Archer )
-                {
+				if (Job == JobType.Archer)
+				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 				}
-				else if( Job == JobType.Magician )
-                {
-					magicianFire.FireDirection = lastDir;
-					magicianFire.SetDamageByLevel(level, Job);
+				else if (Job == JobType.Magician)
+				{
+					RPCMagicSetting();
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 				}
-				
+				else if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+				{
+					Debug.Log("스킬 버튼 작동함?");
+					_netAnimator.Animator.SetTrigger("Skill1");
+					_cc.isCharge = true;
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+					Invoke("isChargeFalse", 0.15f);
+				}
 				_netAnimator.Animator.SetTrigger("Skill1");
+			}
+		}
 
-                if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
-                {
-					RPC_ChargeStartCallback();
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCMagicSetting()
+        {
+			magicianFire.FireDirection = lastDir;
+			magicianFire.SetDamageByLevel(level, Job);
+		}
 
-                    warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+		private void isChargeFalse()
+		{
+			if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+			{
+				RPC_ChargeStartCallback();
 
-                    _netAnimator.Animator.SetTrigger("Skill1");
-                    _cc.isCharge = true;
-                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-                    Invoke("ChargeFinishCallback", 0.15f);
-                }
-            }
+				warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+
+				_netAnimator.Animator.SetTrigger("Skill1");
+				_cc.isCharge = true;
+				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+				Invoke("ChargeFinishCallback", 0.15f);
+			}
         }
 
 		private void ChargeFinishCallback()
@@ -487,8 +554,6 @@ namespace Agit.FortressCraft
             warriorChargeCollider.gameObject.SetActive(false);
             gameObject.layer = LayerMask.NameToLayer("Player");
         }
-
-
 
         public void Skill2() // Archer
         {
@@ -549,6 +614,9 @@ namespace Agit.FortressCraft
 							break;
 					case nameof(IsDestroyCastle):
                         break;
+					case nameof(life):
+						playerHPBar.SetHPBar(life);
+						break;
                 }
             }
 
@@ -660,6 +728,8 @@ namespace Agit.FortressCraft
 				if (_respawnInSeconds <= 0)
 				{
 					_netAnimator.Animator.SetTrigger("Idle");
+					Debug.Log("AAAAAAAAAA" + PlayerId);
+					RPC_SetBright(PlayerId);
 					died = false;
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
 
@@ -741,6 +811,7 @@ namespace Agit.FortressCraft
 			if( bodyCollider.Damaged > 0.0f )
             {
 				life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
+
 				bodyCollider.Damaged = 0.0f;
 
 				if( life <= 0.0f )
@@ -752,6 +823,7 @@ namespace Agit.FortressCraft
 
 		public void Die()
         {
+			RPC_SetDark(PlayerId);
 			died = true;
 			_netAnimator.Animator.SetTrigger("Death");
 			//stage = Stage.Dead;

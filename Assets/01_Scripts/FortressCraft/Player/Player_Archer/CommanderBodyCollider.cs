@@ -19,6 +19,7 @@ namespace Agit.FortressCraft
             {
                 if(collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider) )
                 {
+                    Debug.Log("Hit! - AttackCollider");
                     player.RPCCheckDamaged();
                 }
             }
