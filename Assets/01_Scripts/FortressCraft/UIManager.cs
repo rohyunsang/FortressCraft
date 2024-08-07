@@ -66,13 +66,13 @@ namespace Agit.FortressCraft
 
         public void OnDarkFilter()
         {
-            Debug.Log("HI");
+            Debug.Log("AAAAAAAAAA On");
             darkFilter.SetActive(true);
         }
 
         public void OffDarkFilter()
         {
-            Debug.Log("HI");
+            Debug.Log("AAAAAAAA OFF");
             darkFilter.SetActive(false);
         }
 

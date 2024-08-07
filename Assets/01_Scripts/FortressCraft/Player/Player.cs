@@ -673,6 +673,7 @@ namespace Agit.FortressCraft
 				if (_respawnInSeconds <= 0)
 				{
 					_netAnimator.Animator.SetTrigger("Idle");
+					Debug.Log("AAAAAAAAAA" + PlayerId);
 					RPC_SetBright(PlayerId);
 					died = false;
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
