@@ -9,16 +9,13 @@ namespace Agit.FortressCraft
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log("Try?");
             if (OwnType == null) return;
-            if( collision.tag.StartsWith("Unit") )
+            if ( collision.tag.StartsWith("Unit") )
             {
-                Debug.Log("Hit!");
                 if (collision.CompareTag("Unit_" + OwnType))
                 {
                     return;
                 }
-
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycollider))
                 {
                     if ( collision.transform.parent.TryGetComponent<NormalUnitRigidBodyMovement>(

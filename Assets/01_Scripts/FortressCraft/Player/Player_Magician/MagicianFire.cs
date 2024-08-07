@@ -43,14 +43,20 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             if (OwnType == null) return;
-
             magicianFlareAttackCollider.OwnType = OwnType;
             magicianFlareAttackCollider.Damage = damage * 2;
             Debug.Log("Damage? " + magicianFlareAttackCollider.Damage);
 
             float angle = Mathf.Atan2(FireDirection.y, FireDirection.x) * Mathf.Rad2Deg;
             Quaternion FireRotation = Quaternion.AngleAxis(angle - 90.0f, Vector3.forward);
-            flare.transform.parent.rotation = FireRotation;
+            //flare.transform.parent.rotation = FireRotation;
+            RPCSetRotation(FireRotation);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetRotation(Quaternion quaternion)
+        {
+            flare.transform.parent.rotation = quaternion;
         }
 
         public void FireSkill2()
