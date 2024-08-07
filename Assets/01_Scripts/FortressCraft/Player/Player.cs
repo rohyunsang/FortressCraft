@@ -47,13 +47,14 @@ namespace Agit.FortressCraft
 		}
 
 		[Networked] public Stage stage { get; set; }
-		[Networked] public float life { get; set; }
+		[Networked] public float life { get; set; }  // player HP
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
 		[Networked] public bool ready { get; set; }
 		[Networked] public float Defense { get; set; }
-		public int level { get; set; }
+		[Networked] public float AttackDamage { get; set; }
+        public int level { get; set; }
 
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
@@ -88,7 +89,9 @@ namespace Agit.FortressCraft
 		private MagicianFire magicianFire;
 		private ArrowVector arrowVector;
 		private CommanderBodyCollider bodyCollider;
-		private bool died = false;
+		[SerializeField] private WarriorWeaponCollider wairrorWeapon;
+		[SerializeField] private WarriorChargeCollider warriorChargeCollider;
+        private bool died = false;
 
 		public JobType Job { get; set; }
 
@@ -126,7 +129,7 @@ namespace Agit.FortressCraft
 			magicianFire = GetComponentInChildren<MagicianFire>();
 			arrowVector = GetComponentInChildren<ArrowVector>();
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
-			level = 1;
+            level = 1;
 
 			if (archerFire != null) Job = JobType.Archer;
 			else if (magicianFire != null) Job = JobType.Magician;
@@ -134,8 +137,8 @@ namespace Agit.FortressCraft
 			{
 				Job = JobType.Warrior;
 			}
-
-			SetMaxHPByLevel(level, Job);
+			
+            SetMaxHPByLevel(level, Job);
 		}
 
 		public void SetMaxHPByLevel(int level, JobType jobType)
@@ -143,6 +146,11 @@ namespace Agit.FortressCraft
 			MAX_HEALTH = GoogleSheetManager.GetCommanderData(level, jobType).HP;
 			Debug.Log("Max HP: " + MAX_HEALTH);
 		}
+
+		public void SetAttack(int level, JobType jobType)
+		{
+            AttackDamage = GoogleSheetManager.GetCommanderData(level,jobType).Attack;
+        }
 
 		public void SetDefenseHPByLevel(int level, JobType jobType)
 		{
@@ -166,7 +174,7 @@ namespace Agit.FortressCraft
 		{
 			base.Spawned();
 
-			DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
@@ -244,6 +252,11 @@ namespace Agit.FortressCraft
 				{
 					magicianFire.OwnType = OwnType;
 				}
+				else if (Job == JobType.Warrior)
+                {
+                    wairrorWeapon.OwnType = OwnType;
+					warriorChargeCollider.OwnType = OwnType;
+                }
 			}
 		}
 
@@ -460,9 +473,11 @@ namespace Agit.FortressCraft
 				{
 					magicianFire.SetDamageByLevel(level, Job);
 				}
-
-				//Debug.Log(lastDir);
-
+				else if( Job == JobType.Warrior)
+				{
+					SetAttack(level, Job);
+					wairrorWeapon.Damage = AttackDamage;
+				}
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
 			}
@@ -483,10 +498,7 @@ namespace Agit.FortressCraft
 					RPCMagicSetting();
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 				}
-
-				_netAnimator.Animator.SetTrigger("Skill1");
-
-				if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+				else if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
 				{
 					Debug.Log("스킬 버튼 작동함?");
 					_netAnimator.Animator.SetTrigger("Skill1");
@@ -494,7 +506,7 @@ namespace Agit.FortressCraft
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 					Invoke("isChargeFalse", 0.15f);
 				}
-
+				_netAnimator.Animator.SetTrigger("Skill1");
 			}
 		}
 
@@ -507,12 +519,43 @@ namespace Agit.FortressCraft
 
 		private void isChargeFalse()
 		{
+			if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+			{
+				RPC_ChargeStartCallback();
+
+				warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+
+				_netAnimator.Animator.SetTrigger("Skill1");
+				_cc.isCharge = true;
+				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+				Invoke("ChargeFinishCallback", 0.15f);
+			}
+        }
+
+		private void ChargeFinishCallback()
+		{
 			_cc.isCharge = false;
+			RPC_ChargeEndCallback();
         }
 
 
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_ChargeStartCallback()
+        {
+            wairrorWeapon.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.layer = LayerMask.NameToLayer("WarriorCharging");
+            warriorChargeCollider.gameObject.SetActive(true);
+        }
 
-		public void Skill2()
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPC_ChargeEndCallback()
+        {
+            wairrorWeapon.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            warriorChargeCollider.gameObject.SetActive(false);
+            gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+
+        public void Skill2() // Archer
         {
             if (skill2CoolTimer.Expired(Runner))
 			{
@@ -526,11 +569,23 @@ namespace Agit.FortressCraft
 					magicianFire.SetDamageByLevel(level, Job);
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
                 }
+				else if(Job == JobType.Warrior)
+				{
+                    // Healing 부분 
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+                    float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
+					
+					if(currentMaxHp < life + currentMaxHp * 0.3f)
+					{
+						life = currentMaxHp;
+					}
+					else
+					{
+						life += currentMaxHp * 0.3f;
+					}
+                }
 
 				_netAnimator.Animator.SetTrigger("Skill2");
-
-
-				// need Warrior
 			}
         }
 
