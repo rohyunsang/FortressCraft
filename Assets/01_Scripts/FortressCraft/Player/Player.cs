@@ -267,7 +267,7 @@ namespace Agit.FortressCraft
 				if (!died)
 				{
 					CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
-					life *= (1.0f + 0.01f * commanderData.HealPerSecond);
+					life += ( MAX_HEALTH * 0.01f * commanderData.HealPerSecond);
 					if (life > commanderData.HP)
 					{
 						life = commanderData.HP;
