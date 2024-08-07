@@ -95,8 +95,10 @@ namespace Agit.FortressCraft
 		private Button attackBtn;
 		private Button skill1Btn;
 		private Button skill2Btn;
-		Image[] skill1BtnImages;
-		Image[] skill2BtnImages;
+		private Image[] skill1BtnImages;
+		private Image[] skill2BtnImages;
+
+		private DarkFilter darkFilter;
 
 		public string OwnType { get; set; }
 
@@ -263,6 +265,27 @@ namespace Agit.FortressCraft
 			}
 		}
 
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetDark(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				if (PlayerId == playerRef && HasStateAuthority)
+				{
+					GameObject.Find("UIManager").GetComponent<UIManager>().OnDarkFilter();
+				}
+			}
+		}
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetBright(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				GameObject.Find("UIManager").GetComponent<UIManager>().OffDarkFilter();
+			}
+		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCSetType(string tag)
@@ -650,6 +673,7 @@ namespace Agit.FortressCraft
 				if (_respawnInSeconds <= 0)
 				{
 					_netAnimator.Animator.SetTrigger("Idle");
+					RPC_SetBright(PlayerId);
 					died = false;
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
 
@@ -743,6 +767,7 @@ namespace Agit.FortressCraft
 
 		public void Die()
         {
+			RPC_SetDark(PlayerId);
 			died = true;
 			_netAnimator.Animator.SetTrigger("Death");
 			//stage = Stage.Dead;

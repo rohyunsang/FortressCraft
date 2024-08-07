@@ -51,6 +51,8 @@ namespace Agit.FortressCraft
         public GameObject victoryPanel;
         public GameObject defeatPanel;
 
+        public GameObject darkFilter;
+
         public void OnDefeatPanel()
         {
             Debug.Log("HI");
@@ -60,6 +62,18 @@ namespace Agit.FortressCraft
         public void OnVictoryPanel()
         {
             victoryPanel.SetActive(true);
+        }
+
+        public void OnDarkFilter()
+        {
+            Debug.Log("HI");
+            darkFilter.SetActive(true);
+        }
+
+        public void OffDarkFilter()
+        {
+            Debug.Log("HI");
+            darkFilter.SetActive(false);
         }
 
         #endregion
