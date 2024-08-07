@@ -5,6 +5,7 @@ using Cinemachine;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Jobs.LowLevel.Unsafe;
 
 namespace Agit.FortressCraft
 {
@@ -45,7 +46,7 @@ namespace Agit.FortressCraft
 		}
 
 		[Networked] public Stage stage { get; set; }
-		[Networked] public float life { get; set; }
+		[Networked] public float life { get; set; }  // player HP
 		[Networked] private TickTimer respawnTimer { get; set; }
 		[Networked] private TickTimer invulnerabilityTimer { get; set; }
 		[Networked] public int lives { get; set; }
@@ -134,7 +135,6 @@ namespace Agit.FortressCraft
 				Job = JobType.Warrior;
 			}
 			
-
             SetMaxHPByLevel(level, Job);
 		}
 
@@ -504,11 +504,23 @@ namespace Agit.FortressCraft
 					magicianFire.SetDamageByLevel(level, Job);
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
                 }
+				else if(Job == JobType.Warrior)
+				{
+                    // Healing 부분 
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+                    float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
+					
+					if(currentMaxHp < life + currentMaxHp * 0.3f)
+					{
+						life = currentMaxHp;
+					}
+					else
+					{
+						life += currentMaxHp * 0.3f;
+					}
+                }
 
 				_netAnimator.Animator.SetTrigger("Skill2");
-
-
-				// need Warrior
 			}
         }
 
