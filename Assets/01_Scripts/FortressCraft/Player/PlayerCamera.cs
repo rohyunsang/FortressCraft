@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using Cinemachine;
+using UnityEngine.EventSystems;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class PlayerCamera : MonoBehaviour
     {
         if (!thisObject.HasStateAuthority) return;
 
-        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2) // 마우스 왼쪽 버튼을 누르면, 오른쪽 화면에서만.
+        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2 && !IsPointerOverUIObject()) // 마우스 왼쪽 버튼을 누르면, 오른쪽 화면에서만.
         {
             dragOrigin = Input.mousePosition; // 드래그 시작 위치 저장
             isDragging = true;
@@ -76,5 +77,13 @@ public class PlayerCamera : MonoBehaviour
             followPlayer = true;
             vCam.Follow = playerCameraRoot; // 카메라 follow 대상을 플레이어로 설정
         }
+    }
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }
