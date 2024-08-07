@@ -3396,6 +3396,7 @@ MonoBehaviour:
   _teleportIn: {fileID: 0}
   _teleportOutPrefab: {fileID: 0}
   _respawnTime: 0
+  playerHPBar: {fileID: 8281999552098622695}
   _stage: 0
   _life: 0
   _lives: 0
@@ -3532,6 +3533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cae4d055e665493081641ed2efd9fb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _HP: 0
   HpBarSlider: {fileID: 2571166972699926238}
 --- !u!1 &5684422063655778716
 GameObject:
