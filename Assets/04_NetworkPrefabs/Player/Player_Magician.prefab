@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 6124776727980656446}
   - component: {fileID: 2250860971387831655}
   - component: {fileID: 1591170470106970327}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Player_Magician
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -530,6 +530,9 @@ MonoBehaviour:
   _lives: 0
   _ready: 0
   _Defense: 0
+  _AttackDamage: 0
+  wairrorWeapon: {fileID: 0}
+  warriorChargeCollider: {fileID: 0}
   _PlayerName:
     _length: 0
     _data:
@@ -4702,7 +4705,7 @@ GameObject:
   - component: {fileID: 2522839246899550068}
   - component: {fileID: 1939211367093676909}
   - component: {fileID: 6862518934563427732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UnitRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

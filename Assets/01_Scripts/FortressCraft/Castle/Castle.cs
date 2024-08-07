@@ -31,24 +31,11 @@ namespace Agit.FortressCraft{
             CurrentHP -= damage;
 
             // Update HP in CastleManager
-            var manager = GetComponent<CastleManagerTest>(); // 이러면 원래 Castle이 작동안함. 
+            var manager = GetComponent<CastleManager>(); 
 
             if (manager != null)
             {
                 manager.UpdateCastleHP(team, damage);
-            }
-        }
-
-        public void OnTriggerEnter2D(Collider2D collision)
-        {
-            // PlayerWeapon 컴포넌트를 시도하여 가져오고, 있으면 데미지 처리
-            if (collision.TryGetComponent<PlayerWeapon>(out PlayerWeapon weapon))
-            {
-                Damage(weapon.damage);
-            }
-            else
-            {
-                Debug.Log("This is Not PlayerWeapon");
             }
         }
     }

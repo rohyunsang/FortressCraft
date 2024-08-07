@@ -1984,7 +1984,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4781631848463729063}
   - component: {fileID: 2975874159664926967}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: SpawnCastle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3534,6 +3534,7 @@ MonoBehaviour:
   - {fileID: 8838001341374833890}
   - {fileID: 2653525218152594309}
   - {fileID: 4423126997026053310}
+  - {fileID: 8281999552098622695}
   - {fileID: 1451256016903990940}
   - {fileID: 1404248123323005155}
   - {fileID: 1562815616911068479}
@@ -3606,6 +3607,7 @@ MonoBehaviour:
   _teleportIn: {fileID: 0}
   _teleportOutPrefab: {fileID: 0}
   _respawnTime: 0
+  playerHPBar: {fileID: 8281999552098622695}
   _stage: 0
   _life: 0
   _lives: 0
@@ -3745,6 +3747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cae4d055e665493081641ed2efd9fb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _HP: 0
   HpBarSlider: {fileID: 8830018420471020183}
 --- !u!95 &5307116615814538611
 Animator:

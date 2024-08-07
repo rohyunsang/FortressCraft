@@ -492,21 +492,24 @@ namespace Agit.FortressCraft
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-				}
+                    _netAnimator.Animator.SetTrigger("Skill1");
+                }
 				else if (Job == JobType.Magician)
 				{
 					RPCMagicSetting();
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-				}
-				else if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
+                    _netAnimator.Animator.SetTrigger("Skill1");
+                }
+                else if (Job == JobType.Warrior)
 				{
-					Debug.Log("스킬 버튼 작동함?");
+					RPC_ChargeStartCallback();
+					warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+
 					_netAnimator.Animator.SetTrigger("Skill1");
 					_cc.isCharge = true;
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-					Invoke("isChargeFalse", 0.15f);
-				}
-				_netAnimator.Animator.SetTrigger("Skill1");
+                    Invoke("ChargeFinishCallback", 0.15f);
+                }
 			}
 		}
 
@@ -516,22 +519,6 @@ namespace Agit.FortressCraft
 			magicianFire.FireDirection = lastDir;
 			magicianFire.SetDamageByLevel(level, Job);
 		}
-
-		private void isChargeFalse()
-		{
-			if (skill1CoolTimer.Expired(Runner) && Job == JobType.Warrior)
-			{
-				RPC_ChargeStartCallback();
-
-				warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
-
-				_netAnimator.Animator.SetTrigger("Skill1");
-				_cc.isCharge = true;
-				skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-				Invoke("ChargeFinishCallback", 0.15f);
-			}
-        }
-
 		private void ChargeFinishCallback()
 		{
 			_cc.isCharge = false;

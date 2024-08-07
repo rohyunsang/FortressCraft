@@ -7,7 +7,11 @@ using UnityEngine;
 
 namespace Agit.FortressCraft
 {
-    public class CastleManagerTest : NetworkBehaviour
+    public enum Team
+    {
+        A, B, C, D
+    }
+    public class CastleManager : NetworkBehaviour
     {
         [Networked] public float CurrentHP { get; set; }
 
