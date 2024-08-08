@@ -583,6 +583,15 @@ namespace Agit.FortressCraft
 
 		public void SpawnCastleObejct()
         {
+			RewardManager rewardManager = RewardManager.Instance;
+			SpawnCastleCostManager spawnCastleCostManager = SpawnCastleCostManager.Instance;
+
+			if (rewardManager == null || spawnCastleCostManager == null) return;
+			if (rewardManager.Gold < spawnCastleCostManager.GetCost(spawnCastleCostManager.level)) return;
+
+			rewardManager.Gold -= spawnCastleCostManager.GetCost(spawnCastleCostManager.level);
+			spawnCastleCostManager.LevelUp();
+
 			_spawnCastle.SpawnCastleObject();
         }
 
