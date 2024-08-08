@@ -101,6 +101,8 @@ namespace Agit.FortressCraft
 		private Image[] skill1BtnImages;
 		private Image[] skill2BtnImages;
 
+		private Button spawnCastleBtn;
+
 		private DarkFilter darkFilter;
 
 		public string OwnType { get; set; }
@@ -223,6 +225,9 @@ namespace Agit.FortressCraft
 			skill2Btn = GameObject.Find("SkillBtnGroups_002").GetComponentInChildren<Button>();
 			skill2Btn.onClick.AddListener(Skill2);
 			skill2BtnImages = skill2Btn.GetComponentsInChildren<Image>();
+
+			spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
+			spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
 
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
 			{
@@ -574,6 +579,11 @@ namespace Agit.FortressCraft
 
 				_netAnimator.Animator.SetTrigger("Skill2");
 			}
+        }
+
+		public void SpawnCastleObejct()
+        {
+			_spawnCastle.SpawnCastleObject();
         }
 
         /// <summary>
