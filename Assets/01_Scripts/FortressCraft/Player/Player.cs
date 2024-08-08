@@ -424,9 +424,6 @@ namespace Agit.FortressCraft
 						_netAnimator.Animator.SetBool("isMove", false);
 					}
 
-					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
-						_spawnCastle.SpawnCastleObject();
-
 					_oldInput = input;
 				}
 			}
@@ -583,16 +580,20 @@ namespace Agit.FortressCraft
 
 		public void SpawnCastleObejct()
         {
-			RewardManager rewardManager = RewardManager.Instance;
-			SpawnCastleCostManager spawnCastleCostManager = SpawnCastleCostManager.Instance;
+			if(isBuildCastle && Object.HasStateAuthority)
+            {
+				RewardManager rewardManager = RewardManager.Instance;
+				SpawnCastleCostManager spawnCastleCostManager = SpawnCastleCostManager.Instance;
 
-			if (rewardManager == null || spawnCastleCostManager == null) return;
-			if (rewardManager.Gold < spawnCastleCostManager.GetCost(spawnCastleCostManager.level)) return;
+				if (rewardManager == null || spawnCastleCostManager == null) return;
+				if (rewardManager.Gold < spawnCastleCostManager.GetCost(spawnCastleCostManager.level)) return;
 
-			rewardManager.Gold -= spawnCastleCostManager.GetCost(spawnCastleCostManager.level);
-			spawnCastleCostManager.LevelUp();
+				rewardManager.Gold -= spawnCastleCostManager.GetCost(spawnCastleCostManager.level);
+				spawnCastleCostManager.LevelUp();
 
-			_spawnCastle.SpawnCastleObject();
+				_spawnCastle.SpawnCastleObject();
+			}
+			
         }
 
         /// <summary>
