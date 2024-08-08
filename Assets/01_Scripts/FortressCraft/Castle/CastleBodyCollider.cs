@@ -6,12 +6,11 @@ namespace Agit.FortressCraft
 {
     public class CastleBodyCollider : BodyCollider
     {
-        Castle castle;
+        public Castle castle;
 
         public override void Spawned()
         {
             base.Spawned();
-            castle = transform.parent.GetComponent<Castle>();
 
             switch( castle.team )
             {
@@ -28,6 +27,7 @@ namespace Agit.FortressCraft
                     transform.tag = "Unit_D";
                     break;
             }
+
         }
         
         private void OnTriggerEnter2D(Collider2D collision)
@@ -35,6 +35,7 @@ namespace Agit.FortressCraft
             if( Damaged >= 0.0f )
             {
                 castle.Damage(Damaged);
+                Debug.Log("Castle" + Damaged);
             }
         }
         

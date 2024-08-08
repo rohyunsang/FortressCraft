@@ -13,7 +13,14 @@ namespace Agit.FortressCraft{
         public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
 
+        private bool invincibilityTime = true;
+
         public Team team;
+
+        void Start()
+        {
+            Invoke("EndInvincibility", 5f);
+        }
 
         public void Init(float currntHP)
         {
@@ -25,8 +32,11 @@ namespace Agit.FortressCraft{
             HpBarSlider.gameObject.SetActive(true);
         }
 
+
         public void Damage(float damage)
         {
+            if (invincibilityTime) return;
+
             if (IsDestroyed || CurrentHP <= 0) return;
             CurrentHP -= damage;
 
@@ -35,8 +45,13 @@ namespace Agit.FortressCraft{
 
             if (manager != null)
             {
-                manager.UpdateCastleHP(team, damage);
+                manager.UpdateCastleHP(damage);
             }
+        }
+
+        private void EndInvincibility()
+        {
+            invincibilityTime = false;
         }
     }
 }

@@ -35,16 +35,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private float _respawnTime;
 		[SerializeField] private PlayerHPBar playerHPBar;
 
-		public struct DamageEvent : INetworkEvent
-		{
-			public Vector3 impulse;
-			public int damage;
-		}
-
-		public struct PickupEvent : INetworkEvent
-		{
-			public int powerup;
-		}
 
 		[Networked] public Stage stage { get; set; }
 		[Networked] public float life { get; set; }  // player HP
@@ -101,12 +91,7 @@ namespace Agit.FortressCraft
 		private Image[] skill1BtnImages;
 		private Image[] skill2BtnImages;
 
-		private DarkFilter darkFilter;
-
 		public string OwnType { get; set; }
-
-		// Hit Info
-		List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
 		[Networked] public NetworkString<_32> PlayerName { get; set; }
 		[SerializeField] TextMeshPro playerNameLabel;
@@ -114,11 +99,12 @@ namespace Agit.FortressCraft
 		[Networked] public NetworkString<_256> LastPublicChat { get; set; }
 		string currentChat = "";
 
-		[Networked] public bool IsDestroyCastle { get; set; }
+		[Networked] public bool IsDestroyedAllCastle { get; set; }
 
 		public bool isBuildCastle;
 
-		public Vector2 previousAimDirection;
+		[Networked] public int castleCount { get; set; }
+
 
 		private void Awake()
 		{
@@ -167,7 +153,7 @@ namespace Agit.FortressCraft
 			stage = Stage.New;
 			lives = MAX_LIVES;
 			life = MAX_HEALTH;
-			IsDestroyCastle = false;
+			IsDestroyedAllCastle = false;
 		}
 
 		public override void Spawned()
@@ -185,8 +171,6 @@ namespace Agit.FortressCraft
 
 			_respawnInSeconds = 0;
 
-			RegisterEventListener((DamageEvent evt) => ApplyAreaDamage(evt.impulse, evt.damage));
-			RegisterEventListener((PickupEvent evt) => OnPickup(evt));
 
 			// PlayerName Change
 			var fusionLauncher = FindObjectOfType<FusionLauncher>();
@@ -203,7 +187,9 @@ namespace Agit.FortressCraft
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
 			StartCoroutine(AutoHeal());
-		}
+			castleCount = 1;
+
+        }
 
 		public void UpdateBattleSetting()
 		{
@@ -316,15 +302,6 @@ namespace Agit.FortressCraft
 		{
 			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
 			base.Despawned(runner, hasState);
-			SpawnTeleportOutFx();
-		}
-
-		private void OnPickup(PickupEvent evt)
-		{
-			PowerupElement powerup = PowerupSpawner.GetPowerup(evt.powerup);
-
-			if (powerup.powerupType == PowerupType.HEALTH)
-				life = MAX_HEALTH;
 		}
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
@@ -381,8 +358,6 @@ namespace Agit.FortressCraft
 			{
 				if (GetInput(out NetworkInputData input))
 				{
-					previousAimDirection = input.aimDirection.normalized;
-
 					if (lastDir.x > 0.0f)
 					{
 						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
@@ -420,14 +395,23 @@ namespace Agit.FortressCraft
 					}
 
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
-						_spawnCastle.SpawnCastleObject();
+					{
+						RPC_CastleCount();
+                        _spawnCastle.SpawnCastleObject();
+                    }
 
-					_oldInput = input;
+                    _oldInput = input;
 				}
 			}
 		}
 
-		private void UpdateBtnColor()
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_CastleCount()
+        {
+            castleCount++;
+        }
+
+        private void UpdateBtnColor()
 		{
 			if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
 			{
@@ -599,7 +583,7 @@ namespace Agit.FortressCraft
                     case nameof(LastPublicChat):
                         OnChatChanged();
 							break;
-					case nameof(IsDestroyCastle):
+					case nameof(IsDestroyedAllCastle):
                         break;
 					case nameof(life):
 						playerHPBar.SetHPBar(life);
@@ -611,11 +595,26 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
-        public void RPC_SetDestroyCastle(PlayerRef playerRef)
+        public void RPC_CastleCountDown(PlayerRef playerRef)
+        {
+            if (PlayerId == playerRef && HasStateAuthority)
+            {
+				RPC_CastleCountDownInternal();
+            }
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_CastleCountDownInternal()
+        {
+            castleCount--;
+        }
+
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPC_DestroyedAllCastle(PlayerRef playerRef)
 		{
 			if (PlayerId == playerRef && HasStateAuthority)
 			{
-                IsDestroyCastle = true;
+                IsDestroyedAllCastle = true;
                 GameObject.Find("UIManager").GetComponent<UIManager>().OnDefeatPanel();
             }
         }
@@ -715,7 +714,6 @@ namespace Agit.FortressCraft
 				if (_respawnInSeconds <= 0)
 				{
 					_netAnimator.Animator.SetTrigger("Idle");
-					Debug.Log("AAAAAAAAAA" + PlayerId);
 					RPC_SetBright(PlayerId);
 					died = false;
 					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
@@ -762,11 +760,8 @@ namespace Agit.FortressCraft
 				case Stage.Active:
 					break;
 				case Stage.Dead:
-					if(Runner.TryGetSingleton( out GameManager gameManager))
-						gameManager.OnCommanderDeath();
 					break;
 				case Stage.TeleportOut:
-					SpawnTeleportOutFx();
 					break;
 			}
 			_collider.enabled = stage != Stage.Dead;

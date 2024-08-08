@@ -65,7 +65,6 @@ namespace Agit.FortressCraft
 				return;
 
 			int powerup = State.activePowerupIndex;
-			player.RaiseEvent( new Player.PickupEvent { powerup = powerup} );
 
 			SetNextPowerup();
 		}

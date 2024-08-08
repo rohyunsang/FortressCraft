@@ -2,7 +2,9 @@ using Fusion;
 using FusionHelpers;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 
 namespace Agit.FortressCraft
@@ -17,7 +19,7 @@ namespace Agit.FortressCraft
 
         public Castle castle;
 
-        private float MaxHP = 1500.0f;
+        private float MaxHP = 100f;
 
         private ChangeDetector changes;
 
@@ -52,12 +54,22 @@ namespace Agit.FortressCraft
             }
         }
 
-        public void UpdateCastleHP(Team team, float damage)
+        public void UpdateCastleHP(float damage)
         {
             CurrentHP -= damage;
             if (CurrentHP <= 0)
             {
-                Debug.Log("??????");
+                if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
+                {
+                    Debug.Log("게임매니저 콜AAAAAAAAAAA");
+                    gameManager.GetDestroyCastleOwnerPlayer(gameObject.tag);
+                }
+                else
+                {
+                    Debug.Log("게임매니저 콜안됨AAAAAAAAAAA");
+
+                }
+                Destroy(gameObject);
             }
         }
 

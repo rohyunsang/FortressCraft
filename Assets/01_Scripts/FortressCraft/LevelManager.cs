@@ -138,13 +138,6 @@ namespace Agit.FortressCraft
 
                 yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
 
-				 //_scoreManager.ResetAllGameScores();
-				if (gameManager.lastPlayerStanding != null)
-				{
-					// _scoreManager.ShowIntermediateLevelScore( gameManager );
-					yield return new WaitForSeconds(1.5f);
-					 // _scoreManager.ResetAllGameScores();
-				}
 			}
 
 			yield return base.UnloadSceneCoroutine(prevScene);
@@ -179,7 +172,6 @@ namespace Agit.FortressCraft
 
 			yield return new WaitForSeconds(0.3f);
 
-
 			GameManager gameManager;
 			while (!Runner.TryGetSingleton(out gameManager))
 			{
@@ -187,23 +179,16 @@ namespace Agit.FortressCraft
 				yield return null;
 			}
 
-			if (gameManager.matchWinner!=null && newScene.AsIndex == _lobby)
-			{
-				// Show lobby scores and reset the score ui.
-				//_scoreManager.ShowFinalGameScore(gameManager);
-			}
-
-			// gameManager.lastPlayerStanding = null;
-			
 			// Respawn with slight delay between each player
 			Debug.Log($"Respawning All {gameManager.PlayerCount} Players");
-			foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
+			var players = gameManager.AllPlayers;
+			foreach (FusionPlayer fusionPlayer in players)
 			{
 				Player player = (Player) fusionPlayer;
 				Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
 				player.Reset();
 				player.Respawn();
-				yield return new WaitForSeconds(0.5f);
+				// yield return new WaitForSeconds(0.3f);
 			}
 
 			// Set state to playing level
