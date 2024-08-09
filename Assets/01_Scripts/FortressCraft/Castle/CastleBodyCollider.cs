@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,12 @@ namespace Agit.FortressCraft
 {
     public class CastleBodyCollider : BodyCollider
     {
-        Castle castle;
+        public Castle castle;
+        public CastleManager castleManager;
 
         public override void Spawned()
         {
             base.Spawned();
-            castle = transform.parent.GetComponent<Castle>();
 
             switch( castle.team )
             {
@@ -28,16 +29,19 @@ namespace Agit.FortressCraft
                     transform.tag = "Unit_D";
                     break;
             }
+
         }
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if( Damaged >= 0.0f )
+            if (collision.CompareTag("Attack"))
             {
-                castle.Damage(Damaged);
+                if (collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider))
+                {
+                    castleManager.RPCCheckDamaged();
+                }
             }
         }
-        
     }
 }
 

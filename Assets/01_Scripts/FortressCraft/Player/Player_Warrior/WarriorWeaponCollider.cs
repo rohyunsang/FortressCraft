@@ -19,16 +19,20 @@ namespace Agit.FortressCraft
 
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycollider))
                 {
-                    if (collision.transform.parent.TryGetComponent<NormalUnitRigidBodyMovement>(
-                        out NormalUnitRigidBodyMovement unit))
+                    if(collision.transform.parent != null)
                     {
-                        if (unit.HP - Damage * unit.Defense <= 0.0f && !unit.NoReward)
+                        if (collision.transform.parent.TryGetComponent<NormalUnitRigidBodyMovement>(
+                        out NormalUnitRigidBodyMovement unit))
                         {
-                            unit.NoReward = true;
-                            RewardManager.Instance.Gold += unit.gold;
-                            RewardManager.Instance.Exp += unit.exp;
+                            if (unit.HP - Damage * unit.Defense <= 0.0f && !unit.NoReward)
+                            {
+                                unit.NoReward = true;
+                                RewardManager.Instance.Gold += unit.gold;
+                                RewardManager.Instance.Exp += unit.exp;
+                            }
                         }
                     }
+                    
                     bodycollider.RPCSetDamage(Damage);
                 }
             }

@@ -2,7 +2,9 @@ using Fusion;
 using FusionHelpers;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 
 namespace Agit.FortressCraft
@@ -17,11 +19,15 @@ namespace Agit.FortressCraft
 
         public Castle castle;
 
-        private float MaxHP = 1500.0f;
+        private float MaxHP = 500f;
 
         private ChangeDetector changes;
 
-        public int team_id { get; set; }
+        [SerializeField] private CastleHpBar castleHpBar;
+
+        [SerializeField] private CastleBodyCollider bodyCollider;
+
+        public bool isDestroyCastle = false;
 
         public override void Spawned()
         {
@@ -46,27 +52,44 @@ namespace Agit.FortressCraft
                 switch (change)
                 {
                     case nameof(CurrentHP):
-                        SyncHp(CurrentHP, castle);
+                        castleHpBar.SetHPBar(CurrentHP);
+                        UpdateCastleHP();
                         break;
                 }
             }
         }
 
-        public void UpdateCastleHP(Team team, float damage)
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCCheckDamaged()
         {
-            CurrentHP -= damage;
-            if (CurrentHP <= 0)
+            CheckDamaged();
+        }
+
+        public void CheckDamaged()
+        {
+            // if (IsDestroyed) return;
+
+            if (bodyCollider.Damaged > 0.0f)
             {
-                Debug.Log("??????");
+                CurrentHP -= bodyCollider.Damaged;
+
+                bodyCollider.Damaged = 0.0f;
             }
         }
 
-        private void SyncHp(float currentHp, Castle castle)
+        public void UpdateCastleHP()
         {
-            if (castle != null && castle.HpBarSlider != null)
+            if (!HasStateAuthority) return;
+
+            if (this.CurrentHP <= 0 && !isDestroyCastle)
             {
-                castle.HpBarSlider.value = currentHp / MaxHP;
+                isDestroyCastle = true;
+                if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
+                {
+                    gameManager.GetDestroyCastleOwnerPlayer(gameObject.tag);
+                }
+                Destroy(gameObject);
             }
         }
-    }
+    }       
 }

@@ -36,8 +36,10 @@ namespace FusionHelpers
 		
 		public override void Spawned()
 		{
-			Debug.Log($"Spawned Network Session for Runner: {Runner}");
-			Runner.RegisterSingleton(this);
+			isSetCommanderType = false;
+
+            Debug.Log($"Spawned Network Session for Runner: {Runner}");
+            Runner.RegisterSingleton(this);
 
             // App에서 플레이어 직업 타입을 정한다.
             JobType jobType = FindObjectOfType<App>().jobType;
@@ -106,8 +108,6 @@ namespace FusionHelpers
 			if(Object != null && Object.IsValid)
 				playerRefByIndex.Remove(fusionPlayer.PlayerIndex);
 			OnPlayerAvatarRemoved(fusionPlayer);
-
-
 		}
 
 		public T GetPlayer<T>(PlayerRef plyRef) where T: FusionPlayer

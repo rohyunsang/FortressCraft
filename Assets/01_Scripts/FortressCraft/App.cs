@@ -114,6 +114,8 @@ namespace Agit.FortressCraft
 
 		private void ConnectToLobby() // using Button
 		{
+			FindObjectOfType<UIManager>().Init();
+            FindObjectOfType<LevelUIController>().Init();
             FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab, OnConnectionStatusUpdate);
         }
 
@@ -182,8 +184,11 @@ namespace Agit.FortressCraft
 
 		public void OnEnterRoom()
 		{
-			// Get region from dropdown
-			string region = string.Empty;
+            FindObjectOfType<UIManager>().Init();
+            FindObjectOfType<LevelUIController>().Init();
+
+            // Get region from dropdown
+            string region = string.Empty;
 			if (_regionDropdown.value > 0)
             {
 				region = _regionDropdown.options[_regionDropdown.value].text;

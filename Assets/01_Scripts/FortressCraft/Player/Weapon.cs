@@ -69,7 +69,6 @@ namespace Agit.FortressCraft
 					{ 
 						bullet.Position = hitinfo.point;
 						bullet.EndTick = Runner.Tick;
-						ApplyAreaDamage(hitinfo.point);
 						return true;
 					}
 				}
@@ -166,36 +165,12 @@ namespace Agit.FortressCraft
 				
 				if (impact)
 				{
-					ApplyAreaDamage(hitPoint);
 				}
 				
 				bullets.Add( runner, new ShotState(exit.position, hitPoint-exit.position), 0);
 			}
 			else
 				bullets.Add(runner, new ShotState(exit.position, exit.forward), _bulletPrefab.TimeToLive);
-		}
-
-		private void ApplyAreaDamage(Vector3 hitPoint)
-		{
-			int cnt = Physics.OverlapSphereNonAlloc(hitPoint, _bulletPrefab.AreaRadius, _areaHits, _bulletPrefab.HitMask.value, QueryTriggerInteraction.Ignore);
-			if (cnt > 0)
-			{
-				for (int i = 0; i < cnt; i++)
-				{
-					GameObject other = _areaHits[i].gameObject;
-					if (other)
-					{
-						Player target = other.GetComponent<Player>();
-						if (target != null && target!=_player )
-						{
-							Vector3 impulse = other.transform.position - hitPoint;
-							float l = Mathf.Clamp(_bulletPrefab.AreaRadius - impulse.magnitude, 0, _bulletPrefab.AreaRadius);
-							impulse = _bulletPrefab.AreaImpulse * l * impulse.normalized;
-							target.RaiseEvent(new Player.DamageEvent { impulse=impulse, damage=_bulletPrefab.AreaDamage});
-						}
-					}
-				}
-			}
 		}
 
 		public Transform GetExitPoint(int tick)

@@ -16,14 +16,14 @@ namespace Agit.FortressCraft
         {
             if (!HasStateAuthority) return;
 
-            NetworkObject NO = Runner.Spawn(castle, new Vector3(0f,0f,0f), Quaternion.identity);
+            NetworkObject NO = Runner.Spawn(castle, Vector3.zero, Quaternion.identity);
+            
             string tag = "";
             tag = "A"; // Default
 
             int idx = 0;
             if (Runner.TryGetSingleton(out GameManager gameManager))
             {
-                // gameManager.MakeDictionaryPlayerIdUsingPlayerRef();
                 idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
             }
             Team team;
@@ -48,8 +48,6 @@ namespace Agit.FortressCraft
                     break;
             }
 
-            
-
             RPC_SpawnCastleTransformSync(NO, tag, team);
         }
 
@@ -65,6 +63,7 @@ namespace Agit.FortressCraft
             NormalUnitSpawner spawner = NO.GetComponentInChildren<NormalUnitSpawner>();
             spawner.transform.tag = "Unit_" + tag;
             spawner.SpawnerType = tag;
+
         }
     }
 }

@@ -17,19 +17,6 @@ namespace Agit.FortressCraft
 
 		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
-		public Player lastPlayerStanding { get; set; }
-		public Player matchWinner
-		{
-			get
-			{
-				for (int i = 0; i < score.Length; i++)
-				{
-					if (score[i] >= MAX_SCORE)
-						return GetPlayerByIndex<Player>(i);
-				}
-				return null;
-			}
-		}
 
 		public const byte MAX_SCORE = 3;
 
@@ -42,10 +29,9 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
+            Runner.RegisterSingleton(this);
 
-			Runner.RegisterSingleton(this);
-
-			if (Object.HasStateAuthority)
+            if (Object.HasStateAuthority)
 			{
 				LoadLevel(-1);
 
@@ -62,30 +48,52 @@ namespace Agit.FortressCraft
             FindObjectOfType<UIManager>().leaveToGameButtonDefeatPanel.onClick.AddListener(DisconnectSession);
         }
         
-        public void GetDestroyCastlePlayerRef(string team)
+        public void GetDestroyCastleOwnerPlayer(string tag)
 		{
             foreach (FusionPlayer fusionPlayer in AllPlayers)
             {
                 Player player = (Player)fusionPlayer;
-				if (player.PlayerId.ToString().Contains(team))
-				{
-					player.RPC_SetDestroyCastle(player.PlayerId);
-                    break;
-				}
-            }
-        }
-
-		public void GetWinnerPlayerRef(string team)
-		{
-            foreach (FusionPlayer fusionPlayer in AllPlayers)
-            {
-                Player player = (Player)fusionPlayer;
-                if (player.PlayerId.ToString().Contains(team))
+                // "UnitRoot"라는 이름의 자식 오브젝트를 찾습니다.
+                Transform unitRoot = player.transform.Find("UnitRoot");
+                if (unitRoot != null && unitRoot.gameObject.tag == tag)
                 {
-                    player.RPC_Winner(player.PlayerId);
+					player.RPC_CastleCountDown(player.PlayerId);
+					if(player.castleCount <= 0)
+					{
+						player.RPC_DestroyedAllCastle(player.PlayerId);
+						FindWinner();
+                    }
                     break;
                 }
             }
+        }
+
+        public void FindWinner()
+		{
+			int allPlayerCount = 0;
+			int playerDefeatCnt = 0;
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                allPlayerCount++;
+            }
+			foreach(FusionPlayer fusionPlayer in AllPlayers)
+			{
+                Player player = (Player)fusionPlayer;
+				if(player.IsDestroyedAllCastle)
+					playerDefeatCnt++;
+            }
+
+			if (allPlayerCount - 1 == playerDefeatCnt)
+			{
+				foreach (FusionPlayer fusionPlayer in AllPlayers)
+				{
+                    Player player = (Player)fusionPlayer;
+					if (!player.IsDestroyedAllCastle)
+					{
+						player.RPC_Winner(player.PlayerId);	
+                    }
+                }
+			}
         }
 
 		private void MakeDictionaryPlayerIdUsingPlayerRef()
@@ -122,47 +130,11 @@ namespace Agit.FortressCraft
 
         protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
 		{
-			// Runner.GetLevelManager()?.cameraStrategy.AddTarget(((Player)fusionPlayer).cameraTarget);
 		}
 
 		protected override void OnPlayerAvatarRemoved(FusionPlayer fusionPlayer)
 		{
-			// Runner.GetLevelManager()?.cameraStrategy.RemoveTarget(((Player)fusionPlayer).cameraTarget);
 		}
-        public void OnCommanderDeath()
-		{
-			if (currentPlayState != PlayState.LOBBY)
-			{
-				int playersLeft = 0;
-				lastPlayerStanding = null;
-
-				foreach (FusionPlayer fusionPlayer in AllPlayers)
-				{
-					Player player = (Player)fusionPlayer;
-					if (player.isActivated || player.lives > 0)
-					{
-						lastPlayerStanding = player;
-						playersLeft++;
-					}
-				}
-
-				if (playersLeft > 1)
-					lastPlayerStanding = null;
-
-				Debug.Log($"Someone died - {playersLeft} left");
-				if (lastPlayerStanding != null)
-				{
-					int nextLevelIndex = Runner.GetLevelManager().GetBattleSceneIndex();
-					int newScore = score[lastPlayerStanding.PlayerIndex] + 1;
-					if (HasStateAuthority)
-						score.Set(lastPlayerStanding.PlayerIndex, newScore);
-					if (newScore >= MAX_SCORE)
-						nextLevelIndex = -1;
-					LoadLevel(nextLevelIndex);
-				}
-			}
-		}
-
 		public void Restart(ShutdownReason shutdownReason)
 		{
 			if (!Runner.IsShutdown)
@@ -170,6 +142,7 @@ namespace Agit.FortressCraft
 				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
 				Runner.Shutdown(false, shutdownReason);
 				_restart = false;
+				
 			}
 		}
 
