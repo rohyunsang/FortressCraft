@@ -55,7 +55,6 @@ namespace Agit.FortressCraft
 
         public void OnDefeatPanel()
         {
-            Debug.Log("HI");
             defeatPanel.SetActive(true);
         }
 
@@ -66,13 +65,11 @@ namespace Agit.FortressCraft
 
         public void OnDarkFilter()
         {
-            Debug.Log("AAAAAAAAAA On");
             darkFilter.SetActive(true);
         }
 
         public void OffDarkFilter()
         {
-            Debug.Log("AAAAAAAA OFF");
             darkFilter.SetActive(false);
         }
 

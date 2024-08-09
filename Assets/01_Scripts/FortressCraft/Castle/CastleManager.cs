@@ -61,13 +61,7 @@ namespace Agit.FortressCraft
             {
                 if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
                 {
-                    Debug.Log("게임매니저 콜AAAAAAAAAAA");
                     gameManager.GetDestroyCastleOwnerPlayer(gameObject.tag);
-                }
-                else
-                {
-                    Debug.Log("게임매니저 콜안됨AAAAAAAAAAA");
-
                 }
                 Destroy(gameObject);
             }

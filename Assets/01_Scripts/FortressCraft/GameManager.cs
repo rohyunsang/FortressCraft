@@ -142,6 +142,7 @@ namespace Agit.FortressCraft
 				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
 				Runner.Shutdown(false, shutdownReason);
 				_restart = false;
+				
 			}
 		}
 

@@ -48,8 +48,6 @@ namespace Agit.FortressCraft
                     break;
             }
 
-            
-
             RPC_SpawnCastleTransformSync(NO, tag, team);
         }
 

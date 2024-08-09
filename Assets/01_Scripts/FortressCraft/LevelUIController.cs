@@ -10,7 +10,6 @@ public class LevelUIController : MonoBehaviour
     [SerializeField] private GameObject lobbyParent;
     [SerializeField] private GameObject leaveToSessionButton;
 
-
     // Both
     [SerializeField] private GameObject bothParent;
 
