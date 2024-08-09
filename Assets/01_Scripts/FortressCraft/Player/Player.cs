@@ -402,14 +402,6 @@ namespace Agit.FortressCraft
 					{
 						_netAnimator.Animator.SetBool("isMove", false);
 					}
-
-					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
-					{
-						RPC_CastleCount();
-						RPC_Debug();
-                        _spawnCastle.SpawnCastleObject();
-                    }
-
                     _oldInput = input;
 				}
 			}
@@ -419,12 +411,6 @@ namespace Agit.FortressCraft
         public void RPC_CastleCount()
         {
             castleCount++;
-        }
-
-        [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPC_Debug()
-        {
-			Debug.Log("AAAAAAAAAA" + " " + castleCount + PlayerId);
         }
 
         private void UpdateBtnColor()
@@ -519,9 +505,9 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		// Sound ---------------------------------------------------------
+        #region Sound
 
-		public void PlaySound1()
+        public void PlaySound1()
         {
 			sound1.Play();
         }
@@ -533,9 +519,10 @@ namespace Agit.FortressCraft
 		{
 			sound3.Play();
 		}
-		// ---------------------------------------------------------------
 
-		[Rpc(RpcSources.All, RpcTargets.All)]
+        #endregion 
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCMagicSetting()
         {
 			magicianFire.FireDirection = lastDir;
@@ -605,7 +592,8 @@ namespace Agit.FortressCraft
         {
 			if(isBuildCastle && Object.HasStateAuthority)
             {
-				RewardManager rewardManager = RewardManager.Instance;
+
+                RewardManager rewardManager = RewardManager.Instance;
 				SpawnCastleCostManager spawnCastleCostManager = SpawnCastleCostManager.Instance;
 
 				if (rewardManager == null || spawnCastleCostManager == null) return;
@@ -614,7 +602,8 @@ namespace Agit.FortressCraft
 				rewardManager.Gold -= spawnCastleCostManager.GetCost(spawnCastleCostManager.level);
 				spawnCastleCostManager.LevelUp();
 
-				_spawnCastle.SpawnCastleObject();
+                RPC_CastleCount();
+                _spawnCastle.SpawnCastleObject();
 			}
 			
         }
@@ -666,7 +655,6 @@ namespace Agit.FortressCraft
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPC_CastleCountDownInternal()
         {
-            //castleCount--;
 			Debug.Log("AAAAAAAA" + PlayerId + " caslte " + castleCount);
         }
 
