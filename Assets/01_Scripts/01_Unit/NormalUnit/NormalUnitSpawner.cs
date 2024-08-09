@@ -63,6 +63,8 @@ namespace Agit.FortressCraft
         {
             Usable = false;
 
+            if (!HasStateAuthority) return;
+
             poolManager = NetworkObjectPoolManager.Instance;
             //AttackEnabled = true;
             Damage = NormalUnitDataManager.Instance.Attack;

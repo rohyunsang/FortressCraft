@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731716, g: 0.13414738, b: 0.121078566, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20691,7 +20691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   costText: {fileID: 2080006024}
-  costByLevel: 6400000096000000c8000000f000000018010000400100006801000090010000a4010000b8010000cc010000e0010000f4010000080200001c02000030020000
+  costByLevel: 0000000096000000c8000000f000000018010000400100006801000090010000a4010000b8010000cc010000e0010000f4010000080200001c02000030020000
 --- !u!1 &1656839690
 GameObject:
   m_ObjectHideFlags: 0
@@ -29120,7 +29120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1829525154846187925}
   m_HandleRect: {fileID: 2452266743058850416}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
