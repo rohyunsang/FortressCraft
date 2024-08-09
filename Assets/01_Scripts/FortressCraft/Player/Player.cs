@@ -35,6 +35,10 @@ namespace Agit.FortressCraft
 		[SerializeField] private float _respawnTime;
 		[SerializeField] private PlayerHPBar playerHPBar;
 
+		[SerializeField] private AudioSource sound1;
+		[SerializeField] private AudioSource sound2;
+		[SerializeField] private AudioSource sound3;
+
 		public struct DamageEvent : INetworkEvent
 		{
 			public Vector3 impulse;
@@ -251,6 +255,7 @@ namespace Agit.FortressCraft
 
 				if (Job == JobType.Archer)
 				{
+					sound2.SetScheduledStartTime(0.7f);
 					archerFire.OwnType = OwnType;
 				}
 				else if (Job == JobType.Magician)
@@ -470,15 +475,18 @@ namespace Agit.FortressCraft
 				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
+					Invoke("PlaySound1", 0.4f);
 				}
 				else if (Job == JobType.Magician)
 				{
 					magicianFire.SetDamageByLevel(level, Job);
+					Invoke("PlaySound1", 0.3f);
 				}
 				else if( Job == JobType.Warrior)
 				{
 					SetAttack(level, Job);
 					wairrorWeapon.Damage = AttackDamage;
+					Invoke("PlaySound1", 0.2f);
 				}
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
@@ -495,13 +503,15 @@ namespace Agit.FortressCraft
 					archerFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
-                }
+					Invoke("PlaySound2", 0.5f);
+				}
 				else if (Job == JobType.Magician)
 				{
 					RPCMagicSetting();
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
-                }
+					Invoke("PlaySound2", 0.4f);
+				}
                 else if (Job == JobType.Warrior)
 				{
 					RPC_ChargeStartCallback();
@@ -511,9 +521,26 @@ namespace Agit.FortressCraft
 					_cc.isCharge = true;
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
                     Invoke("ChargeFinishCallback", 0.15f);
+					PlaySound2();
                 }
 			}
 		}
+
+		// Sound ---------------------------------------------------------
+
+		public void PlaySound1()
+        {
+			sound1.Play();
+        }
+		public void PlaySound2()
+		{
+			sound2.Play();
+		}
+		public void PlaySound3()
+		{
+			sound3.Play();
+		}
+		// ---------------------------------------------------------------
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCMagicSetting()
@@ -552,6 +579,7 @@ namespace Agit.FortressCraft
                 {
 					archerFire.SetDamageByLevel(level, Job);
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+					Invoke("PlaySound3", 0.5f);
 				}
 				else if( Job == JobType.Magician )
                 {
@@ -572,6 +600,8 @@ namespace Agit.FortressCraft
 					{
 						life += currentMaxHp * 0.3f;
 					}
+
+					PlaySound3();
                 }
 
 				_netAnimator.Animator.SetTrigger("Skill2");
