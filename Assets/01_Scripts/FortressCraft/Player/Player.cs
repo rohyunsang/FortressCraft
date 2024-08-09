@@ -498,7 +498,7 @@ namespace Agit.FortressCraft
 
 					_netAnimator.Animator.SetTrigger("Skill1");
 					_cc.isCharge = true;
-					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     Invoke("ChargeFinishCallback", 0.15f);
 					PlaySound2();
                 }
@@ -569,7 +569,7 @@ namespace Agit.FortressCraft
 				else if(Job == JobType.Warrior)
 				{
                     // Healing 부분 
-					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
                     float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
 					
 					if(currentMaxHp < life + currentMaxHp * 0.3f)
