@@ -63,6 +63,7 @@ namespace Agit.FortressCraft
             NormalUnitSpawner spawner = NO.GetComponentInChildren<NormalUnitSpawner>();
             spawner.transform.tag = "Unit_" + tag;
             spawner.SpawnerType = tag;
+
         }
     }
 }

@@ -53,6 +53,12 @@ namespace Agit.FortressCraft
 
         public GameObject darkFilter;
 
+        public void Init()
+        {
+            victoryPanel.SetActive(false);
+            defeatPanel.SetActive(false);
+        }
+
         public void OnDefeatPanel()
         {
             defeatPanel.SetActive(true);

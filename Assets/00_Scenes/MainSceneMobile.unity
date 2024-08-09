@@ -16189,6 +16189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyParent: {fileID: 1505417035}
   leaveToSessionButton: {fileID: 1625020599}
+  disconnectPrompt: {fileID: 2174979962748793621}
   bothParent: {fileID: 1149515712}
   inGameParent: {fileID: 157666252}
 --- !u!1 &1353563043

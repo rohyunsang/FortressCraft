@@ -296,6 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HpBarSlider: {fileID: 1521518489167026119}
   team: 0
+  bodyCollider: {fileID: 0}
 --- !u!114 &3225645976391736003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +315,7 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 7120570684118470469}
   NetworkedBehaviours:
+  - {fileID: 6051903310663013930}
   - {fileID: 2804369645508665532}
 --- !u!50 &7883682871855343710
 Rigidbody2D:

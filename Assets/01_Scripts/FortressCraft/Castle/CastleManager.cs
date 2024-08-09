@@ -19,11 +19,15 @@ namespace Agit.FortressCraft
 
         public Castle castle;
 
-        private float MaxHP = 100f;
+        private float MaxHP = 500f;
 
         private ChangeDetector changes;
 
-        public int team_id { get; set; }
+        [SerializeField] private CastleHpBar castleHpBar;
+
+        [SerializeField] private CastleBodyCollider bodyCollider;
+
+        public bool isDestroyCastle = false;
 
         public override void Spawned()
         {
@@ -48,17 +52,38 @@ namespace Agit.FortressCraft
                 switch (change)
                 {
                     case nameof(CurrentHP):
-                        SyncHp(CurrentHP, castle);
+                        castleHpBar.SetHPBar(CurrentHP);
+                        UpdateCastleHP();
                         break;
                 }
             }
         }
 
-        public void UpdateCastleHP(float damage)
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCCheckDamaged()
         {
-            CurrentHP -= damage;
-            if (CurrentHP <= 0)
+            CheckDamaged();
+        }
+
+        public void CheckDamaged()
+        {
+            // if (IsDestroyed) return;
+
+            if (bodyCollider.Damaged > 0.0f)
             {
+                CurrentHP -= bodyCollider.Damaged;
+
+                bodyCollider.Damaged = 0.0f;
+            }
+        }
+
+        public void UpdateCastleHP()
+        {
+            if (!HasStateAuthority) return;
+
+            if (this.CurrentHP <= 0 && !isDestroyCastle)
+            {
+                isDestroyCastle = true;
                 if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
                 {
                     gameManager.GetDestroyCastleOwnerPlayer(gameObject.tag);
@@ -66,13 +91,5 @@ namespace Agit.FortressCraft
                 Destroy(gameObject);
             }
         }
-
-        private void SyncHp(float currentHp, Castle castle)
-        {
-            if (castle != null && castle.HpBarSlider != null)
-            {
-                castle.HpBarSlider.value = currentHp / MaxHP;
-            }
-        }
-    }
+    }       
 }

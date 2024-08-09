@@ -9,9 +9,11 @@ public class LevelUIController : MonoBehaviour
     // Only Lobby
     [SerializeField] private GameObject lobbyParent;
     [SerializeField] private GameObject leaveToSessionButton;
+    [SerializeField] private GameObject disconnectPrompt;
 
     // Both
     [SerializeField] private GameObject bothParent;
+    
 
     // InGame
     [SerializeField] private GameObject inGameParent;
@@ -21,6 +23,15 @@ public class LevelUIController : MonoBehaviour
         lobbyParent.SetActive(true);
         leaveToSessionButton.SetActive(true);
         bothParent.SetActive(true);
+    }
+
+    public void Init()
+    {
+        lobbyParent.SetActive(true);
+        bothParent.SetActive(true);
+        leaveToSessionButton.SetActive(true);
+        inGameParent.SetActive(false);
+        disconnectPrompt.SetActive(false);
     }
 
     public void BattleSceneUIChange()

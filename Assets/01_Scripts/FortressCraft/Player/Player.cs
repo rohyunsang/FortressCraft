@@ -188,7 +188,6 @@ namespace Agit.FortressCraft
 
 			StartCoroutine(AutoHeal());
 			castleCount = 1;
-
         }
 
 		public void UpdateBattleSetting()
@@ -397,6 +396,7 @@ namespace Agit.FortressCraft
 					if (isBuildCastle && Object.HasStateAuthority && input.WasPressed(NetworkInputData.BUTTON_TOGGLE_SPAWNCASTLE, _oldInput))
 					{
 						RPC_CastleCount();
+						RPC_Debug();
                         _spawnCastle.SpawnCastleObject();
                     }
 
@@ -409,6 +409,12 @@ namespace Agit.FortressCraft
         public void RPC_CastleCount()
         {
             castleCount++;
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_Debug()
+        {
+			Debug.Log("AAAAAAAAAA" + " " + castleCount + PlayerId);
         }
 
         private void UpdateBtnColor()
@@ -599,14 +605,16 @@ namespace Agit.FortressCraft
         {
             if (PlayerId == playerRef && HasStateAuthority)
             {
-				RPC_CastleCountDownInternal();
+                castleCount--;
+                RPC_CastleCountDownInternal();
             }
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPC_CastleCountDownInternal()
         {
-            castleCount--;
+            //castleCount--;
+			Debug.Log("AAAAAAAA" + PlayerId + " caslte " + castleCount);
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
