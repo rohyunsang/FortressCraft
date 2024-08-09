@@ -7,7 +7,7 @@ namespace Agit.FortressCraft
 {
     public class UIScale : NetworkBehaviour
     {
-        public override void FixedUpdateNetwork()
+        public void Update()
         {
             if(HasStateAuthority)
                 RPCSettingScale();
