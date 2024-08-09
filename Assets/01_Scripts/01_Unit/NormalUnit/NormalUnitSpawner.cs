@@ -198,9 +198,11 @@ namespace Agit.FortressCraft
                                                  Random.Range(-range, range),
                                                  0.0f);
 
-                    unit.RPCSetPos(transform.position + offset);
+                    RPCSetPos(transform.position + offset);
 
-                    unit.RPCSetActive();
+                    //unit.RPCSetActive();
+                    RPCSetActive();
+
                     ++NowUnitCount;
                 }
                 else
@@ -214,6 +216,19 @@ namespace Agit.FortressCraft
         public void RPCUnitSetting(NormalUnitRigidBodyMovement normal)
         {
             normal.NoReward = false;
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetActive()
+        {
+            gameObject.SetActive(true);
+            Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetPos(Vector3 pos)
+        {
+            transform.position = pos;
         }
     }
 }

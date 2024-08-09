@@ -22,7 +22,7 @@ namespace FusionHelpers
         [SerializeField] private FusionPlayer _playerPrefabArcher;
 		[SerializeField] private FusionPlayer _playerPrefabMagician;
 
-        [Networked, Capacity(MAX_PLAYERS)] public NetworkDictionary<int, PlayerRef> playerRefByIndex { get; }
+        [Networked, Capacity(10)] public NetworkDictionary<int, PlayerRef> playerRefByIndex { get; }
 		private Dictionary<PlayerRef, FusionPlayer> _players = new();
 
 		protected abstract void OnPlayerAvatarAdded(FusionPlayer fusionPlayer);
@@ -72,6 +72,7 @@ namespace FusionHelpers
 
 		private void MaybeSpawnNextAvatar()
 		{
+			Debug.Log("Maybe");
 			foreach (KeyValuePair<int,PlayerRef> refByIndex in playerRefByIndex)
 			{
 				if (Runner.IsServer || (Runner.Topology == Topologies.Shared && refByIndex.Value == Runner.LocalPlayer))
