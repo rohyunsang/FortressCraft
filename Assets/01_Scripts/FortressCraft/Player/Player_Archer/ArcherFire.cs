@@ -14,7 +14,9 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
         [SerializeField] private float damage = 0.0f;
 
-        public int skill2ArrowCount = 36; 
+        public int skill2ArrowCount = 36;
+
+        private Vector3 offsetVector = new Vector3(0.0f, 0.1f, 0.0f);
 
         // 관통형 화살 1개 발사 
         public void FireArrow()
@@ -22,7 +24,7 @@ namespace Agit.FortressCraft
             //Debug.Log("Damage: " + damage);
             //Debug.Log("Fire!");
             if (OwnType == null) return;
-            NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
+            NetworkObject no = Runner.Spawn(arrow, transform.position + offsetVector, Quaternion.identity);
             no.transform.SetParent(null);
 
             ArcherArrow archerArrow = no.GetComponent<ArcherArrow>();
@@ -41,11 +43,8 @@ namespace Agit.FortressCraft
             if (OwnType == null) return;
             for ( int i = 1; i < 11; ++i )
             {
-                NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
+                NetworkObject no = Runner.Spawn(arrow, transform.position + offsetVector, Quaternion.identity);
                 no.transform.SetParent(null);
-                no.transform.localScale = new Vector3(no.transform.localScale.x * 1.5f,
-                                                        no.transform.localScale.y * 1.5f,
-                                                        no.transform.localScale.z);
 
                 ArcherArrow archerArrow = no.GetComponent<ArcherArrow>();
                 archerArrow.FireDirection = new Vector2( FireDirection.x * i / 2.0f , FireDirection.y * i / 2.0f );
@@ -65,7 +64,7 @@ namespace Agit.FortressCraft
             float offset = 360.0f / (float)skill2ArrowCount;
             for( int i = 0; i < skill2ArrowCount; ++i )
             {
-                NetworkObject no = Runner.Spawn(arrow, transform.position, Quaternion.identity);
+                NetworkObject no = Runner.Spawn(arrow, transform.position + offsetVector, Quaternion.identity);
                 no.transform.SetParent(null);
 
                 ArcherArrow archerArrow = no.GetComponent<ArcherArrow>();

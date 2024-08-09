@@ -35,6 +35,10 @@ namespace Agit.FortressCraft
 		[SerializeField] private float _respawnTime;
 		[SerializeField] private PlayerHPBar playerHPBar;
 
+		[SerializeField] private AudioSource sound1;
+		[SerializeField] private AudioSource sound2;
+		[SerializeField] private AudioSource sound3;
+
 
 		[Networked] public Stage stage { get; set; }
 		[Networked] public float life { get; set; }  // player HP
@@ -90,6 +94,8 @@ namespace Agit.FortressCraft
 		private Button skill2Btn;
 		private Image[] skill1BtnImages;
 		private Image[] skill2BtnImages;
+
+		private Button spawnCastleBtn;
 
 		public string OwnType { get; set; }
 
@@ -209,6 +215,9 @@ namespace Agit.FortressCraft
 			skill2Btn.onClick.AddListener(Skill2);
 			skill2BtnImages = skill2Btn.GetComponentsInChildren<Image>();
 
+			spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
+			spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
+
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
 			{
 				switch (gameManager.TryGetPlayerId(Runner.LocalPlayer))
@@ -231,6 +240,7 @@ namespace Agit.FortressCraft
 
 				if (Job == JobType.Archer)
 				{
+					sound2.SetScheduledStartTime(0.7f);
 					archerFire.OwnType = OwnType;
 				}
 				else if (Job == JobType.Magician)
@@ -252,7 +262,7 @@ namespace Agit.FortressCraft
 				if (!died)
 				{
 					CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
-					life *= (1.0f + 0.01f * commanderData.HealPerSecond);
+					life += ( MAX_HEALTH * 0.01f * commanderData.HealPerSecond);
 					if (life > commanderData.HP)
 					{
 						life = commanderData.HP;
@@ -458,15 +468,18 @@ namespace Agit.FortressCraft
 				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
+					Invoke("PlaySound1", 0.4f);
 				}
 				else if (Job == JobType.Magician)
 				{
 					magicianFire.SetDamageByLevel(level, Job);
+					Invoke("PlaySound1", 0.3f);
 				}
 				else if( Job == JobType.Warrior)
 				{
 					SetAttack(level, Job);
 					wairrorWeapon.Damage = AttackDamage;
+					Invoke("PlaySound1", 0.2f);
 				}
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
@@ -483,13 +496,15 @@ namespace Agit.FortressCraft
 					archerFire.SetDamageByLevel(level, Job);
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
-                }
+					Invoke("PlaySound2", 0.5f);
+				}
 				else if (Job == JobType.Magician)
 				{
 					RPCMagicSetting();
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
-                }
+					Invoke("PlaySound2", 0.4f);
+				}
                 else if (Job == JobType.Warrior)
 				{
 					RPC_ChargeStartCallback();
@@ -499,9 +514,26 @@ namespace Agit.FortressCraft
 					_cc.isCharge = true;
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
                     Invoke("ChargeFinishCallback", 0.15f);
+					PlaySound2();
                 }
 			}
 		}
+
+		// Sound ---------------------------------------------------------
+
+		public void PlaySound1()
+        {
+			sound1.Play();
+        }
+		public void PlaySound2()
+		{
+			sound2.Play();
+		}
+		public void PlaySound3()
+		{
+			sound3.Play();
+		}
+		// ---------------------------------------------------------------
 
 		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCMagicSetting()
@@ -540,6 +572,7 @@ namespace Agit.FortressCraft
                 {
 					archerFire.SetDamageByLevel(level, Job);
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+					Invoke("PlaySound3", 0.5f);
 				}
 				else if( Job == JobType.Magician )
                 {
@@ -560,10 +593,30 @@ namespace Agit.FortressCraft
 					{
 						life += currentMaxHp * 0.3f;
 					}
+
+					PlaySound3();
                 }
 
 				_netAnimator.Animator.SetTrigger("Skill2");
 			}
+        }
+
+		public void SpawnCastleObejct()
+        {
+			if(isBuildCastle && Object.HasStateAuthority)
+            {
+				RewardManager rewardManager = RewardManager.Instance;
+				SpawnCastleCostManager spawnCastleCostManager = SpawnCastleCostManager.Instance;
+
+				if (rewardManager == null || spawnCastleCostManager == null) return;
+				if (rewardManager.Gold < spawnCastleCostManager.GetCost(spawnCastleCostManager.level)) return;
+
+				rewardManager.Gold -= spawnCastleCostManager.GetCost(spawnCastleCostManager.level);
+				spawnCastleCostManager.LevelUp();
+
+				_spawnCastle.SpawnCastleObject();
+			}
+			
         }
 
         /// <summary>

@@ -33,7 +33,7 @@ namespace Agit.FortressCraft
             no.transform.SetParent(null);
 
             MagicianSpell magicianSpell = no.GetComponent<MagicianSpell>();
-            magicianSpell.SpellSpeed = 3.0f;
+            magicianSpell.SpellSpeed = 5.0f;
 
             MagicianSpellAttackCollider magicAttackCollider = no.GetComponent<MagicianSpellAttackCollider>();
             magicAttackCollider.Damage = damage;
