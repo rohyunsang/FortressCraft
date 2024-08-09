@@ -4475,7 +4475,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1541378872
+  SortKey: 3763655458
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -16550,6 +16550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyParent: {fileID: 1505417035}
   leaveToSessionButton: {fileID: 1625020599}
+  disconnectPrompt: {fileID: 2174979962748793621}
   bothParent: {fileID: 1149515712}
   inGameParent: {fileID: 157666252}
 --- !u!1 &1353563043
