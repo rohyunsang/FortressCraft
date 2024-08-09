@@ -23,6 +23,7 @@ namespace Agit.FortressCraft{
         public void SliderInit()
         {
             HpBarSlider.gameObject.SetActive(true);
+            HpBarSlider.value = 1;
         }
 
 
