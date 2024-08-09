@@ -13,7 +13,7 @@ namespace Agit.FortressCraft
 		public enum PlayState { LOBBY, LEVEL, TRANSITION }
 
 		[Networked] public PlayState currentPlayState { get; set; }
-		[Networked, Capacity(4)] private NetworkArray<int> score => default;
+
 
 		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
@@ -195,11 +195,6 @@ namespace Agit.FortressCraft
 		{
             if (Object.HasStateAuthority)
 				Runner.GetLevelManager().LoadLevel(nextLevelIndex);
-		}
-
-		public int GetScore(Player player)
-		{
-			return score[player.PlayerIndex];
 		}
 	}
 }

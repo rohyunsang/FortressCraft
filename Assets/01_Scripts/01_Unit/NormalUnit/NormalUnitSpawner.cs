@@ -63,6 +63,8 @@ namespace Agit.FortressCraft
         {
             Usable = false;
 
+            if (!HasStateAuthority) return;
+
             poolManager = NetworkObjectPoolManager.Instance;
             //AttackEnabled = true;
             Damage = NormalUnitDataManager.Instance.Attack;
@@ -196,9 +198,11 @@ namespace Agit.FortressCraft
                                                  Random.Range(-range, range),
                                                  0.0f);
 
-                    unit.RPCSetPos(transform.position + offset);
+                    RPCSetPos(unit, transform.position + offset);
 
-                    unit.RPCSetActive();
+                    //unit.RPCSetActive();
+                    RPCSetActive(unit);
+
                     ++NowUnitCount;
                 }
                 else
@@ -212,6 +216,19 @@ namespace Agit.FortressCraft
         public void RPCUnitSetting(NormalUnitRigidBodyMovement normal)
         {
             normal.NoReward = false;
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetActive(NormalUnitRigidBodyMovement normal)
+        {
+            normal.gameObject.SetActive(true);
+            Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetPos(NormalUnitRigidBodyMovement normal, Vector3 pos)
+        {
+            normal.transform.position = pos;
         }
     }
 }

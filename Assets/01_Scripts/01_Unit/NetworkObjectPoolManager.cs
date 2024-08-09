@@ -83,7 +83,7 @@ namespace Agit.FortressCraft
 				if (instance.TryGetComponent<NormalUnitRigidBodyMovement>(out NormalUnitRigidBodyMovement normal))
 				{
 					normal.RPCSetUnactive();
-				}
+                }
 				else if (instance.TryGetComponent<Arrow>(out Arrow arrow))
                 {
 					Debug.Log("Arrow unactive");
@@ -97,5 +97,5 @@ namespace Agit.FortressCraft
 				Destroy(instance.gameObject);
 			}
 		}
-	}
+    }
 }
