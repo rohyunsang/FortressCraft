@@ -39,7 +39,7 @@ namespace FusionHelpers
 	public class FusionLauncher : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		private Action<NetworkRunner, ConnectionStatus, string> _connectionCallback;
-		private FusionSession _sessionPrefab;
+		[SerializeField]	private FusionSession _sessionPrefab;
 
 		public string playerName = null;
 

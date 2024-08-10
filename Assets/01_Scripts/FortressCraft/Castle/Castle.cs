@@ -15,8 +15,6 @@ namespace Agit.FortressCraft{
 
         public Team team;
 
-
-
         public void Init(float currntHP)
         {
             CurrentHP = currntHP;
@@ -27,8 +25,6 @@ namespace Agit.FortressCraft{
             HpBarSlider.gameObject.SetActive(true);
             HpBarSlider.value = 1;
         }
-
-        
     }
 }
 

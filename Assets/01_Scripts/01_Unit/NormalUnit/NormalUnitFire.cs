@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
@@ -41,13 +42,15 @@ namespace Agit.FortressCraft
             NetworkObject networkObject;
             poolManager.AcquirePrefabInstance(runner, context, out networkObject);
             Debug.Log(networkObject);
-            networkObject.transform.position = transform.position;
+            //networkObject.transform.position = transform.position;
 
             Arrow arrow = networkObject.GetComponent<Arrow>();
             arrow.TargetTransform = TargetTranform;
             arrow.ID = id;
             arrow.Normal = normalUnit;
             RPCSetActive(arrow, transform.position);
+            arrow.RPCSetActive();
+
             arrow.ReserveRelease();
 
             AttackCollider attackCollider = networkObject.GetComponentInChildren<AttackCollider>();
@@ -59,8 +62,7 @@ namespace Agit.FortressCraft
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCSetActive(Arrow arrow, Vector3 pos)
         {
-            arrow.transform.position = pos;
-            gameObject.SetActive(true);
+            arrow.gameObject.GetComponent<Rigidbody2D>().transform.position = pos;
         }
     }
 }

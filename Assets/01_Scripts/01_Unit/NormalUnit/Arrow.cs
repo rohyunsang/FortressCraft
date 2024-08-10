@@ -61,9 +61,8 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPCSetActive(Vector3 pos)
+        public void RPCSetActive()
         {
-            transform.position = pos;
             gameObject.SetActive(true);
         }
 
