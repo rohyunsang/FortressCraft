@@ -238,6 +238,8 @@ namespace Agit.FortressCraft
 
 				RPCSetType("Unit_" + OwnType);
 
+				BattleBarUIManager.Instance.OwnType = OwnType;
+
 				if (Job == JobType.Archer)
 				{
 					sound2.SetScheduledStartTime(0.7f);

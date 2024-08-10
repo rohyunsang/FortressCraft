@@ -204,6 +204,7 @@ namespace Agit.FortressCraft
                     RPCSetActive(unit);
 
                     ++NowUnitCount;
+                    BattleBarUIManager.Instance.RPCPlusUnitCount(SpawnerType);
                 }
                 else
                 {

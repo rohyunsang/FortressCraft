@@ -146,6 +146,7 @@ namespace Agit.FortressCraft
             if (dieTimer.Expired(Runner))
             {
                 --Spawner.NowUnitCount;
+                BattleBarUIManager.Instance.RPCMinusUnitCount(Spawner.SpawnerType);
                 dieTimer = TickTimer.None;
                 NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, Spawner.id, false, false);
                 Spawner.poolManager.ReleaseInstance(Runner, context);

@@ -24,17 +24,17 @@ namespace Agit.FortressCraft
             switch (idx)
             {
                 case 0:
-                    attackLevel.text = level.ToString() + "Lv";
+                    attackLevel.text = "Lv " + level.ToString();
                     attackValue.text = unitData.Attack.ToString();
                     attackCost.text = unitData.UpgradeCost.ToString();
                     break;
                 case 1:
-                    defenseLevel.text = level.ToString() + "Lv";
+                    defenseLevel.text = "Lv " + level.ToString();
                     defenseValue.text = unitData.Defense.ToString();
                     defenseCost.text = unitData.UpgradeCost.ToString();
                     break;
                 case 2:
-                    timeLevel.text = level.ToString() + "Lv";
+                    timeLevel.text = "Lv " + level.ToString();
                     timeValue.text = unitData.SpawnDelay.ToString() + "초";
                     timeCost.text = unitData.UpgradeCost.ToString();
                     break;
