@@ -82,12 +82,12 @@ namespace Agit.FortressCraft
 				instance.gameObject.SetActive(false);
 				if (instance.TryGetComponent<NormalUnitRigidBodyMovement>(out NormalUnitRigidBodyMovement normal))
 				{
-					normal.RPCSetUnactive();
+                    normal.RPCSetUnactive();
                 }
 				else if (instance.TryGetComponent<Arrow>(out Arrow arrow))
                 {
 					Debug.Log("Arrow unactive");
-					arrow.RPCSetUnactive();
+                    arrow.RPCSetUnactive();
                 }
 				stack.Push(instance);
 			}
