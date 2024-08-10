@@ -31,5 +31,11 @@ namespace Agit.FortressCraft
             ++level;
             costText.text = costByLevel[level].ToString();
         }
+
+        public void resetCost()
+        {
+            level = 0;
+            costText.text = costByLevel[level].ToString();
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace Agit.FortressCraft
             foreach (FusionPlayer fusionPlayer in AllPlayers)
             {
                 Player player = (Player)fusionPlayer;
-                // "UnitRoot"라는 이름의 자식 오브젝트를 찾습니다.
+                // "UnitRoot"???? ?????? ???? ?????????? ????????.
                 Transform unitRoot = player.transform.Find("UnitRoot");
                 if (unitRoot != null && unitRoot.gameObject.tag == tag)
                 {
@@ -189,6 +189,8 @@ namespace Agit.FortressCraft
 			// close and hide the session from matchmaking / lists. this demo does not allow late join.
 			Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
+
+			Transform.FindObjectOfType<LoadingMsg>().OnInfo();
 
 			// Reset stats and transition to level.
 			Invoke("InvokeLoadLevel",3f);

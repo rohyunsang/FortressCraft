@@ -4,40 +4,45 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUIController : MonoBehaviour
+namespace Agit.FortressCraft
 {
-    // Only Lobby
-    [SerializeField] private GameObject lobbyParent;
-    [SerializeField] private GameObject leaveToSessionButton;
-    [SerializeField] private GameObject disconnectPrompt;
-
-    // Both
-    [SerializeField] private GameObject bothParent;
-    
-
-    // InGame
-    [SerializeField] private GameObject inGameParent;
-
-    private void Start()
+    public class LevelUIController : MonoBehaviour
     {
-        lobbyParent.SetActive(true);
-        leaveToSessionButton.SetActive(true);
-        bothParent.SetActive(true);
-    }
+        // Only Lobby
+        [SerializeField] private GameObject lobbyParent;
+        [SerializeField] private GameObject leaveToSessionButton;
+        [SerializeField] private GameObject disconnectPrompt;
 
-    public void Init()
-    {
-        lobbyParent.SetActive(true);
-        bothParent.SetActive(true);
-        leaveToSessionButton.SetActive(true);
-        inGameParent.SetActive(false);
-        disconnectPrompt.SetActive(false);
-    }
+        // Both
+        [SerializeField] private GameObject bothParent;
 
-    public void BattleSceneUIChange()
-    {
-        leaveToSessionButton.SetActive(false);
-        lobbyParent.SetActive(false);
-        inGameParent.SetActive(true);
+
+        // InGame
+        [SerializeField] private GameObject inGameParent;
+
+        private void Start()
+        {
+            lobbyParent.SetActive(true);
+            leaveToSessionButton.SetActive(true);
+            bothParent.SetActive(true);
+        }
+
+        public void Init()
+        {
+            lobbyParent.SetActive(true);
+            bothParent.SetActive(true);
+            leaveToSessionButton.SetActive(true);
+            inGameParent.SetActive(false);
+            disconnectPrompt.SetActive(false);
+        }
+
+        public void BattleSceneUIChange()
+        {
+            leaveToSessionButton.SetActive(false);
+            lobbyParent.SetActive(false);
+            inGameParent.SetActive(true);
+
+            BattleBarUIManager.Instance.SetBattleBar();
+        }
     }
 }

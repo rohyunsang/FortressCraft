@@ -13,6 +13,7 @@ namespace Agit.FortressCraft
         public float SpellSpeed { get; set; }
         public NetworkPrefabId ID { get; set; }
         public bool Fired { get; set; }
+        public string OwnType { get; set; }
         private TickTimer destroyTimer;
         private MagicianSpellAttackCollider attackCollider;
 
@@ -30,15 +31,25 @@ namespace Agit.FortressCraft
             Target = null;
 
             Collider2D[] cols = Physics2D.OverlapCircleAll(
-                        new Vector2(transform.position.x, transform.position.y), 2.0f);
+                        new Vector2(transform.position.x, transform.position.y), 3.0f);
 
             foreach (Collider2D col in cols)
             {
                 if (col.tag.StartsWith("Unit"))
                 {
-                    if (col.CompareTag("Unit_" + attackCollider.OwnType)) continue;
-                    Target = col.transform.parent;
-                    break;
+                    if (!col.CompareTag("Unit_" + OwnType))
+                    {
+                        if( col.transform.parent != null )
+                        {
+                            Target = col.transform.parent;
+                        }
+                        else
+                        {
+                            Target = col.transform;
+                        }
+                        
+                        break;
+                    }
                 }
             }
 

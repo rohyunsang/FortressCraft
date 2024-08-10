@@ -68,6 +68,7 @@ namespace Agit.FortressCraft
         public void OnDefeatPanel()
         {
             defeatPanel.SetActive(true);
+            BattleBarUIManager.Instance.RPCClearUnitCount(BattleBarUIManager.Instance.OwnType);
         }
 
         public void OnVictoryPanel()
