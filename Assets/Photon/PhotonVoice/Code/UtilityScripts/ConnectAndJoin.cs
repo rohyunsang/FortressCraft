@@ -56,6 +56,8 @@ namespace Photon.Voice.Unity.UtilityScripts
 
         public void ConnectNow()
         {
+            //this.voiceConnection = this.GetComponent<VoiceConnection>();
+            //this.voiceConnection.Client.AddCallbackTarget(this);
             this.voiceConnection.ConnectUsingSettings();
         }
 

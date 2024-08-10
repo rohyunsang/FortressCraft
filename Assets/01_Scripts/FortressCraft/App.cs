@@ -57,7 +57,7 @@ namespace Agit.FortressCraft
 
             SetGameMode(GameMode.Shared);
 
-			Instantiate(recorderPrefab);
+			Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
         }
 
 		private void Start()
