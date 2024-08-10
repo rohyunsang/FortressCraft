@@ -60,7 +60,7 @@ namespace Agit.FortressCraft
         public void RPCSetActive(Arrow arrow, Vector3 pos)
         {
             arrow.transform.position = pos;
-            gameObject.SetActive(true);
+            arrow.gameObject.SetActive(true);
         }
     }
 }
