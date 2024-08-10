@@ -4899,6 +4899,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1647073601}
+        m_TargetAssemblyTypeName: Agit.FortressCraft.SpawnCastleCostManager, Assembly-CSharp
+        m_MethodName: resetCost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &339087747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19047,6 +19059,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1647073601}
+        m_TargetAssemblyTypeName: Agit.FortressCraft.SpawnCastleCostManager, Assembly-CSharp
+        m_MethodName: resetCost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &1356044423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23709,7 +23733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   costText: {fileID: 2080006024}
-  costByLevel: 0000000096000000c8000000f000000018010000400100006801000090010000a4010000b8010000cc010000e0010000f4010000080200001c02000030020000
+  costByLevel: 6400000096000000c8000000f000000018010000400100006801000090010000a4010000b8010000cc010000e0010000f4010000080200001c02000030020000
 --- !u!1 &1656839690
 GameObject:
   m_ObjectHideFlags: 0

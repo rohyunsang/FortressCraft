@@ -6,7 +6,7 @@ namespace Agit.FortressCraft
 {
     public class BGM : MonoBehaviour
     {
-        private AudioSource bgm;
+        private AudioSource bgm = null;
 
         private void Awake()
         {
@@ -20,6 +20,7 @@ namespace Agit.FortressCraft
 
         public void SetVolume(float volume)
         {
+            if (bgm == null) return;
             bgm.volume = volume;
         }
 
