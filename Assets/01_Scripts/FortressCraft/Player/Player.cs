@@ -522,14 +522,17 @@ namespace Agit.FortressCraft
 
         public void PlaySound1()
         {
+			sound1.volume = SoundManager.Instance.SFXVolume;
 			sound1.Play();
         }
 		public void PlaySound2()
 		{
+			sound2.volume = SoundManager.Instance.SFXVolume;
 			sound2.Play();
 		}
 		public void PlaySound3()
 		{
+			sound3.volume = SoundManager.Instance.SFXVolume;
 			sound3.Play();
 		}
 
