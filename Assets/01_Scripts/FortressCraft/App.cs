@@ -35,6 +35,8 @@ namespace Agit.FortressCraft
 
 
         public string roomCode = "";
+
+
 		public void SetRoomCodeOverride(string roomCodeOverride)
 		{
 			this.roomCode = roomCodeOverride;
@@ -57,7 +59,7 @@ namespace Agit.FortressCraft
 
             SetGameMode(GameMode.Shared);
 
-			Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
+			
         }
 
 		private void Start()
@@ -125,6 +127,10 @@ namespace Agit.FortressCraft
 
 		public void ConnectToSession()
 		{
+            Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
+            SetVoiceRoomName();
+
+
             // Get region from dropdown
             string region = string.Empty;
             if (_regionDropdown.value > 0)
@@ -146,7 +152,7 @@ namespace Agit.FortressCraft
 			_levelManager.roomCode.text = "Room : " + _room.text;
 			roomCode = _room.text;
 
-            SetVoiceRoomName();
+            
         }
 
         public void CreateRoom()  // using  App - UI Intro - Start Panel - CreateRoom
@@ -191,6 +197,8 @@ namespace Agit.FortressCraft
             FindObjectOfType<UIManager>().Init();
             FindObjectOfType<LevelUIController>().Init();
 
+            Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
+            SetVoiceRoomName();
             // Get region from dropdown
             string region = string.Empty;
 			if (_regionDropdown.value > 0)

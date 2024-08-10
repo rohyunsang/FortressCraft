@@ -142,9 +142,19 @@ namespace Agit.FortressCraft
 				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
 				Runner.Shutdown(false, shutdownReason);
 				_restart = false;
-				
-			}
-		}
+
+				GameObject recorder = GameObject.Find("[Recorder]");
+                GameObject recorderLogger = GameObject.Find("VoiceLogger");
+				if(recorder != null)
+				{
+					Destroy(recorder);
+				}
+				if(recorderLogger != null)
+				{
+					Destroy(recorderLogger);
+				}
+            }
+        }
 
 		public const ShutdownReason ShutdownReason_GameAlreadyRunning = (ShutdownReason)100;
 

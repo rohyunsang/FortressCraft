@@ -51,7 +51,10 @@ namespace Photon.Voice.Unity.UtilityScripts
 
         private void OnDestroy()
         {
-            this.voiceConnection.Client.RemoveCallbackTarget(this);
+            if (this.voiceConnection != null)
+            {
+                this.voiceConnection.Client.RemoveCallbackTarget(this);
+            }
         }
 
         public void ConnectNow()

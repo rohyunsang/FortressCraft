@@ -17,7 +17,8 @@ namespace Agit.FortressCraft {
             this.roomName.text = roomName;
             this.playerCount.text = playerCount + " / " + maxPlayer;
             joinButton.onClick.AddListener(ConnectToSession);
-            FindObjectOfType<ConnectAndJoin>().RoomName = roomName; 
+            // FindObjectOfType<ConnectAndJoin>().RoomName = roomCode;
+
         }
 
         public void ConnectToSession()
