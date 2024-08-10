@@ -18,6 +18,12 @@ namespace Agit.FortressCraft
             BGMVolume = 1.0f;
             SFXVolume = 1.0f;
         }
+
+        public void UpdateBGMVolume()
+        {
+            BGM bgm = GameObject.Find("BGM").GetComponent<BGM>();
+            bgm.SetVolume(BGMVolume);
+        }
     }
 }
 
