@@ -38,25 +38,10 @@ namespace Agit.FortressCraft
 
         [SerializeField] public Text roomCode;
 
-        [Networked, OnChangedRender(nameof(SetRoomCode))] public NetworkString<_32> RoomCode { get; set; }
-
-
-
         private void Awake()
 		{
 			_countdownManager.Reset();
 		}
-
-		public void SetRoomCode(string roomCode)
-		{
-			RoomCode = roomCode;
-			RoomCodeUISync();
-        }
-
-		public void RoomCodeUISync()
-		{
-            roomCode.text = "Room : " + RoomCode.ToString();
-        }
 
         public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
         {
