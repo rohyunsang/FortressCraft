@@ -46,6 +46,8 @@ namespace Agit.FortressCraft
 		
 		public JobType jobType;
 
+		public GameObject recorderPrefab;
+
 
         private void Awake()
 		{
@@ -54,6 +56,8 @@ namespace Agit.FortressCraft
 			_levelManager.onStatusUpdate = OnConnectionStatusUpdate;
 
             SetGameMode(GameMode.Shared);
+
+			Instantiate(recorderPrefab);
         }
 
 		private void Start()
