@@ -13,6 +13,11 @@ namespace Agit.FortressCraft
             bgm = GetComponent<AudioSource>();
         }
 
+        private void Start()
+        {
+            bgm.volume = SoundManager.Instance.BGMVolume;
+        }
+
         public void SetVolume(float volume)
         {
             bgm.volume = volume;
