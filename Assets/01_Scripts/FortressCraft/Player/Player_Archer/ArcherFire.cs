@@ -71,7 +71,7 @@ namespace Agit.FortressCraft
                 archerArrow.FireDirection = new Vector2(Mathf.Cos(i*offset) / 1.5f, Mathf.Sin(i*offset) / 1.5f);
 
                 ArcherArrowAttackCollider arrowAttackCollider = no.GetComponent<ArcherArrowAttackCollider>();
-                arrowAttackCollider.Damage = damage;
+                arrowAttackCollider.Damage = damage / 4.0f;
                 arrowAttackCollider.OwnType = OwnType;
             }
         }

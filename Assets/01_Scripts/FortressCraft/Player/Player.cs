@@ -262,10 +262,15 @@ namespace Agit.FortressCraft
 				if (!died)
 				{
 					CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
-					life += ( MAX_HEALTH * 0.01f * commanderData.HealPerSecond);
-					if (life > commanderData.HP)
+					float tempHeal = (MAX_HEALTH * 0.01f * commanderData.HealPerSecond);
+
+					if (life + tempHeal > commanderData.HP)
 					{
 						life = commanderData.HP;
+					}
+					else
+					{
+						life += tempHeal;
 					}
 				}
 
@@ -383,6 +388,12 @@ namespace Agit.FortressCraft
 					{
 						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 					}
+					else if( animState.fullPathHash == animAttack
+							&& ( Job == JobType.Magician
+							|| Job == JobType.Warrior ) )
+                    {
+						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+					}
 
 					if (input.moveDirection.normalized != Vector2.zero)
 					{
@@ -448,7 +459,7 @@ namespace Agit.FortressCraft
 
 		public void Attack()  // Archer
 		{
-			if (attackInputTimer.Expired(Runner))
+			if (attackInputTimer.Expired(Runner) && animState.fullPathHash != animAttack )
 			{
 				if (Job == JobType.Archer)
 				{
@@ -468,7 +479,7 @@ namespace Agit.FortressCraft
 					Invoke("PlaySound1", 0.2f);
 				}
 				_netAnimator.Animator.SetTrigger("Attack");
-				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.3f);
+				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.2f);
 			}
 		}
 

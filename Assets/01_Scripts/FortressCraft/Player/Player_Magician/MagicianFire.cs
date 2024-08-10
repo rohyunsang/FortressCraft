@@ -34,9 +34,10 @@ namespace Agit.FortressCraft
 
             MagicianSpell magicianSpell = no.GetComponent<MagicianSpell>();
             magicianSpell.SpellSpeed = 5.0f;
+            magicianSpell.OwnType = OwnType;
 
             MagicianSpellAttackCollider magicAttackCollider = no.GetComponent<MagicianSpellAttackCollider>();
-            magicAttackCollider.Damage = damage;
+            magicAttackCollider.Damage = damage * 2;
             magicAttackCollider.OwnType = OwnType;
         }
 
