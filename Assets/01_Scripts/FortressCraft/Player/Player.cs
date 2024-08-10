@@ -170,8 +170,6 @@ namespace Agit.FortressCraft
 
 			changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
-			ready = false;
-
 			// Proxies may not be in state "NEW" when they spawn, so make sure we handle the state properly, regardless of what it is
 			OnStageChanged();
 
@@ -744,7 +742,6 @@ namespace Agit.FortressCraft
 		public void Reset()
 		{
 			Debug.Log($"Resetting player #{PlayerIndex} ID:{PlayerId}");
-			ready = false;
 			lives = MAX_LIVES;
 		}
 
