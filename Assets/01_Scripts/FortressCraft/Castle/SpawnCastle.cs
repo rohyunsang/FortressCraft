@@ -55,7 +55,27 @@ namespace Agit.FortressCraft
         public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team)
         {
             NO.gameObject.tag = tag;
-            NO.transform.position = transform.parent.position;
+
+            Transform[] transforms = FindObjectOfType<CastleBuildAreaManager>().castleBuildAreaTransforms;
+
+            Transform closestTransform = null;
+            float closestDistance = Mathf.Infinity;
+            Vector3 parentPosition = transform.parent.position;
+
+            foreach (Transform t in transforms)
+            {
+                float distance = Vector3.Distance(parentPosition, t.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTransform = t;
+                }
+            }
+
+            if (closestTransform != null)
+            {
+                NO.transform.position = closestTransform.position + new Vector3(0f,0.26f,0f);    // origin 0.59, change 0.85 -> 0.26
+            }
             NO.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             NO.gameObject.GetComponent<Castle>().SliderInit();
             NO.gameObject.GetComponent<Castle>().team = team;
