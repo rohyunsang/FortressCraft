@@ -170,7 +170,6 @@ namespace Agit.FortressCraft
 			roomCode = randomCode;
             _room.text = randomCode;
 
-            _levelManager.SetRoomCode(_room.text);
         }
 
 		private void SetVoiceRoomName()

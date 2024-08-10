@@ -110,8 +110,10 @@ namespace Agit.FortressCraft
 
 				InputController.fetchInput = false;
 
-				// Despawn players with a small delay between each one
-				Debug.Log("De-spawning all players");
+                // Despawn players with a small delay between each one
+
+                /*
+				 Debug.Log("De-spawning all players");
                 foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
                 {
                     Player player = (Player)fusionPlayer;
@@ -119,13 +121,11 @@ namespace Agit.FortressCraft
                     // player.TeleportOut();
                     yield return new WaitForSeconds(0.1f);
                 }
-
-
                 yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
+				 */
 
-			}
-
-			yield return base.UnloadSceneCoroutine(prevScene);
+            }
+            yield return base.UnloadSceneCoroutine(prevScene);
 		}
 
 		protected override IEnumerator OnSceneLoaded(SceneRef newScene, Scene loadedScene, NetworkLoadSceneParameters sceneFlags)
@@ -152,12 +152,10 @@ namespace Agit.FortressCraft
 			
 			// Activate the next level
 			_currentLevel = FindObjectOfType<LevelBehaviour>();
-			//if(_currentLevel != null)
-				//_currentLevel.Activate();
 
-			yield return new WaitForSeconds(0.3f);
+			yield return new WaitForSeconds(1.0f);
 
-			GameManager gameManager;
+            GameManager gameManager;
 			while (!Runner.TryGetSingleton(out gameManager))
 			{
 				Debug.Log($"Waiting for GameManager to Spawn!");
@@ -173,7 +171,6 @@ namespace Agit.FortressCraft
 				Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
 				player.Reset();
 				player.Respawn();
-				// yield return new WaitForSeconds(0.3f);
 			}
 
 			// Set state to playing level

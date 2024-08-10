@@ -191,7 +191,7 @@ namespace Agit.FortressCraft
 			Runner.SessionInfo.IsVisible = false;
 
 			// Reset stats and transition to level.
-			Invoke("InvokeLoadLevel",2f);
+			Invoke("InvokeLoadLevel",3f);
 		}
 
 		private void InvokeLoadLevel()
