@@ -192,7 +192,6 @@ namespace FusionHelpers
 				Debug.Log("AAAAAAAAAAAAAAAA sameRunner!!!!!!!!!!!!!!!!!!!");
 				return;
                 // throw new Exception($"Attempt to register {typeof(T)} twice as a singleton for the same runner!");
-
             }
 
             singletonsByType[singletonType] = singletonInstance;
