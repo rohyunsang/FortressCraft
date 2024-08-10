@@ -5436,6 +5436,8 @@ MonoBehaviour:
   victoryPanel: {fileID: 2044556590}
   defeatPanel: {fileID: 1463073120}
   darkFilter: {fileID: 771479219}
+  voiceOff: {fileID: 682423115}
+  voiceOn: {fileID: 1415543141}
 --- !u!1 &390297427
 GameObject:
   m_ObjectHideFlags: 0
@@ -20466,7 +20468,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 682423115}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: set_isStatic
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
