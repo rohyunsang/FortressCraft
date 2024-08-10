@@ -14,7 +14,6 @@ namespace Agit.FortressCraft
 
 		[Networked] public PlayState currentPlayState { get; set; }
 
-
 		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
 
@@ -29,7 +28,8 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
-            Runner.RegisterSingleton(this);
+
+			Runner.RegisterSingleton(this);
 
             if (Object.HasStateAuthority)
 			{
