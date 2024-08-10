@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731716, g: 0.13414738, b: 0.121078566, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5817,7 +5817,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 548834810
+  SortKey: 146121227
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -51528,6 +51528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1907665058}
+  - component: {fileID: 1907665059}
   m_Layer: 0
   m_Name: CastleBuildAreas
   m_TagString: Untagged
@@ -51566,6 +51567,35 @@ Transform:
   - {fileID: 163991253}
   m_Father: {fileID: 1987963815}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1907665059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907665057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df8805b4f4ec4d4a9ae409c377e47a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castleBuildAreaTransforms:
+  - {fileID: 260247770}
+  - {fileID: 1806142226}
+  - {fileID: 1499836418}
+  - {fileID: 1727884204}
+  - {fileID: 7947911506927446633}
+  - {fileID: 645275412}
+  - {fileID: 1403504309}
+  - {fileID: 1944583653}
+  - {fileID: 965298035}
+  - {fileID: 1997346061}
+  - {fileID: 1542358709}
+  - {fileID: 677512241}
+  - {fileID: 645520538}
+  - {fileID: 380474845}
+  - {fileID: 1934115512}
+  - {fileID: 163991253}
 --- !u!1 &1907870493
 GameObject:
   m_ObjectHideFlags: 0
