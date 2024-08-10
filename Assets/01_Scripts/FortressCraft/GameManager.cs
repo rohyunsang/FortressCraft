@@ -14,7 +14,6 @@ namespace Agit.FortressCraft
 
 		[Networked] public PlayState currentPlayState { get; set; }
 
-
 		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
 
 
@@ -29,7 +28,8 @@ namespace Agit.FortressCraft
 		public override void Spawned()
 		{
 			base.Spawned();
-            Runner.RegisterSingleton(this);
+
+			Runner.RegisterSingleton(this);
 
             if (Object.HasStateAuthority)
 			{
@@ -142,9 +142,19 @@ namespace Agit.FortressCraft
 				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
 				Runner.Shutdown(false, shutdownReason);
 				_restart = false;
-				
-			}
-		}
+
+				GameObject recorder = GameObject.Find("[Recorder]");
+                GameObject recorderLogger = GameObject.Find("VoiceLogger");
+				if(recorder != null)
+				{
+					Destroy(recorder);
+				}
+				if(recorderLogger != null)
+				{
+					Destroy(recorderLogger);
+				}
+            }
+        }
 
 		public const ShutdownReason ShutdownReason_GameAlreadyRunning = (ShutdownReason)100;
 
@@ -183,7 +193,7 @@ namespace Agit.FortressCraft
 			Transform.FindObjectOfType<LoadingMsg>().OnInfo();
 
 			// Reset stats and transition to level.
-			Invoke("InvokeLoadLevel",2f);
+			Invoke("InvokeLoadLevel",3f);
 		}
 
 		private void InvokeLoadLevel()

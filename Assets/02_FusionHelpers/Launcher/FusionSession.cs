@@ -65,12 +65,12 @@ namespace FusionHelpers
 		public override void Render()
 		{
 			if (!isSetCommanderType) return;
-
-            if (Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
+            
+			 if (Runner && Runner.Topology == Topologies.Shared && _players.Count != playerRefByIndex.Count)
 				MaybeSpawnNextAvatar();
-		}
+        }
 
-		private void MaybeSpawnNextAvatar()
+        private void MaybeSpawnNextAvatar()
 		{
 			Debug.Log("Maybe");
 			foreach (KeyValuePair<int,PlayerRef> refByIndex in playerRefByIndex)

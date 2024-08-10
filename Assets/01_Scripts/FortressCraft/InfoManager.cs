@@ -14,9 +14,11 @@ public class InfoManager : MonoBehaviour
 
     public void Awake()
     {
+        infoTexts.Add("왼쪽 하단을 클릭하면 조이스틱이 생성됩니다.!");
+        infoTexts.Add("조이스틱을 이용해 캐릭터를 움직여 보세요.");
         infoTexts.Add("직업은 전사, 궁수, 마법사로 이루어져 있습니다.");
         infoTexts.Add("점령 가능 지역을 점령해 영토를 확장하세요.");
-        infoTexts.Add("4명의 플레이어가 입장하면 게임을 시작할 수 있습니다.");
+        infoTexts.Add("2명 이상의 플레이어가 모이면 게임을 시작할 수 있습니다.");
         infoTexts.Add("상대의 점령지역을 모두 파괴하면 게임에서 승리합니다.");
 
         lastTextChangeTime = Time.time; // 초기화

@@ -156,6 +156,7 @@ namespace FusionHelpers
 			}
 
 			Type type = typeof(T);
+			
 			RegisterSingleton(runner, singletonsByType, type, singleton);
 		}
 
@@ -187,9 +188,13 @@ namespace FusionHelpers
 		private static void RegisterSingleton<T>(NetworkRunner runner, Dictionary<Type,object> singletonsByType, Type singletonType, T singletonInstance) where T: MonoBehaviour
 		{
 			if (singletonsByType.TryGetValue(singletonType, out _))
-				throw new Exception($"Attempt to register {typeof(T)} twice as a singleton for the same runner!");
+			{
+				Debug.Log("AAAAAAAAAAAAAAAA sameRunner!!!!!!!!!!!!!!!!!!!");
+				return;
+                // throw new Exception($"Attempt to register {typeof(T)} twice as a singleton for the same runner!");
+            }
 
-			singletonsByType[singletonType] = singletonInstance;
+            singletonsByType[singletonType] = singletonInstance;
 
 			if (_pendingRequestsByRunner.TryGetValue(runner, out var pendingRequestsByType)) 
 			{
