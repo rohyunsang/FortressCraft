@@ -185,12 +185,12 @@ namespace Agit.FortressCraft
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
-            RPC_AllPlayerLoadingBar();
+           
 
             if (isStarted) return;
 			if (!Object.HasStateAuthority) return;
-
-			isStarted = true;
+            RPC_AllPlayerLoadingBar();
+            isStarted = true;
 
 			MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
 
