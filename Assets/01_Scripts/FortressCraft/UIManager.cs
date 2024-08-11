@@ -56,6 +56,8 @@ namespace Agit.FortressCraft
         public GameObject voiceOff;
         public GameObject voiceOn;
 
+        public GameObject LoadingMsg;
+
         public void Init()
         {
             victoryPanel.SetActive(false);

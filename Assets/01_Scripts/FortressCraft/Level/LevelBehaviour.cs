@@ -18,8 +18,11 @@ namespace Agit.FortressCraft
 		public SpawnPoint[] _playerSpawnPoints;
 
 		public string currentSceneName = "";
-		
-		public SpawnPoint GetPlayerSpawnPoint(int plyIndex)
+
+		[SerializeField] private GameObject BGM_Lobby;
+		[SerializeField] private GameObject BGM_Battle;
+
+        public SpawnPoint GetPlayerSpawnPoint(int plyIndex)
 		{
 			return _playerSpawnPoints[plyIndex].GetComponent<SpawnPoint>();
 		}
@@ -28,9 +31,23 @@ namespace Agit.FortressCraft
 		{
 			currentSceneName = gameObject.name;
 
+			if(gameObject.name == "Lobby")
+			{
+				Instantiate(BGM_Lobby).gameObject.name = "BGM";
+			}
+
 			if (gameObject.name == "Battle")
 			{
-				FindObjectOfType<LevelUIController>().BattleSceneUIChange();
+				FindObjectOfType<UIManager>().LoadingMsg.SetActive(false);
+
+
+                GameObject bgm = FindObjectOfType<BGM>().gameObject;
+                if (bgm != null)
+                    Destroy(FindObjectOfType<BGM>().gameObject);
+
+                Instantiate(BGM_Battle).gameObject.name = "BGM";
+
+                FindObjectOfType<LevelUIController>().BattleSceneUIChange();
 
 				Invoke("SpawnCastle", 2f);
             }

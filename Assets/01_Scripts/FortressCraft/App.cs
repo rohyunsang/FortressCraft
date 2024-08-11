@@ -131,7 +131,10 @@ namespace Agit.FortressCraft
 		{
             Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
             SetVoiceRoomName();
-            Destroy(FindObjectOfType<BGM>().gameObject);
+
+            GameObject bgm = FindObjectOfType<BGM>().gameObject;
+            if (bgm != null)
+                Destroy(FindObjectOfType<BGM>().gameObject);
 
             // Get region from dropdown
             string region = string.Empty;
@@ -197,7 +200,10 @@ namespace Agit.FortressCraft
 		{
             FindObjectOfType<UIManager>().Init();
             FindObjectOfType<LevelUIController>().Init();
-            Destroy(FindObjectOfType<BGM>().gameObject);
+
+			GameObject bgm = FindObjectOfType<BGM>().gameObject;
+			if(bgm != null)
+				Destroy(FindObjectOfType<BGM>().gameObject);
 
             Instantiate(recorderPrefab).gameObject.name = "[Recorder]";
             SetVoiceRoomName();

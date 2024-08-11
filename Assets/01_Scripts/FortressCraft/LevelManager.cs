@@ -91,6 +91,9 @@ namespace Agit.FortressCraft
         {
             Debug.Log($"LevelManager.UnloadSceneCoroutine({prevScene});");
 
+            yield return new WaitForSeconds(1.0f);
+
+
             GameManager gameManager;
             while (!Runner.TryGetSingleton(out gameManager))
             {

@@ -6,6 +6,8 @@ namespace Agit.FortressCraft
 {
     public class SoundManager : MonoBehaviour
     {
+        [SerializeField] private GameObject BGM_Main;
+
         public static SoundManager Instance { get; set; }
 
         public float BGMVolume { get; set; }
@@ -23,6 +25,11 @@ namespace Agit.FortressCraft
         {
             BGM bgm = GameObject.Find("BGM").GetComponent<BGM>();
             bgm.SetVolume(BGMVolume);
+        }
+
+        public void SpawnMainBGM()
+        {
+            Instantiate(BGM_Main).gameObject.name ="BGM";
         }
     }
 }

@@ -176,10 +176,18 @@ namespace Agit.FortressCraft
                 DisconnectManager.DisconnectPrompt.SetActive(true);
         }
 
+        [Rpc(RpcSources.All, RpcTargets.All)]
+         public void RPC_AllPlayerLoadingBar()
+		 {
+            FindObjectOfType<UIManager>().LoadingMsg.SetActive(true);
+         }
+
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
-			if (isStarted) return;
+            RPC_AllPlayerLoadingBar();
+
+            if (isStarted) return;
 			if (!Object.HasStateAuthority) return;
 
 			isStarted = true;
@@ -190,7 +198,7 @@ namespace Agit.FortressCraft
 			Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
 
-			Transform.FindObjectOfType<LoadingMsg>().OnInfo();
+			
 
 			// Reset stats and transition to level.
 			Invoke("InvokeLoadLevel",3f);

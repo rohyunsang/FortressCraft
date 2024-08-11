@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 563354552305761512}
   - component: {fileID: 2150060202006584479}
+  - component: {fileID: 878803605452652878}
   m_Layer: 0
   m_Name: BGM_Battle
   m_TagString: Untagged
@@ -128,3 +129,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &878803605452652878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7367861615516812373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5dd5625d78e345719fee5843d256141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
