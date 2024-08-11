@@ -19,7 +19,7 @@ namespace Agit.FortressCraft
 
         public Castle castle;
 
-        private float MaxHP = 500f;
+        private float MaxHP = 1000f;
 
         private ChangeDetector changes;
 

@@ -108,16 +108,16 @@ namespace Agit.FortressCraft
                 switch (SpawnerType)
                 {
                     case "A":
-                        targetBtnName = "Button_2";
+                        targetBtnName = "Button_1";
                         break;
                     case "B":
-                        targetBtnName = "Button_3";
+                        targetBtnName = "Button_2";
                         break;
                     case "C":
-                        targetBtnName = "Button_4";
+                        targetBtnName = "Button_3";
                         break;
                     case "D":
-                        targetBtnName = "Button_1";
+                        targetBtnName = "Button_4";
                         break;
                 }
                 changeTarget.UpdateTargetButtonColor(targetBtnName);
@@ -132,16 +132,16 @@ namespace Agit.FortressCraft
                     switch (idx)
                     {
                         case 0:
-                            Target = "B";
+                            Target = "A";
                             break;
                         case 1:
-                            Target = "C";
+                            Target = "B";
                             break;
                         case 2:
-                            Target = "D";
+                            Target = "C";
                             break;
                         case 3:
-                            Target = "A";
+                            Target = "D";
                             break;
                     }
                     changeTarget.Target = Target;

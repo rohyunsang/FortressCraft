@@ -208,7 +208,7 @@ namespace Agit.FortressCraft
 
             // Debug.Log("Setting: " + Spawner.Target + " " + OwnType);
 
-            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 3.0f);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 1.5f);
 
             // 적 탐색 
             foreach (Collider2D col in cols)
