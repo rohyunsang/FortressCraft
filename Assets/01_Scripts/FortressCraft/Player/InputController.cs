@@ -137,12 +137,15 @@ namespace Agit.FortressCraft
                     }
                     else
                     {
-                        rightIsDown = true;
+                        /*
+                         rightIsDown = true;
                         _rightPos = touch.position;
                         if (_rightTouchWasDown && (touch.position - _rightDown).magnitude > (0.01f * Screen.dpi))
                             _aimDelta = (10.0f / Screen.dpi) * (touch.position - _rightDown);
                         else
                             _rightDown = touch.position;
+                         */
+
                     }
                 }
                 if (_rightTouchWasDown && !rightIsDown)

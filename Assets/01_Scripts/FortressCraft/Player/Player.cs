@@ -405,13 +405,13 @@ namespace Agit.FortressCraft
 						arrowVector.TargetDirection = lastDir;
 					}
 
-					if (input.moveDirection.normalized != Vector2.zero)
+					if (input.moveDirection.normalized.x < -0.1f || input.moveDirection.normalized.y < -0.1f || input.moveDirection.normalized.x > 0.1f || input.moveDirection.normalized.y > 0.1f)
 					{
 						_netAnimator.Animator.SetBool("isMove", true);
 					}
 					else
 					{
-						_netAnimator.Animator.SetBool("isMove", false);
+                        _netAnimator.Animator.SetBool("isMove", false);
 					}
                     _oldInput = input;
 				}
