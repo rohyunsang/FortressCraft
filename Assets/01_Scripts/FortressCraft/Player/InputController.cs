@@ -145,7 +145,7 @@ namespace Agit.FortressCraft
                         else
                             _rightDown = touch.position;
                          */
-
+                        
                     }
                 }
                 if (_rightTouchWasDown && !rightIsDown)
@@ -154,15 +154,10 @@ namespace Agit.FortressCraft
                 if (!leftIsDown)
                     _moveDelta = Vector2.zero;
 
-                _mobileInput.gameObject.SetActive(true);
                 _mobileInput.SetLeft(leftIsDown, _leftDown, _leftPos);
 
                 _leftTouchWasDown = leftIsDown;
                 _rightTouchWasDown = rightIsDown;
-            }
-            else
-            {
-                _mobileInput.gameObject.SetActive(false);
             }
         }
 
