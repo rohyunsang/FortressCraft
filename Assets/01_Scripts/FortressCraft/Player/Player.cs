@@ -266,7 +266,7 @@ namespace Agit.FortressCraft
 
 					if (life + tempHeal > commanderData.HP)
 					{
-						// life = commanderData.HP;
+						life = commanderData.HP;
 					}
 					else
 					{
@@ -706,7 +706,7 @@ namespace Agit.FortressCraft
 
         public void OnChatChanged()
         {
-            ChatSystem.instance.chatDisplay.text += "\n" + PlayerName.ToString() + " : " + LastPublicChat.ToString();
+            ChatSystem.instance.chatDisplay.text += "\n" + "[" + PlayerName.ToString() + "]"+ " : " + LastPublicChat.ToString();
             ChatSystem.instance.chatInputField.text = "";
         }
 

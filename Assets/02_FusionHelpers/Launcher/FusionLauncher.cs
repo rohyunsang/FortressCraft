@@ -280,7 +280,6 @@ namespace FusionHelpers
 		public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
 		public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) {
             Debug.Log($"Session List Updated with {sessionList.Count} session(s)");
-
             // RoomListPanel - Content - Destroy
 
             RoomListPanel roomListPanel = FindObjectOfType<RoomListPanel>();
@@ -300,7 +299,6 @@ namespace FusionHelpers
             if (sessionList.Count > 0)
             {
                 // Prefab Spawning 
-
                 foreach (var session in sessionList)
 				{
                     Debug.Log($"SessionName {session.Name}");
