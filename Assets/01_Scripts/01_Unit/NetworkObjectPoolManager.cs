@@ -89,6 +89,10 @@ namespace Agit.FortressCraft
 					Debug.Log("Arrow unactive");
                     arrow.RPCSetUnactive();
                 }
+				else if( instance.TryGetComponent<ArcherArrow>( out ArcherArrow archerArrow ) )
+                {
+					archerArrow.RPCSetUnactive();
+                }
 				stack.Push(instance);
 			}
 			else
