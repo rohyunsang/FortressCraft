@@ -59,9 +59,9 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPCSetUnactive()
+        public void RPCSetUnactive(ArcherArrow archerArrow)
         {
-            gameObject.SetActive(false);
+            archerArrow.gameObject.SetActive(false);
         }
     }
 }

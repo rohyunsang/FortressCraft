@@ -149,7 +149,8 @@ namespace Agit.FortressCraft
                 BattleBarUIManager.Instance.RPCMinusUnitCount(Spawner.SpawnerType);
                 dieTimer = TickTimer.None;
                 NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, Spawner.id, false, false);
-                Spawner.poolManager.ReleaseInstance(Runner, context);
+                //Spawner.poolManager.ReleaseInstance(Runner, context);
+                NetworkObjectPoolManager.Instance.ReleaseInstance(Runner, context);
             }
 
             Initializing();
@@ -372,12 +373,14 @@ namespace Agit.FortressCraft
         public void RPCSetActive()
         {
             gameObject.SetActive(true);
-            Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
+            //Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCSetUnactive()
         {
+            //Debug.Log("Unactive: " + normal.name);
+            Debug.Log("Name? : " + gameObject.name);
             gameObject.SetActive(false);
         }
 

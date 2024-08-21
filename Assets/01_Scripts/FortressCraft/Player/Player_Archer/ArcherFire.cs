@@ -27,10 +27,12 @@ namespace Agit.FortressCraft
             id = temp.NetworkTypeId.AsPrefabId;
             Destroy(temp.gameObject);
             poolManager.AddPoolTable(id);
+            /*
+            int prePoolingCount = 30;
 
             NetworkObject[] arrows = new NetworkObject[50];
 
-            for( int i = 0; i < 50; ++ i )
+            for( int i = 0; i < prePoolingCount; ++ i )
             {
                 NetworkObject no = null;
                 NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
@@ -38,10 +40,11 @@ namespace Agit.FortressCraft
                 no.GetComponent<ArcherArrow>().ID = id;
                 arrows[i] = no;
             }
-            for (int i = 0; i < 50; ++i)
+            for (int i = 0; i < prePoolingCount; ++i)
             {
                 arrows[i].GetComponent<ArcherArrow>().Release();
             }
+            */
         }
 
         // 관통형 화살 1개 발사 
