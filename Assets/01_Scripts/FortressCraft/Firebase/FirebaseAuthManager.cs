@@ -1,73 +1,128 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Auth;
-using UnityEngine.UI;
 using System.IO;
 using Firebase;
 using Firebase.Extensions;
+using System;
+using Firebase.Database;
 
-public class FirebaseAuthManager : MonoBehaviour
-{
-    private FirebaseAuth auth;
-    private FirebaseAuth user;
-
-    public InputField email;
-    public InputField password;
-
-    void Awake()
+namespace Agit.FortressCraft {
+    public class FirebaseAuthManager
     {
-        if (auth == null)
+        private static FirebaseAuthManager instance = null;
+
+        public static FirebaseAuthManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new FirebaseAuthManager();
+                }
+
+                return instance;
+            }
+        }
+
+        private FirebaseAuth auth;
+        private FirebaseUser user;
+
+        public Action<bool> LoginState;
+
+        public string UserId => user.UserId;
+
+        public void Init()
         {
             auth = FirebaseAuth.DefaultInstance;
+
+            // 임시처리
+            if(auth.CurrentUser != null)
+            {
+                LogOut();
+            }
+
+            auth.StateChanged += OnChanged;
+        }
+        private void OnChanged(object sender, EventArgs e)
+        {
+            if (auth.CurrentUser != user)
+            {
+                bool signed = (auth.CurrentUser != user && auth.CurrentUser != null);
+                if (!signed && user != null)
+                {
+                    Debug.Log("로그아웃");
+                    LoginState?.Invoke(false);
+                }
+                user = auth.CurrentUser;
+
+                if (signed)
+                {
+                    Debug.Log("로그인");
+                    LoginState?.Invoke(true);
+                }
+            }
+        }
+
+        public void Create(string email, string password)
+        {
+            auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.Log("회원가입 취소");
+                    return;
+                }
+
+                if (task.IsFaulted)
+                {
+                    Debug.Log("회원가입 실패");
+                    return;
+                }
+
+                FirebaseUser newUser = task.Result.User;
+                Debug.Log("회원가입 완료");
+                MainThreadDispatcher.Enqueue(() =>
+                {
+                    FirebaseDBManager.Instance.WriteNewUser(UserId);
+                });
+            });
+        }
+
+
+        public void Login(string email, string password)
+        {
+            auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.Log("로그인 취소");
+                    return;
+                }
+
+                if (task.IsFaulted)
+                {
+                    Debug.Log("로그인 실패");
+                    return;
+                }
+
+                FirebaseUser newUser = task.Result.User;
+
+                Debug.Log("로그인 완료");
+
+                // 메인 스레드에서 UI 업데이트 실행
+                MainThreadDispatcher.Enqueue(() =>
+                {
+                    UIManager_Firebase.Instance._mainScreen.SetActive(true);
+                    UIManager_Firebase.Instance._loginScreen.SetActive(false);
+                    UIManager_Firebase.Instance._uuidText.text = newUser.UserId;
+                });
+            });
+        }
+        public void LogOut()
+        {
+            auth.SignOut();
+            Debug.Log("로그아웃");
         }
     }
 
-    public void Create()
-    {
-        auth.CreateUserWithEmailAndPasswordAsync(email.text, password.text).ContinueWith(task => 
-        {
-            if (task.IsCanceled)
-            {
-                Debug.Log("회원가입 취소");
-                return;
-            }
-            
-            if (task.IsFaulted)
-            {
-                Debug.Log("회원가입 실패");
-                return;
-            }
-
-            FirebaseUser newUser = task.Result.User;
-
-            Debug.Log("회원가입 완료");
-        });
-    }
-    public void Login()
-    {
-        auth.SignInWithEmailAndPasswordAsync(email.text, password.text).ContinueWith(task =>
-        {
-            if (task.IsCanceled)
-            {
-                Debug.Log("로그인 취소");
-                return;
-            }
-
-            if (task.IsFaulted)
-            {
-                Debug.Log("로그인 실패");
-                return;
-            }
-
-            FirebaseUser newUser = task.Result.User;
-
-            Debug.Log("로그인 완료");
-        });
-    }
-    public void LogOut()
-    {
-        auth.SignOut();
-        Debug.Log("로그아웃");
-    }
 }
