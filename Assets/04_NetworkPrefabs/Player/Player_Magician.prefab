@@ -388,7 +388,6 @@ GameObject:
   - component: {fileID: 5817150152857453795}
   - component: {fileID: 7517753670712999943}
   - component: {fileID: 9140731734683221681}
-  - component: {fileID: 799581247842679668}
   - component: {fileID: 4320856916694314688}
   - component: {fileID: 4826502403090030381}
   - component: {fileID: 6124776727980656446}
@@ -450,7 +449,6 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 7517753670712999943}
   - {fileID: 9140731734683221681}
-  - {fileID: 799581247842679668}
   - {fileID: 4320856916694314688}
   - {fileID: 6124776727980656446}
   - {fileID: 1591170470106970327}
@@ -548,24 +546,6 @@ MonoBehaviour:
   _IsDestroyedAllCastle: 0
   isBuildCastle: 0
   _castleCount: 0
---- !u!114 &799581247842679668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442255509702882950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a839a43fa967fe34ea9ba85d1751deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _weapons: []
-  _player: {fileID: 9140731734683221681}
-  _selectedPrimaryWeapon: 0
-  _selectedSecondaryWeapon: 0
-  _primaryAmmo: 0
-  _secondaryAmmo: 0
 --- !u!114 &4320856916694314688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2249,6 +2229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 9140731734683221681}
+  player_RPG: {fileID: 0}
 --- !u!114 &5960423123716500960
 MonoBehaviour:
   m_ObjectHideFlags: 0

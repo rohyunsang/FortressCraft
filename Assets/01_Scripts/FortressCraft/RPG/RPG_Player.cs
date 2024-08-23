@@ -172,7 +172,11 @@ namespace Agit.FortressCraft
 				if (GetInput(out NetworkInputData input))
 				{
 					Debug.Log(input.moveDirection);
-					MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+
+                    MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+
+
+
 
 					if (input.moveDirection.normalized != Vector2.zero)
 					{
@@ -361,5 +365,11 @@ namespace Agit.FortressCraft
         {
 			CheckDamaged();
         }
-	}
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetScale(Vector3 scale)
+        {
+            transform.localScale = scale;
+        }
+    }
 }
