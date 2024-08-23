@@ -12,11 +12,9 @@ namespace Agit.FortressCraft
             {
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycollider))
                 {
-                    Debug.Log("Hit!!!!!!");
-                    Debug.Log(Damage);
                     bodycollider.RPCSetDamage(Damage);
+                    bodycollider.CallDamageCheck();
                 }
-
             }
         }
     }

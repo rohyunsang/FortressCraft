@@ -13,15 +13,9 @@ namespace Agit.FortressCraft
             controller = transform.parent.GetComponent<Monster_FrostLizardController>();
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        public override void CallDamageCheck()
         {
-            if (collision.CompareTag("Attack"))
-            {
-                if (collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider))
-                {
-                    controller.RPCCheckDamage();
-                }
-            }
+            controller.RPCCheckDamaged();
         }
     }
 }

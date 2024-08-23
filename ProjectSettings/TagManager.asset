@@ -22,6 +22,7 @@ TagManager:
   - C
   - D
   - CastleBuildArea
+  - Unit_Monster
   layers:
   - Default
   - TransparentFX

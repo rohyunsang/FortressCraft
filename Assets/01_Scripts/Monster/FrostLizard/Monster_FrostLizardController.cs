@@ -84,8 +84,6 @@ namespace Agit.FortressCraft
             animator.SetTrigger("Breath");
             acted = true;
         }
-
-
     }
 }
 

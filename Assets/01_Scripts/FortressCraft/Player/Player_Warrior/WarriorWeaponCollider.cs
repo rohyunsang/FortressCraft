@@ -34,6 +34,7 @@ namespace Agit.FortressCraft
                     }
                     
                     bodycollider.RPCSetDamage(Damage);
+                    bodycollider.CallDamageCheck();
                 }
             }
         }

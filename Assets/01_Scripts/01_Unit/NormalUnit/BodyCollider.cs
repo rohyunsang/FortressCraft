@@ -20,6 +20,8 @@ namespace Agit.FortressCraft
             Damaged = damage;
             // Debug.Log(transform.parent.name + ": " + damage);
         }
+
+        public virtual void CallDamageCheck() { }
     }
 }
 

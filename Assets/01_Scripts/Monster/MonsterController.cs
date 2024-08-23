@@ -7,8 +7,8 @@ namespace Agit.FortressCraft
 {
     public class MonsterController : NetworkBehaviour
     {
-        [SerializeField] protected float hpMax = 3000;
-        public float Hp { get; set; }
+        [SerializeField] public float hpMax = 3000;
+        [Networked] public float Hp { get; set; }
 
         protected float startTime = 0.0f;
         protected float nextDelay = 0.0f;
@@ -20,13 +20,18 @@ namespace Agit.FortressCraft
         protected bool acted = false;
 
         protected BodyCollider bodyCollider;
+        protected MonsterHPBar hpBar;
+        protected ChangeDetector changes;
 
         public override void Spawned()
         {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             bodyCollider = GetComponentInChildren<BodyCollider>();
+            hpBar = GetComponent<MonsterHPBar>();
             ActiveSts = false;
+            changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
+
         }
 
         public virtual void MonsterAI() { }
@@ -39,6 +44,11 @@ namespace Agit.FortressCraft
 
         public virtual void Die()
         {
+            animator.SetTrigger("Die");
+        }
+
+        public void DestroySelf()
+        {
             Destroy(this.gameObject);
         }
 
@@ -49,7 +59,7 @@ namespace Agit.FortressCraft
             return (this.Hp == 0);
         }
 
-        public void RPCCheckDamage()
+        public void RPCCheckDamaged()
         {
             if (bodyCollider.Damaged > 0.0f)
             {
@@ -62,6 +72,21 @@ namespace Agit.FortressCraft
                     Die();
                 }
             }
+        }
+
+        public override void Render()
+        {
+            foreach (var change in changes.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(Hp):
+                        hpBar.SetHPBar(Hp);
+                        break;
+                }
+            }
+
+            var interpolated = new NetworkBehaviourBufferInterpolator(this);
         }
     }
 }

@@ -851,6 +851,7 @@ namespace Agit.FortressCraft
 
 		public void CheckDamaged()
         {
+			Debug.Log("Damaged Value - " + bodyCollider.Damaged);
 			if (died) return;
 			if( bodyCollider.Damaged > 0.0f )
             {
