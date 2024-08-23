@@ -101,7 +101,7 @@ namespace Agit.FortressCraft
             //Debug.Log("Spawner Type: " + SpawnerType);
 
             ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
-            if (changeTarget.OwnType == "")     // first Spawner
+            if (changeTarget.OwnType == "")
             {
                 changeTarget.OwnType = SpawnerType;
                 string targetBtnName = "";
