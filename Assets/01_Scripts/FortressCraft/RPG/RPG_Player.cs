@@ -175,9 +175,6 @@ namespace Agit.FortressCraft
 
                     MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 
-
-
-
 					if (input.moveDirection.normalized != Vector2.zero)
 					{
 						lastDir = input.moveDirection.normalized;
