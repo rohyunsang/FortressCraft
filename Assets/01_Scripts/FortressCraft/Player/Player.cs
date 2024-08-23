@@ -372,7 +372,8 @@ namespace Agit.FortressCraft
 			{
 				if (GetInput(out NetworkInputData input))
 				{
-					if (lastDir.x > 0.0f)
+                    Debug.Log(input.moveDirection);
+                    if (lastDir.x > 0.0f)
 					{
 						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
 									transform.localScale.y, transform.localScale.z));

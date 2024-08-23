@@ -35,24 +35,40 @@ namespace Agit.FortressCraft
 
         public void SendButton()
         {
-            Player[] players = FindObjectsOfType<Player>();
-
-            foreach (Player player in players)
+            if (FindObjectOfType<App>().rpgMode)
             {
-                if (player != null && player.PlayerName.ToString() == playerName)
+                RPG_Player[] players = FindObjectsOfType<RPG_Player>();
+
+                foreach (RPG_Player player in players)
                 {
-                    player.ChatGate();
-                    break;
-                }
-                else
-                {
-                    Debug.Log("Player 컴포넌트를 찾을 수 없습니다.");
+                    if (player != null && player.PlayerName.ToString() == playerName)
+                    {
+                        player.ChatGate();
+                        break;
+                    }
+                    else
+                    {
+                        Debug.Log("Player 컴포넌트를 찾을 수 없습니다.");
+                    }
                 }
             }
-            
+            else
+            {
+                Player[] players = FindObjectsOfType<Player>();
+
+                foreach (Player player in players)
+                {
+                    if (player != null && player.PlayerName.ToString() == playerName)
+                    {
+                        player.ChatGate();
+                        break;
+                    }
+                    else
+                    {
+                        Debug.Log("Player 컴포넌트를 찾을 수 없습니다.");
+                    }
+                }
+            }
         }
-
-
     }
-
 }

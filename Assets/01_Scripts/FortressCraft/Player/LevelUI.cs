@@ -11,6 +11,7 @@ namespace Agit.FortressCraft
     {
         private TextMeshProUGUI levelText;
         [SerializeField] private Player player;
+        [SerializeField] private RPG_Player player_RPG;
 
         private void Awake()
         {
@@ -19,6 +20,7 @@ namespace Agit.FortressCraft
 
         private void FixedUpdate()
         {
+            if (FindObjectOfType<App>().rpgMode) return;
             levelText.text = player.level.ToString();
         }
     }

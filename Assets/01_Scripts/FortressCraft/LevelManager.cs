@@ -1,5 +1,6 @@
 using Fusion;
 using FusionHelpers;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace Agit.FortressCraft
 
         private void Awake()
         {
-            _countdownManager.Reset();
+            // _countdownManager.Reset();
         }
 
         public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
@@ -104,23 +105,7 @@ namespace Agit.FortressCraft
 
             if (prevScene.AsIndex > 0)
             {
-
                 InputController.fetchInput = false;
-
-                // Despawn players with a small delay between each one
-
-                /*
-				 Debug.Log("De-spawning all players");
-                foreach (FusionPlayer fusionPlayer in gameManager.AllPlayers)
-                {
-                    Player player = (Player)fusionPlayer;
-                    Debug.Log($"De-spawning player {fusionPlayer.PlayerIndex}:{fusionPlayer}");
-                    // player.TeleportOut();
-                    yield return new WaitForSeconds(0.1f);
-                }
-                yield return new WaitForSeconds(1.5f - gameManager.PlayerCount * 0.1f);
-				 */
-
             }
             yield return base.UnloadSceneCoroutine(prevScene);
         }
@@ -164,10 +149,21 @@ namespace Agit.FortressCraft
             var players = gameManager.AllPlayers;
             foreach (FusionPlayer fusionPlayer in players)
             {
-                Player player = (Player)fusionPlayer;
-                Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
-                player.Reset();
-                player.Respawn();
+                if (FindObjectOfType<App>().rpgMode)
+                {
+                    RPG_Player player = (RPG_Player)fusionPlayer;
+                    Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
+                    player.Reset();
+                    player.Respawn();
+                }
+                else
+                {
+                    Player player = (Player)fusionPlayer;
+                    Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
+                    player.Reset();
+                    player.Respawn();
+                }
+                
             }
 
             // Set state to playing level

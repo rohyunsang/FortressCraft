@@ -1,0 +1,47 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Agit.FortressCraft
+{
+    public class NicknameManager : MonoBehaviour
+    {
+        public InputField _nicknameInputField;
+        public Button _submitNicknameButton;
+
+        public void Start()
+        {
+            _submitNicknameButton.onClick.AddListener(TrySetNickname);
+        }
+
+
+        public void TrySetNickname()
+        {
+            string nickname = _nicknameInputField.text;
+            string userId = FirebaseAuthManager.Instance.UserId;
+            string uid = FirebaseAuthManager.Instance.UserId;
+
+            FirebaseDBManager.Instance.IsNicknameAvailable(nickname).ContinueWith(task =>
+            {
+                if (task.Result)
+                {
+                    // 닉네임 사용 가능
+                    FirebaseDBManager.Instance.SetNickname(nickname, userId).ContinueWith(setTask =>
+                    {
+                        if (setTask.IsCompleted)
+                        {
+                            Debug.Log("Nickname set successfully");
+                            // 성공적으로 설정되었을 때의 로직 구현
+                            FirebaseDBManager.Instance.UpdateNickname(uid, nickname);
+                        }
+                    });
+                }
+                else
+                {
+                    Debug.Log("Nickname is already taken");
+                    // 닉네임이 이미 사용 중일 때의 UI 처리
+                }
+            });
+        }
+    }
+}
+

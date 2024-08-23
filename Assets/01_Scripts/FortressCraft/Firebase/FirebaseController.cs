@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class FirebaseController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     public void TestButton()
     {
         Debug.Log("TestButton ´­¸²");
@@ -23,11 +18,5 @@ public class FirebaseController : MonoBehaviour
             int newGold = userProperties.gold + 100;
             FirebaseDBManager.Instance.UpdateGold(uid, newGold);
         });
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

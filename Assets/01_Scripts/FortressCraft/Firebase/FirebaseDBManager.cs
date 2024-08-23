@@ -5,6 +5,8 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity;
 using JetBrains.Annotations;
+using System;
+using System.Threading.Tasks;
 
 
 namespace Agit.FortressCraft
@@ -33,10 +35,31 @@ namespace Agit.FortressCraft
             database = FirebaseDatabase.DefaultInstance.RootReference;
         }
 
-        public void GetUserPropertiesByUid(string uid, System.Action<UserProperties> callback)
+        public void GetUserPropertiesByUid(string uid, Action<UserProperties> callback)
         {
             DatabaseReference userPropertiesRef = database.Child(uid).Child("UserProperties");
             userPropertiesRef.GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Error retrieving user properties: " + task.Exception);
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    if (snapshot.Exists)
+                    {
+                        UserProperties properties = JsonUtility.FromJson<UserProperties>(snapshot.GetRawJsonValue());
+                        callback(properties);
+                    }
+                }
+            });
+        }
+
+        public void GetUserDatasByUid(string uid, Action<UserProperties> callback)
+        {
+            DatabaseReference userDatasRef = database.Child(uid).Child("UserDatas");
+            userDatasRef.GetValueAsync().ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -68,6 +91,51 @@ namespace Agit.FortressCraft
                     Debug.Log("Gold updated to " + newGold);
                 }
             });
+        }
+
+        public void UpdateNickname(string uid, string nickName)
+        {
+            DatabaseReference goldRef = database.Child(uid).Child("UserDatas").Child("userNickname");
+            goldRef.SetValueAsync(nickName).ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Failed to update nickName: " + task.Exception);
+                }
+                else if (task.IsCompleted)
+                {
+                    Debug.Log("Nickname updated to " + nickName);
+                }
+            });
+        }
+
+        public Task<bool> IsNicknameAvailable(string nickname)
+        {
+            DatabaseReference nicknameRef = database.Child("UserIds").Child(nickname);
+            var tcs = new TaskCompletionSource<bool>();
+            nicknameRef.GetValueAsync().ContinueWith(task => {
+                if (task.IsFaulted || task.IsCanceled)
+                {
+                    Debug.LogError("Error accessing database");
+                    tcs.SetResult(false);
+                }
+                else if (task.Result.Exists)
+                {
+                    tcs.SetResult(false); // 이미 존재하면 false
+                }
+                else
+                {
+                    tcs.SetResult(true); // 사용 가능하면 true
+                }
+            });
+            return tcs.Task;
+        }
+
+        // 사용 가능한 닉네임이면 데이터베이스에 저장
+        public Task SetNickname(string nickname, string userId)
+        {
+            DatabaseReference nicknameRef = database.Child("UserIds").Child(nickname);
+            return nicknameRef.SetValueAsync(userId);
         }
 
         public class UserDatas // 사용자 클래스 생성
@@ -144,7 +212,7 @@ namespace Agit.FortressCraft
         {
             UserDatas user = new UserDatas();
             string jsonUser = JsonUtility.ToJson(user);
-            database.Child(userid).Child("UserData").SetRawJsonValueAsync(jsonUser);
+            database.Child(userid).Child("UserDatas").SetRawJsonValueAsync(jsonUser);
 
             UserProperties userProperty = new UserProperties();
             string jsonProperties = JsonUtility.ToJson(userProperty);
