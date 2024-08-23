@@ -7,13 +7,14 @@ namespace Agit.FortressCraft
 {
     public class Monster_FrostLizardMain : NetworkBehaviour
     {
-        public Monster_FrostLizardController monsterCtrl;
-        public int idle = 20;
-        public int walk = 20;
-        public int breath = 20;
-        public int tailAttack = 20;
+        [SerializeField] private Monster_FrostLizardController monsterCtrl;
+        [SerializeField] private int idle = 20;
+        [SerializeField] private int walk = 20;
+        [SerializeField] private int breath = 20;
+        [SerializeField] private int tailAttack = 20;
+        [SerializeField] private int slam = 20;
 
-        public int sum;
+        private int sum;
 
 
         private int num;
@@ -29,8 +30,9 @@ namespace Agit.FortressCraft
             delayDict.Add(Monster_FrostLizardState.WALK, 2.0f);
             delayDict.Add(Monster_FrostLizardState.BREATH, 3.0f);
             delayDict.Add(Monster_FrostLizardState.TAILATTACK, 2.0f);
+            delayDict.Add(Monster_FrostLizardState.SLAM, 3.0f);
 
-            sum = idle + walk + breath + tailAttack;
+            sum = idle + walk + breath + tailAttack + slam;
 
             StartCoroutine(SetMonsterState());
         }
@@ -73,6 +75,10 @@ namespace Agit.FortressCraft
                 else if( num < idle + walk + breath + tailAttack )
                 {
                     nextState = Monster_FrostLizardState.TAILATTACK;
+                }
+                else if( num < idle + walk + breath + tailAttack + slam)
+                {
+                    nextState = Monster_FrostLizardState.SLAM;
                 }
 
                 if( prevState == nextState && nextState == Monster_FrostLizardState.BREATH )

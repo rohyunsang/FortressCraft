@@ -15,7 +15,7 @@ namespace Agit.FortressCraft
 
         protected Rigidbody2D rb;
         protected Animator animator;
-        protected float movingWeight = 20.0f;
+        [SerializeField] protected float movingWeight = 1.0f;
         public bool ActiveSts { get; set; }
         protected bool acted = false;
 

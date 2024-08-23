@@ -12,6 +12,7 @@ namespace Agit.FortressCraft
             {
                 if (collision.TryGetComponent<BodyCollider>(out BodyCollider bodycollider))
                 {
+                    if (collision.CompareTag("Unit_Monster")) return;
                     bodycollider.RPCSetDamage(Damage);
                     bodycollider.CallDamageCheck();
                 }
