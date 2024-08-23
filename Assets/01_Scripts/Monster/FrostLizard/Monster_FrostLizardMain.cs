@@ -11,6 +11,7 @@ namespace Agit.FortressCraft
         public int idle = 20;
         public int walk = 20;
         public int breath = 20;
+        public int tailAttack = 20;
 
         public int sum;
 
@@ -27,8 +28,9 @@ namespace Agit.FortressCraft
             delayDict.Add(Monster_FrostLizardState.IDLE, 2.0f);
             delayDict.Add(Monster_FrostLizardState.WALK, 2.0f);
             delayDict.Add(Monster_FrostLizardState.BREATH, 3.0f);
+            delayDict.Add(Monster_FrostLizardState.TAILATTACK, 2.0f);
 
-            sum = idle + walk + breath;
+            sum = idle + walk + breath + tailAttack;
 
             StartCoroutine(SetMonsterState());
         }
@@ -67,6 +69,10 @@ namespace Agit.FortressCraft
                 {
                     //Debug.Log("Monster - Breath");
                     nextState = Monster_FrostLizardState.BREATH;
+                }
+                else if( num < idle + walk + breath + tailAttack )
+                {
+                    nextState = Monster_FrostLizardState.TAILATTACK;
                 }
 
                 if( prevState == nextState && nextState == Monster_FrostLizardState.BREATH )

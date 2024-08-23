@@ -12,6 +12,7 @@ namespace Agit.FortressCraft
         IDLE,
         WALK,
         BREATH,
+        TAILATTACK,
         NON
     }
 
@@ -58,6 +59,9 @@ namespace Agit.FortressCraft
                 case Monster_FrostLizardState.BREATH:
                     ActionBreath();
                     break;
+                case Monster_FrostLizardState.TAILATTACK:
+                    ActionTailAttack();
+                    break; 
             }
         }
 
@@ -82,6 +86,14 @@ namespace Agit.FortressCraft
             if (acted) return;
             attackCollider.Damage = 500.0f;
             animator.SetTrigger("Breath");
+            acted = true;
+        }
+
+        private void ActionTailAttack()
+        {
+            if (acted) return;
+            attackCollider.Damage = 300.0f;
+            animator.SetTrigger("TailAttack");
             acted = true;
         }
     }
