@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "515943327418",
+    "firebase_url": "https://fortress-craft-d886f-default-rtdb.firebaseio.com",
+    "project_id": "fortress-craft-d886f",
+    "storage_bucket": "fortress-craft-d886f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515943327418:android:1fe7efbbb8dc4234b38483",
+        "android_client_info": {
+          "package_name": "com.Ln.FortressCraft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkots9znoYlofzlmjSN7JHgoVHC7eQT-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

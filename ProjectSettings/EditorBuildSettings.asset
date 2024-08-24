@@ -6,24 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/RPG_Main.unity
-    guid: 8fcb0c7ec30af9640abbe29a01e3fae9
-  - enabled: 1
-    path: Assets/00_Scenes/RPG.unity
-    guid: d62bbbe29bf74044caa623c1597e8faa
+    path: Assets/00_Scenes/Main 1.unity
+    guid: ce474bb97ade94ca59c9f0068d9edd73
   - enabled: 1
     path: Assets/00_Scenes/Lobby.unity
     guid: fe5cec13e26ac403c9a1507035254d8d
   - enabled: 1
     path: Assets/00_Scenes/Battle 1.unity
     guid: aa0389b81f4b541c0bb74dd6367aa04c
-  - enabled: 0
-    path: Assets/00_Scenes/Battle.unity
-    guid: 62e33d36de4544197ae741e280925708
-  - enabled: 1
-    path: Assets/00_Scenes/Firebase.unity
-    guid: a3884172201beda4787bcb88a48f94cd
-  - enabled: 1
-    path: Assets/00_Scenes/Main.unity
-    guid: 14aea5d6005cbd448ba130b1be9c336b
   m_configObjects: {}
