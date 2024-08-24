@@ -16,6 +16,7 @@ namespace Agit.FortressCraft
 
         public static bool fetchInput = true;
 
+        private RPG_Player _rpg_Player;
         private Player _player;
         private NetworkInputData _inputData = new NetworkInputData();
         private Vector2 _moveDelta;
@@ -38,7 +39,14 @@ namespace Agit.FortressCraft
         public override void Spawned()
         {
             _mobileInput = FindObjectOfType<MobileInput>(true);
-            _player = GetComponent<Player>();
+            if (FindObjectOfType<App>().rpgMode)
+            {
+                _rpg_Player = GetComponent<RPG_Player>();
+            }
+            else
+            {
+                _player = GetComponent<Player>();
+            }
             // Technically, it does not really matter which InputController fills the input structure, since the actual data will only be sent to the one that does have authority,
             // but in the name of clarity, let's make sure we give input control to the gameobject that also has Input authority.
             if (Object.HasInputAuthority)
@@ -57,6 +65,13 @@ namespace Agit.FortressCraft
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
             if (_player != null && _player.Object != null && _player.stage == Player.Stage.Active)
+            {
+                _inputData.aimDirection = _aimDelta.normalized;
+                _inputData.moveDirection = _moveDelta.normalized;
+                _inputData.Buttons = _buttonSample;
+                _buttonReset |= _buttonSample; // This effectively delays the reset of the read button flags until next Update() in case we're ticking faster than we're rendering
+            }
+            else if(_rpg_Player != null && _rpg_Player.Object != null && _rpg_Player.stage == RPG_Player.Stage.Active)
             {
                 _inputData.aimDirection = _aimDelta.normalized;
                 _inputData.moveDirection = _moveDelta.normalized;
@@ -116,8 +131,6 @@ namespace Agit.FortressCraft
                     }
                 }
 
-                // Vector3 aimDirection = mouseCollisionPoint - _player.turretPosition;
-                // _aimDelta = new Vector2(aimDirection.x,aimDirection.z );
             }
             else if (Input.touchSupported)
             {

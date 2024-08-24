@@ -185,8 +185,6 @@ namespace Agit.FortressCraft
 		// Transition from lobby to level
 		public void GameStartButtonCallback()
 		{
-           
-
             if (isStarted) return;
 			if (!Object.HasStateAuthority) return;
             RPC_AllPlayerLoadingBar();
@@ -197,8 +195,6 @@ namespace Agit.FortressCraft
 			// close and hide the session from matchmaking / lists. this demo does not allow late join.
 			Runner.SessionInfo.IsOpen = false;
 			Runner.SessionInfo.IsVisible = false;
-
-			
 
 			// Reset stats and transition to level.
 			Invoke("InvokeLoadLevel",3f);

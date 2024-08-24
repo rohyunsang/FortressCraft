@@ -21,6 +21,7 @@ namespace FusionHelpers
         [SerializeField] private FusionPlayer _playerPrefabWarrior;
         [SerializeField] private FusionPlayer _playerPrefabArcher;
 		[SerializeField] private FusionPlayer _playerPrefabMagician;
+		[SerializeField] private FusionPlayer _RPG_Player;
 
         [Networked, Capacity(10)] public NetworkDictionary<int, PlayerRef> playerRefByIndex { get; }
 		private Dictionary<PlayerRef, FusionPlayer> _players = new();
@@ -41,24 +42,34 @@ namespace FusionHelpers
             Debug.Log($"Spawned Network Session for Runner: {Runner}");
             Runner.RegisterSingleton(this);
 
-            // App에서 플레이어 직업 타입을 정한다.
-            JobType jobType = FindObjectOfType<App>().jobType;
-            switch (jobType)
-            {
-                case JobType.Warrior:
-					_playerPrefab = _playerPrefabWarrior;
-                    break;
-                case JobType.Archer:
-					_playerPrefab = _playerPrefabArcher;
-                    break;
-                case JobType.Magician:
-					_playerPrefab = _playerPrefabMagician;
-                    break;
-                default:
-					_playerPrefab = _playerPrefabArcher; // default commander is Archer
-                    Debug.LogError("default commander is Archer");
-                    break;
+			if (FindObjectOfType<App>().rpgMode)
+			{
+				_playerPrefab = _RPG_Player;
+			}
+			else
+			{
+                // App에서 플레이어 직업 타입을 정한다.
+                JobType jobType = FindObjectOfType<App>().jobType;
+                switch (jobType)
+                {
+                    case JobType.Warrior:
+                        _playerPrefab = _playerPrefabWarrior;
+                        break;
+                    case JobType.Archer:
+                        _playerPrefab = _playerPrefabArcher;
+                        break;
+                    case JobType.Magician:
+                        _playerPrefab = _playerPrefabMagician;
+                        break;
+                    default:
+                        _playerPrefab = _playerPrefabArcher; // default commander is Archer
+                        Debug.LogError("default commander is Archer");
+                        break;
+                }
             }
+			
+
+            
 			isSetCommanderType = true;
         }
 

@@ -23,6 +23,7 @@ TagManager:
   - D
   - CastleBuildArea
   - Unit_Monster
+  - NPC
   layers:
   - Default
   - TransparentFX

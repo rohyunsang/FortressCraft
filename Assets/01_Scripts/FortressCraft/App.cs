@@ -50,6 +50,7 @@ namespace Agit.FortressCraft
 
 		public GameObject recorderPrefab;
 
+		public bool rpgMode = false;
 
         private void Awake()
 		{
@@ -58,8 +59,6 @@ namespace Agit.FortressCraft
 			_levelManager.onStatusUpdate = OnConnectionStatusUpdate;
 
             SetGameMode(GameMode.Shared);
-
-			
         }
 
 		private void Start()
@@ -68,6 +67,12 @@ namespace Agit.FortressCraft
 
 			StartCoroutine(GoogleSheetManager.Loader());
         }
+
+		public void OnClickRPGModeButton()
+		{
+			rpgMode = true;
+			Debug.Log("RPG 모드입니다.");
+		}
 
 		public void SetJob(string jobType)   // using Button ;
 		{
@@ -286,6 +291,7 @@ namespace Agit.FortressCraft
 	{
 		Warrior = 0,
 		Archer,
-		Magician
-	}
+		Magician,
+        Beginner,
+    }
 }

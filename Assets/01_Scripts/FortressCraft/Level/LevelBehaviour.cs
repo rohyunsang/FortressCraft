@@ -51,6 +51,10 @@ namespace Agit.FortressCraft
 
 				Invoke("SpawnCastle", 2f);
             }
+            if (gameObject.name == "RPG")
+			{
+                FindObjectOfType<LevelUIController>().RPGSceneUIChange();
+            }
         }
 
 		private void SpawnCastle() // using Invoke 
