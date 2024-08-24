@@ -171,7 +171,7 @@ namespace Agit.FortressCraft
 			{
 				if (GetInput(out NetworkInputData input))
 				{
-					Debug.Log(input.moveDirection);
+					//Debug.Log(input.moveDirection);
 
                     MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 

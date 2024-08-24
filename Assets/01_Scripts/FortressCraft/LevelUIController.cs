@@ -20,6 +20,9 @@ namespace Agit.FortressCraft
         // InGame
         [SerializeField] private GameObject inGameParent;
 
+        // RPG
+        [SerializeField] private GameObject _rpgParent;
+
         private void Start()
         {
             lobbyParent.SetActive(true);
@@ -43,6 +46,11 @@ namespace Agit.FortressCraft
             inGameParent.SetActive(true);
 
             BattleBarUIManager.Instance.SetBattleBar();
+        }
+        
+        public void RPGSceneUIChange()
+        {
+            _rpgParent.SetActive(true);
         }
     }
 }
