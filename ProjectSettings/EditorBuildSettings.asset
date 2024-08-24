@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/Main.unity
-    guid: 14aea5d6005cbd448ba130b1be9c336b
+    path: Assets/00_Scenes/RPG_Main.unity
+    guid: 8fcb0c7ec30af9640abbe29a01e3fae9
   - enabled: 1
     path: Assets/00_Scenes/RPG.unity
     guid: d62bbbe29bf74044caa623c1597e8faa
@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Firebase.unity
     guid: a3884172201beda4787bcb88a48f94cd
+  - enabled: 1
+    path: Assets/00_Scenes/Main.unity
+    guid: 14aea5d6005cbd448ba130b1be9c336b
   m_configObjects: {}
