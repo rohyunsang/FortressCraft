@@ -160,6 +160,7 @@ namespace Agit.FortressCraft
             Destroy(temp.gameObject);
             poolManager.AddPoolTable(id);
 
+            temp = null;
             temp = Runner.Spawn(Arrow, (Vector2)transform.position, Quaternion.identity);
             arrowId = temp.NetworkTypeId.AsPrefabId;
             Destroy(temp.gameObject);
@@ -223,7 +224,6 @@ namespace Agit.FortressCraft
         public void RPCSetActive(NormalUnitRigidBodyMovement normal)
         {
             normal.gameObject.SetActive(true);
-            Debug.Log("Unit Activatied? : " + gameObject.activeSelf);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]

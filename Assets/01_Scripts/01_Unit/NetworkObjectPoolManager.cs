@@ -79,15 +79,20 @@ namespace Agit.FortressCraft
 			{
 				Debug.Log("DestroyPrefabInstance - Pooling");
 				instance.transform.SetParent(null);
-				instance.gameObject.SetActive(false);
+				//instance.gameObject.SetActive(false);
 				if (instance.TryGetComponent<NormalUnitRigidBodyMovement>(out NormalUnitRigidBodyMovement normal))
 				{
                     normal.RPCSetUnactive();
+					//normal.gameObject.SetActive(false);
                 }
 				else if (instance.TryGetComponent<Arrow>(out Arrow arrow))
                 {
 					Debug.Log("Arrow unactive");
                     arrow.RPCSetUnactive();
+                }
+				else if( instance.TryGetComponent<ArcherArrow>( out ArcherArrow archerArrow ) )
+                {
+					archerArrow.RPCSetUnactive(archerArrow);
                 }
 				stack.Push(instance);
 			}

@@ -20,12 +20,19 @@ namespace Agit.FortressCraft
         {
             _rb = GetComponent<NetworkRigidbody2D>();
             attackCollider = GetComponent<ArcherArrowAttackCollider>();
-            Invoke("DestroySelf", 0.8f);
+            //Invoke("DestroySelf", 0.8f);
         }
 
         public override void FixedUpdateNetwork()
         {
             if (attackCollider.OwnType == null) return;
+            if (destroyTimer.Expired(Runner))
+            {
+                if (gameObject.activeSelf == true)
+                {
+                    Release();
+                }
+            }
 
             float angle = Mathf.Atan2(FireDirection.y, FireDirection.x) * Mathf.Rad2Deg;
             Quaternion FireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -34,9 +41,27 @@ namespace Agit.FortressCraft
             _rb.Rigidbody.velocity = FireDirection * arrowSpeed;
         }
 
+        public void ReserveRelease()
+        {
+            destroyTimer = TickTimer.CreateFromSeconds(Runner, 0.8f);
+        }
+
+        public void Release()
+        {
+            destroyTimer = TickTimer.None;
+            NetworkObjectReleaseContext context = new NetworkObjectReleaseContext(Object, ID, false, false);
+            NetworkObjectPoolManager.Instance.ReleaseInstance(Runner, context);
+        }
+
         public void DestroySelf()
         {
             Destroy(this.gameObject);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPCSetUnactive(ArcherArrow archerArrow)
+        {
+            archerArrow.gameObject.SetActive(false);
         }
     }
 }

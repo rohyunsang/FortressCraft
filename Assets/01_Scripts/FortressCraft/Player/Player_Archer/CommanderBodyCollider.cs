@@ -13,6 +13,7 @@ namespace Agit.FortressCraft
             player = transform.parent.GetComponent<Player>();
         }
 
+        /*
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.CompareTag("Attack"))
@@ -22,6 +23,12 @@ namespace Agit.FortressCraft
                     player.RPCCheckDamaged();
                 }
             }
+        }
+        */
+
+        public override void CallDamageCheck()
+        {
+            player.RPCCheckDamaged();
         }
     }
 }
