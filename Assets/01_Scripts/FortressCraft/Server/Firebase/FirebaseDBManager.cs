@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Database;
-using Firebase.Unity;
-using JetBrains.Annotations;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using UnityEditor.Search;
-
 
 namespace Agit.FortressCraft
 {
@@ -22,6 +19,7 @@ namespace Agit.FortressCraft
     public class FirebaseDBManager
     {
         private static FirebaseDBManager instance = null;
+        private const int MaxSlots = 24; // 인벤토리 타입별 최대 슬롯 수
 
         public static FirebaseDBManager Instance
         {
@@ -38,9 +36,7 @@ namespace Agit.FortressCraft
 
         DatabaseReference database; // 데이터를 쓰기 위한 reference 변수
 
-        public Inventory equipmentInventory { get; private set; }
-        public Inventory consumablesInventory { get; private set; }
-        public Inventory miscInventory { get; private set; }
+        public Dictionary<InventoryType, Inventory> inventories = new Dictionary<InventoryType, Inventory>();
 
         public void Init()
         {
@@ -49,92 +45,39 @@ namespace Agit.FortressCraft
         }
         private void InitializeInventories()
         {
-            equipmentInventory = new Inventory();
-            consumablesInventory = new Inventory();
-            miscInventory = new Inventory();
+            inventories[InventoryType.Equipment] = new Inventory(1, 24);
+            inventories[InventoryType.Consumable] = new Inventory(100, 24);
+            inventories[InventoryType.Misc] = new Inventory(100, 24);
         }
-
 
         public void AddItemToInventory(string itemId, int quantity, InventoryType inventoryType)
         {
-            Inventory targetInventory = GetInventoryByType(inventoryType);
-            if (targetInventory != null)
-            {
-                targetInventory.AddItem(itemId, quantity);
-                UpdateInventoryInDatabase(inventoryType); // Update the specific inventory in the database.
-            }
+            Inventory inventory = inventories[inventoryType];
+            inventory.AddItem(itemId, quantity);
+            UpdateInventoryInDatabase(inventoryType);
         }
 
-        public void RemoveItemFromInventory(string itemId, int quantity, InventoryType inventoryType)
+        public void UpdateInventoryInDatabase(InventoryType inventoryType)
         {
-            Inventory targetInventory = GetInventoryByType(inventoryType);
-            if (targetInventory != null)
-            {
-                targetInventory.RemoveItem(itemId, quantity);
-                UpdateInventoryInDatabase(inventoryType); // Update the specific inventory in the database.
-            }
+            Inventory inventory = inventories[inventoryType];
+            string jsonInventory = JsonUtility.ToJson(inventory);
+            database.Child(FirebaseAuthManager.Instance.UserId).Child($"{inventoryType}Inventory").SetRawJsonValueAsync(jsonInventory);
         }
 
-        private void UpdateInventoryInDatabase(InventoryType inventoryType)
-        {
-            Inventory targetInventory = GetInventoryByType(inventoryType);
-            if (targetInventory != null)
-            {
-                string jsonInventory = JsonUtility.ToJson(targetInventory);
-                database.Child(FirebaseAuthManager.Instance.UserId).Child(inventoryType.ToString() + "Inventory").SetRawJsonValueAsync(jsonInventory).ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        Debug.LogError("Failed to update " + inventoryType.ToString().ToLower() + " inventory: " + task.Exception);
-                    }
-                    else if (task.IsCompleted)
-                    {
-                        Debug.Log(inventoryType.ToString() + " inventory updated successfully.");
-                    }
-                });
-            }
-        }
 
-        private Inventory GetInventoryByType(InventoryType inventoryType)
+        public Inventory GetInventoryByType(InventoryType inventoryType)
         {
-            switch (inventoryType)
+            if (inventories.TryGetValue(inventoryType, out Inventory inventory))
             {
-                case InventoryType.Equipment:
-                    return equipmentInventory;
-                case InventoryType.Consumable:
-                    return consumablesInventory;
-                case InventoryType.Misc:
-                    return miscInventory;
-                default:
-                    return null;
+                return inventory;
             }
+            return null; // 없을 경우 null 반환
         }
 
         public void GetUserPropertiesByUid(string uid, Action<UserProperties> callback)
         {
             DatabaseReference userPropertiesRef = database.Child(uid).Child("UserProperties");
             userPropertiesRef.GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("Error retrieving user properties: " + task.Exception);
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    if (snapshot.Exists)
-                    {
-                        UserProperties properties = JsonUtility.FromJson<UserProperties>(snapshot.GetRawJsonValue());
-                        callback(properties);
-                    }
-                }
-            });
-        }
-
-        public void GetUserDatasByUid(string uid, Action<UserProperties> callback)
-        {
-            DatabaseReference userDatasRef = database.Child(uid).Child("UserDatas");
-            userDatasRef.GetValueAsync().ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -170,8 +113,8 @@ namespace Agit.FortressCraft
 
         public void UpdateNickname(string uid, string nickName)
         {
-            DatabaseReference goldRef = database.Child(uid).Child("UserDatas").Child("userNickname");
-            goldRef.SetValueAsync(nickName).ContinueWith(task =>
+            DatabaseReference nickNameRef = database.Child(uid).Child("UserDatas").Child("userNickname");
+            nickNameRef.SetValueAsync(nickName).ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -246,56 +189,67 @@ namespace Agit.FortressCraft
         }
         public class Inventory
         {
-            public int maxInventory;
-            public List<Item> items;
-            public int currentItemCount;
+            public int maxItemsPerSlot;
+            public List<Item>[] slots;
 
-            // Constructor with a default max inventory size of 24
-            public Inventory(int maxInventory = 24)
+            public Inventory(int maxPerSlot, int numberOfSlots)
             {
-                this.maxInventory = maxInventory;
-                items = new List<Item>();
-                currentItemCount = 0;
+                maxItemsPerSlot = maxPerSlot;
+                slots = new List<Item>[numberOfSlots];
+                for (int i = 0; i < numberOfSlots; i++)
+                {
+                    slots[i] = new List<Item>();
+                }
             }
 
             public void AddItem(string itemId, int quantity)
             {
-                if (currentItemCount + quantity > maxInventory)
+                foreach (List<Item> slot in slots)
                 {
-                    Debug.LogError("Cannot add item: Inventory capacity exceeded.");
-                    return;
+                    Item existingItem = slot.FirstOrDefault(item => item.itemId == itemId);
+                    if (existingItem != null && existingItem.quantity + quantity <= maxItemsPerSlot)
+                    {
+                        existingItem.quantity += quantity;
+                        return;
+                    }
                 }
 
-                Item item = items.Find(x => x.itemId == itemId);
-                if (item != null)
+                // No existing item found or slot max reached; try to add to a new slot
+                foreach (List<Item> slot in slots)
                 {
-                    item.quantity += quantity;
+                    if (slot.Count == 0 || slot.Sum(item => item.quantity) < maxItemsPerSlot)
+                    {
+                        slot.Add(new Item(itemId, Math.Min(quantity, maxItemsPerSlot)));
+                        return;
+                    }
                 }
-                else
-                {
-                    items.Add(new Item(itemId, quantity));
-                }
-                currentItemCount += quantity;
+
+                Debug.Log("No available slot or all slots are full.");
             }
 
-            public void RemoveItem(string itemId, int quantity)
+            public bool CanAddItem(string itemId, int quantity)
             {
-                Item item = items.Find(x => x.itemId == itemId);
-                if (item != null)
+                foreach (List<Item> slot in slots)
                 {
-                    int newQuantity = item.quantity - quantity;
-                    if (newQuantity <= 0)
+                    Item existingItem = slot.FirstOrDefault(item => item.itemId == itemId);
+                    if (existingItem != null && existingItem.quantity + quantity <= maxItemsPerSlot)
                     {
-                        items.Remove(item);
-                        currentItemCount -= item.quantity;
-                    }
-                    else
-                    {
-                        item.quantity = newQuantity;
-                        currentItemCount -= quantity;
+                        return true;
                     }
                 }
+
+                // Check if there is an empty slot or a slot with enough space to add the new item
+                foreach (List<Item> slot in slots)
+                {
+                    if (slot.Count == 0 || slot.Sum(item => item.quantity) + quantity <= maxItemsPerSlot)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
+
         }
 
         [System.Serializable]
@@ -321,27 +275,25 @@ namespace Agit.FortressCraft
             string jsonProperties = JsonUtility.ToJson(userProperty);
             database.Child(userid).Child("UserProperties").SetRawJsonValueAsync(jsonProperties);
 
-            // Initialize and save each inventory type
-            Inventory equipmentInventory = new Inventory(); // Default max is 24
-            Inventory consumablesInventory = new Inventory(); // Default max is 24
-            Inventory miscInventory = new Inventory(); // Default max is 24
-
-            SaveInventoryToDatabase(userid, "Equipment", equipmentInventory);
-            SaveInventoryToDatabase(userid, "Consumables", consumablesInventory);
-            SaveInventoryToDatabase(userid, "Misc", miscInventory);
+            // 각 인벤토리 유형에 대해 인벤토리 데이터를 저장
+            foreach (var inventoryEntry in inventories)
+            {
+                SaveInventoryToDatabase(userid, inventoryEntry.Key.ToString(), inventoryEntry.Value);
+            }
         }
-        private void SaveInventoryToDatabase(string userid, string inventoryType, Inventory inventory)
+
+        private void SaveInventoryToDatabase(string userId, string inventoryType, Inventory inventory)
         {
             string jsonInventory = JsonUtility.ToJson(inventory);
-            database.Child(userid).Child(inventoryType + "Inventory").SetRawJsonValueAsync(jsonInventory).ContinueWith(task =>
+            database.Child(userId).Child(inventoryType + "Inventory").SetRawJsonValueAsync(jsonInventory).ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
-                    Debug.LogError("Failed to save " + inventoryType + " inventory: " + task.Exception);
+                    Debug.LogError($"Failed to save {inventoryType} inventory: " + task.Exception);
                 }
                 else if (task.IsCompleted)
                 {
-                    Debug.Log(inventoryType + " inventory saved successfully for user " + userid);
+                    Debug.Log($"{inventoryType} inventory saved successfully for user {userId}");
                 }
             });
         }

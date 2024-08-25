@@ -18,7 +18,7 @@ namespace Agit.FortressCraft
                 Debug.Log("Loaded User Data for UID: " + uid);
                 Debug.Log("Current Gold: " + userProperties.gold);
 
-                int newGold = userProperties.gold + 100;
+                int newGold = userProperties.gold + 1000;
                 FirebaseDBManager.Instance.UpdateGold(uid, newGold);
             });
         }
