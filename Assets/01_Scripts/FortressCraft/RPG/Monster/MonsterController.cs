@@ -9,6 +9,7 @@ namespace Agit.FortressCraft
     {
         [SerializeField] public float hpMax = 3000;
         [Networked] public float Hp { get; set; }
+        public MonsterSpawner Spawner { get; set; }
 
         protected float startTime = 0.0f;
         protected float nextDelay = 0.0f;
@@ -44,6 +45,8 @@ namespace Agit.FortressCraft
 
         public virtual void Die()
         {
+            --Spawner.SpawnCount;
+            Spawner.RPCSetSpawnCount(Spawner.SpawnCount);
             animator.SetTrigger("Die");
         }
 

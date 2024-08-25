@@ -7,7 +7,6 @@ using Firebase.Unity;
 using JetBrains.Annotations;
 using System;
 using System.Threading.Tasks;
-using UnityEditor.Search;
 
 
 namespace Agit.FortressCraft
@@ -36,7 +35,7 @@ namespace Agit.FortressCraft
             }
         }
 
-        DatabaseReference database; // 데이터를 쓰기 위한 reference 변수
+        DatabaseReference database; // ???????? ???? ???? reference ????
 
         public Inventory equipmentInventory { get; private set; }
         public Inventory consumablesInventory { get; private set; }
@@ -196,24 +195,24 @@ namespace Agit.FortressCraft
                 }
                 else if (task.Result.Exists)
                 {
-                    tcs.SetResult(false); // 이미 존재하면 false
+                    tcs.SetResult(false); // ???? ???????? false
                 }
                 else
                 {
-                    tcs.SetResult(true); // 사용 가능하면 true
+                    tcs.SetResult(true); // ???? ???????? true
                 }
             });
             return tcs.Task;
         }
 
-        // 사용 가능한 닉네임이면 데이터베이스에 저장
+        // ???? ?????? ?????????? ?????????????? ????
         public Task SetNickname(string nickname, string userId)
         {
             DatabaseReference nicknameRef = database.Child("UserIds").Child(nickname);
             return nicknameRef.SetValueAsync(userId);
         }
 
-        public class UserDatas // 사용자 클래스 생성
+        public class UserDatas // ?????? ?????? ????
         {
             public string userNickname;
             public string guildType;
@@ -221,7 +220,7 @@ namespace Agit.FortressCraft
             public UserDatas()
             {
                 this.userNickname = "user123";
-                this.guildType = "None"; // 기본 값 설정
+                this.guildType = "None"; // ???? ?? ????
                 this.currentMap = "Starting Area";
             }
         }
@@ -311,7 +310,7 @@ namespace Agit.FortressCraft
             }
         }
 
-        public void WriteNewUser(string userid) // 가입한 회원 고유 번호에 대한 사용자 기본값 설정
+        public void WriteNewUser(string userid) // ?????? ???? ???? ?????? ???? ?????? ?????? ????
         {
             UserDatas user = new UserDatas();
             string jsonUser = JsonUtility.ToJson(user);

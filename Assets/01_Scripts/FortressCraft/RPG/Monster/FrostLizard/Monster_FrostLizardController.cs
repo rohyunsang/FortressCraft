@@ -30,10 +30,14 @@ namespace Agit.FortressCraft
             attackCollider = GetComponentInChildren<Monster_FrostLizardAttackCollider>();
         }
 
-        public override void FixedUpdateNetwork()
+        // FixedUpdateNetwork는 Athority 있는 거에서만 돌아서 FixedUpdate에서 처리 필요 
+        private void FixedUpdate()
         {
-            rb.velocity = Vector2.zero;
-            MonsterAI();
+            if(Runner.IsSharedModeMasterClient)
+            {
+                rb.velocity = Vector2.zero;
+                MonsterAI();
+            }
         }
 
         public void SetState(Monster_FrostLizardState state, float nextDelay)
