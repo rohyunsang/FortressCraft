@@ -46,8 +46,8 @@ namespace Agit.FortressCraft
         private void InitializeInventories()
         {
             inventories[InventoryType.Equipment] = new Inventory(1, 24);
-            inventories[InventoryType.Consumable] = new Inventory(100, 24);
-            inventories[InventoryType.Misc] = new Inventory(100, 24);
+            inventories[InventoryType.Consumable] = new Inventory(10, 24);
+            inventories[InventoryType.Misc] = new Inventory(10, 24);
         }
 
         public void AddItemToInventory(string itemId, int quantity, InventoryType inventoryType, Action<bool> callback)
@@ -240,23 +240,35 @@ namespace Agit.FortressCraft
 
             public int? AddItem(string itemId, int quantity)
             {
-                for (int i = 0; i < slots.Count; i++)
+                // 먼저 모든 슬롯을 검사하여 아이템 추가 시도
+                foreach (var slot in slots)
                 {
-                    Slot slot = slots[i];
-                    Item existingItem = slot.items.FirstOrDefault(item => item.itemId == itemId);
-                    if (existingItem != null && existingItem.quantity + quantity <= maxItemsPerSlot)
+                    Item item = slot.items.FirstOrDefault(x => x.itemId == itemId);
+                    if (item != null)
                     {
-                        existingItem.quantity += quantity;
-                        return i;
-                    }
-                    else if (slot.items.Count == 0 || slot.items.Sum(item => item.quantity) < maxItemsPerSlot)
-                    {
-                        slot.items.Add(new Item(itemId, Math.Min(quantity, maxItemsPerSlot)));
-                        return i;
+                        // 이미 존재하는 아이템에 추가
+                        if (item.quantity + quantity <= maxItemsPerSlot)
+                        {
+                            item.quantity += quantity;
+                            return slots.IndexOf(slot); // 아이템을 추가한 슬롯의 인덱스 반환
+                        }
                     }
                 }
+
+                // 적절한 슬롯이 없는 경우 새로운 아이템을 빈 슬롯에 추가
+                foreach (var slot in slots)
+                {
+                    if (slot.items.Count == 0 || slot.items.Sum(x => x.quantity) < maxItemsPerSlot)
+                    {
+                        slot.items.Add(new Item(itemId, Math.Min(quantity, maxItemsPerSlot)));
+                        return slots.IndexOf(slot); // 새 아이템을 추가한 슬롯의 인덱스 반환
+                    }
+                }
+
+                // 모든 슬롯이 가득 차 있는 경우 null 반환
                 return null;
             }
+
         }
 
         [System.Serializable]
