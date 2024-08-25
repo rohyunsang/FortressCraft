@@ -60,10 +60,17 @@ namespace Agit.FortressCraft {
                         string[] parts = itemText.text.Split(':');
                         if (parts.Length > 1 && int.TryParse(parts[1], out int currentQuantity))
                         {
-                            int newQuantity = currentQuantity + quantity;
-                            itemText.text = $"{itemId}: {newQuantity}";
-                            Debug.Log($"Updated {itemId} quantity to {newQuantity} in {inventoryType} inventory.");
-                            return;
+                            if(currentQuantity >= 10)
+                            {
+
+                            }
+                            else
+                            {
+                                int newQuantity = currentQuantity + quantity;
+                                itemText.text = $"{itemId}: {newQuantity}";
+                                Debug.Log($"Updated {itemId} quantity to {newQuantity} in {inventoryType} inventory.");
+                                return;
+                            }
                         }
                     }
                 }
