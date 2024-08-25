@@ -92,7 +92,7 @@ namespace Agit.FortressCraft {
         // 아이템을 데이터베이스에 추가합니다.
         public void AddItemToDatabase(string itemId, int quantity, InventoryType inventoryType)
         {
-            FirebaseDBManager.Instance.AddItemToInventory(itemId, quantity, inventoryType);
+            // FirebaseDBManager.Instance.AddItemToInventory(itemId, quantity, inventoryType);
         }
 
         // 아이템을 데이터베이스에서 제거합니다.

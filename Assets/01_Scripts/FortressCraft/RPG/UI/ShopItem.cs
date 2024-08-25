@@ -30,22 +30,14 @@ namespace Agit.FortressCraft
 
                 if (userProperties.gold >= _itemPrice)
                 {
-                    Inventory inventory = FirebaseDBManager.Instance.GetInventoryByType(inventoryType);
-
-                    if (inventory != null)
+                    FirebaseDBManager.Instance.AddItemToInventory(_itemName, 1, inventoryType, success =>
                     {
-                        inventory.AddItem(_itemName, 1); // Try adding the item directly
-
-                        if (inventory.CanAddItem(_itemName, 1)) // Check if it was possible to add
+                        if (success)
                         {
                             Debug.Log("Purchase successful");
                             int newGold = userProperties.gold - _itemPrice;
                             FirebaseDBManager.Instance.UpdateGold(uid, newGold);
 
-                            // Update the inventory in database after adding the item
-                            FirebaseDBManager.Instance.AddItemToInventory(_itemName, 1, inventoryType);
-
-                            // If using MainThreadDispatcher to handle Unity's main thread operations
                             MainThreadDispatcher.Enqueue(() =>
                             {
                                 InventoryManager.Instance.AddItemToGameInventory(_itemName, 1, inventoryType);
@@ -55,11 +47,7 @@ namespace Agit.FortressCraft
                         {
                             Debug.Log("Not enough inventory space");
                         }
-                    }
-                    else
-                    {
-                        Debug.Log("Inventory not found");
-                    }
+                    });
                 }
                 else
                 {
@@ -67,5 +55,7 @@ namespace Agit.FortressCraft
                 }
             });
         }
+
+
     }
 }

@@ -50,18 +50,37 @@ namespace Agit.FortressCraft
             inventories[InventoryType.Misc] = new Inventory(100, 24);
         }
 
-        public void AddItemToInventory(string itemId, int quantity, InventoryType inventoryType)
+        public void AddItemToInventory(string itemId, int quantity, InventoryType inventoryType, Action<bool> callback)
         {
             Inventory inventory = inventories[inventoryType];
-            inventory.AddItem(itemId, quantity);
-            UpdateInventoryInDatabase(inventoryType);
+            int? slotIndex = inventory.AddItem(itemId, quantity);  // 아이템을 추가하고, 변경된 슬롯의 인덱스를 반환받음
+
+            if (slotIndex.HasValue)
+            {
+                // 데이터베이스에 특정 인벤토리 슬롯 업데이트
+                UpdateInventoryInDatabase(inventory.slots[slotIndex.Value], inventoryType, slotIndex.Value);
+                callback(true);
+            }
+            else
+            {
+                callback(false);
+            }
         }
 
-        public void UpdateInventoryInDatabase(InventoryType inventoryType)
+        public void UpdateInventoryInDatabase(Slot slot, InventoryType inventoryType, int slotIndex)
         {
-            Inventory inventory = inventories[inventoryType];
-            string jsonInventory = JsonUtility.ToJson(inventory);
-            database.Child(FirebaseAuthManager.Instance.UserId).Child($"{inventoryType}Inventory").SetRawJsonValueAsync(jsonInventory);
+            string jsonInventory = JsonUtility.ToJson(slot);
+            if (jsonInventory == null)
+            {
+                Debug.LogError("Failed to serialize slot");
+                return;
+            }
+
+            database.Child(FirebaseAuthManager.Instance.UserId)
+                    .Child($"{inventoryType}Inventory")
+                    .Child("Slots")
+                    .Child(slotIndex.ToString())
+                    .SetRawJsonValueAsync(jsonInventory);
         }
 
 
@@ -187,69 +206,57 @@ namespace Agit.FortressCraft
                 this.mp = 50;
             }
         }
+        [System.Serializable]
+        public class Slot
+        {
+            public List<Item> items;
+
+            public Slot()
+            {
+                items = new List<Item>();
+            }
+        }
+
+        [System.Serializable]
         public class Inventory
         {
             public int maxItemsPerSlot;
-            public List<Item>[] slots;
+            public List<Slot> slots;
 
             public Inventory(int maxPerSlot, int numberOfSlots)
             {
                 maxItemsPerSlot = maxPerSlot;
-                slots = new List<Item>[numberOfSlots];
+                slots = new List<Slot>();
                 for (int i = 0; i < numberOfSlots; i++)
                 {
-                    slots[i] = new List<Item>();
+                    slots.Add(new Slot());
                 }
             }
 
-            public void AddItem(string itemId, int quantity)
+            public string Serialize()
             {
-                foreach (List<Item> slot in slots)
+                return JsonUtility.ToJson(this);
+            }
+
+            public int? AddItem(string itemId, int quantity)
+            {
+                for (int i = 0; i < slots.Count; i++)
                 {
-                    Item existingItem = slot.FirstOrDefault(item => item.itemId == itemId);
+                    Slot slot = slots[i];
+                    Item existingItem = slot.items.FirstOrDefault(item => item.itemId == itemId);
                     if (existingItem != null && existingItem.quantity + quantity <= maxItemsPerSlot)
                     {
                         existingItem.quantity += quantity;
-                        return;
+                        return i;
                     }
-                }
-
-                // No existing item found or slot max reached; try to add to a new slot
-                foreach (List<Item> slot in slots)
-                {
-                    if (slot.Count == 0 || slot.Sum(item => item.quantity) < maxItemsPerSlot)
+                    else if (slot.items.Count == 0 || slot.items.Sum(item => item.quantity) < maxItemsPerSlot)
                     {
-                        slot.Add(new Item(itemId, Math.Min(quantity, maxItemsPerSlot)));
-                        return;
+                        slot.items.Add(new Item(itemId, Math.Min(quantity, maxItemsPerSlot)));
+                        return i;
                     }
                 }
-
-                Debug.Log("No available slot or all slots are full.");
+                return null;
             }
-
-            public bool CanAddItem(string itemId, int quantity)
-            {
-                foreach (List<Item> slot in slots)
-                {
-                    Item existingItem = slot.FirstOrDefault(item => item.itemId == itemId);
-                    if (existingItem != null && existingItem.quantity + quantity <= maxItemsPerSlot)
-                    {
-                        return true;
-                    }
-                }
-
-                // Check if there is an empty slot or a slot with enough space to add the new item
-                foreach (List<Item> slot in slots)
-                {
-                    if (slot.Count == 0 || slot.Sum(item => item.quantity) + quantity <= maxItemsPerSlot)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
         }
 
         [System.Serializable]
