@@ -75,7 +75,7 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             //Debug.Log("Damage: " + damage);
-            Debug.Log("Skill1");
+            //Debug.Log("Skill1");
             if (OwnType == null) return;
             for ( int i = 1; i < 11; ++i )
             {

@@ -19,7 +19,6 @@ namespace Agit.FortressCraft
     {
         private Monster_NormalState state = Monster_NormalState.NON;
         private MonsterAttackCollider attackCollider;
-        private Vector2 dir;
 
         public override void Spawned()
         {
@@ -31,6 +30,8 @@ namespace Agit.FortressCraft
         // FixedUpdateNetwork는 Athority 있는 거에서만 돌아서 FixedUpdate에서 처리 필요 
         private void FixedUpdate()
         {
+            if (Runner == null) return;
+
             if (Runner.IsSharedModeMasterClient)
             {
                 rb.velocity = Vector2.zero;
@@ -76,7 +77,52 @@ namespace Agit.FortressCraft
 
         private void ActionRun()
         {
-            
+            if (!acted)
+            {
+                dir = Vector2.zero;
+                Transform Target = null;
+                Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 4.0f);
+
+                // 적 탐색 
+                foreach (Collider2D col in cols)
+                {
+                    if (col.tag.StartsWith("Unit") && !col.CompareTag("Unit_Monster"))
+                    {
+                        Target = col.transform;
+                        break;
+                    }
+                }
+
+                if (Target != null)
+                {
+                    dir = (Target.position - transform.position).normalized;
+                }
+                else
+                {
+                    // 타겟이 없을 시 랜덤 단위 벡터 
+                    float angle = Random.Range(0f, Mathf.PI * 2);
+                    dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                }
+                
+                animator.SetTrigger("Run");
+                acted = true;
+            }
+
+            if (dir.x > 0.001f || dir.y > 0.001f)
+            {
+                rb.velocity = dir * movingWeight;
+            }
+
+            if (rb.velocity.x > 0)
+            {
+                rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * -1.0f,
+                                                    transform.localScale.y, transform.localScale.z);
+            }
+            else
+            {
+                rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x),
+                                                    transform.localScale.y, transform.localScale.z);
+            }
         }
 
         private void ActionAttack()
@@ -84,7 +130,7 @@ namespace Agit.FortressCraft
             if (acted) return;
 
             attackCollider.Damage = damage * 3.0f;
-            animator.SetTrigger("Attack");
+            animator.SetTrigger("AttackNormal");
             acted = true;
         }
 

@@ -11,22 +11,23 @@ namespace Agit.FortressCraft
         [SerializeField] private int idle = 20;
         [SerializeField] private int run = 20;
         [SerializeField] private int attack = 20;
+        private MonsterData monsterData;
 
         private int sum;
-
-
         private int num;
-        private int burstActualValue = 0;
+
         private Dictionary<Monster_NormalState, float> delayDict;
         private Monster_NormalState prevState = Monster_NormalState.IDLE;
         private Monster_NormalState nextState = Monster_NormalState.IDLE;
 
         public override void Spawned()
         {
+            monsterData = monsterCtrl.monsterData;
+
             delayDict = new Dictionary<Monster_NormalState, float>();
-            delayDict.Add(Monster_NormalState.IDLE, 0.5f);
-            delayDict.Add(Monster_NormalState.RUN, 0.333f);
-            delayDict.Add(Monster_NormalState.ATTACK, 0.417f);
+            delayDict.Add(Monster_NormalState.IDLE, monsterData.IdleDelay);
+            delayDict.Add(Monster_NormalState.RUN, monsterData.RunDelay);
+            delayDict.Add(Monster_NormalState.ATTACK, monsterData.AttackDelay);
 
             sum = idle + run + attack;
 

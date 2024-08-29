@@ -7,9 +7,9 @@ namespace Agit.FortressCraft
 {
     public class MonsterController : NetworkBehaviour
     {
-        [SerializeField] private MonsterData monsterData;
+        public MonsterData monsterData;
 
-        public float hpMax;
+        [System.NonSerialized] public float hpMax;
         protected float movingWeight;
         protected float damage;
 
@@ -28,6 +28,7 @@ namespace Agit.FortressCraft
         protected BodyCollider bodyCollider;
         protected MonsterHPBar hpBar;
         protected ChangeDetector changes;
+        protected Vector2 dir;
 
         public override void Spawned()
         {

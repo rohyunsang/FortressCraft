@@ -21,7 +21,7 @@ namespace Agit.FortressCraft
     {
         private Monster_FrostLizardState state = Monster_FrostLizardState.NON;
         private MonsterAttackCollider attackCollider;
-        private Vector2 dir;
+        
 
         public override void Spawned()
         {

@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Agit.FortressCraft
 {
+    public enum MonsterType
+    {
+        NORMAL,
+        SWORD,
+        BOW,
+        NON
+    }
+
     [CreateAssetMenu( fileName = "MonsterData", menuName = "Scriptable Object/Monster Data" )]
     public class MonsterData : ScriptableObject
     {
@@ -13,6 +21,16 @@ namespace Agit.FortressCraft
         public float MovingWeight { get { return movingWeight; } }
         [SerializeField] private float damage = 10.0f;
         public float Damage { get { return damage; } }
+
+        [SerializeField] private float idleDelay= 1.0f;
+        public float IdleDelay { get { return idleDelay; } }
+        [SerializeField] private float runDelay = 1.0f;
+        public float RunDelay { get { return runDelay; } }
+        [SerializeField] private float attackDelay = 1.0f;
+        public float AttackDelay { get { return attackDelay; } }
+
+        [SerializeField] public MonsterType type = MonsterType.NON;
+        public MonsterType Type { get { return type; } }
     }
 }
 
