@@ -75,7 +75,7 @@ namespace Agit.FortressCraft {
                     }
                 }
             }
-
+            // inventoryContent.gameObject.GetComponent<InventoryController>()
             // If item not found, add new item
             GameObject item = Instantiate(itemPrefab, inventoryContent);
             item.GetComponentInChildren<Text>().text = $"{itemId}: {quantity}";
