@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
-using static Agit.FortressCraft.FirebaseDBManager;
 
 namespace Agit.FortressCraft
 {
@@ -10,7 +8,6 @@ namespace Agit.FortressCraft
         public string _itemName;
         public int _itemPrice;
         public Button _purchaseButton;
-        public InventoryType inventoryType;
 
         void Start()
         {
@@ -30,32 +27,16 @@ namespace Agit.FortressCraft
 
                 if (userProperties.gold >= _itemPrice)
                 {
-                    FirebaseDBManager.Instance.AddItemToInventory(_itemName, 1, inventoryType, success =>
+                    MainThreadDispatcher.Enqueue(() =>
                     {
-                        if (success)
-                        {
-                            Debug.Log("Purchase successful");
-                            int newGold = userProperties.gold - _itemPrice;
-                            FirebaseDBManager.Instance.UpdateGold(uid, newGold);
-
-                            MainThreadDispatcher.Enqueue(() =>
-                            {
-                                InventoryManager.Instance.AddItemToGameInventory(_itemName, 1, inventoryType);
-                            });
-                        }
-                        else
-                        {
-                            Debug.Log("Not enough inventory space");
-                        }
                     });
                 }
                 else
                 {
-                    Debug.Log("Not enough gold to purchase");
+                    Debug.Log("Not enough inventory space");
                 }
             });
         }
-
-
     }
 }
+

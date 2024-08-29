@@ -10,6 +10,33 @@ namespace Agit.FortressCraft
 {
     public class UIManager : MonoBehaviour
     {
+        public static UIManager Instance { get; private set; } // Singleton instance
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject); // Prevent the singleton object from being destroyed on load
+            }
+            else
+            {
+                Destroy(gameObject); // Destroy this instance if a duplicate exists
+            }
+
+            joinButton.onClick.AddListener(InitOnClickJoinButton);
+            createButton.onClick.AddListener(InitOnClickCreateButton);
+        }
+
+        #region Login
+        public GameObject _loginScreen;
+        public GameObject _nicknameGroup;
+        public GameObject _successMakeNicknameGroup;
+
+
+
+        #endregion
+
         #region UI - INTRO
 
         public InputField _room;
@@ -20,12 +47,6 @@ namespace Agit.FortressCraft
         public GameObject _incorrectNicknamePanel;
         public GameObject _roomListPanel;
         public GameObject _roomOptionPanel;
-
-        private void Awake()
-        {
-            joinButton.onClick.AddListener(InitOnClickJoinButton);
-            createButton.onClick.AddListener(InitOnClickCreateButton);
-        }
 
         public void InitOnClickJoinButton()
         {

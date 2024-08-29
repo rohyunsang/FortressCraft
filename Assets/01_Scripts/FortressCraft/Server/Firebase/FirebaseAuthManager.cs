@@ -112,9 +112,7 @@ namespace Agit.FortressCraft {
                 // 메인 스레드에서 UI 업데이트 실행
                 MainThreadDispatcher.Enqueue(() =>
                 {
-                    UIManager_Firebase.Instance._mainScreen.SetActive(true);
-                    UIManager_Firebase.Instance._loginScreen.SetActive(false);
-                    UIManager_Firebase.Instance._uuidText.text = newUser.UserId;
+                    UIManager.Instance._loginScreen.SetActive(false);
                 });
             });
         }

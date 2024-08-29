@@ -32,6 +32,11 @@ namespace Agit.FortressCraft
                             Debug.Log("Nickname set successfully");
                             // 성공적으로 설정되었을 때의 로직 구현
                             FirebaseDBManager.Instance.UpdateNickname(uid, nickname);
+                            MainThreadDispatcher.Enqueue(() =>
+                            {
+                                UIManager.Instance._nicknameGroup.SetActive(false);
+                                UIManager.Instance._successMakeNicknameGroup.SetActive(true);
+                            });
                         }
                     });
                 }

@@ -22,8 +22,11 @@ namespace Agit.FortressCraft
 
         private void OnChangedState(bool sign)
         {
-            outputText.text = sign ? "로그인 : " : "로그아웃 : ";
-            outputText.text += FirebaseAuthManager.Instance.UserId;
+            // outputText.text = sign ? "로그인 : " : "로그아웃 : ";
+            if (sign)
+            {
+                outputText.text = "회원 가입 완료";
+            }
         }
 
         public void Create()
