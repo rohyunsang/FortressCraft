@@ -26,7 +26,7 @@ namespace Agit.FortressCraft
         private void FixedUpdate()
         {
             if (Runner == null) return;
-            Debug.Log("Count: " + SpawnCount);
+            //Debug.Log("Count: " + SpawnCount);
             if (spawnTimer.Expired(Runner))
             {
                 spawnTimer = TickTimer.CreateFromSeconds(Runner, spawnDelay);

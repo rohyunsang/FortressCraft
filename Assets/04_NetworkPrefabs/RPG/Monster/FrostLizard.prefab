@@ -1768,9 +1768,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c4362887e6543c698419a8fe281f95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterData: {fileID: 11400000, guid: cc7f87133c35145b6b85a6579a0a2bcf, type: 2}
   hpMax: 5000
   _Hp: 0
-  movingWeight: 0.7
 --- !u!114 &386755887964259986
 MonoBehaviour:
   m_ObjectHideFlags: 0

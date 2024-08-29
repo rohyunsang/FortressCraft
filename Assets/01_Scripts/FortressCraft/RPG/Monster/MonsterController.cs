@@ -7,7 +7,12 @@ namespace Agit.FortressCraft
 {
     public class MonsterController : NetworkBehaviour
     {
-        [SerializeField] public float hpMax = 3000;
+        [SerializeField] private MonsterData monsterData;
+
+        public float hpMax;
+        protected float movingWeight;
+        protected float damage;
+
         [Networked] public float Hp { get; set; }
         public MonsterSpawner Spawner { get; set; }
 
@@ -16,7 +21,7 @@ namespace Agit.FortressCraft
 
         protected Rigidbody2D rb;
         protected Animator animator;
-        [SerializeField] protected float movingWeight = 1.0f;
+        
         public bool ActiveSts { get; set; }
         protected bool acted = false;
 
@@ -33,6 +38,9 @@ namespace Agit.FortressCraft
             ActiveSts = false;
             changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
+            hpMax = monsterData.HPMax;
+            movingWeight = monsterData.MovingWeight;
+            damage = monsterData.Damage;
         }
 
         public virtual void MonsterAI() { }

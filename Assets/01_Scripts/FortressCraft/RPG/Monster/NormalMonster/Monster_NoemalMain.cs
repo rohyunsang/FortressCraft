@@ -1,0 +1,79 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Fusion;
+
+namespace Agit.FortressCraft
+{
+    public class Monster_NormalMain : NetworkBehaviour
+    {
+        [SerializeField] private Monster_NormalController monsterCtrl;
+        [SerializeField] private int idle = 20;
+        [SerializeField] private int run = 20;
+        [SerializeField] private int attack = 20;
+
+        private int sum;
+
+
+        private int num;
+        private int burstActualValue = 0;
+        private Dictionary<Monster_NormalState, float> delayDict;
+        private Monster_NormalState prevState = Monster_NormalState.IDLE;
+        private Monster_NormalState nextState = Monster_NormalState.IDLE;
+
+        public override void Spawned()
+        {
+            delayDict = new Dictionary<Monster_NormalState, float>();
+            delayDict.Add(Monster_NormalState.IDLE, 0.5f);
+            delayDict.Add(Monster_NormalState.RUN, 0.333f);
+            delayDict.Add(Monster_NormalState.ATTACK, 0.417f);
+
+            sum = idle + run + attack;
+
+            StartCoroutine(SetMonsterState());
+        }
+
+        public IEnumerator SetMonsterState()
+        {
+            while (true)
+            {
+                prevState = nextState;
+                nextState = Monster_NormalState.NON;
+
+                /*
+                // 스테이트 강제 설정 ----------------------------------------------------
+
+                if (nextState != Monster_FrostLizardState.NON)
+                {
+                    monsterCtrl.setState(nextState, delayDict[nextState]);
+                    return;
+                }
+                */
+
+                // 스테이트 일반 설정 ----------------------------------------------------
+                num = Random.Range(0, sum);
+
+                if (num < idle)
+                {
+                    //Debug.Log("Monster - Idle");
+                    nextState = Monster_NormalState.IDLE;
+                }
+                else if( num < idle + run )
+                {
+                    nextState = Monster_NormalState.RUN;
+                }
+                else if( num < idle + run + attack )
+                {
+                    nextState = Monster_NormalState.ATTACK;
+                }
+                
+
+                monsterCtrl.SetState(nextState, delayDict[nextState]);
+
+                yield return new WaitForSeconds(delayDict[nextState]);
+            }
+        }
+    }
+}
+
+

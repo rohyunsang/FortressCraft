@@ -75,7 +75,7 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             //Debug.Log("Damage: " + damage);
-            // Debug.Log("Skill1");
+            Debug.Log("Skill1");
             if (OwnType == null) return;
             for ( int i = 1; i < 11; ++i )
             {
@@ -84,7 +84,7 @@ namespace Agit.FortressCraft
                 var result = poolManager.AcquirePrefabInstance(Runner, context, out no);
                 //NetworkObject no = Runner.Spawn(arrow, transform.position + offsetVector, Quaternion.identity);
                 no.transform.SetParent(null);
-
+                //Debug.Log("FireSkill1");
                 if (result == NetworkObjectAcquireResult.Success)
                 {
                     no.transform.SetParent(null);

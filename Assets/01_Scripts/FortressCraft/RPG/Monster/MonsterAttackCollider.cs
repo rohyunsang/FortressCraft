@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Agit.FortressCraft
 {
-    public class Monster_FrostLizardAttackCollider : AttackCollider
+    public class MonsterAttackCollider : AttackCollider
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {

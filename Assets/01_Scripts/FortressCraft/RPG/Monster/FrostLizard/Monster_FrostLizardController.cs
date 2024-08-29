@@ -20,14 +20,14 @@ namespace Agit.FortressCraft
     public class Monster_FrostLizardController : MonsterController
     {
         private Monster_FrostLizardState state = Monster_FrostLizardState.NON;
-        private Monster_FrostLizardAttackCollider attackCollider;
+        private MonsterAttackCollider attackCollider;
         private Vector2 dir;
 
         public override void Spawned()
         {
             base.Spawned();
             Hp = hpMax;
-            attackCollider = GetComponentInChildren<Monster_FrostLizardAttackCollider>();
+            attackCollider = GetComponentInChildren<MonsterAttackCollider>();
         }
 
         // FixedUpdateNetwork는 Athority 있는 거에서만 돌아서 FixedUpdate에서 처리 필요 
@@ -136,7 +136,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 300.0f;
+            attackCollider.Damage = damage * 3.0f;
             animator.SetTrigger("Breath");
             acted = true;
         }
@@ -145,7 +145,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 100.0f;
+            attackCollider.Damage = damage;
             animator.SetTrigger("TailAttack");
             acted = true;
         }
@@ -154,7 +154,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 500.0f;
+            attackCollider.Damage = damage;
             animator.SetTrigger("Slam");
             acted = true;
         }
