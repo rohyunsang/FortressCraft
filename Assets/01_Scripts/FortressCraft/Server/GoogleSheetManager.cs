@@ -11,15 +11,13 @@ namespace Agit.FortressCraft {
     {
         public static List<CommanderData> commanderDatas = new List<CommanderData>();
         public static List<UnitData> unitDatas = new List<UnitData>();
-        public static List<RPGPlayerData> playerDatas = new List<RPGPlayerData>();
 
-        // ???? ?? edit ~ ?????? ???? export?format=tsv ????????
+        //link change : edit ~ -> export?format=tsv
 
         private static readonly List<string> _urls = new List<string>
         {
             "https://docs.google.com/spreadsheets/d/1Z_awcApNOODEqu---j7VFGDjjuyU5cl7IMinMXKHPII/export?format=tsv&gid=0",
-            "https://docs.google.com/spreadsheets/d/1Z_awcApNOODEqu---j7VFGDjjuyU5cl7IMinMXKHPII/export?format=tsv&gid=1728502320",
-            "https://docs.google.com/spreadsheets/d/1Z_awcApNOODEqu---j7VFGDjjuyU5cl7IMinMXKHPII/export?format=tsv&gid=21590149"
+            "https://docs.google.com/spreadsheets/d/1Z_awcApNOODEqu---j7VFGDjjuyU5cl7IMinMXKHPII/export?format=tsv&gid=1728502320"
         };
 
         public static readonly ReadOnlyCollection<string> Urls = new ReadOnlyCollection<string>(_urls);
@@ -40,60 +38,18 @@ namespace Agit.FortressCraft {
                 ParseCommanderData(data[0]);
             if (data[1] != null)
                 ParseUnitData(data[1]);
-            if (data[2] != null)
-                ParsePlayerData(data[2]);
             foreach(string d in data)
             {
                 Debug.Log(d);
             }
         }
-        private static void ParsePlayerData(string data)
-        {
-            string[] lines = data.Split('\n');
-            for (int i = 1; i < lines.Length; i++) // ?? ???? ???? ???? ?????? ????
-            {
-                string[] fields = lines[i].Split('\t');
-                if (fields.Length < 5) // ?????? ???? ?? ???? ?? ???? ???? ?? ???? ????
-                {
-                    Debug.LogError($"Line {i} has insufficient fields: {fields.Length} fields found.");
-                    continue;
-                }
-                try
-                {
-                    RPGPlayerData playerData = new RPGPlayerData()
-                    {
-                        JobType = fields[0],
-                        Level = ParseInt(fields[1]),
-                        NeedExp = ParseInt(fields[2]),
-                        HP = ParseFloat(fields[3]),
-                        MP = ParseFloat(fields[4]),
-                        Attack = ParseFloat(fields[5]),
-                        AttackSpeed = ParseFloat(fields[6]),
-                        AttackDelay = ParseFloat(fields[7]),
-                        Defense = ParseFloat(fields[8]),
-                        MoveSpeed = ParseFloat(fields[9]),
-                        HealPerSecond = ParseFloat(fields[10]),
-                    };
-                    playerDatas.Add(playerData);
-                }
-                catch (FormatException e)
-                {
-                    Debug.LogError($"FormatException on line {i}: {e.Message}");
-                }
-                catch (OverflowException e)
-                {
-                    Debug.LogError($"OverflowException on line {i}: {e.Message}");
-                }
-            }
-        }
-
         private static void ParseCommanderData(string data)
         {
             string[] lines = data.Split('\n');
-            for (int i = 1; i < lines.Length; i++) // ?? ???? ???? ???? ?????? ????
+            for (int i = 1; i < lines.Length; i++) 
             {
                 string[] fields = lines[i].Split('\t');
-                if (fields.Length < 5) // ?????? ???? ?? ???? ?? ???? ???? ?? ???? ????
+                if (fields.Length < 5) 
                 {
                     Debug.LogError($"Line {i} has insufficient fields: {fields.Length} fields found.");
                     continue;
@@ -129,10 +85,10 @@ namespace Agit.FortressCraft {
         private static void ParseUnitData(string data)
         {
             string[] lines = data.Split('\n');
-            for (int i = 1; i < lines.Length; i++) // ?? ???? ???? ???? ?????? ????
+            for (int i = 1; i < lines.Length; i++) 
             {
                 string[] fields = lines[i].Split('\t');
-                if (fields.Length < 11) // ?????? ???? ?? ???? ?? ???? ???? ?? ???? ????
+                if (fields.Length < 11) // enough field? 
                 {
                     Debug.LogError($"Line {i} has insufficient fields: {fields.Length} fields found.");
                     continue;
@@ -240,22 +196,6 @@ namespace Agit.FortressCraft {
         public float SpawnDelay;
         public int CostReward;
         public int ExpReward;
-    }
-
-    [System.Serializable]
-    public class RPGPlayerData
-    {
-        public string JobType;
-        public int Level;
-        public int NeedExp;
-        public float HP;
-        public float MP;
-        public float Attack;
-        public float AttackSpeed;
-        public float AttackDelay;
-        public float Defense;
-        public float MoveSpeed;
-        public float HealPerSecond;
     }
 }
 
