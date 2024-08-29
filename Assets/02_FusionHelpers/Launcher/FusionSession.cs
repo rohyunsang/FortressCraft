@@ -42,12 +42,6 @@ namespace FusionHelpers
             Debug.Log($"Spawned Network Session for Runner: {Runner}");
             Runner.RegisterSingleton(this);
 
-			if (FindObjectOfType<App>().rpgMode)
-			{
-				_playerPrefab = _RPG_Player;
-			}
-			else
-			{
                 // App에서 플레이어 직업 타입을 정한다.
                 JobType jobType = FindObjectOfType<App>().jobType;
                 switch (jobType)
@@ -66,7 +60,6 @@ namespace FusionHelpers
                         Debug.LogError("default commander is Archer");
                         break;
                 }
-            }
 			
 
             

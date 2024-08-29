@@ -149,20 +149,10 @@ namespace Agit.FortressCraft
             var players = gameManager.AllPlayers;
             foreach (FusionPlayer fusionPlayer in players)
             {
-                if (FindObjectOfType<App>().rpgMode)
-                {
-                    RPG_Player player = (RPG_Player)fusionPlayer;
-                    Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
-                    player.Reset();
-                    player.Respawn();
-                }
-                else
-                {
-                    Player player = (Player)fusionPlayer;
-                    Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
-                    player.Reset();
-                    player.Respawn();
-                }
+                Player player = (Player)fusionPlayer;
+                Debug.Log($"Initiating Respawn of Player #{fusionPlayer.PlayerIndex} ID:{fusionPlayer.PlayerId}:{player}");
+                player.Reset();
+                player.Respawn();
                 
             }
 

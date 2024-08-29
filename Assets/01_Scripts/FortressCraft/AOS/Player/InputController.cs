@@ -39,14 +39,7 @@ namespace Agit.FortressCraft
         public override void Spawned()
         {
             _mobileInput = FindObjectOfType<MobileInput>(true);
-            if (FindObjectOfType<App>().rpgMode)
-            {
-                _rpg_Player = GetComponent<RPG_Player>();
-            }
-            else
-            {
-                _player = GetComponent<Player>();
-            }
+            _player = GetComponent<Player>();
             // Technically, it does not really matter which InputController fills the input structure, since the actual data will only be sent to the one that does have authority,
             // but in the name of clarity, let's make sure we give input control to the gameobject that also has Input authority.
             if (Object.HasInputAuthority)

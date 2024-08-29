@@ -50,8 +50,6 @@ namespace Agit.FortressCraft
 
 		public GameObject recorderPrefab;
 
-		public bool rpgMode = false;
-
         private void Awake()
 		{
 			Application.targetFrameRate = 60;
@@ -68,11 +66,6 @@ namespace Agit.FortressCraft
 			StartCoroutine(GoogleSheetManager.Loader());
         }
 
-		public void OnClickRPGModeButton()
-		{
-			rpgMode = true;
-			Debug.Log("RPG 모드입니다.");
-		}
 
 		public void SetJob(string jobType)   // using Button ;
 		{

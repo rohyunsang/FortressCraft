@@ -20,7 +20,6 @@ namespace Agit.FortressCraft
 
         private void FixedUpdate()
         {
-            if (FindObjectOfType<App>().rpgMode) return;
             levelText.text = player.level.ToString();
         }
     }
