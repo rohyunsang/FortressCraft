@@ -36,6 +36,8 @@ namespace Agit.FortressCraft
                             {
                                 UIManager.Instance._nicknameGroup.SetActive(false);
                                 UIManager.Instance._successMakeNicknameGroup.SetActive(true);
+                                UIManager.Instance._gameStartButton.SetActive(true);
+                                UIManager.Instance._nicknameText.text = nickname;
                             });
                         }
                     });

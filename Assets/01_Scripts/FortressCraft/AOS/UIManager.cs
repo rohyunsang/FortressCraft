@@ -32,7 +32,8 @@ namespace Agit.FortressCraft
         public GameObject _loginScreen;
         public GameObject _nicknameGroup;
         public GameObject _successMakeNicknameGroup;
-
+        public GameObject _gameStartButton;
+        public Text _nicknameText;
 
 
         #endregion
