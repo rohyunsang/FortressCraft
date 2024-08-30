@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79f36aeea2e13464da79c5b959c593f0, type: 3}
-  m_Name: Zombie2Data
+  m_Name: SkeletonKingData
   m_EditorClassIdentifier: 
-  hpMax: 200
+  hpMax: 400
   movingWeight: 1
-  damage: 20
+  damage: 40
   idleDelay: 2
   runDelay: 1
-  attackDelay: 1
-  gold: 30
-  exp: 20
-  type: 0
+  attackDelay: 2
+  gold: 100
+  exp: 50
+  type: 1

@@ -9,6 +9,7 @@ namespace Agit.FortressCraft
         NORMAL,
         SWORD,
         BOW,
+        MAGIC,
         NON
     }
 
@@ -28,6 +29,11 @@ namespace Agit.FortressCraft
         public float RunDelay { get { return runDelay; } }
         [SerializeField] private float attackDelay = 1.0f;
         public float AttackDelay { get { return attackDelay; } }
+
+        [SerializeField] private int gold = 10;
+        public int Gold { get { return gold; } }
+        [SerializeField] private float exp = 10.0f;
+        public float Exp { get { return exp; } }
 
         [SerializeField] public MonsterType type = MonsterType.NON;
         public MonsterType Type { get { return type; } }

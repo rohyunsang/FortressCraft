@@ -15,3 +15,9 @@ MonoBehaviour:
   hpMax: 3000
   movingWeight: 1
   damage: 100
+  idleDelay: 1
+  runDelay: 1
+  attackDelay: 1
+  gold: 300
+  exp: 100
+  type: 3

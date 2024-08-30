@@ -41,15 +41,20 @@ namespace Agit.FortressCraft
                 prevState = nextState;
                 nextState = Monster_NormalState.NON;
 
-                /*
+                if( monsterCtrl.GetNearEnemy() == null )
+                {
+                    nextState = Monster_NormalState.IDLE;
+                }
+
                 // 스테이트 강제 설정 ----------------------------------------------------
 
-                if (nextState != Monster_FrostLizardState.NON)
+                if (nextState != Monster_NormalState.NON)
                 {
-                    monsterCtrl.setState(nextState, delayDict[nextState]);
-                    return;
+                    monsterCtrl.SetState(nextState, delayDict[nextState]);
+                    yield return new WaitForSeconds(delayDict[nextState]);
+                    continue;
                 }
-                */
+                
 
                 // 스테이트 일반 설정 ----------------------------------------------------
                 num = Random.Range(0, sum);

@@ -16,6 +16,9 @@ namespace Agit.FortressCraft
         [Networked] public float Hp { get; set; }
         public MonsterSpawner Spawner { get; set; }
 
+        public int Gold { get; set; }
+        public float Exp { get; set; }
+
         protected float startTime = 0.0f;
         protected float nextDelay = 0.0f;
 
@@ -42,6 +45,9 @@ namespace Agit.FortressCraft
             hpMax = monsterData.HPMax;
             movingWeight = monsterData.MovingWeight;
             damage = monsterData.Damage;
+
+            Gold = monsterData.Gold;
+            Exp = monsterData.Exp;
         }
 
         public virtual void MonsterAI() { }

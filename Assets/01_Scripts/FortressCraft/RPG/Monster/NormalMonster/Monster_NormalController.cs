@@ -19,8 +19,8 @@ namespace Agit.FortressCraft
     {
         private Monster_NormalState state = Monster_NormalState.NON;
         private MonsterAttackCollider attackCollider;
-        private delegate void Attack();
-        Attack AttackFunc;
+        private delegate void ActionAttackFunction();
+        ActionAttackFunction Attack;
         [SerializeField] NetworkObject obj;
 
         public override void Spawned()
@@ -31,11 +31,19 @@ namespace Agit.FortressCraft
 
             if( monsterData.Type == MonsterType.NORMAL )
             {
-                AttackFunc = ActionAttack;
+                Attack = ActionAttack;
             }
             else if( monsterData.Type == MonsterType.BOW )
             {
-                AttackFunc = ActionBow;
+                Attack = ActionBow;
+            }
+            else if( monsterData.Type == MonsterType.SWORD )
+            {
+                Attack = ActionSword;
+            }
+            else if( monsterData.Type == MonsterType.MAGIC )
+            {
+                Attack = ActionMagic;
             }
         }
 
@@ -74,9 +82,46 @@ namespace Agit.FortressCraft
                     ActionRun();
                     break;
                 case Monster_NormalState.ATTACK:
-                    AttackFunc();
+                    Attack();
                     break;
 
+            }
+        }
+
+        public Transform GetNearEnemy()
+        {
+            Transform Target = null;
+            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 4.0f);
+
+            // 적 탐색 
+            foreach (Collider2D col in cols)
+            {
+                if (col.tag.StartsWith("Unit") && !col.CompareTag("Unit_Monster"))
+                {
+                    Target = col.transform;
+                    break;
+                }
+            }
+
+            return Target;
+        }
+
+        private void SetScale()
+        {
+            Transform target = GetNearEnemy();
+
+            if (target != null)
+            {
+                if (target.transform.position.x > transform.position.x)
+                {
+                    rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * -1.0f,
+                                                    transform.localScale.y, transform.localScale.z);
+                }
+                else
+                {
+                    rb.transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x),
+                                                    transform.localScale.y, transform.localScale.z);
+                }
             }
         }
 
@@ -92,18 +137,7 @@ namespace Agit.FortressCraft
             if (!acted)
             {
                 dir = Vector2.zero;
-                Transform Target = null;
-                Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 4.0f);
-
-                // 적 탐색 
-                foreach (Collider2D col in cols)
-                {
-                    if (col.tag.StartsWith("Unit") && !col.CompareTag("Unit_Monster"))
-                    {
-                        Target = col.transform;
-                        break;
-                    }
-                }
+                Transform Target = GetNearEnemy();
 
                 if (Target != null)
                 {
@@ -141,6 +175,8 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
+            SetScale();
+
             attackCollider.Damage = damage * 2.0f;
             animator.SetTrigger("AttackNormal");
             acted = true;
@@ -150,25 +186,38 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
+            SetScale();
+
             attackCollider.Damage = damage * 3.0f;
             animator.SetTrigger("AttackBow");
             acted = true;
         }
 
+        private void ActionSword()
+        {
+            if (acted) return;
+
+            SetScale();
+
+            attackCollider.Damage = damage * 2.0f;
+            animator.SetTrigger("AttackSword");
+            acted = true;
+        }
+
+        private void ActionMagic()
+        {
+            if (acted) return;
+
+            SetScale();
+
+            attackCollider.Damage = damage * 3.0f;
+            animator.SetTrigger("AttackMagic");
+            acted = true;
+        }
+
         public void Fire()
         {
-            Transform Target = null;
-            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 4.0f);
-
-            // 적 탐색 
-            foreach (Collider2D col in cols)
-            {
-                if (col.tag.StartsWith("Unit") && !col.CompareTag("Unit_Monster"))
-                {
-                    Target = col.transform;
-                    break;
-                }
-            }
+            Transform Target = GetNearEnemy();
 
             if (Target == null) return;
 
