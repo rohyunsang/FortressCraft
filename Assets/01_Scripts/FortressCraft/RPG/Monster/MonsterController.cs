@@ -54,8 +54,12 @@ namespace Agit.FortressCraft
 
         public virtual void Die()
         {
-            --Spawner.SpawnCount;
-            Spawner.RPCSetSpawnCount(Spawner.SpawnCount);
+            if( Spawner != null )
+            {
+                --Spawner.SpawnCount;
+                Spawner.RPCSetSpawnCount(Spawner.SpawnCount);
+            }
+            
             animator.SetTrigger("Die");
         }
 

@@ -19,12 +19,24 @@ namespace Agit.FortressCraft
     {
         private Monster_NormalState state = Monster_NormalState.NON;
         private MonsterAttackCollider attackCollider;
+        private delegate void Attack();
+        Attack AttackFunc;
+        [SerializeField] NetworkObject obj;
 
         public override void Spawned()
         {
             base.Spawned();
             Hp = hpMax;
             attackCollider = GetComponentInChildren<MonsterAttackCollider>();
+
+            if( monsterData.Type == MonsterType.NORMAL )
+            {
+                AttackFunc = ActionAttack;
+            }
+            else if( monsterData.Type == MonsterType.BOW )
+            {
+                AttackFunc = ActionBow;
+            }
         }
 
         // FixedUpdateNetwork는 Athority 있는 거에서만 돌아서 FixedUpdate에서 처리 필요 
@@ -62,7 +74,7 @@ namespace Agit.FortressCraft
                     ActionRun();
                     break;
                 case Monster_NormalState.ATTACK:
-                    ActionAttack();
+                    AttackFunc();
                     break;
 
             }
@@ -129,11 +141,44 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = damage * 3.0f;
+            attackCollider.Damage = damage * 2.0f;
             animator.SetTrigger("AttackNormal");
             acted = true;
         }
 
+        private void ActionBow()
+        {
+            if (acted) return;
+
+            attackCollider.Damage = damage * 3.0f;
+            animator.SetTrigger("AttackBow");
+            acted = true;
+        }
+
+        public void Fire()
+        {
+            Transform Target = null;
+            Collider2D[] cols = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 4.0f);
+
+            // 적 탐색 
+            foreach (Collider2D col in cols)
+            {
+                if (col.tag.StartsWith("Unit") && !col.CompareTag("Unit_Monster"))
+                {
+                    Target = col.transform;
+                    break;
+                }
+            }
+
+            if (Target == null) return;
+
+            NetworkObject fireObj = Runner.Spawn(obj, transform.position, Quaternion.identity);
+            MonsterArrow monsterArrow = fireObj.GetComponent<MonsterArrow>();
+            monsterArrow.TargetTransform = Target;
+
+            MonsterAttackCollider monsterAttackCollider = fireObj.GetComponent<MonsterAttackCollider>();
+            monsterAttackCollider.Damage = damage;
+        }
     }
 }
 
