@@ -175,6 +175,7 @@ namespace Agit.FortressCraft
             NetworkObject fireObj = Runner.Spawn(obj, transform.position, Quaternion.identity);
             MonsterArrow monsterArrow = fireObj.GetComponent<MonsterArrow>();
             monsterArrow.TargetTransform = Target;
+            monsterArrow.ReserveRelease();
 
             MonsterAttackCollider monsterAttackCollider = fireObj.GetComponent<MonsterAttackCollider>();
             monsterAttackCollider.Damage = damage;
