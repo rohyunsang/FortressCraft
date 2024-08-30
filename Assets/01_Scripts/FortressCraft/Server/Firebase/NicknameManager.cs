@@ -20,6 +20,15 @@ namespace Agit.FortressCraft
             string userId = FirebaseAuthManager.Instance.UserId;
             string uid = FirebaseAuthManager.Instance.UserId;
 
+            if(!PlayerNameValidator.IsValidName(nickname))
+            {
+                MainThreadDispatcher.Enqueue(() =>
+                {
+                    UIManager.Instance._failNicknameInfo.SetActive(true);
+                });
+                return;
+            }
+
             FirebaseDBManager.Instance.IsNicknameAvailable(nickname).ContinueWith(task =>
             {
                 if (task.Result)

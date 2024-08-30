@@ -21,8 +21,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameManager _gameManagerPrefab;
 		[SerializeField] private InputField _room;
-        [SerializeField] private InputField _playerName;
-        [SerializeField] private InputField _playerNameOverride;
         [SerializeField] private TextMeshProUGUI _progress;
 		[SerializeField] private Panel _uiStart;
 		[SerializeField] private Panel _uiProgress;
@@ -88,32 +86,18 @@ namespace Agit.FortressCraft
 			FindObjectOfType<FusionLauncher>().ShutDownCustom();
         }
 
-		public void CheckNickname() // using Button 1. 방 목록보기 
-		{
-			if (PlayerNameValidator.IsValidName(_playerNameOverride.text))
-			{
-                ConnectToLobby();
-				FindObjectOfType<UIManager>()._nicknamePanel.SetActive(false);
-				FindObjectOfType<UIManager>()._roomListPanel.SetActive(true);
-            }
-			else
-			{
-				FindObjectOfType<UIManager>()._incorrectNicknamePanel.SetActive(true);
-            }
+		public void RandomRoomCreate() // using Button  NickNamePanel - SubmitAndCancelLayout - SubmitNicknameButton
+        {
+            ConnectToLobby();
+			FindObjectOfType<UIManager>()._nicknamePanel.SetActive(false);
+			FindObjectOfType<UIManager>()._roomListPanel.SetActive(true);
         }
 
 		public void CheckNickNameOverride() // using Button 2. 방 만들기. 
 		{
-			if (PlayerNameValidator.IsValidName(_playerName.text))
-			{
-                OnEnterRoom();
-                SetRoomName();
-				FindObjectOfType<UIManager>()._roomOptionPanel.SetActive(false);
-            }
-			else
-			{
-                FindObjectOfType<UIManager>()._incorrectNicknamePanel.SetActive(true);
-            }
+            OnEnterRoom();
+            SetRoomName();
+			FindObjectOfType<UIManager>()._roomOptionPanel.SetActive(false);
         }
 
 		private void ConnectToLobby() // using Button
@@ -122,7 +106,7 @@ namespace Agit.FortressCraft
             FindObjectOfType<LevelUIController>().Init();
 			
 
-            FusionLauncher.ConnectToLobby(_playerNameOverride.text, _gameManagerPrefab, OnConnectionStatusUpdate);
+            FusionLauncher.ConnectToLobby(FirebaseAuthManager.Instance.UserId, _gameManagerPrefab, OnConnectionStatusUpdate);
         }
 
 		public void ConnectToSession()
@@ -212,7 +196,7 @@ namespace Agit.FortressCraft
 				region = _regionDropdown.options[_regionDropdown.value].text;
 				region = region.Split(" (")[0];
             }
-            FusionLauncher.Launch(_gameMode, region, _room.text, _playerName.text, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
+            FusionLauncher.Launch(_gameMode, region, _room.text, FirebaseAuthManager.Instance.UserId, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)

@@ -25,7 +25,6 @@ namespace Agit.FortressCraft
             }
 
             joinButton.onClick.AddListener(InitOnClickJoinButton);
-            createButton.onClick.AddListener(InitOnClickCreateButton);
         }
 
         #region Login
@@ -34,6 +33,7 @@ namespace Agit.FortressCraft
         public GameObject _successMakeNicknameGroup;
         public GameObject _gameStartButton;
         public Text _nicknameText;
+        public GameObject _failNicknameInfo;
 
 
         #endregion
@@ -41,7 +41,6 @@ namespace Agit.FortressCraft
         #region UI - INTRO
 
         public InputField _room;
-        public InputField _playerName;
         public Button createButton;
         public Button joinButton;
         public GameObject _nicknamePanel;
@@ -52,11 +51,6 @@ namespace Agit.FortressCraft
         public void InitOnClickJoinButton()
         {
             _room.text = "";
-            _playerName.text = "";
-        }
-        private void InitOnClickCreateButton()
-        {
-            _playerName.text = "";
         }
 
         #endregion
