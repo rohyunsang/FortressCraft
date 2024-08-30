@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-
+using UnityEngine.Serialization;
 
 namespace Agit.FortressCraft 
 {
@@ -32,8 +32,9 @@ namespace Agit.FortressCraft
         public GameObject _nicknameGroup;
         public GameObject _successMakeNicknameGroup;
         public GameObject _gameStartButton;
-        public Text _nicknameText;
+        public Text _nicknameText;  // profile
         public GameObject _failNicknameInfo;
+        public Text _outputText; // failNickNameInfo - Text
 
 
         #endregion
@@ -43,7 +44,8 @@ namespace Agit.FortressCraft
         public InputField _room;
         public Button createButton;
         public Button joinButton;
-        public GameObject _nicknamePanel;
+        [FormerlySerializedAs("_nicknamePanel")] // 이전 변수명 지정
+        public GameObject _createRoomPanel; // 새 변수명으로 변경
         public GameObject _incorrectNicknamePanel;
         public GameObject _roomListPanel;
         public GameObject _roomOptionPanel;

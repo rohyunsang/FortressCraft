@@ -7,6 +7,7 @@ namespace Agit.FortressCraft
     {
         public InputField _nicknameInputField;
         public Button _submitNicknameButton;
+        public string nickname;
 
         public void Start()
         {
@@ -25,6 +26,7 @@ namespace Agit.FortressCraft
                 MainThreadDispatcher.Enqueue(() =>
                 {
                     UIManager.Instance._failNicknameInfo.SetActive(true);
+                    UIManager.Instance._outputText.text = "잘못된 닉네임 형식입니다.";
                 });
                 return;
             }
@@ -48,6 +50,7 @@ namespace Agit.FortressCraft
                                 UIManager.Instance._gameStartButton.SetActive(true);
                                 UIManager.Instance._nicknameText.text = nickname;
                             });
+                            this.nickname = nickname;
                         }
                     });
                 }
@@ -55,6 +58,10 @@ namespace Agit.FortressCraft
                 {
                     Debug.Log("Nickname is already taken");
                     // 닉네임이 이미 사용 중일 때의 UI 처리
+                    MainThreadDispatcher.Enqueue(() =>
+                    {
+                        UIManager.Instance._outputText.text = "이미 사용중인 닉네임입니다.";
+                    });
                 }
             });
         }

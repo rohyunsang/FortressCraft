@@ -86,27 +86,29 @@ namespace Agit.FortressCraft
 			FindObjectOfType<FusionLauncher>().ShutDownCustom();
         }
 
-		public void RandomRoomCreate() // using Button  NickNamePanel - SubmitAndCancelLayout - SubmitNicknameButton
+        public void CreateRoom()
         {
-            ConnectToLobby();
-			FindObjectOfType<UIManager>()._nicknamePanel.SetActive(false);
-			FindObjectOfType<UIManager>()._roomListPanel.SetActive(true);
+            CreateRandomRoomCode();
+            OnEnterRoom();
+            SetRoomName();
+            FindObjectOfType<UIManager>()._createRoomPanel.SetActive(false);
         }
 
-		public void CheckNickNameOverride() // using Button 2. 방 만들기. 
+		public void JoinRoom()
 		{
             OnEnterRoom();
             SetRoomName();
-			FindObjectOfType<UIManager>()._roomOptionPanel.SetActive(false);
+            FindObjectOfType<UIManager>()._roomOptionPanel.SetActive(false);
         }
 
-		private void ConnectToLobby() // using Button
+        public void ConnectToLobby() 
 		{
 			FindObjectOfType<UIManager>().Init();
             FindObjectOfType<LevelUIController>().Init();
-			
 
-            FusionLauncher.ConnectToLobby(FirebaseAuthManager.Instance.UserId, _gameManagerPrefab, OnConnectionStatusUpdate);
+			string nickname = FindObjectOfType<NicknameManager>().nickname;
+
+            FusionLauncher.ConnectToLobby(nickname, _gameManagerPrefab, OnConnectionStatusUpdate);
         }
 
 		public void ConnectToSession()
@@ -130,7 +132,6 @@ namespace Agit.FortressCraft
 
             // UI SetActive false
 			selectJoinModePanel.SetActive(false);
-            nickNamePanel.SetActive(false);
             roomListPanel.SetActive(false);
         }
 
@@ -138,14 +139,9 @@ namespace Agit.FortressCraft
         {
 			_levelManager.roomCode.text = "Room : " + _room.text;
 			roomCode = _room.text;
-
-            
         }
 
-        public void CreateRoom()  // using  App - UI Intro - Start Panel - CreateRoom
-        {
-            CreateRandomRoomCode();
-        }
+        
 
         private void CreateRandomRoomCode()
 		{
@@ -156,7 +152,6 @@ namespace Agit.FortressCraft
 			
 			roomCode = randomCode;
             _room.text = randomCode;
-
         }
 
 		private void SetVoiceRoomName()
@@ -196,7 +191,10 @@ namespace Agit.FortressCraft
 				region = _regionDropdown.options[_regionDropdown.value].text;
 				region = region.Split(" (")[0];
             }
-            FusionLauncher.Launch(_gameMode, region, _room.text, FirebaseAuthManager.Instance.UserId, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
+
+            string nickname = FindObjectOfType<NicknameManager>().nickname;
+
+            FusionLauncher.Launch(_gameMode, region, _room.text, nickname, _gameManagerPrefab, _levelManager, OnConnectionStatusUpdate);
 		}
 
 		private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)

@@ -18,16 +18,15 @@ namespace Agit.FortressCraft {
             this.playerCount.text = playerCount + " / " + maxPlayer;
             joinButton.onClick.AddListener(ConnectToSession);
             // FindObjectOfType<ConnectAndJoin>().RoomName = roomCode;
-
         }
 
         public void ConnectToSession()
         {
             FindObjectOfType<App>().GetComponent<App>().SetRoomCodeOverride(roomName.text);
             FindObjectOfType<App>().GetComponent<App>().ConnectToSession();
+            UIManager.Instance._roomListPanel.SetActive(false);
         }
     }
-
 }
 
 
