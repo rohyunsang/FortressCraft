@@ -141,8 +141,6 @@ namespace Agit.FortressCraft
 			roomCode = _room.text;
         }
 
-        
-
         private void CreateRandomRoomCode()
 		{
             // 0에서 99999 사이의 랜덤 숫자 생성
@@ -267,6 +265,6 @@ namespace Agit.FortressCraft
 		Warrior = 0,
 		Archer,
 		Magician,
-        Beginner,
+        GreatSword,
     }
 }

@@ -14,7 +14,6 @@ namespace Agit.FortressCraft
             _submitNicknameButton.onClick.AddListener(TrySetNickname);
         }
 
-
         public void TrySetNickname()
         {
             string nickname = _nicknameInputField.text;

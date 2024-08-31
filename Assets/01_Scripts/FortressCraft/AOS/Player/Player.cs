@@ -85,6 +85,9 @@ namespace Agit.FortressCraft
 		private CommanderBodyCollider bodyCollider;
 		[SerializeField] private WarriorWeaponCollider wairrorWeapon;
 		[SerializeField] private WarriorChargeCollider warriorChargeCollider;
+
+		[SerializeField] private GreatSwordWeaponCollider greatSwordWeaponCollider;
+
         private bool died = false;
 
 		public JobType Job { get; set; }
@@ -123,12 +126,7 @@ namespace Agit.FortressCraft
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
             level = 1;
 
-			if (archerFire != null) Job = JobType.Archer;
-			else if (magicianFire != null) Job = JobType.Magician;
-			else
-			{
-				Job = JobType.Warrior;
-			}
+			Job = FindObjectOfType<App>().jobType;
 			
             SetMaxHPByLevel(level, Job);
 		}
@@ -252,6 +250,10 @@ namespace Agit.FortressCraft
                     wairrorWeapon.OwnType = OwnType;
 					warriorChargeCollider.OwnType = OwnType;
                 }
+				else if(Job == JobType.GreatSword)
+				{
+					greatSwordWeaponCollider.OwnType = OwnType;
+				}
 			}
 		}
 
@@ -390,8 +392,7 @@ namespace Agit.FortressCraft
 						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 					}
 					else if( animState.fullPathHash == animAttack
-							&& ( Job == JobType.Magician
-							|| Job == JobType.Warrior ) )
+							&& ( Job != JobType.Archer ) )
                     {
 						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
 					}
@@ -406,7 +407,7 @@ namespace Agit.FortressCraft
 						arrowVector.TargetDirection = lastDir;
 					}
 
-					if (input.moveDirection.normalized.x < -0.1f || input.moveDirection.normalized.y < -0.1f || input.moveDirection.normalized.x > 0.1f || input.moveDirection.normalized.y > 0.1f)
+					if (input.moveDirection.magnitude > 0.1f)
 					{
 						_netAnimator.Animator.SetBool("isMove", true);
 					}
@@ -479,7 +480,12 @@ namespace Agit.FortressCraft
 					wairrorWeapon.Damage = AttackDamage;
 					Invoke("PlaySound1", 0.2f);
 				}
-				_netAnimator.Animator.SetTrigger("Attack");
+                else if (Job == JobType.GreatSword)
+                {
+                    SetAttack(level, Job);
+                    greatSwordWeaponCollider.Damage = AttackDamage;
+                }
+                _netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.2f);
 			}
 		}
@@ -514,7 +520,11 @@ namespace Agit.FortressCraft
                     Invoke("ChargeFinishCallback", 0.15f);
 					PlaySound2();
                 }
-			}
+                else if (Job == JobType.GreatSword)
+                {
+                    _netAnimator.Animator.SetTrigger("Skill1");
+                }
+            }
 		}
 
         #region Sound
@@ -598,8 +608,13 @@ namespace Agit.FortressCraft
 
 					PlaySound3();
                 }
+                else if (Job == JobType.GreatSword)
+                {
+                    // Healing 부분 
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
 
-				_netAnimator.Animator.SetTrigger("Skill2");
+                _netAnimator.Animator.SetTrigger("Skill2");
 			}
         }
 
@@ -623,14 +638,6 @@ namespace Agit.FortressCraft
 			
         }
 
-        /// <summary>
-        /// Render is the Fusion equivalent of Unity's Update() and unlike FixedUpdateNetwork which is very different from FixedUpdate,
-        /// Render is in fact exactly the same. It even uses the same Time.deltaTime time steps. The purpose of Render is that
-        /// it is always called *after* FixedUpdateNetwork - so to be safe you should use Render over Update if you're on a
-        /// SimulationBehaviour.
-        ///
-        /// Here, we use Render to update visual aspects of the Tank that does not involve changing of networked properties.
-        /// </summary>
         public override void Render()
         {
             foreach (var change in changes.DetectChanges(this))
@@ -646,8 +653,6 @@ namespace Agit.FortressCraft
                     case nameof(LastPublicChat):
                         OnChatChanged();
 							break;
-					case nameof(IsDestroyedAllCastle):
-                        break;
 					case nameof(life):
 						playerHPBar.SetHPBar(life);
 						break;
@@ -663,14 +668,7 @@ namespace Agit.FortressCraft
             if (PlayerId == playerRef && HasStateAuthority)
             {
                 castleCount--;
-                RPC_CastleCountDownInternal();
             }
-        }
-
-        [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPC_CastleCountDownInternal()
-        {
-			Debug.Log("AAAAAAAA" + PlayerId + " caslte " + castleCount);
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
@@ -692,7 +690,6 @@ namespace Agit.FortressCraft
             }
         }
 
-
         public void OnPlayerNameChanged()
         {
             playerNameLabel.text = PlayerName.ToString();
@@ -710,40 +707,6 @@ namespace Agit.FortressCraft
             ChatSystem.instance.chatDisplay.text += "\n" + "[" + PlayerName.ToString() + "]"+ " : " + LastPublicChat.ToString();
             ChatSystem.instance.chatInputField.text = "";
         }
-
-
-        /// <summary>
-        /// Apply damage to Tank with an associated impact impulse
-        /// </summary>
-        /// <param name="impulse"></param>
-        /// <param name="damage"></param>
-        /// <param name="attacker"></param>
-        public void ApplyAreaDamage(Vector3 impulse, int damage)
-		{
-			if (!isActivated)
-				return;
-
-			if (Runner.TryGetSingleton(out GameManager gameManager))
-			{
-				if (damage >= life)
-				{
-					life = 0;
-					stage = Stage.Dead;
-
-					if (gameManager.currentPlayState == GameManager.PlayState.LEVEL)
-						lives -= 1;
-
-					if (lives > 0)
-						Respawn(_respawnTime);
-				}
-				else
-				{
-					life -= (byte)damage;
-					Debug.Log($"Player {PlayerId} took {damage} damage, life = {life}");
-				}
-			}
-		}
-
 		private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
 		{
 			if (!isActivated)
@@ -828,11 +791,6 @@ namespace Agit.FortressCraft
 					break;
 			}
 			_collider.enabled = stage != Stage.Dead;
-		}
-
-		private void SpawnTeleportOutFx()
-		{
-			// TankTeleportOutEffect teleout = LocalObjectPool.Acquire(_teleportOutPrefab, transform.position, transform.rotation, null);
 		}
 
 		private void ResetPlayer()

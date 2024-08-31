@@ -109,8 +109,6 @@ namespace Agit.FortressCraft
 			bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
             level = 1;
 
-			Job = JobType.Beginner;
-			
 		}
 
 		public override void InitNetworkState()

@@ -155,6 +155,9 @@ namespace Agit.FortressCraft {
                 case JobType.Archer:
                     offset = 29;
                     break;
+                case JobType.GreatSword:
+                    offset = 44;
+                    break;
             }
 
             return GoogleSheetManager.commanderDatas[level + offset];

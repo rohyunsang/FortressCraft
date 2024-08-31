@@ -17,7 +17,6 @@ namespace Agit.FortressCraft
             FirebaseAuthManager.Instance.LoginState += OnChangedState;
             FirebaseAuthManager.Instance.Init();
             FirebaseDBManager.Instance.Init();
-            
         }
 
         private void OnChangedState(bool sign)

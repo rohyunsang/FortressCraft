@@ -107,9 +107,6 @@ namespace Agit.FortressCraft
         }
 
         #endregion
-
-
     }
-
 }
 
