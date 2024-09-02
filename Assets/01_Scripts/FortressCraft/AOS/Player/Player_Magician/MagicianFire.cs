@@ -91,5 +91,10 @@ namespace Agit.FortressCraft
 
             damage = GoogleSheetManager.commanderDatas[level + offset].Attack;
         }
+
+        public void BuffDamage(float coef)
+        {
+            damage = damage * coef;
+        }
     }
 }

@@ -9,11 +9,13 @@ namespace Agit.FortressCraft
     {
         public MonsterData monsterData;
 
+        public bool NoReward { get; set; }
+
         [System.NonSerialized] public float hpMax;
         protected float movingWeight;
         protected float damage;
 
-        [Networked] public float Hp { get; set; }
+        [Networked] public float HP { get; set; }
         public MonsterSpawner Spawner { get; set; }
 
         public int Gold { get; set; }
@@ -46,6 +48,7 @@ namespace Agit.FortressCraft
             movingWeight = monsterData.MovingWeight;
             damage = monsterData.Damage;
 
+            NoReward = false;
             Gold = monsterData.Gold;
             Exp = monsterData.Exp;
         }
@@ -76,20 +79,21 @@ namespace Agit.FortressCraft
 
         public virtual bool SetHP(float hp, float hpMax)
         {
-            this.Hp = hp <= 0 ? 0 : hp;
+            this.HP = hp <= 0 ? 0 : hp;
             this.hpMax = hpMax;
-            return (this.Hp == 0);
+            return (this.HP == 0);
         }
 
+        [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCCheckDamaged()
         {
             if (bodyCollider.Damaged > 0.0f)
             {
-                Hp -= bodyCollider.Damaged;
-
+                HP -= bodyCollider.Damaged;
+                Debug.Log("Remaining HP: " + HP);
                 bodyCollider.Damaged = 0.0f;
 
-                if (Hp <= 0.0f)
+                if (HP <= 0.0f)
                 {
                     Die();
                 }
@@ -102,8 +106,8 @@ namespace Agit.FortressCraft
             {
                 switch (change)
                 {
-                    case nameof(Hp):
-                        hpBar.SetHPBar(Hp);
+                    case nameof(HP):
+                        hpBar.SetHPBar(HP);
                         break;
                 }
             }

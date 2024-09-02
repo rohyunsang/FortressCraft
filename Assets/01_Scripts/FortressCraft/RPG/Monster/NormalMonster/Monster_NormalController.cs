@@ -26,7 +26,7 @@ namespace Agit.FortressCraft
         public override void Spawned()
         {
             base.Spawned();
-            Hp = hpMax;
+            HP = hpMax;
             attackCollider = GetComponentInChildren<MonsterAttackCollider>();
 
             if( monsterData.Type == MonsterType.NORMAL )
@@ -71,7 +71,7 @@ namespace Agit.FortressCraft
 
         public override void MonsterAI()
         {
-            if (Hp <= 0.0f) return;
+            if (HP <= 0.0f) return;
 
             switch (state)
             {

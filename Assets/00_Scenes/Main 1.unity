@@ -27880,7 +27880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6606cd9b8171d54db9c6004c2669019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _countdownFrom: 10
+  _countdownFrom: 5
   _countdownCurve:
     serializedVersion: 2
     m_Curve:

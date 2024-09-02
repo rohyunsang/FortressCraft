@@ -48,6 +48,11 @@ namespace Agit.FortressCraft
 		[Networked] public bool ready { get; set; }
 		[Networked] public float Defense { get; set; }
 		[Networked] public float AttackDamage { get; set; }
+
+		public TickTimer BuffAttack { get; set; }
+		private float coefAttack = 100.5f;
+		public float BuffAttackTime = 300.0f;
+
         public int level { get; set; }
 
 
@@ -136,7 +141,7 @@ namespace Agit.FortressCraft
 		public void SetMaxHPByLevel(int level, JobType jobType)
 		{
 			MAX_HEALTH = GoogleSheetManager.GetCommanderData(level, jobType).HP;
-			Debug.Log("Max HP: " + MAX_HEALTH);
+			//Debug.Log("Max HP: " + MAX_HEALTH);
 		}
 
 		public void SetAttack(int level, JobType jobType)
@@ -189,6 +194,8 @@ namespace Agit.FortressCraft
 			attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+
+			BuffAttack = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
 			StartCoroutine(AutoHeal());
 			castleCount = 1;
@@ -466,11 +473,23 @@ namespace Agit.FortressCraft
 				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
+					
+					if (!BuffAttack.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+					
 					Invoke("PlaySound1", 0.4f);
 				}
 				else if (Job == JobType.Magician)
 				{
 					magicianFire.SetDamageByLevel(level, Job);
+
+					if( !BuffAttack.Expired(Runner) )
+                    {
+						magicianFire.BuffDamage(coefAttack);
+                    }
+
 					Invoke("PlaySound1", 0.3f);
 				}
 				else if( Job == JobType.Warrior)
@@ -492,13 +511,26 @@ namespace Agit.FortressCraft
 				{
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttack.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+
                     _netAnimator.Animator.SetTrigger("Skill1");
 					Invoke("PlaySound2", 0.5f);
 				}
 				else if (Job == JobType.Magician)
 				{
 					RPCMagicSetting();
+
+					if (!BuffAttack.Expired(Runner))
+					{
+						magicianFire.BuffDamage(coefAttack);
+					}
+
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
 					Invoke("PlaySound2", 0.4f);
@@ -535,9 +567,9 @@ namespace Agit.FortressCraft
 			sound3.Play();
 		}
 
-        #endregion 
+		#endregion
 
-        [Rpc(RpcSources.All, RpcTargets.All)]
+		[Rpc(RpcSources.All, RpcTargets.All)]
 		public void RPCMagicSetting()
         {
 			magicianFire.FireDirection = lastDir;
@@ -573,12 +605,24 @@ namespace Agit.FortressCraft
 				if( Job == JobType.Archer )
                 {
 					archerFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttack.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
 					Invoke("PlaySound3", 0.5f);
 				}
 				else if( Job == JobType.Magician )
                 {
 					magicianFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttack.Expired(Runner))
+					{
+						magicianFire.BuffDamage(coefAttack);
+					}
+
 					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
                 }
 				else if(Job == JobType.Warrior)
