@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 namespace Agit.FortressCraft
 {
     public class MagicianTwinkleAttackCollider : AttackCollider
     {
+        public Player ClientPlayer { get; set; }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (OwnType == null) return;
@@ -30,7 +33,27 @@ namespace Agit.FortressCraft
                                 RewardManager.Instance.Exp += normal.exp;
                             }
                         }
+                        else if (collision.transform.parent.TryGetComponent<MonsterController>(
+                        out MonsterController monster))
+                        {
+                            if (monster.HP - Damage <= 0.0f && !monster.NoReward)
+                            {
+                                monster.NoReward = true;
+                                RewardManager.Instance.Gold += monster.Gold;
+                                RewardManager.Instance.Exp += monster.Exp;
+                            }
+                        }
+
+                        if (collision.transform.parent.TryGetComponent<Monster_FrostLizardController>(
+                        out Monster_FrostLizardController frostLizardController))
+                        {
+                            if (frostLizardController.HP - Damage <= 0.0f)
+                            {
+                                ClientPlayer.BuffAttack = TickTimer.CreateFromSeconds(Runner, ClientPlayer.BuffAttackTime);
+                            }
+                        }
                     }
+
                     bodycollider.RPCSetDamage(Damage);
                     bodycollider.CallDamageCheck();
                 }
