@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f36aeea2e13464da79c5b959c593f0, type: 3}
   m_Name: ZombieMagicianData
   m_EditorClassIdentifier: 
-  hpMax: 150
+  hpMax: 750
   movingWeight: 0.5
   damage: 45
   idleDelay: 2

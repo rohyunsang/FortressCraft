@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f36aeea2e13464da79c5b959c593f0, type: 3}
   m_Name: SkeletonKingData
   m_EditorClassIdentifier: 
-  hpMax: 400
+  hpMax: 2000
   movingWeight: 1
   damage: 40
   idleDelay: 2
