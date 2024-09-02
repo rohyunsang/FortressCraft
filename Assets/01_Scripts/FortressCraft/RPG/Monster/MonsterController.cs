@@ -20,6 +20,7 @@ namespace Agit.FortressCraft
 
         public int Gold { get; set; }
         public float Exp { get; set; }
+        public BuffType Buff { get; set; }
 
         protected float startTime = 0.0f;
         protected float nextDelay = 0.0f;
@@ -51,6 +52,7 @@ namespace Agit.FortressCraft
             NoReward = false;
             Gold = monsterData.Gold;
             Exp = monsterData.Exp;
+            Buff = monsterData.Buff;
         }
 
         public virtual void MonsterAI() { }

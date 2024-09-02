@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpMax: 80
   movingWeight: 0.7
-  damage: 15
+  damage: 6
   idleDelay: 2
   runDelay: 1
   attackDelay: 1
   gold: 20
   exp: 20
   type: 2
+  buff: 0

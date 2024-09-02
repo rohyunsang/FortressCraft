@@ -18,4 +18,7 @@ MonoBehaviour:
   idleDelay: 2
   runDelay: 1
   attackDelay: 1
+  gold: 10
+  exp: 10
   type: 0
+  buff: 0

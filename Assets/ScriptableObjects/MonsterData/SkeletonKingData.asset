@@ -21,3 +21,4 @@ MonoBehaviour:
   gold: 100
   exp: 50
   type: 1
+  buff: 2

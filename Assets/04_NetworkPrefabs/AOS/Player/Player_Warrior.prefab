@@ -582,6 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ec3557de07feb448deac58b2ca64d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 8960233729958994200}
 --- !u!1 &547220952508872261
 GameObject:
   m_ObjectHideFlags: 0
@@ -3562,6 +3563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5cff67abf06064da9f5ce7208d4774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 8960233729958994200}
 --- !u!50 &8297676045344782964
 Rigidbody2D:
   serializedVersion: 4
@@ -3961,6 +3963,7 @@ MonoBehaviour:
   _ready: 0
   _Defense: 0
   _AttackDamage: 0
+  BuffAttackTime: 300
   wairrorWeapon: {fileID: 1562815616911068479}
   warriorChargeCollider: {fileID: 9173448906131834303}
   _PlayerName:

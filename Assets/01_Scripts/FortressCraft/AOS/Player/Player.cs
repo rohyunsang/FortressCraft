@@ -49,11 +49,15 @@ namespace Agit.FortressCraft
 		[Networked] public float Defense { get; set; }
 		[Networked] public float AttackDamage { get; set; }
 
-		public TickTimer BuffAttack { get; set; }
-		private float coefAttack = 100.5f;
+		public TickTimer BuffAttackTimer { get; set; }
+		private float coefAttack = 1.5f;
 		public float BuffAttackTime = 300.0f;
 
-        public int level { get; set; }
+		public TickTimer BuffDefenseTimer { get; set; }
+		private float coefDefense = 1.5f;
+		public float BuffDefenseTime = 100.0f;
+
+		public int level { get; set; }
 
 
 		public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
@@ -195,7 +199,8 @@ namespace Agit.FortressCraft
 			skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
-			BuffAttack = TickTimer.CreateFromSeconds(Runner, 0.1f);
+			BuffAttackTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+			BuffDefenseTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
 			StartCoroutine(AutoHeal());
 			castleCount = 1;
@@ -474,7 +479,7 @@ namespace Agit.FortressCraft
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
 					
-					if (!BuffAttack.Expired(Runner))
+					if (!BuffAttackTimer.Expired(Runner))
 					{
 						archerFire.BuffDamage(coefAttack);
 					}
@@ -485,7 +490,7 @@ namespace Agit.FortressCraft
 				{
 					magicianFire.SetDamageByLevel(level, Job);
 
-					if( !BuffAttack.Expired(Runner) )
+					if( !BuffAttackTimer.Expired(Runner) )
                     {
 						magicianFire.BuffDamage(coefAttack);
                     }
@@ -496,6 +501,12 @@ namespace Agit.FortressCraft
 				{
 					SetAttack(level, Job);
 					wairrorWeapon.Damage = AttackDamage;
+
+					if( !BuffAttackTimer.Expired(Runner) )
+                    {
+						wairrorWeapon.Damage *= coefAttack;
+                    }
+
 					Invoke("PlaySound1", 0.2f);
 				}
 				_netAnimator.Animator.SetTrigger("Attack");
@@ -512,7 +523,7 @@ namespace Agit.FortressCraft
 					archerFire.FireDirection = lastDir;
 					archerFire.SetDamageByLevel(level, Job);
 
-					if (!BuffAttack.Expired(Runner))
+					if (!BuffAttackTimer.Expired(Runner))
 					{
 						archerFire.BuffDamage(coefAttack);
 					}
@@ -526,7 +537,7 @@ namespace Agit.FortressCraft
 				{
 					RPCMagicSetting();
 
-					if (!BuffAttack.Expired(Runner))
+					if (!BuffAttackTimer.Expired(Runner))
 					{
 						magicianFire.BuffDamage(coefAttack);
 					}
@@ -539,6 +550,11 @@ namespace Agit.FortressCraft
 				{
 					RPC_ChargeStartCallback();
 					warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage *= coefAttack;
+					}
 
 					_netAnimator.Animator.SetTrigger("Skill1");
 					_cc.isCharge = true;
@@ -606,7 +622,7 @@ namespace Agit.FortressCraft
                 {
 					archerFire.SetDamageByLevel(level, Job);
 
-					if (!BuffAttack.Expired(Runner))
+					if (!BuffAttackTimer.Expired(Runner))
 					{
 						archerFire.BuffDamage(coefAttack);
 					}
@@ -618,7 +634,7 @@ namespace Agit.FortressCraft
                 {
 					magicianFire.SetDamageByLevel(level, Job);
 
-					if (!BuffAttack.Expired(Runner))
+					if (!BuffAttackTimer.Expired(Runner))
 					{
 						magicianFire.BuffDamage(coefAttack);
 					}
@@ -896,11 +912,19 @@ namespace Agit.FortressCraft
 
 		public void CheckDamaged()
         {
-			Debug.Log("Damaged Value - " + bodyCollider.Damaged);
 			if (died) return;
+
 			if( bodyCollider.Damaged > 0.0f )
             {
-				life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
+				if( BuffDefenseTimer.Expired(Runner) )
+                {
+					life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
+				}
+				else
+                {
+					life -= ( bodyCollider.Damaged * (1.0f - 0.01f * Defense) ) / coefDefense;
+				}
+				
 
 				bodyCollider.Damaged = 0.0f;
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f36aeea2e13464da79c5b959c593f0, type: 3}
   m_Name: FrostLizardData
   m_EditorClassIdentifier: 
-  hpMax: 10
+  hpMax: 3000
   movingWeight: 1
   damage: 100
   idleDelay: 1
@@ -21,3 +21,4 @@ MonoBehaviour:
   gold: 300
   exp: 100
   type: 4
+  buff: 1

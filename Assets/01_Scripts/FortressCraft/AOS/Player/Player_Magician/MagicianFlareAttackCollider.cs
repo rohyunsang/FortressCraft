@@ -40,15 +40,15 @@ namespace Agit.FortressCraft
                                 monster.NoReward = true;
                                 RewardManager.Instance.Gold += monster.Gold;
                                 RewardManager.Instance.Exp += monster.Exp;
-                            }
-                        }
 
-                        if (collision.transform.parent.TryGetComponent<Monster_FrostLizardController>(
-                        out Monster_FrostLizardController frostLizardController))
-                        {
-                            if (frostLizardController.HP - Damage <= 0.0f)
-                            {
-                                ClientPlayer.BuffAttack = TickTimer.CreateFromSeconds(Runner, ClientPlayer.BuffAttackTime);
+                                if (monster.Buff == BuffType.ATTACK)
+                                {
+                                    ClientPlayer.BuffAttackTimer = TickTimer.CreateFromSeconds(Runner, ClientPlayer.BuffAttackTime);
+                                }
+                                else if (monster.Buff == BuffType.DEFENSE)
+                                {
+                                    ClientPlayer.BuffDefenseTimer = TickTimer.CreateFromSeconds(Runner, ClientPlayer.BuffDefenseTime);
+                                }
                             }
                         }
                     }

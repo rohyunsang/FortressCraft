@@ -13,6 +13,13 @@ namespace Agit.FortressCraft
         NON
     }
 
+    public enum BuffType
+    {
+        NON,
+        ATTACK,
+        DEFENSE
+    }
+
     [CreateAssetMenu( fileName = "MonsterData", menuName = "Scriptable Object/Monster Data" )]
     public class MonsterData : ScriptableObject
     {
@@ -35,8 +42,11 @@ namespace Agit.FortressCraft
         [SerializeField] private float exp = 10.0f;
         public float Exp { get { return exp; } }
 
-        [SerializeField] public MonsterType type = MonsterType.NON;
+        [SerializeField] private MonsterType type = MonsterType.NON;
         public MonsterType Type { get { return type; } }
+
+        [SerializeField] private BuffType buff = BuffType.NON;
+        public BuffType Buff { get { return buff; } }
     }
 }
 
