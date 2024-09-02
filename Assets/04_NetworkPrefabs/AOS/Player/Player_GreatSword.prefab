@@ -3306,128 +3306,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c562f92f3b8b435d98ac3b65547b755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4992104605461064493
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5756562460571083555}
-  - component: {fileID: 5717616886652493606}
-  - component: {fileID: 9173448906131834303}
-  - component: {fileID: 8297676045344782964}
-  m_Layer: 8
-  m_Name: ChargeCollider
-  m_TagString: Attack
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &5756562460571083555
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4992104605461064493}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3025816784150943157}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!61 &5717616886652493606
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4992104605461064493}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.3}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &9173448906131834303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4992104605461064493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c5cff67abf06064da9f5ce7208d4774, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!50 &8297676045344782964
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4992104605461064493}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!1 &5249697074531903033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3519,7 +3397,6 @@ GameObject:
   - component: {fileID: 6052548211824699789}
   - component: {fileID: 8960233729958994200}
   - component: {fileID: 2653525218152594309}
-  - component: {fileID: 2207852679990085300}
   - component: {fileID: 4423126997026053310}
   - component: {fileID: 6727204430707573400}
   - component: {fileID: 8281999552098622695}
@@ -3548,7 +3425,6 @@ RectTransform:
   - {fileID: 4761200173271245654}
   - {fileID: 7743029938713473220}
   - {fileID: 4781631848463729063}
-  - {fileID: 5756562460571083555}
   - {fileID: 5105539660676071907}
   - {fileID: 374670532066069248}
   - {fileID: 6532774134857611963}
@@ -3588,7 +3464,6 @@ MonoBehaviour:
   - {fileID: 7047448153957681682}
   - {fileID: 5085728961093323480}
   - {fileID: 2975874159664926967}
-  - {fileID: 9173448906131834303}
 --- !u!143 &-3928054935676406298
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3663,8 +3538,8 @@ MonoBehaviour:
   _Defense: 0
   _AttackDamage: 0
   wairrorWeapon: {fileID: 0}
-  warriorChargeCollider: {fileID: 9173448906131834303}
-  greatSwordWeaponCollider: {fileID: 0}
+  warriorChargeCollider: {fileID: 0}
+  greatSwordWeaponCollider: {fileID: 5104556488281564429}
   _PlayerName:
     _length: 0
     _data:
@@ -3692,26 +3567,6 @@ MonoBehaviour:
   _mouseRayMask:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &2207852679990085300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5552724304938365259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 0
-  SphereRadius: 0
-  CapsuleRadius: 0
-  BoxExtents: {x: 0, y: 0, z: 0}
-  CapsuleExtents: 0
-  Offset: {x: 0, y: 0, z: 0}
-  Root: {fileID: 0}
-  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &4423126997026053310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3724,11 +3579,11 @@ MonoBehaviour:
   m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
-  TotalWords: 0
+  Animator: {fileID: 5970297420071805344}
+  TotalWords: 3
   ApplyTiming: 2
   SyncSettings: -1
-  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5dec3f04e7b8717f13ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f99c8f8a2081884d6726de83b93bd944fe
+  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb2ae93cdcaecaea33b50e492705fff6790f5f40bebfaeffe0f584fd5fe8833a18
   TriggerHashes: 000000002afa86260d286c4073cbfc9f2b1a167cfa334f4a406246d3
 --- !u!114 &6727204430707573400
 MonoBehaviour:

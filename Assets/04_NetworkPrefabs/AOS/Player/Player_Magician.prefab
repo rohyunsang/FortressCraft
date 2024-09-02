@@ -215,7 +215,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2157551659938911355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +389,6 @@ GameObject:
   - component: {fileID: 7517753670712999943}
   - component: {fileID: 9140731734683221681}
   - component: {fileID: 4320856916694314688}
-  - component: {fileID: 4826502403090030381}
   - component: {fileID: 6124776727980656446}
   - component: {fileID: 2250860971387831655}
   - component: {fileID: 1591170470106970327}
@@ -534,6 +533,7 @@ MonoBehaviour:
   _AttackDamage: 0
   wairrorWeapon: {fileID: 0}
   warriorChargeCollider: {fileID: 0}
+  greatSwordWeaponCollider: {fileID: 0}
   _PlayerName:
     _length: 0
     _data:
@@ -561,26 +561,6 @@ MonoBehaviour:
   _mouseRayMask:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &4826502403090030381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442255509702882950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 0
-  SphereRadius: 0
-  CapsuleRadius: 0
-  BoxExtents: {x: 0, y: 0, z: 0}
-  CapsuleExtents: 0
-  Offset: {x: 0, y: 0, z: 0}
-  Root: {fileID: 0}
-  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &6124776727980656446
 MonoBehaviour:
   m_ObjectHideFlags: 0

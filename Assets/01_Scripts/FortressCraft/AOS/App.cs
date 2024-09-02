@@ -78,6 +78,9 @@ namespace Agit.FortressCraft
 				case "Magician":
                     this.jobType = JobType.Magician;
                     break;
+				case "GreatSword":
+					this.jobType = JobType.GreatSword;
+					break;
 			}
 		}
 

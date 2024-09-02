@@ -5742,7 +5742,7 @@ MonoBehaviour:
   _gameStartButton: {fileID: 64390372}
   _nicknameText: {fileID: 122490416}
   _failNicknameInfo: {fileID: 841791599}
-  _outputText: {fileID: 0}
+  _outputText: {fileID: 1115719203}
   _room: {fileID: 1898750881}
   createButton: {fileID: 807486144}
   joinButton: {fileID: 1732962014}
@@ -9188,7 +9188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &679906056
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11810,7 +11810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &877992245
 RectTransform:
   m_ObjectHideFlags: 0
