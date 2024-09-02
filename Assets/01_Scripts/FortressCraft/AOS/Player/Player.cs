@@ -77,8 +77,9 @@ namespace Agit.FortressCraft
 		private TickTimer attackInputTimer;
 		private TickTimer skill1CoolTimer;
 		private TickTimer skill2CoolTimer;
+		private TickTimer skill3CoolTimer;
 
-		private Vector2 lastDir = Vector2.left;
+        private Vector2 lastDir = Vector2.left;
 		private ArcherFire archerFire;
 		private MagicianFire magicianFire;
 		private ArrowVector arrowVector;
@@ -95,10 +96,12 @@ namespace Agit.FortressCraft
 		private Button attackBtn;
 		private Button skill1Btn;
 		private Button skill2Btn;
+		private Button skill3Btn;
 		private Image[] skill1BtnImages;
 		private Image[] skill2BtnImages;
+		private Image[] skill3BtnImages;
 
-		private Button spawnCastleBtn;
+        private Button spawnCastleBtn;
 
 		public string OwnType { get; set; }
 
@@ -211,7 +214,11 @@ namespace Agit.FortressCraft
 			skill2Btn.onClick.AddListener(Skill2);
 			skill2BtnImages = skill2Btn.GetComponentsInChildren<Image>();
 
-			spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
+            skill3Btn = GameObject.Find("SkillBtnGroups_003").GetComponentInChildren<Button>();
+            skill3Btn.onClick.AddListener(Skill3);
+            skill3BtnImages = skill3Btn.GetComponentsInChildren<Image>();
+
+            spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
 			spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
 
 			if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
@@ -457,7 +464,22 @@ namespace Agit.FortressCraft
 					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
 				}
 			}
-		}
+
+            if (skill3CoolTimer.Expired(Runner) && skill3Btn != null)
+            {
+                foreach (Image btnImage in skill3BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+                }
+            }
+            else if (skill3Btn != null)
+            {
+                foreach (Image btnImage in skill3BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+                }
+            }
+        }
 
 		public void Attack()  // Archer
 		{
@@ -618,7 +640,49 @@ namespace Agit.FortressCraft
 			}
         }
 
-		public void SpawnCastleObejct()
+        public void Skill3() // SKill 3
+        {
+            if (skill2CoolTimer.Expired(Runner))
+            {
+                if (Job == JobType.Archer)
+                {
+                    archerFire.SetDamageByLevel(level, Job);
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+                    Invoke("PlaySound3", 0.5f);
+                }
+                else if (Job == JobType.Magician)
+                {
+                    magicianFire.SetDamageByLevel(level, Job);
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
+                else if (Job == JobType.Warrior)
+                {
+                    // Healing 부분 
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                    float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
+
+                    if (currentMaxHp < life + currentMaxHp * 0.3f)
+                    {
+                        life = currentMaxHp;
+                    }
+                    else
+                    {
+                        life += currentMaxHp * 0.3f;
+                    }
+
+                    PlaySound3();
+                }
+                else if (Job == JobType.GreatSword)
+                {
+                    // Healing 부분 
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
+
+                _netAnimator.Animator.SetTrigger("Skill2");
+            }
+        }
+
+        public void SpawnCastleObejct()
         {
 			if(isBuildCastle && Object.HasStateAuthority)
             {
@@ -635,7 +699,6 @@ namespace Agit.FortressCraft
                 RPC_CastleCount();
                 _spawnCastle.SpawnCastleObject();
 			}
-			
         }
 
         public override void Render()
