@@ -11,12 +11,12 @@ public class PlayerCamera : MonoBehaviour
     public CinemachineVirtualCamera vCam;
 
     [SerializeField] Transform playerCameraRoot;
-    private bool followPlayer = true; // ÇÃ·¹ÀÌ¾î¸¦ µû¶ó°¥Áö ¿©ºÎ
+    private bool followPlayer = true; // ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    private Vector3 dragOrigin; // µå·¡±× ½ÃÀÛ À§Ä¡
-    private bool isDragging = false; // µå·¡±× »óÅÂ
+    private Vector3 dragOrigin; // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    private bool isDragging = false; // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    private Coroutine followPlayerCoroutine; // Ä«¸Þ¶ó Follow¸¦ Àç°³ÇÏ±â À§ÇÑ ÄÚ·çÆ¾
+    private Coroutine followPlayerCoroutine; // Ä«ï¿½Þ¶ï¿½ Followï¿½ï¿½ ï¿½ç°³ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     NetworkObject thisObject;
     void Start()
     {
@@ -33,12 +33,12 @@ public class PlayerCamera : MonoBehaviour
     {
         if (!thisObject.HasStateAuthority) return;
 
-        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2 && !IsPointerOverUIObject()) // ¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ´©¸£¸é, ¿À¸¥ÂÊ È­¸é¿¡¼­¸¸.
+        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > Screen.width / 2 && !IsPointerOverUIObject()) // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ï¿½ï¿½ï¿½ï¿½.
         {
-            dragOrigin = Input.mousePosition; // µå·¡±× ½ÃÀÛ À§Ä¡ ÀúÀå
+            dragOrigin = Input.mousePosition; // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
             isDragging = true;
 
-            // »õ·Î¿î µå·¡±×°¡ ½ÃÀÛµÉ ¶§ ±âÁ¸ÀÇ ÄÚ·çÆ¾À» ÁßÁö
+            // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½å·¡ï¿½×°ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (followPlayerCoroutine != null)
             {
                 StopCoroutine(followPlayerCoroutine);
@@ -46,36 +46,36 @@ public class PlayerCamera : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0)) // ¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ¶¼¸é
+        if (Input.GetMouseButtonUp(0)) // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             isDragging = false;
 
             followPlayerCoroutine = StartCoroutine(EnableFollowPlayerAfterDelay(0.5f));
         }
 
-        if (isDragging) // µå·¡±× ÁßÀÌ¸é
+        if (isDragging) // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½
         {
-            Vector3 difference = Input.mousePosition - dragOrigin; // ¿øÁ¡°ú ÇöÀç ¸¶¿ì½º À§Ä¡ÀÇ Â÷ÀÌ
-            dragOrigin = Input.mousePosition; // µå·¡±× ¿øÁ¡ ¾÷µ¥ÀÌÆ®
-            MoveCamera(difference); // Ä«¸Þ¶ó ÀÌµ¿
+            Vector3 difference = Input.mousePosition - dragOrigin; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            dragOrigin = Input.mousePosition; // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+            MoveCamera(difference); // Ä«ï¿½Þ¶ï¿½ ï¿½Ìµï¿½
         }
     }
 
     private void MoveCamera(Vector3 delta)
     {
-        followPlayer = false; // ÇÃ·¹ÀÌ¾î µû¶ó°¡±â ÁßÁö
-        vCam.Follow = null; // Ä«¸Þ¶ó follow ´ë»ó ÇØÁ¦
+        followPlayer = false; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ó°¡±ï¿½ ï¿½ï¿½ï¿½ï¿½
+        vCam.Follow = null; // Ä«ï¿½Þ¶ï¿½ follow ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        // Ä«¸Þ¶ó À§Ä¡¸¦ ¾÷µ¥ÀÌÆ® - delta °ªÀ» È­¸é ÇØ»óµµ¿¡ ¸Â°Ô Á¶Á¤
-        vCam.transform.position -= Camera.main.ScreenToViewportPoint(new Vector3(delta.x * (19 / 9), delta.y, 0f)) * 3f; // ¼Óµµ Á¶ÀýÀ» À§ÇØ 10À» °öÇÔ
+        // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® - delta ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½Ø»óµµ¿ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½
+        vCam.transform.position -= Camera.main.ScreenToViewportPoint(new Vector3(delta.x * (19 / 9), delta.y, 0f)) * 3f; // ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 10ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
     private IEnumerator EnableFollowPlayerAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (!isDragging) // µå·¡±×°¡ Àç°³µÇÁö ¾Ê¾Ò´Ù¸é
+        if (!isDragging) // ï¿½å·¡ï¿½×°ï¿½ ï¿½ç°³ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò´Ù¸ï¿½
         {
             followPlayer = true;
-            vCam.Follow = playerCameraRoot; // Ä«¸Þ¶ó follow ´ë»óÀ» ÇÃ·¹ÀÌ¾î·Î ¼³Á¤
+            vCam.Follow = playerCameraRoot; // Ä«ï¿½Þ¶ï¿½ follow ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
     private bool IsPointerOverUIObject()
