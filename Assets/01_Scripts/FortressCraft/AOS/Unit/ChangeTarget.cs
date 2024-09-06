@@ -62,12 +62,11 @@ namespace Agit.FortressCraft
         // 골라진 타겟만 색을 바꾸도록 설정 
         public void UpdateTargetButtonColor(string name)
         {
-            
             foreach( Button btn in btns )
             {
                 if (btn.transform.name == buttonNameAttack) continue;
 
-                if( btn.transform.name == name )
+                if (btn.transform.name == name)
                 {
                     btn.GetComponent<Image>().color = orgColor;
                 }
@@ -80,7 +79,7 @@ namespace Agit.FortressCraft
 
         private void UpdateAttackButtonColor()
         {
-            if( IsAttackOn )
+            if ( IsAttackOn )
             {
                 attackBtn.GetComponent<Image>().color = unselectedColor;
             }

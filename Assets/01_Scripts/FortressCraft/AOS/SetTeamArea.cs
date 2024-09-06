@@ -26,6 +26,9 @@ namespace Agit.FortressCraft
                 if (player != null)
                 {
                     player.RPC_ChangeHpBarColor(team);
+                    GameObject _tilemap = GameObject.Find("Tilemap");
+                    if(_tilemap != null)
+                        _tilemap.SetActive(false);
                 }
             }
         }
@@ -42,6 +45,9 @@ namespace Agit.FortressCraft
                         player.RPC_ChangeHpBarColor(team);
                         // Update the time of the last call
                         lastCallTime[player] = Time.time;
+                        GameObject _tilemap = GameObject.Find("Tilemap");
+                        if (_tilemap != null)
+                            _tilemap.SetActive(false);
                     }
                 }
             }

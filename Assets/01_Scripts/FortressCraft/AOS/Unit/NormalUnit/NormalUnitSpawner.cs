@@ -77,11 +77,14 @@ namespace Agit.FortressCraft
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
+            ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
+
             if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
             {
+                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+
                 if (gameManager.mode == Mode.Survival)
                 {
-                    idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
                     Debug.Log("idx: " + idx);
                     switch (idx)
                     {
@@ -105,7 +108,6 @@ namespace Agit.FortressCraft
                 }
                 else
                 {
-                    idx = 0;
                     string team = gameManager.TryGetPlayerTeam(Runner.LocalPlayer);
                     if (team == "A")
                     {
@@ -118,59 +120,57 @@ namespace Agit.FortressCraft
                         UnitPrefab = UnitPrefab_B;
                     }
                 }
-            }
 
-            ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
-            if (changeTarget.OwnType == "")
-            {
-                changeTarget.OwnType = SpawnerType;
-                string targetBtnName = "";
-                switch (SpawnerType)
+                if (changeTarget.OwnType == "")
                 {
-                    case "A":
-                        targetBtnName = "Button_1";
-                        break;
-                    case "B":
-                        targetBtnName = "Button_2";
-                        break;
-                    case "C":
-                        targetBtnName = "Button_3";
-                        break;
-                    case "D":
-                        targetBtnName = "Button_4";
-                        break;
-                }
-                changeTarget.UpdateTargetButtonColor(targetBtnName);
-            }
-
-            if (idx > -1)
-            {
-                Usable = true;
-
-                if (changeTarget.Target == null)
-                {
-                    switch (idx)
+                    changeTarget.OwnType = SpawnerType;
+                    string targetBtnName = "";
+                    switch (SpawnerType)
                     {
-                        case 0:
-                            Target = "A";
+                        case "A":
+                            targetBtnName = "Button_1";
                             break;
-                        case 1:
-                            Target = "B";
+                        case "B":
+                            targetBtnName = "Button_2";
                             break;
-                        case 2:
-                            Target = "C";
+                        case "C":
+                            targetBtnName = "Button_3";
                             break;
-                        case 3:
-                            Target = "D";
+                        case "D":
+                            targetBtnName = "Button_4";
                             break;
                     }
-                    changeTarget.Target = Target;
-                }
-                else
-                {
-                    Target = changeTarget.Target;
+                    changeTarget.UpdateTargetButtonColor(targetBtnName);
                 }
 
+                if (idx > -1)
+                {
+                    Usable = true;
+
+                    if (changeTarget.Target == null)
+                    {
+                        switch (idx)
+                        {
+                            case 0:
+                                Target = "A";
+                                break;
+                            case 1:
+                                Target = "B";
+                                break;
+                            case 2:
+                                Target = "C";
+                                break;
+                            case 3:
+                                Target = "D";
+                                break;
+                        }
+                        changeTarget.Target = Target;
+                    }
+                    else
+                    {
+                        Target = changeTarget.Target;
+                    }
+                }
             }
 
             AttackEnabled = changeTarget.IsAttackOn;

@@ -91,12 +91,10 @@ namespace FusionHelpers
 
             while (runner.State == NetworkRunner.States.Shutdown)
             {
-				Debug.Log("´ë±âÁß");
 				Debug.Log(runner.State);
-                await Task.Delay(100); // 100ms ´ë±â ÈÄ ´Ù½Ã Ã¼Å©
+                await Task.Delay(100); // 100ms ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ù½ï¿½ Ã¼Å©
             }
 
-			Debug.Log("´ë±â³¡");
             // Voice 
             gameObject.AddComponent<FusionVoiceClient>();
 
@@ -104,7 +102,7 @@ namespace FusionHelpers
             scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
             // An empty region will use the best region.
-            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice¿¡µµ PhotonAppSettings°¡ ÀÖ¾î¼­ ¸ðÈ£ ÂüÁ¶ ¿¡·¯¶á´Ù. 
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voiceï¿½ï¿½ï¿½ï¿½ PhotonAppSettingsï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
 
             SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
@@ -156,7 +154,7 @@ namespace FusionHelpers
 			scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
             // An empty region will use the best region.
-            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice¿¡µµ PhotonAppSettings°¡ ÀÖ¾î¼­ ¸ðÈ£ ÂüÁ¶ ¿¡·¯¶á´Ù. 
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voiceï¿½ï¿½ï¿½ï¿½ PhotonAppSettingsï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
 
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
@@ -285,7 +283,6 @@ namespace FusionHelpers
             RoomListPanel roomListPanel = FindObjectOfType<RoomListPanel>();
             if (roomListPanel != null && roomListPanel._scrollViewContent != null)
             {
-                // _scrollViewContentÀÇ ¸ðµç ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ ¼øÈ¸ÇÏ¸ç »èÁ¦
                 foreach (Transform child in roomListPanel._scrollViewContent.transform)
                 {
                     Destroy(child.gameObject);
