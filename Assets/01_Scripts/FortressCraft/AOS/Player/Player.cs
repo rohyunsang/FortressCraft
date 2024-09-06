@@ -511,39 +511,54 @@ namespace Agit.FortressCraft
         }
 
         private void UpdateBtnColor()
-		{
-			if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
-			{
-				foreach (Image btnImage in skill1BtnImages)
-				{
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-				}
-			}
-			else if (skill1Btn != null)
-			{
-				foreach (Image btnImage in skill1BtnImages)
-				{
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-				}
-			}
+        {
+            if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
+            {
+                foreach (Image btnImage in skill1BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+                }
+            }
+            else if (skill1Btn != null)
+            {
+                foreach (Image btnImage in skill1BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+                }
+            }
 
-			if (skill2CoolTimer.Expired(Runner) && skill2Btn != null)
-			{
-				foreach (Image btnImage in skill2BtnImages)
-				{
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-				}
-			}
-			else if (skill2Btn != null)
-			{
-				foreach (Image btnImage in skill2BtnImages)
-				{
-					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-				}
-			}
-		}
+            if (skill2CoolTimer.Expired(Runner) && skill2Btn != null)
+            {
+                foreach (Image btnImage in skill2BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+                }
+            }
+            else if (skill2Btn != null)
+            {
+                foreach (Image btnImage in skill2BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+                }
+            }
 
-		public void Attack()  // Archer
+            if (skill3CoolTimer.Expired(Runner) && skill3Btn != null)
+            {
+                foreach (Image btnImage in skill3BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+                }
+            }
+            else if (skill3Btn != null)
+            {
+                foreach (Image btnImage in skill3BtnImages)
+                {
+                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+                }
+            }
+        }
+
+        public void Attack()  // Archer
 		{
 			if (attackInputTimer.Expired(Runner) && animState.fullPathHash != animAttack )
 			{
