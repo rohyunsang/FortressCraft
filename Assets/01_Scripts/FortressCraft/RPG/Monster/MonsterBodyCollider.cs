@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Agit.FortressCraft
 {
-    public class Monster_FrostLizardBodyCollider : BodyCollider
+    public class MonsterBodyCollider : BodyCollider
     {
-        Monster_FrostLizardController controller;
+        MonsterController controller;
 
         private void Awake()
         {
-            controller = transform.parent.GetComponent<Monster_FrostLizardController>();
+            controller = transform.parent.GetComponent<MonsterController>();
         }
 
         public override void CallDamageCheck()

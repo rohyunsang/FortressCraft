@@ -7,21 +7,34 @@ namespace Agit.FortressCraft
 {
     public class MonsterController : NetworkBehaviour
     {
-        [SerializeField] public float hpMax = 3000;
-        [Networked] public float Hp { get; set; }
+        public MonsterData monsterData;
+
+        public bool NoReward { get; set; }
+
+        [System.NonSerialized] public float hpMax;
+        protected float movingWeight;
+        protected float damage;
+
+        [Networked] public float HP { get; set; }
+        public MonsterSpawner Spawner { get; set; }
+
+        public int Gold { get; set; }
+        public float Exp { get; set; }
+        public BuffType Buff { get; set; }
 
         protected float startTime = 0.0f;
         protected float nextDelay = 0.0f;
 
         protected Rigidbody2D rb;
         protected Animator animator;
-        [SerializeField] protected float movingWeight = 1.0f;
+        
         public bool ActiveSts { get; set; }
         protected bool acted = false;
 
         protected BodyCollider bodyCollider;
         protected MonsterHPBar hpBar;
         protected ChangeDetector changes;
+        protected Vector2 dir;
 
         public override void Spawned()
         {
@@ -32,6 +45,14 @@ namespace Agit.FortressCraft
             ActiveSts = false;
             changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
+            hpMax = monsterData.HPMax;
+            movingWeight = monsterData.MovingWeight;
+            damage = monsterData.Damage;
+
+            NoReward = false;
+            Gold = monsterData.Gold;
+            Exp = monsterData.Exp;
+            Buff = monsterData.Buff;
         }
 
         public virtual void MonsterAI() { }
@@ -44,6 +65,12 @@ namespace Agit.FortressCraft
 
         public virtual void Die()
         {
+            if( Spawner != null )
+            {
+                --Spawner.SpawnCount;
+                Spawner.RPCSetSpawnCount(Spawner.SpawnCount);
+            }
+            
             animator.SetTrigger("Die");
         }
 
@@ -54,20 +81,21 @@ namespace Agit.FortressCraft
 
         public virtual bool SetHP(float hp, float hpMax)
         {
-            this.Hp = hp <= 0 ? 0 : hp;
+            this.HP = hp <= 0 ? 0 : hp;
             this.hpMax = hpMax;
-            return (this.Hp == 0);
+            return (this.HP == 0);
         }
 
+        [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCCheckDamaged()
         {
             if (bodyCollider.Damaged > 0.0f)
             {
-                Hp -= bodyCollider.Damaged;
-
+                HP -= bodyCollider.Damaged;
+                Debug.Log("Remaining HP: " + HP);
                 bodyCollider.Damaged = 0.0f;
 
-                if (Hp <= 0.0f)
+                if (HP <= 0.0f)
                 {
                     Die();
                 }
@@ -80,8 +108,8 @@ namespace Agit.FortressCraft
             {
                 switch (change)
                 {
-                    case nameof(Hp):
-                        hpBar.SetHPBar(Hp);
+                    case nameof(HP):
+                        hpBar.SetHPBar(HP);
                         break;
                 }
             }

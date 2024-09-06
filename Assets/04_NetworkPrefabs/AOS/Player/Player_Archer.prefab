@@ -2013,7 +2013,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3508790426829227536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
@@ -2025,7 +2025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.02}
+  m_AnchoredPosition: {x: 0, y: -0.01999998}
   m_SizeDelta: {x: 39.1, y: 9.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2571166972699926238
@@ -3533,6 +3533,7 @@ MonoBehaviour:
   _ready: 0
   _Defense: 0
   _AttackDamage: 0
+  BuffAttackTime: 300
   wairrorWeapon: {fileID: 0}
   warriorChargeCollider: {fileID: 0}
   greatSwordWeaponCollider: {fileID: 0}

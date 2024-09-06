@@ -73,6 +73,14 @@ namespace Agit.FortressCraft
         private TickTimer skill2CoolTimer;
         private TickTimer skill3CoolTimer;
 
+        public TickTimer BuffAttackTimer { get; set; }
+		private float coefAttack = 1.5f;
+		public float BuffAttackTime = 300.0f;
+
+		public TickTimer BuffDefenseTimer { get; set; }
+		private float coefDefense = 1.5f;
+		public float BuffDefenseTime = 100.0f;
+
         private Vector2 lastDir = Vector2.left;
         private ArcherFire archerFire;
         private MagicianFire magicianFire;
@@ -218,9 +226,12 @@ namespace Agit.FortressCraft
             skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
             skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
             skill3CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+            BuffAttackTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
+			BuffDefenseTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
-            StartCoroutine(AutoHeal());
-            castleCount = 1;
+			StartCoroutine(AutoHeal());
+			castleCount = 1;
+
         }
 
         public void UpdateBattleSetting()
@@ -323,27 +334,168 @@ namespace Agit.FortressCraft
         }
 
         private IEnumerator AutoHeal()
-        {
-            while (true)
-            {
-                if (!died)
-                {
-                    CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
-                    float tempHeal = (commanderData.HP * 0.01f * commanderData.HealPerSecond);
+		{
+			while (true)
+			{
+				if (!died)
+				{
+					CommanderData commanderData = GoogleSheetManager.GetCommanderData(level, Job);
+					float tempHeal = (commanderData.HP * 0.01f * commanderData.HealPerSecond);
 
-                    if (life + tempHeal > commanderData.HP)
-                    {
-                        life = commanderData.HP;
-                    }
-                    else
-                    {
-                        life += tempHeal;
-                    }
-                }
+					if (life + tempHeal > commanderData.HP)
+					{
+						life = commanderData.HP;
+					}
+					else
+					{
+						life += tempHeal;
+					}
+				}
 
-                yield return new WaitForSeconds(5.0f);
-            }
-        }
+				yield return new WaitForSeconds(5.0f);
+			}
+		}
+
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetDark(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				if (PlayerId == playerRef && HasStateAuthority)
+				{
+					GameObject.Find("UIManager").GetComponent<UIManager>().OnDarkFilter();
+				}
+			}
+		}
+
+		[Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+		public void RPC_SetBright(PlayerRef playerRef)
+		{
+			if (PlayerId == playerRef && HasStateAuthority)
+			{
+				GameObject.Find("UIManager").GetComponent<UIManager>().OffDarkFilter();
+			}
+		}
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetType(string tag)
+		{
+			transform.Find("UnitRoot").gameObject.tag = tag;
+		}
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetLevel(int level)
+		{
+			this.level = level;
+		}
+
+		public override void Despawned(NetworkRunner runner, bool hasState)
+		{
+			Debug.Log($"Despawned PlayerAvatar for PlayerRef {PlayerId}");
+			base.Despawned(runner, hasState);
+		}
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCSetScale(Vector3 scale)
+		{
+			transform.localScale = scale;
+		}
+
+		public void ExpCheck()
+		{
+			if (RewardManager.Instance != null)
+			{
+				float needExp = GetNeedExpByLevel(level, Job);
+				if (RewardManager.Instance.Exp >= needExp)
+				{
+					RewardManager.Instance.Exp -= needExp;
+					++level;
+					RPCSetLevel(level);
+					UpdateProperty();
+				}
+			}
+		}
+
+		public void UpdateProperty()
+		{
+			// HP
+			SetMaxHPByLevel(level, Job);
+			life = MAX_HEALTH;
+
+			// Defense
+			SetDefenseHPByLevel(level, Job);
+		}
+
+		public override void FixedUpdateNetwork()
+		{
+			if (attackBtn == null) UpdateBattleSetting();
+
+			if (Object.HasStateAuthority)
+			{
+				CheckRespawn();
+
+				if (isRespawningDone)
+					ResetPlayer();
+			}
+
+			if (died) return;
+			animState = _netAnimator.Animator.GetCurrentAnimatorStateInfo(0);
+
+			UpdateBtnColor();
+
+			ExpCheck();
+
+			if (InputController.fetchInput)
+			{
+				if (GetInput(out NetworkInputData input))
+				{
+                    //Debug.Log(input.moveDirection);
+                    if (lastDir.x > 0.0f)
+					{
+						RPCSetScale(new Vector3(-1 * Mathf.Abs(transform.localScale.x),
+									transform.localScale.y, transform.localScale.z));
+					}
+					else
+					{
+						RPCSetScale(new Vector3(Mathf.Abs(transform.localScale.x),
+									transform.localScale.y, transform.localScale.z));
+					}
+
+					if (animState.fullPathHash != animAttack &&
+						animState.fullPathHash != animSkill1)
+					{
+						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+					}
+					else if( animState.fullPathHash == animAttack
+							&& ( Job == JobType.Magician
+							|| Job == JobType.Warrior ) )
+                    {
+						MovePlayer(input.moveDirection.normalized, input.aimDirection.normalized);
+					}
+
+					if (input.moveDirection.normalized != Vector2.zero)
+					{
+						lastDir = input.moveDirection.normalized;
+					}
+
+					if (arrowVector != null)
+					{
+						arrowVector.TargetDirection = lastDir;
+					}
+
+					if (input.moveDirection.magnitude > 0.1f)
+					{
+						_netAnimator.Animator.SetBool("isMove", true);
+					}
+					else
+					{
+                        _netAnimator.Animator.SetBool("isMove", false);
+					}
+                    _oldInput = input;
+				}
+			}
+		}
 
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
@@ -494,122 +646,144 @@ namespace Agit.FortressCraft
         }
 
         private void UpdateBtnColor()
-        {
-            if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
-            {
-                foreach (Image btnImage in skill1BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-                }
-            }
-            else if (skill1Btn != null)
-            {
-                foreach (Image btnImage in skill1BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-                }
-            }
+		{
+			if (skill1CoolTimer.Expired(Runner) && skill1Btn != null)
+			{
+				foreach (Image btnImage in skill1BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+				}
+			}
+			else if (skill1Btn != null)
+			{
+				foreach (Image btnImage in skill1BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+				}
+			}
 
-            if (skill2CoolTimer.Expired(Runner) && skill2Btn != null)
-            {
-                foreach (Image btnImage in skill2BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-                }
-            }
-            else if (skill2Btn != null)
-            {
-                foreach (Image btnImage in skill2BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-                }
-            }
+			if (skill2CoolTimer.Expired(Runner) && skill2Btn != null)
+			{
+				foreach (Image btnImage in skill2BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
+				}
+			}
+			else if (skill2Btn != null)
+			{
+				foreach (Image btnImage in skill2BtnImages)
+				{
+					btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
+				}
+			}
+		}
 
-            if (skill3CoolTimer.Expired(Runner) && skill3Btn != null)
-            {
-                foreach (Image btnImage in skill3BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-                }
-            }
-            else if (skill3Btn != null)
-            {
-                foreach (Image btnImage in skill3BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-                }
-            }
-        }
+		public void Attack()  // Archer
+		{
+			if (attackInputTimer.Expired(Runner) && animState.fullPathHash != animAttack )
+			{
+				if (Job == JobType.Archer)
+				{
+					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+					
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+					
+					Invoke("PlaySound1", 0.4f);
+				}
+				else if (Job == JobType.Magician)
+				{
+					magicianFire.SetDamageByLevel(level, Job);
 
-        public void Attack()  // Archer
-        {
-            if (attackInputTimer.Expired(Runner) && animState.fullPathHash != animAttack)
-            {
-                if (Job == JobType.Archer)
-                {
-                    archerFire.FireDirection = lastDir;
-                    archerFire.SetDamageByLevel(level, Job);
-                    Invoke("PlaySound1", 0.4f);
-                }
-                else if (Job == JobType.Magician)
-                {
-                    magicianFire.SetDamageByLevel(level, Job);
-                    Invoke("PlaySound1", 0.3f);
-                }
-                else if (Job == JobType.Warrior)
-                {
-                    SetAttack(level, Job);
-                    wairrorWeapon.Damage = AttackDamage;
-                    Invoke("PlaySound1", 0.2f);
-                }
+					if( !BuffAttackTimer.Expired(Runner) )
+                    {
+						magicianFire.BuffDamage(coefAttack);
+                    }
+
+					Invoke("PlaySound1", 0.3f);
+				}
+				else if( Job == JobType.Warrior)
+				{
+					SetAttack(level, Job);
+					wairrorWeapon.Damage = AttackDamage;
+
+					if( !BuffAttackTimer.Expired(Runner) )
+                    {
+						wairrorWeapon.Damage *= coefAttack;
+                    }
+
+					Invoke("PlaySound1", 0.2f);
+				}
                 else if (Job == JobType.GreatSword)
                 {
                     SetAttack(level, Job);
                     greatSwordWeaponCollider.Damage = AttackDamage;
                 }
-                _netAnimator.Animator.SetTrigger("Attack");
-                attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.2f);
-            }
-        }
+				_netAnimator.Animator.SetTrigger("Attack");
+				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.2f);
+			}
+		}
 
-        public void Skill1()
-        {
-            if (skill1CoolTimer.Expired(Runner))
-            {
-                if (Job == JobType.Archer)
-                {
-                    archerFire.FireDirection = lastDir;
-                    archerFire.SetDamageByLevel(level, Job);
-                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+		public void Skill1()
+		{
+			if (skill1CoolTimer.Expired(Runner))
+			{
+				if (Job == JobType.Archer)
+				{
+					archerFire.FireDirection = lastDir;
+					archerFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+
                     _netAnimator.Animator.SetTrigger("Skill1");
-                    Invoke("PlaySound2", 0.5f);
-                }
-                else if (Job == JobType.Magician)
-                {
-                    RPCMagicSetting();
-                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+					Invoke("PlaySound2", 0.5f);
+				}
+				else if (Job == JobType.Magician)
+				{
+					RPCMagicSetting();
+
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						magicianFire.BuffDamage(coefAttack);
+					}
+
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     _netAnimator.Animator.SetTrigger("Skill1");
-                    Invoke("PlaySound2", 0.4f);
-                }
+					Invoke("PlaySound2", 0.4f);
+				}
                 else if (Job == JobType.Warrior)
-                {
-                    RPC_ChargeStartCallback();
-                    warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
+				{
+					RPC_ChargeStartCallback();
+					warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage = AttackDamage;
 
-                    _netAnimator.Animator.SetTrigger("Skill1");
-                    _cc.isCharge = true;
-                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						warriorChargeCollider.GetComponent<WarriorChargeCollider>().Damage *= coefAttack;
+					}
+
+					_netAnimator.Animator.SetTrigger("Skill1");
+					_cc.isCharge = true;
+					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
                     Invoke("ChargeFinishCallback", 0.15f);
-                    PlaySound2();
+					PlaySound2();
                 }
                 else if (Job == JobType.GreatSword)
                 {
                     _netAnimator.Animator.SetTrigger("Skill1");
                     skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
                 }
-            }
-        }
+			}
+		}
 
+        
         #region Sound
 
         public void PlaySound1()
@@ -628,10 +802,11 @@ namespace Agit.FortressCraft
             sound3.Play();
         }
 
-        #endregion 
+		#endregion
 
-        [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPCMagicSetting()
+
+		[Rpc(RpcSources.All, RpcTargets.All)]
+		public void RPCMagicSetting()
         {
             magicianFire.FireDirection = lastDir;
             magicianFire.SetDamageByLevel(level, Job);
@@ -666,14 +841,26 @@ namespace Agit.FortressCraft
             {
                 if (Job == JobType.Archer)
                 {
-                    archerFire.SetDamageByLevel(level, Job);
-                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-                    Invoke("PlaySound3", 0.5f);
-                }
-                else if (Job == JobType.Magician)
+					archerFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						archerFire.BuffDamage(coefAttack);
+					}
+
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+					Invoke("PlaySound3", 0.5f);
+				}
+				else if( Job == JobType.Magician )
                 {
-                    magicianFire.SetDamageByLevel(level, Job);
-                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+					magicianFire.SetDamageByLevel(level, Job);
+
+					if (!BuffAttackTimer.Expired(Runner))
+					{
+						magicianFire.BuffDamage(coefAttack);
+					}
+
+					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
                 }
                 else if (Job == JobType.Warrior)
                 {
@@ -829,61 +1016,61 @@ namespace Agit.FortressCraft
         }
 
         public void Reset()
-        {
-            Debug.Log($"Resetting player #{PlayerIndex} ID:{PlayerId}");
-            lives = MAX_LIVES;
-        }
+		{
+			Debug.Log($"Resetting player #{PlayerIndex} ID:{PlayerId}");
+			lives = MAX_LIVES;
+		}
 
-        public void Respawn(float inSeconds = 0)
-        {
-            _respawnInSeconds = inSeconds;
-        }
+		public void Respawn( float inSeconds = 0 )
+		{
+			_respawnInSeconds = inSeconds;
+		}
 
-        private void CheckRespawn()
-        {
-            if (_respawnInSeconds >= 0)
-            {
-                Debug.Log("Respawn Time: " + _respawnInSeconds);
-                _respawnInSeconds -= Runner.DeltaTime;
+		private void CheckRespawn()
+		{
+			if (_respawnInSeconds >= 0)
+			{
+				Debug.Log("Respawn Time: " + _respawnInSeconds);
+				_respawnInSeconds -= Runner.DeltaTime;
 
-                if (_respawnInSeconds <= 0)
-                {
-                    _netAnimator.Animator.SetTrigger("Idle");
-                    RPC_SetBright(PlayerId);
-                    died = false;
-                    SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint(PlayerIndex);
+				if (_respawnInSeconds <= 0)
+				{
+					_netAnimator.Animator.SetTrigger("Idle");
+					RPC_SetBright(PlayerId);
+					died = false;
+					SpawnPoint spawnpt = Runner.GetLevelManager().GetPlayerSpawnPoint( PlayerIndex );
 
-                    if (spawnpt == null)
-                    {
-                        _respawnInSeconds = Runner.DeltaTime;
-                        Debug.LogWarning($"No Spawn Point for player #{PlayerIndex} ID:{PlayerId} - trying again in {_respawnInSeconds} seconds");
-                        return;
-                    }
+					if (spawnpt == null)
+					{
+						_respawnInSeconds = Runner.DeltaTime;
+						Debug.LogWarning($"No Spawn Point for player #{PlayerIndex} ID:{PlayerId} - trying again in {_respawnInSeconds} seconds");
+						return;
+					}
 
-                    Debug.Log($"Respawning Player #{PlayerIndex} ID:{PlayerId}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} from state={stage} @{spawnpt}");
+					Debug.Log($"Respawning Player #{PlayerIndex} ID:{PlayerId}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} from state={stage} @{spawnpt}");
 
-                    // Make sure we don't get in here again, even if we hit exactly zero
-                    _respawnInSeconds = -1;
+					// Make sure we don't get in here again, even if we hit exactly zero
+					_respawnInSeconds = -1;
 
-                    // Restore health
-                    life = MAX_HEALTH;
+					// Restore health
+					life = MAX_HEALTH;
 
-                    // Start the respawn timer and trigger the teleport in effect
-                    respawnTimer = TickTimer.CreateFromSeconds(Runner, 1);
-                    invulnerabilityTimer = TickTimer.CreateFromSeconds(Runner, 1);
+					// Start the respawn timer and trigger the teleport in effect
+					respawnTimer = TickTimer.CreateFromSeconds(Runner, 1);
+					invulnerabilityTimer = TickTimer.CreateFromSeconds(Runner, 1);
 
-                    // Place the tank at its spawn point. This has to be done in FUN() because the transform gets reset otherwise
-                    Transform spawn = spawnpt.transform;
-                    _cc.Teleport(spawn.position, spawn.rotation);
+					// Place the tank at its spawn point. This has to be done in FUN() because the transform gets reset otherwise
+					Transform spawn = spawnpt.transform;
+					_cc.Teleport( spawn.position, spawn.rotation );
 
-                    // If the player was already here when we joined, it might already be active, in which case we don't want to trigger any spawn FX, so just leave it ACTIVE
-                    if (stage != Stage.Active)
-                        stage = Stage.TeleportIn;
+					// If the player was already here when we joined, it might already be active, in which case we don't want to trigger any spawn FX, so just leave it ACTIVE
+					if (stage != Stage.Active)
+						stage = Stage.TeleportIn;
 
-                    Debug.Log($"Respawned player {PlayerId} @ {spawn.position}, tick={Runner.Tick}, timer={respawnTimer.IsRunning}:{respawnTimer.TargetTick}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} to state={stage}");
-                }
-            }
-        }
+					Debug.Log($"Respawned player {PlayerId} @ {spawn.position}, tick={Runner.Tick}, timer={respawnTimer.IsRunning}:{respawnTimer.TargetTick}, life={life}, lives={lives}, hasStateAuth={Object.HasStateAuthority} to state={stage}");
+				}
+			}
+		}
 
         public void OnStageChanged()
         {
@@ -910,20 +1097,29 @@ namespace Agit.FortressCraft
 
         public void CheckDamaged()
         {
-            Debug.Log("Damaged Value - " + bodyCollider.Damaged);
-            if (died) return;
-            if (bodyCollider.Damaged > 0.0f)
+			if (died) return;
+
+			if( bodyCollider.Damaged > 0.0f )
             {
-                life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
-
-                bodyCollider.Damaged = 0.0f;
-
-                if (life <= 0.0f)
+				if( BuffDefenseTimer.Expired(Runner) )
                 {
-                    Die();
+					life -= bodyCollider.Damaged * (1.0f - 0.01f * Defense);
+				}
+				else
+                {
+					life -= ( bodyCollider.Damaged * (1.0f - 0.01f * Defense) ) / coefDefense;
+				}
+				
+
+				bodyCollider.Damaged = 0.0f;
+
+				if( life <= 0.0f )
+                {
+					Die();
                 }
             }
         }
+
         public void Die()
         {
             RPC_SetDark(PlayerId);

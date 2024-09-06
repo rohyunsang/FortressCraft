@@ -20,20 +20,24 @@ namespace Agit.FortressCraft
     public class Monster_FrostLizardController : MonsterController
     {
         private Monster_FrostLizardState state = Monster_FrostLizardState.NON;
-        private Monster_FrostLizardAttackCollider attackCollider;
-        private Vector2 dir;
+        private MonsterAttackCollider attackCollider;
+        
 
         public override void Spawned()
         {
             base.Spawned();
-            Hp = hpMax;
-            attackCollider = GetComponentInChildren<Monster_FrostLizardAttackCollider>();
+            HP = hpMax;
+            attackCollider = GetComponentInChildren<MonsterAttackCollider>();
         }
 
-        public override void FixedUpdateNetwork()
+        // FixedUpdateNetwork는 Athority 있는 거에서만 돌아서 FixedUpdate에서 처리 필요 
+        private void FixedUpdate()
         {
-            rb.velocity = Vector2.zero;
-            MonsterAI();
+            if(Runner.IsSharedModeMasterClient)
+            {
+                rb.velocity = Vector2.zero;
+                MonsterAI();
+            }
         }
 
         public void SetState(Monster_FrostLizardState state, float nextDelay)
@@ -48,7 +52,7 @@ namespace Agit.FortressCraft
 
         public override void MonsterAI()
         {
-            if (Hp <= 0.0f) return;
+            if (HP <= 0.0f) return;
             
             switch (state)
             {
@@ -132,7 +136,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 300.0f;
+            attackCollider.Damage = damage * 3.0f;
             animator.SetTrigger("Breath");
             acted = true;
         }
@@ -141,7 +145,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 100.0f;
+            attackCollider.Damage = damage;
             animator.SetTrigger("TailAttack");
             acted = true;
         }
@@ -150,7 +154,7 @@ namespace Agit.FortressCraft
         {
             if (acted) return;
 
-            attackCollider.Damage = 500.0f;
+            attackCollider.Damage = damage;
             animator.SetTrigger("Slam");
             acted = true;
         }

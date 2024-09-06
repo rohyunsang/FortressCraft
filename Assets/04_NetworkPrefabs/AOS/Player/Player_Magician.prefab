@@ -531,6 +531,7 @@ MonoBehaviour:
   _ready: 0
   _Defense: 0
   _AttackDamage: 0
+  BuffAttackTime: 300
   wairrorWeapon: {fileID: 0}
   warriorChargeCollider: {fileID: 0}
   greatSwordWeaponCollider: {fileID: 0}

@@ -7,8 +7,17 @@ namespace Agit.FortressCraft
 {
     public class UIScale : NetworkBehaviour
     {
+        private TickTimer startTimer;
+
+        public override void Spawned()
+        {
+            startTimer = TickTimer.CreateFromSeconds(Runner, 1.0f);
+        }
+
         public void Update()
         {
+            if (!startTimer.Expired(Runner)) return;
+
             if(HasStateAuthority)
                 RPCSettingScale();
         }

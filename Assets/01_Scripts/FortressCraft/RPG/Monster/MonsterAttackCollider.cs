@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace Agit.FortressCraft
 {
-    public class Monster_FrostLizardAttackCollider : AttackCollider
+    public class MonsterAttackCollider : AttackCollider
     {
+        [SerializeField] private bool isDisposable = false;
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.tag.StartsWith("Unit"))
@@ -15,6 +17,11 @@ namespace Agit.FortressCraft
                     if (collision.CompareTag("Unit_Monster")) return;
                     bodycollider.RPCSetDamage(Damage);
                     bodycollider.CallDamageCheck();
+                }
+
+                if( isDisposable )
+                {
+                    Destroy(this.gameObject);
                 }
             }
         }

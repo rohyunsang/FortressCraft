@@ -17,9 +17,12 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
         [SerializeField] private float damage = 0.0f;
 
+        private Player player;
+
         public override void Spawned()
         {
             OwnType = null;
+            player = transform.parent.GetComponent<Player>();
         }
 
         // 추적탄 1개 발사 
@@ -37,6 +40,7 @@ namespace Agit.FortressCraft
             magicianSpell.OwnType = OwnType;
 
             MagicianSpellAttackCollider magicAttackCollider = no.GetComponent<MagicianSpellAttackCollider>();
+            magicAttackCollider.ClientPlayer = player;
             magicAttackCollider.Damage = damage * 2;
             magicAttackCollider.OwnType = OwnType;
         }
@@ -44,6 +48,7 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             if (OwnType == null) return;
+            magicianFlareAttackCollider.ClientPlayer = player;
             magicianFlareAttackCollider.OwnType = OwnType;
             magicianFlareAttackCollider.Damage = damage * 2;
             Debug.Log("Damage? " + magicianFlareAttackCollider.Damage);
@@ -68,6 +73,7 @@ namespace Agit.FortressCraft
             no.transform.SetParent(null);
 
             MagicianTwinkleAttackCollider magicAttackCollider = no.GetComponentInChildren<MagicianTwinkleAttackCollider>();
+            magicAttackCollider.ClientPlayer = player;
             magicAttackCollider.Damage = damage;
             magicAttackCollider.OwnType = OwnType;
         }
@@ -90,6 +96,11 @@ namespace Agit.FortressCraft
             }
 
             damage = GoogleSheetManager.commanderDatas[level + offset].Attack;
+        }
+
+        public void BuffDamage(float coef)
+        {
+            damage = damage * coef;
         }
     }
 }

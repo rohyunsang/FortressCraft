@@ -19,32 +19,16 @@ namespace Agit.FortressCraft
         private Vector3 offsetVector = new Vector3(0.0f, 0.1f, 0.0f);
         private NetworkPrefabId id;
         private NetworkObjectPoolManager poolManager;
+        private Player player;
 
         public override void Spawned()
         {
+            player = transform.parent.GetComponent<Player>();
             poolManager = NetworkObjectPoolManager.Instance;
             NetworkObject temp = Runner.Spawn(arrow, (Vector2)transform.position, Quaternion.identity);
             id = temp.NetworkTypeId.AsPrefabId;
             Destroy(temp.gameObject);
             poolManager.AddPoolTable(id);
-            /*
-            int prePoolingCount = 30;
-
-            NetworkObject[] arrows = new NetworkObject[50];
-
-            for( int i = 0; i < prePoolingCount; ++ i )
-            {
-                NetworkObject no = null;
-                NetworkPrefabAcquireContext context = new NetworkPrefabAcquireContext(id);
-                var result = poolManager.AcquirePrefabInstance(Runner, context, out no);
-                no.GetComponent<ArcherArrow>().ID = id;
-                arrows[i] = no;
-            }
-            for (int i = 0; i < prePoolingCount; ++i)
-            {
-                arrows[i].GetComponent<ArcherArrow>().Release();
-            }
-            */
         }
 
         // 관통형 화살 1개 발사 
@@ -66,6 +50,7 @@ namespace Agit.FortressCraft
                 archerArrow.ReserveRelease();
 
                 ArcherArrowAttackCollider arrowAttackCollider = no.GetComponent<ArcherArrowAttackCollider>();
+                arrowAttackCollider.ClientPlayer = player;
                 arrowAttackCollider.Damage = damage;
                 arrowAttackCollider.OwnType = OwnType;
             }
@@ -75,7 +60,7 @@ namespace Agit.FortressCraft
         public void FireSkill1()
         {
             //Debug.Log("Damage: " + damage);
-            // Debug.Log("Skill1");
+            //Debug.Log("Skill1");
             if (OwnType == null) return;
             for ( int i = 1; i < 11; ++i )
             {
@@ -84,7 +69,7 @@ namespace Agit.FortressCraft
                 var result = poolManager.AcquirePrefabInstance(Runner, context, out no);
                 //NetworkObject no = Runner.Spawn(arrow, transform.position + offsetVector, Quaternion.identity);
                 no.transform.SetParent(null);
-
+                //Debug.Log("FireSkill1");
                 if (result == NetworkObjectAcquireResult.Success)
                 {
                     no.transform.SetParent(null);
@@ -147,6 +132,12 @@ namespace Agit.FortressCraft
             }
 
             damage = GoogleSheetManager.commanderDatas[level + offset].Attack;
+        }
+
+        public void BuffDamage(float coef)
+        {
+            Debug.Log("Damage Buff");
+            damage = damage * coef;
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
