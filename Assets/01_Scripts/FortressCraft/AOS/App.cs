@@ -13,9 +13,13 @@ using Photon.Realtime;
 
 namespace Agit.FortressCraft
 {
-	/// <summary>
-	/// App entry point and main UI flow management.
-	/// </summary>
+	public enum Mode
+	{
+        Survival,
+		Team
+    }
+
+
 	public class App : MonoBehaviour
 	{
 		[SerializeField] private LevelManager _levelManager;
@@ -34,12 +38,7 @@ namespace Agit.FortressCraft
 
         public string roomCode = "";
 
-
-		public void SetRoomCodeOverride(string roomCodeOverride)
-		{
-			this.roomCode = roomCodeOverride;
-			_levelManager.roomCode.text = "Room : " + roomCodeOverride;
-        }
+		public Mode mode;
 
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 		private GameMode _gameMode;
@@ -84,7 +83,23 @@ namespace Agit.FortressCraft
 			}
 		}
 
-		public void ShutDownSession() // using button 
+		public void SetGameModeSurvival() // using Button 
+		{
+			mode = Mode.Survival;
+			Debug.Log(mode);
+		}
+        public void SetGameModeTeam()
+        {
+			mode = Mode.Team;
+			Debug.Log(mode);
+        }
+
+        public void SetRoomCodeOverride(string roomCodeOverride)
+        {
+            this.roomCode = roomCodeOverride;
+            _levelManager.roomCode.text = "Room : " + roomCodeOverride;
+        }
+        public void ShutDownSession() // using button 
 		{
 			FindObjectOfType<FusionLauncher>().ShutDownCustom();
         }
@@ -146,9 +161,9 @@ namespace Agit.FortressCraft
 
         private void CreateRandomRoomCode()
 		{
-            // 0¿¡¼­ 99999 »çÀÌÀÇ ·£´ý ¼ýÀÚ »ý¼º
+            // 0ï¿½ï¿½ï¿½ï¿½ 99999 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             int randomNumber = Random.Range(0, 100000);
-            // ¼ýÀÚ¸¦ ¹®ÀÚ¿­·Î º¯È¯ÇÏ¸é¼­ 5ÀÚ¸® Æ÷¸ËÀ» À¯Áö
+            // ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï¸é¼­ 5ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             string randomCode = randomNumber.ToString("D5");
 			
 			roomCode = randomCode;

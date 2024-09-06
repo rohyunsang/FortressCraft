@@ -1,7 +1,6 @@
-using UnityEngine;
 using Fusion;
-using Agit.FortressCraft;
 using FusionHelpers;
+using UnityEngine;
 
 namespace Agit.FortressCraft
 {
@@ -12,6 +11,10 @@ namespace Agit.FortressCraft
         public NetworkObject UnitPrefab_C;
         public NetworkObject UnitPrefab_D;
         private NetworkObject UnitPrefab;
+
+        public NetworkObject UnitPrefab_A_Team;
+        public NetworkObject UnitPrefab_B_Team;
+
         public NetworkObject Arrow;
         public Player player = null;
         public bool Usable { get; private set; }
@@ -31,6 +34,8 @@ namespace Agit.FortressCraft
         public NetworkPrefabId arrowId;
 
         private int idx = -1;
+
+        public Mode mode;
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPCTargetChange(string t)
@@ -72,33 +77,48 @@ namespace Agit.FortressCraft
             NowUnitCount = 0;
             Center = GameObject.Find("Center").transform;
 
-
             if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
             {
-                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
-                Debug.Log("idx: " + idx);
-                switch (idx)
+                if (gameManager.mode == Mode.Survival)
                 {
-                    case 0:
+                    idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+                    Debug.Log("idx: " + idx);
+                    switch (idx)
+                    {
+                        case 0:
+                            SpawnerType = "A";
+                            UnitPrefab = UnitPrefab_A;
+                            break;
+                        case 1:
+                            SpawnerType = "B";
+                            UnitPrefab = UnitPrefab_B;
+                            break;
+                        case 2:
+                            SpawnerType = "C";
+                            UnitPrefab = UnitPrefab_C;
+                            break;
+                        case 3:
+                            SpawnerType = "D";
+                            UnitPrefab = UnitPrefab_D;
+                            break;
+                    }
+                }
+                else
+                {
+                    idx = 0;
+                    string team = gameManager.TryGetPlayerTeam(Runner.LocalPlayer);
+                    if (team == "A")
+                    {
                         SpawnerType = "A";
                         UnitPrefab = UnitPrefab_A;
-                        break;
-                    case 1:
+                    }
+                    else
+                    {
                         SpawnerType = "B";
                         UnitPrefab = UnitPrefab_B;
-                        break;
-                    case 2:
-                        SpawnerType = "C";
-                        UnitPrefab = UnitPrefab_C;
-                        break;
-                    case 3:
-                        SpawnerType = "D";
-                        UnitPrefab = UnitPrefab_D;
-                        break;
+                    }
                 }
             }
-
-            //Debug.Log("Spawner Type: " + SpawnerType);
 
             ChangeTarget changeTarget = GameObject.FindObjectOfType<ChangeTarget>();
             if (changeTarget.OwnType == "")
@@ -127,7 +147,7 @@ namespace Agit.FortressCraft
             {
                 Usable = true;
 
-                if( changeTarget.Target == null )
+                if (changeTarget.Target == null)
                 {
                     switch (idx)
                     {
@@ -150,7 +170,7 @@ namespace Agit.FortressCraft
                 {
                     Target = changeTarget.Target;
                 }
-                
+
             }
 
             AttackEnabled = changeTarget.IsAttackOn;

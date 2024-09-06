@@ -21,10 +21,10 @@ namespace Agit.FortressCraft
 
         private void OnChangedState(bool sign)
         {
-            // outputText.text = sign ? "·Î±×ÀÎ : " : "·Î±×¾Æ¿ô : ";
+            // outputText.text = sign ? "ï¿½Î±ï¿½ï¿½ï¿½ : " : "ï¿½Î±×¾Æ¿ï¿½ : ";
             if (sign)
             {
-                outputText.text = "È¸¿ø °¡ÀÔ ¿Ï·á";
+                outputText.text = "íšŒì› ê°€ì…ì´ ì™„ë£ŒëìŠµë‹ˆë‹¤.";
             }
         }
 

@@ -546,6 +546,8 @@ MonoBehaviour:
   _IsDestroyedAllCastle: 0
   isBuildCastle: 0
   _castleCount: 0
+  team: 0
+  hpBarImage: {fileID: 5961534349399336545}
 --- !u!114 &4320856916694314688
 MonoBehaviour:
   m_ObjectHideFlags: 0

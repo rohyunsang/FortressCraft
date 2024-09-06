@@ -35,7 +35,7 @@ namespace Agit.FortressCraft {
         {
             auth = FirebaseAuth.DefaultInstance;
 
-            // 임시처리
+            // 占쌈쏙옙처占쏙옙
             if(auth.CurrentUser != null)
             {
                 LogOut();
@@ -50,14 +50,12 @@ namespace Agit.FortressCraft {
                 bool signed = (auth.CurrentUser != user && auth.CurrentUser != null);
                 if (!signed && user != null)
                 {
-                    Debug.Log("로그아웃");
                     LoginState?.Invoke(false);
                 }
                 user = auth.CurrentUser;
 
                 if (signed)
                 {
-                    Debug.Log("로그인");
                     LoginState?.Invoke(true);
                 }
             }
@@ -69,18 +67,15 @@ namespace Agit.FortressCraft {
             {
                 if (task.IsCanceled)
                 {
-                    Debug.Log("회원가입 취소");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
-                    Debug.Log("회원가입 실패");
                     return;
                 }
 
                 FirebaseUser newUser = task.Result.User;
-                Debug.Log("회원가입 완료");
                 MainThreadDispatcher.Enqueue(() =>
                 {
                     FirebaseDBManager.Instance.WriteNewUser(UserId);
@@ -95,21 +90,16 @@ namespace Agit.FortressCraft {
             {
                 if (task.IsCanceled)
                 {
-                    Debug.Log("로그인 취소");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
-                    Debug.Log("로그인 실패");
                     return;
                 }
 
                 FirebaseUser newUser = task.Result.User;
 
-                Debug.Log("로그인 완료");
-
-                // 메인 스레드에서 UI 업데이트 실행
                 MainThreadDispatcher.Enqueue(() =>
                 {
                     UIManager.Instance._loginScreen.SetActive(false);
@@ -119,7 +109,6 @@ namespace Agit.FortressCraft {
         public void LogOut()
         {
             auth.SignOut();
-            Debug.Log("로그아웃");
         }
     }
 

@@ -7,7 +7,7 @@ namespace Agit.FortressCraft
     public class CastleBuildArea : MonoBehaviour
     {
         public bool hasCastle = false;
-        public bool startDelay = false; // 5ÃÊ°£Àº ¼º ¼ÒÈ¯ÇÏÁö ¸øÇÏ°Ô ÇÏ´Â º¯¼ö
+        public bool startDelay = false; // 5ï¿½Ê°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         void Start ()
         {
@@ -31,7 +31,7 @@ namespace Agit.FortressCraft
             if (other.gameObject.name.Contains("Castle"))
             {
                 hasCastle = true;
-                StopAllCoroutines(); // ÇöÀç ½ÇÇà ÁßÀÎ ¸ðµç ÄÚ·çÆ¾À» Áß´Ü
+                StopAllCoroutines(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ ï¿½ß´ï¿½
             }
         }
 
@@ -48,8 +48,8 @@ namespace Agit.FortressCraft
         }
         private IEnumerator SetHasCastleFalseAfterDelay()
         {
-            yield return new WaitForSeconds(1); // 1ÃÊ ±â´Ù¸²
-            hasCastle = false; // hasCastleÀ» false·Î ¼³Á¤
+            yield return new WaitForSeconds(1); // 1ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½
+            hasCastle = false; // hasCastleï¿½ï¿½ falseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 }

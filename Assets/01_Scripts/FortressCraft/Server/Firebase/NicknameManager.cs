@@ -25,7 +25,7 @@ namespace Agit.FortressCraft
                 MainThreadDispatcher.Enqueue(() =>
                 {
                     UIManager.Instance._failNicknameInfo.SetActive(true);
-                    UIManager.Instance._outputText.text = "Àß¸øµÈ ´Ğ³×ÀÓ Çü½ÄÀÔ´Ï´Ù.";
+                    UIManager.Instance._outputText.text = "ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.";
                 });
                 return;
             }
@@ -34,13 +34,11 @@ namespace Agit.FortressCraft
             {
                 if (task.Result)
                 {
-                    // ´Ğ³×ÀÓ »ç¿ë °¡´É
                     FirebaseDBManager.Instance.SetNickname(nickname, userId).ContinueWith(setTask =>
                     {
                         if (setTask.IsCompleted)
                         {
                             Debug.Log("Nickname set successfully");
-                            // ¼º°øÀûÀ¸·Î ¼³Á¤µÇ¾úÀ» ¶§ÀÇ ·ÎÁ÷ ±¸Çö
                             FirebaseDBManager.Instance.UpdateNickname(uid, nickname);
                             MainThreadDispatcher.Enqueue(() =>
                             {
@@ -56,10 +54,9 @@ namespace Agit.FortressCraft
                 else
                 {
                     Debug.Log("Nickname is already taken");
-                    // ´Ğ³×ÀÓÀÌ ÀÌ¹Ì »ç¿ë ÁßÀÏ ¶§ÀÇ UI Ã³¸®
                     MainThreadDispatcher.Enqueue(() =>
                     {
-                        UIManager.Instance._outputText.text = "ÀÌ¹Ì »ç¿ëÁßÀÎ ´Ğ³×ÀÓÀÔ´Ï´Ù.";
+                        UIManager.Instance._outputText.text = "ì´ë¯¸ìˆëŠ” ë‹‰ë„¤ì„ì…ë‹ˆë‹¤.";
                     });
                 }
             });

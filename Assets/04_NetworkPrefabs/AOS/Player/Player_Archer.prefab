@@ -3548,6 +3548,8 @@ MonoBehaviour:
   _IsDestroyedAllCastle: 0
   isBuildCastle: 0
   _castleCount: 0
+  team: 0
+  hpBarImage: {fileID: 4283990354618409746}
 --- !u!114 &2653525218152594309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,7 +5071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &114044611014699731
 RectTransform:
   m_ObjectHideFlags: 0

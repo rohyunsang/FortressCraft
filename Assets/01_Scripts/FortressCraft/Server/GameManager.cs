@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Agit.FortressCraft
 {
@@ -15,15 +16,18 @@ namespace Agit.FortressCraft
 		[Networked] public PlayState currentPlayState { get; set; }
 
 		[Networked, Capacity(32)] public NetworkDictionary<string, int> playerRef_playerIdx => default;
+        [Networked, Capacity(32)] public NetworkDictionary<string, string> playerRef_playerTeam => default;
 
 
-		public const byte MAX_SCORE = 3;
+        public const byte MAX_SCORE = 3;
 
 		private bool _restart;
 
 		public bool DisconnectByPrompt { get; set; }
 
 		public bool isStarted = false;
+
+		public Mode mode;
 
 		public override void Spawned()
 		{
@@ -123,6 +127,20 @@ namespace Agit.FortressCraft
             }
         }
 
+		private void PlayerTeamRef()
+		{
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+				playerRef_playerTeam.Add(player.PlayerId.ToString(), player.team.ToString());
+				Debug.Log("AAAAAAA" + player.PlayerId.ToString() + " " + player.team.ToString());
+            }
+        }
+		public string TryGetPlayerTeam(PlayerRef playerRef)
+		{
+			return playerRef_playerTeam[playerRef.ToString()];
+        }
+
 		public int TryGetPlayerId(PlayerRef playerRef)
 		{
 			return playerRef_playerIdx[playerRef.ToString()];
@@ -176,21 +194,69 @@ namespace Agit.FortressCraft
                 DisconnectManager.DisconnectPrompt.SetActive(true);
         }
 
-        [Rpc(RpcSources.All, RpcTargets.All)]
-         public void RPC_AllPlayerLoadingBar()
-		 {
-            FindObjectOfType<UIManager>().LoadingMsg.SetActive(true);
-         }
+		[Rpc(RpcSources.All, RpcTargets.All)]
+        public void RPC_AllPlayerLoadingBar()
+		{
+			FindObjectOfType<UIManager>().LoadingMsg.SetActive(true);
+        }
 
-		// Transition from lobby to level
+
+		private bool CheckTeamCount()
+		{
+			int idx = 0;
+			int aTeamCount = 0;
+			int bTeamCount = 0;
+            foreach (FusionPlayer fusionPlayer in AllPlayers)
+            {
+                Player player = (Player)fusionPlayer;
+				idx++;
+				if(player.team == Team.A)
+				{
+					aTeamCount++;
+				}
+				else
+				{
+					bTeamCount++;
+				}
+            }
+			
+			if (idx < 4)	return false;
+			if(aTeamCount != bTeamCount) return false;
+
+            return true;
+		}
+
 		public void GameStartButtonCallback()
 		{
+			if (!Object.HasStateAuthority)
+			{
+				FindObjectOfType<UIManager>()._gameStartFailInfo.SetActive(true);
+				FindObjectOfType<UIManager>()._gameStartFailInfoText.text = "방장만 게임 시작이 가능합니다.";
+
+                return;
+            }
             if (isStarted) return;
-			if (!Object.HasStateAuthority) return;
+            /*
+			if(FindObjectOfType<App>().mode == Mode.Team)
+            {
+				if (!CheckTeamCount()) {
+                    FindObjectOfType<UIManager>()._gameStartFailInfo.SetActive(true);
+                    FindObjectOfType<UIManager>()._gameStartFailInfoText.text = "각 팀원의 숫자를 맞춰주세요.";
+
+                    return;
+                }
+				
+            }
+			*/
             RPC_AllPlayerLoadingBar();
             isStarted = true;
 
-			MakeDictionaryPlayerIdUsingPlayerRef(); // only bangjang
+			MakeDictionaryPlayerIdUsingPlayerRef(); // only Master Client
+
+			if (mode == Mode.Team)
+			{
+				PlayerTeamRef();
+            }
 
 			// close and hide the session from matchmaking / lists. this demo does not allow late join.
 			Runner.SessionInfo.IsOpen = false;

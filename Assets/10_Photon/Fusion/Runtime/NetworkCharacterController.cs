@@ -43,7 +43,6 @@ namespace Fusion
     {
         new ref NetworkCCData Data => ref ReinterpretState<NetworkCCData>();
 
-
         [Header("Character Controller Settings")]
         public float gravity = -20.0f;
         public float jumpImpulse = 8.0f;

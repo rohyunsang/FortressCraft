@@ -12,6 +12,7 @@ namespace Agit.FortressCraft{
         public float CurrentHP { get; private set; }
         public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
+        public Player player;
 
         public Team team;
 

@@ -7,9 +7,7 @@ using UnityEngine.UI;
 
 namespace Agit.FortressCraft
 {
-    /// <summary>
-    /// The Player class represent the players avatar - in this case the Tank.
-    /// </summary>
+
     [RequireComponent(typeof(NetworkCharacterController))]
     public class Player : FusionPlayer
     {
@@ -37,7 +35,6 @@ namespace Agit.FortressCraft
         [SerializeField] private AudioSource sound2;
         [SerializeField] private AudioSource sound3;
 
-
         [Networked] public Stage stage { get; set; }
         [Networked] public float life { get; set; }  // player HP
         [Networked] private TickTimer respawnTimer { get; set; }
@@ -47,7 +44,6 @@ namespace Agit.FortressCraft
         [Networked] public float Defense { get; set; }
         [Networked] public float AttackDamage { get; set; }
         public int level { get; set; }
-
 
         public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
         public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -82,9 +78,9 @@ namespace Agit.FortressCraft
         private MagicianFire magicianFire;
         private ArrowVector arrowVector;
         private CommanderBodyCollider bodyCollider;
+        
         [SerializeField] private WarriorWeaponCollider wairrorWeapon;
         [SerializeField] private WarriorChargeCollider warriorChargeCollider;
-
         [SerializeField] private GreatSwordWeaponCollider greatSwordWeaponCollider;
 
         private bool died = false;
@@ -115,6 +111,11 @@ namespace Agit.FortressCraft
 
         [Networked] public int castleCount { get; set; }
 
+        public Team team;
+        public Mode mode;
+
+        public Image hpBarImage;
+        
 
         private void Awake()
         {
@@ -130,6 +131,26 @@ namespace Agit.FortressCraft
             Job = FindObjectOfType<App>().jobType;
 
             SetMaxHPByLevel(level, Job);
+        }
+
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPC_ChangeHpBarColor(Team team) // Red Origin Color Hexa : FF0000
+        {
+            Debug.Log("Team Change Rpc Call");
+            if(team == Team.A)
+            {
+                this.team = team;
+                hpBarImage.color = Color.red;
+            }
+            else if(team == Team.B)
+            {
+                this.team = team;
+                hpBarImage.color = Color.cyan;
+            }
+            if(Runner.TryGetSingleton<GameManager>(out GameManager gameManager)){
+                gameManager.mode = Mode.Team;
+            }
+            Debug.Log(FindObjectOfType<App>().mode.ToString());
         }
 
         public void SetMaxHPByLevel(int level, JobType jobType)
@@ -220,23 +241,53 @@ namespace Agit.FortressCraft
             spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
             spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
 
-            if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
+            if(FindObjectOfType<App>().mode == Mode.Survival)
             {
-                switch (gameManager.TryGetPlayerId(Runner.LocalPlayer))
+                if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
                 {
-                    case 0:
-                        OwnType = "A";
-                        break;
-                    case 1:
-                        OwnType = "B";
-                        break;
-                    case 2:
-                        OwnType = "C";
-                        break;
-                    case 3:
-                        OwnType = "D";
-                        break;
+                    switch (gameManager.TryGetPlayerId(Runner.LocalPlayer))
+                    {
+                        case 0:
+                            OwnType = "A";
+                            break;
+                        case 1:
+                            OwnType = "B";
+                            break;
+                        case 2:
+                            OwnType = "C";
+                            break;
+                        case 3:
+                            OwnType = "D";
+                            break;
+                    }
+
+                    RPCSetType("Unit_" + OwnType);
+
+                    BattleBarUIManager.Instance.OwnType = OwnType;
+
+                    if (Job == JobType.Archer)
+                    {
+                        sound2.SetScheduledStartTime(0.7f);
+                        archerFire.OwnType = OwnType;
+                    }
+                    else if (Job == JobType.Magician)
+                    {
+                        magicianFire.OwnType = OwnType;
+                    }
+                    else if (Job == JobType.Warrior)
+                    {
+                        wairrorWeapon.OwnType = OwnType;
+                        warriorChargeCollider.OwnType = OwnType;
+                    }
+                    else if (Job == JobType.GreatSword)
+                    {
+                        greatSwordWeaponCollider.OwnType = OwnType;
+                    }
                 }
+            }
+            else
+            {
+                OwnType = team.ToString();
 
                 RPCSetType("Unit_" + OwnType);
 
@@ -331,6 +382,8 @@ namespace Agit.FortressCraft
         {
             transform.localScale = scale;
         }
+
+
 
         public void ExpCheck()
         {
@@ -682,7 +735,7 @@ namespace Agit.FortressCraft
                 spawnCastleCostManager.LevelUp();
 
                 RPC_CastleCount();
-                _spawnCastle.SpawnCastleObject();
+                _spawnCastle.SpawnCastleObject(this);
             }
         }
 
@@ -755,6 +808,7 @@ namespace Agit.FortressCraft
             ChatSystem.instance.chatDisplay.text += "\n" + "[" + PlayerName.ToString() + "]" + " : " + LastPublicChat.ToString();
             ChatSystem.instance.chatInputField.text = "";
         }
+
         private void MovePlayer(Vector2 moveVector, Vector2 aimVector)
         {
             if (!isActivated)

@@ -12,7 +12,7 @@ namespace Agit.FortressCraft
     {
         [SerializeField] private NetworkObject castle;
         
-        public void SpawnCastleObject()
+        public void SpawnCastleObject(Player player)
         {
             if (!HasStateAuthority) return;
 
@@ -20,39 +20,55 @@ namespace Agit.FortressCraft
             
             string tag = "";
             tag = "A"; // Default
-
-            int idx = 0;
-            if (Runner.TryGetSingleton(out GameManager gameManager))
+            Team team = Team.A;
+            if (FindObjectOfType<App>().mode == Mode.Survival)
             {
-                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+                int idx = 0;
+                if (Runner.TryGetSingleton(out GameManager gameManager))
+                {
+                    idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+                }
+                
+                team = Team.A; // Default
+                switch (idx)
+                {
+                    case 0:
+                        tag = "A";
+                        team = Team.A;
+                        break;
+                    case 1:
+                        tag = "B";
+                        team = Team.B;
+                        break;
+                    case 2:
+                        tag = "C";
+                        team = Team.C;
+                        break;
+                    case 3:
+                        tag = "D";
+                        team = Team.D;
+                        break;
+                }
             }
-            Team team;
-            team = Team.A; // Default
-            switch (idx)
+            else
             {
-                case 0 :
+                if (player.team == Team.A)
+                {
                     tag = "A";
                     team = Team.A;
-                    break;
-                case 1:
+                }
+                else if (player.team == Team.B)
+                {
                     tag = "B";
                     team = Team.B;
-                    break;
-                case 2:
-                    tag = "C";
-                    team = Team.C;
-                    break;
-                case 3:
-                    tag = "D";
-                    team = Team.D;
-                    break;
+                }
             }
-
-            RPC_SpawnCastleTransformSync(NO, tag, team);
+            
+            RPC_SpawnCastleTransformSync(NO, tag, team, player);
         }
 
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
-        public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team)
+        public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team, Player player)
         {
             NO.gameObject.tag = tag;
 

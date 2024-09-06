@@ -44,9 +44,8 @@ namespace Agit.FortressCraft
         public InputField _room;
         public Button createButton;
         public Button joinButton;
-        [FormerlySerializedAs("_nicknamePanel")] // ÀÌÀü º¯¼ö¸í ÁöÁ¤
-        public GameObject _createRoomPanel; // »õ º¯¼ö¸íÀ¸·Î º¯°æ
-        public GameObject _incorrectNicknamePanel;
+        [FormerlySerializedAs("_nicknamePanel")] // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        public GameObject _createRoomPanel; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public GameObject _roomListPanel;
         public GameObject _roomOptionPanel;
 
@@ -75,6 +74,8 @@ namespace Agit.FortressCraft
         public GameObject voiceOn;
 
         public GameObject LoadingMsg;
+        public GameObject _gameStartFailInfo;
+        public Text _gameStartFailInfoText;
 
         public void Init()
         {
