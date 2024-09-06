@@ -268,8 +268,8 @@ MonoBehaviour:
   TotalWords: 3
   ApplyTiming: 2
   SyncSettings: -1
-  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90b95b3bae5f77bcf
-  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab137b93501
+  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90be8245b89a768de
+  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab12ad6867737b935010bf865e4
 --- !u!50 &1334741900220004052
 Rigidbody2D:
   serializedVersion: 4
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterData: {fileID: 11400000, guid: 5c5ad2bc9792d42869716af6c6d6daae, type: 2}
-  _Hp: 0
+  _HP: 0
   obj: {fileID: 6821257497667350088, guid: 2cb604afacac248d59e90d52170d4a1b, type: 3}
 --- !u!114 &6798158314668566763
 MonoBehaviour:
