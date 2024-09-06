@@ -22,6 +22,7 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject BGM_Lobby;
 		[SerializeField] private GameObject BGM_Battle;
 		[SerializeField] private GameObject _setTeamGroup;
+		[SerializeField] private GameObject _singleModeMap;
 
         public SpawnPoint GetPlayerSpawnPoint(int plyIndex)
 		{
@@ -37,7 +38,11 @@ namespace Agit.FortressCraft
 				if (FindObjectOfType<App>().mode == Mode.Team){
 					_setTeamGroup.SetActive(true);
                 }
-				if(gameObject.name == "TeamLobby")
+				else
+				{
+                    _singleModeMap.SetActive(true);
+                }
+                if (gameObject.name == "TeamLobby")
 				{
 
 				}

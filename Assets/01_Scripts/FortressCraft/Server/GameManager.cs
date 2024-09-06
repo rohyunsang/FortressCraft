@@ -257,10 +257,12 @@ namespace Agit.FortressCraft
 				
             }
 			*/
+            
             RPC_AllPlayerLoadingBar();
-            isStarted = true;
-
+            
             AllPlayerDontMove();
+            
+            isStarted = true;
 
             MakeDictionaryPlayerIdUsingPlayerRef(); // only Master Client
 
