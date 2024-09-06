@@ -30157,6 +30157,8 @@ MonoBehaviour:
   currentSceneName: 
   BGM_Lobby: {fileID: 3706139729383731699, guid: 0270807074b14404ea3a79291b88a2ec, type: 3}
   BGM_Battle: {fileID: 7367861615516812373, guid: 4985cd06e55f04db58d6f69d8bcbafdb, type: 3}
+  _setTeamGroup: {fileID: 0}
+  _singleModeMap: {fileID: 0}
 --- !u!1 &1568337323
 GameObject:
   m_ObjectHideFlags: 0
@@ -56461,7 +56463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4456641113667581007, guid: b79ebdc40dd79c84c80963fe19bc99a1, type: 3}
       propertyPath: SortKey
-      value: 2784581875
+      value: 2964685178
       objectReference: {fileID: 0}
     - target: {fileID: 7314981422877548503, guid: b79ebdc40dd79c84c80963fe19bc99a1, type: 3}
       propertyPath: m_Name
