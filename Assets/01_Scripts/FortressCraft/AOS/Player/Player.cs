@@ -140,17 +140,19 @@ namespace Agit.FortressCraft
             if(team == Team.A)
             {
                 this.team = team;
+                tag = "A";
                 hpBarImage.color = Color.red;
             }
             else if(team == Team.B)
             {
                 this.team = team;
+                tag = "B";
                 hpBarImage.color = Color.cyan;
             }
             if(Runner.TryGetSingleton<GameManager>(out GameManager gameManager)){
                 gameManager.mode = Mode.Team;
             }
-            Debug.Log(FindObjectOfType<App>().mode.ToString());
+            mode = Mode.Team;
         }
 
         public void SetMaxHPByLevel(int level, JobType jobType)
@@ -180,6 +182,12 @@ namespace Agit.FortressCraft
             lives = MAX_LIVES;
             life = MAX_HEALTH;
             IsDestroyedAllCastle = false;
+        }
+
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        public void RPC_SetPlayerDontMove()
+        {
+            InputController.fetchInput = false;
         }
 
         public override void Spawned()
@@ -241,7 +249,7 @@ namespace Agit.FortressCraft
             spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
             spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
 
-            if(FindObjectOfType<App>().mode == Mode.Survival)
+            if (mode != Mode.Team)
             {
                 if (Runner.TryGetSingleton<GameManager>(out GameManager gameManager))
                 {
@@ -261,7 +269,7 @@ namespace Agit.FortressCraft
                             break;
                     }
 
-                    RPCSetType("Unit_" + OwnType);
+                    RPCSetTag("Unit_" + OwnType);
 
                     BattleBarUIManager.Instance.OwnType = OwnType;
 
@@ -289,7 +297,7 @@ namespace Agit.FortressCraft
             {
                 OwnType = team.ToString();
 
-                RPCSetType("Unit_" + OwnType);
+                RPCSetTag("Unit_" + OwnType);
 
                 BattleBarUIManager.Instance.OwnType = OwnType;
 
@@ -360,7 +368,7 @@ namespace Agit.FortressCraft
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
-        public void RPCSetType(string tag)
+        public void RPCSetTag(string tag)
         {
             transform.Find("UnitRoot").gameObject.tag = tag;
         }

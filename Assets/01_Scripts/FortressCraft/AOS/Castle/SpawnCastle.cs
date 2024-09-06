@@ -1,72 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Fusion;
-using Photon.Realtime;
-using UnityEngine.UI;
 using FusionHelpers;
+using UnityEngine;
 
 namespace Agit.FortressCraft
 {
     public class SpawnCastle : NetworkBehaviour
     {
         [SerializeField] private NetworkObject castle;
-        
+
         public void SpawnCastleObject(Player player)
         {
             if (!HasStateAuthority) return;
 
             NetworkObject NO = Runner.Spawn(castle, Vector3.zero, Quaternion.identity);
-            
+
             string tag = "";
             tag = "A"; // Default
             Team team = Team.A;
-            if (FindObjectOfType<App>().mode == Mode.Survival)
+            if (Runner.TryGetSingleton(out GameManager gameManager))
             {
-                int idx = 0;
-                if (Runner.TryGetSingleton(out GameManager gameManager))
+                if (gameManager.mode != Mode.Team)
                 {
+                    int idx = 0;
                     idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+
+                    team = Team.A; // Default
+                    switch (idx)
+                    {
+                        case 0:
+                            tag = "A";
+                            team = Team.A;
+                            break;
+                        case 1:
+                            tag = "B";
+                            team = Team.B;
+                            break;
+                        case 2:
+                            tag = "C";
+                            team = Team.C;
+                            break;
+                        case 3:
+                            tag = "D";
+                            team = Team.D;
+                            break;
+                    }
                 }
-                
-                team = Team.A; // Default
-                switch (idx)
+                else
                 {
-                    case 0:
+                    string playerTeam = gameManager.TryGetPlayerTeam(Runner.LocalPlayer);
+                    if (playerTeam == Team.A.ToString())
+                    {
                         tag = "A";
                         team = Team.A;
-                        break;
-                    case 1:
+                    }
+                    else if (playerTeam == Team.B.ToString())
+                    {
                         tag = "B";
                         team = Team.B;
-                        break;
-                    case 2:
-                        tag = "C";
-                        team = Team.C;
-                        break;
-                    case 3:
-                        tag = "D";
-                        team = Team.D;
-                        break;
+                    }
                 }
-            }
-            else
-            {
-                if (player.team == Team.A)
-                {
-                    tag = "A";
-                    team = Team.A;
-                }
-                else if (player.team == Team.B)
-                {
-                    tag = "B";
-                    team = Team.B;
-                }
-            }
-            
-            RPC_SpawnCastleTransformSync(NO, tag, team, player);
-        }
 
+                RPC_SpawnCastleTransformSync(NO, tag, team, player);
+            }
+        }
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
         public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team, Player player)
         {
@@ -90,7 +86,7 @@ namespace Agit.FortressCraft
 
             if (closestTransform != null)
             {
-                NO.transform.position = closestTransform.position + new Vector3(0f,0.26f,0f);    // origin 0.59, change 0.85 -> 0.26
+                NO.transform.position = closestTransform.position + new Vector3(0f, 0.26f, 0f);    // origin 0.59, change 0.85 -> 0.26
             }
             NO.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             NO.gameObject.GetComponent<Castle>().SliderInit();

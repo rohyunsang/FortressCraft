@@ -36,11 +36,6 @@ namespace Agit.FortressCraft
 
         [SerializeField] public Text roomCode;
 
-        private void Awake()
-        {
-            // _countdownManager.Reset();
-        }
-
         public SpawnPoint GetPlayerSpawnPoint(int playerIndex)
         {
             if (_currentLevel != null)
@@ -107,6 +102,7 @@ namespace Agit.FortressCraft
             {
                 InputController.fetchInput = false;
             }
+
             yield return base.UnloadSceneCoroutine(prevScene);
         }
 
@@ -174,7 +170,6 @@ namespace Agit.FortressCraft
                     }
                     // Enable inputs after countdow finishes
                     InputController.fetchInput = true;
-                    //		    Debug.Log($"Switched Scene from {prevScene} to {newScene}");
                 }));
             }
         }
