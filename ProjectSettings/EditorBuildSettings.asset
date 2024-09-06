@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/Main.unity
-    guid: 14aea5d6005cbd448ba130b1be9c336b
+    path: Assets/00_Scenes/Main_Roh.unity
+    guid: d0fee794bfd01254886cd0556f13a278
   - enabled: 1
     path: Assets/00_Scenes/Lobby.unity
-    guid: 65f26a75a89b44442960de567293f479
+    guid: 96f5ef0db30079249a4486d8e90b128d
   - enabled: 1
-    path: Assets/00_Scenes/Battle.unity
-    guid: 62e33d36de4544197ae741e280925708
+    path: Assets/00_Scenes/Battle 1.unity
+    guid: 052fff544c47e418ea30fc6e46af400b
   m_configObjects: {}
