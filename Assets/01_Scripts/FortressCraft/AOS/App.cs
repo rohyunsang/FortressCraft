@@ -16,7 +16,7 @@ namespace Agit.FortressCraft
 	public enum Mode
 	{
         Survival,
-		Team
+		Tams
     }
 
 
