@@ -761,13 +761,13 @@ namespace Agit.FortressCraft
                 }
                 else if (Job == JobType.GreatSword)
                 {
-                    // Healing 부분 
                     skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
                     _cc.isCharge = true;
                     Invoke("ChargeFinishCallback", 0.15f);
                 }
 
-                _netAnimator.Animator.SetTrigger("Skill2");
+                if(Job != JobType.GreatSword)
+                    _netAnimator.Animator.SetTrigger("Skill2");
             }
         }
 

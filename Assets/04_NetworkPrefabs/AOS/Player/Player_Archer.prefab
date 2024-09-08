@@ -3534,6 +3534,7 @@ MonoBehaviour:
   _Defense: 0
   _AttackDamage: 0
   BuffAttackTime: 300
+  BuffDefenseTime: 100
   wairrorWeapon: {fileID: 0}
   warriorChargeCollider: {fileID: 0}
   greatSwordWeaponCollider: {fileID: 0}
@@ -3550,6 +3551,7 @@ MonoBehaviour:
   isBuildCastle: 0
   _castleCount: 0
   team: 0
+  mode: 0
   hpBarImage: {fileID: 4283990354618409746}
 --- !u!114 &2653525218152594309
 MonoBehaviour:
@@ -5072,7 +5074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &114044611014699731
 RectTransform:
   m_ObjectHideFlags: 0

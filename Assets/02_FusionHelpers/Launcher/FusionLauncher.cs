@@ -13,29 +13,6 @@ using System.Threading.Tasks;
 
 namespace FusionHelpers
 {
-	/// <summary>
-	/// <p>Small helper that provides a simple session/player pattern for launching Fusion in either hosted/server or shared mode.
-	/// </p>
-	/// <p><br/>Usage:</p>
-	/// <ul>
-	/// <li>Extend FusionPlayer to create your custom player data object - the game scene will have one such instance per player.</li>
-	/// <li>Extend FusionSession to create your session manager - the game will have one such instance per game session.</li>
-	/// <li>Create prefabs of both and provide the player prefab in the sessions PlayerPrefab field.</li>
-	/// <li>Pass a reference to the session prefab to the Launch() method on all peers.</li>
-	/// <li>Use Runner.GetSingleton&lt;YourFusionSessionDerivedType&gt;() to access the session in your code.</li>
-	/// </ul>
-	/// <p>Note: You may need to adjust the capacity of the FusionSession _players member to match your max target player count.
-	/// </p>
-	/// <p><br/>How it works:</p>
-	/// <ul>
-	/// <li>The FusionLauncher will spawn an instance of the session prefab if called on host or master client.</li>
-	/// <li>When a new player joins, that players ref is added to a networked dictionary on the session</li>
-	/// <li>In hosted mode, an instance of the FusionPlayer prefab is spawned immediately</li>
-	/// <li>In shared mode, the FusionSession will detect the added player ref and spawn the FusionPlayer on the relevant peer.</li>
-	/// <li>When the FusionPlayer spawns on each peer, it registers itself with the session allowing you to access each players data via the session.</li>
-	/// </ul>
-	/// </summary>
-
 	public class FusionLauncher : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		private Action<NetworkRunner, ConnectionStatus, string> _connectionCallback;
@@ -92,7 +69,7 @@ namespace FusionHelpers
             while (runner.State == NetworkRunner.States.Shutdown)
             {
 				Debug.Log(runner.State);
-                await Task.Delay(100); // 100ms ��� �� �ٽ� üũ
+                await Task.Delay(100); // 100ms wait loop time 
             }
 
             // Voice 
@@ -102,7 +79,7 @@ namespace FusionHelpers
             scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
             // An empty region will use the best region.
-            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice���� PhotonAppSettings�� �־ ��ȣ ���� �������. 
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice PhotonAppVoice Setting 
 
             SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
@@ -154,7 +131,7 @@ namespace FusionHelpers
 			scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
             // An empty region will use the best region.
-            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // voice���� PhotonAppSettings�� �־ ��ȣ ���� �������. 
+            Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = region;  // 
 
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
