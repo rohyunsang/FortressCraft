@@ -11,6 +11,7 @@ namespace Agit.FortressCraft
         public float Attack { get; set; }
         public float Defense { get; set; }
         public float SpawnTime { get; set; }
+        public float Speed { get; set; }
 
         private void Awake()
         {
@@ -19,6 +20,7 @@ namespace Agit.FortressCraft
             Attack = 20.0f;
             Defense = 1.0f;
             SpawnTime = 5.0f;
+            Speed = 1.5f;
         }
     }
 }

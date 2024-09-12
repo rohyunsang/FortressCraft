@@ -1,7 +1,6 @@
 using UnityEngine;
 using Fusion;
 using FusionHelpers;
-//using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 using NetworkRigidbody2D = Fusion.Addons.Physics.NetworkRigidbody2D;
 
 namespace Agit.FortressCraft
@@ -11,7 +10,7 @@ namespace Agit.FortressCraft
         public NormalUnitSpawner Spawner { get; set; }
         private Transform[] grounds = new Transform[4];
         private Transform middlePoint = null;
-        [SerializeField] private int testSpeed;
+        private int speed;
 
         public string TargetString { get; set; }
 
@@ -46,6 +45,7 @@ namespace Agit.FortressCraft
 
         void Awake()
         {
+            speed = 10;
             initialized = false;
             _rb = GetComponent<NetworkRigidbody2D>();
 
@@ -308,7 +308,8 @@ namespace Agit.FortressCraft
             Vector3 movDir = targetGround.position - transform.position;
             Vector3 movDirNormalized = movDir.normalized;
 
-            _rb.Rigidbody.velocity = movDirNormalized * testSpeed;
+            // _rb.Rigidbody.velocity = movDirNormalized * speed;
+            _rb.Rigidbody.velocity = movDirNormalized * NormalUnitDataManager.Instance.Speed;
 
             if (movDir.x > 0)
             {

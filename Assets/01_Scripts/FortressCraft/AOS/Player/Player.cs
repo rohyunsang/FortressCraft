@@ -105,6 +105,9 @@ namespace Agit.FortressCraft
 
         private Button spawnCastleBtn;
 
+        private Enhancement enhancement;
+        private EnhancementCaller enhancementCaller;
+
         public string OwnType { get; set; }
 
         [Networked] public NetworkString<_32> PlayerName { get; set; }
@@ -127,6 +130,8 @@ namespace Agit.FortressCraft
 
         private void Awake()
         {
+            enhancement = GetComponent<Enhancement>();
+            enhancementCaller = Transform.FindObjectOfType<EnhancementCaller>(true);
             _cc = GetComponent<NetworkCharacterController>();
             _collider = GetComponentInChildren<Collider>();
             _netAnimator = GetComponent<NetworkMecanimAnimator>();
@@ -409,6 +414,12 @@ namespace Agit.FortressCraft
 				float needExp = GetNeedExpByLevel(level, Job);
 				if (RewardManager.Instance.Exp >= needExp)
 				{
+                    enhancementCaller.ActiveSelf();
+                    if (level == 1) enhancement.Init();
+                    enhancement.EnhancementSetting();
+                    //enhancementCaller.SetAsOrgPos();
+                    StartCoroutine(EnhancementSetAsOrgPos());
+
 					RewardManager.Instance.Exp -= needExp;
 					++level;
 					RPCSetLevel(level);
@@ -416,6 +427,12 @@ namespace Agit.FortressCraft
 				}
 			}
 		}
+
+        private IEnumerator EnhancementSetAsOrgPos()
+        {
+            yield return new WaitForSeconds(0.1f);
+            enhancementCaller.SetAsOrgPos();
+        }
 
 		public void UpdateProperty()
 		{

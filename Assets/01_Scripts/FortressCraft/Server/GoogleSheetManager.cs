@@ -142,6 +142,8 @@ namespace Agit.FortressCraft {
 
         public static CommanderData GetCommanderData(int level, JobType jobType)
         {
+            if (level > 15) level = 15;
+
             int offset = 0;
 
             switch (jobType)
