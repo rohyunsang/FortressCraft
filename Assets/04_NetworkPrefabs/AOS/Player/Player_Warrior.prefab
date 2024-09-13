@@ -3821,6 +3821,7 @@ GameObject:
   - component: {fileID: 4423126997026053310}
   - component: {fileID: 6727204430707573400}
   - component: {fileID: 8281999552098622695}
+  - component: {fileID: 4506766802867562534}
   m_Layer: 8
   m_Name: Player_Warrior
   m_TagString: Player
@@ -3963,6 +3964,7 @@ MonoBehaviour:
   _Defense: 0
   _AttackDamage: 0
   BuffAttackTime: 300
+  BuffDefenseTime: 100
   wairrorWeapon: {fileID: 1562815616911068479}
   warriorChargeCollider: {fileID: 9173448906131834303}
   greatSwordWeaponCollider: {fileID: 0}
@@ -3979,6 +3981,7 @@ MonoBehaviour:
   isBuildCastle: 0
   _castleCount: 0
   team: 0
+  mode: 0
   hpBarImage: {fileID: 8549339362846008517}
 --- !u!114 &2653525218152594309
 MonoBehaviour:
@@ -4042,6 +4045,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HP: 0
   HpBarSlider: {fileID: 8830018420471020183}
+--- !u!114 &4506766802867562534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552724304938365259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85767acda7d1244fc9512058a836b69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enhance1weight: 20
+  enhance2weight: 20
+  enhance3weight: 20
+  enhance4weight: 20
+  enhance5weight: 20
+  enhance6weight: 10
+  enhance7weight: 10
+  enhance8weight: 10
 --- !u!1 &5643880208726375868
 GameObject:
   m_ObjectHideFlags: 0

@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 6124776727980656446}
   - component: {fileID: 2250860971387831655}
   - component: {fileID: 1591170470106970327}
+  - component: {fileID: 7378274099261269854}
   m_Layer: 8
   m_Name: Player_Magician
   m_TagString: Player
@@ -532,6 +533,7 @@ MonoBehaviour:
   _Defense: 0
   _AttackDamage: 0
   BuffAttackTime: 300
+  BuffDefenseTime: 100
   wairrorWeapon: {fileID: 0}
   warriorChargeCollider: {fileID: 0}
   greatSwordWeaponCollider: {fileID: 0}
@@ -548,6 +550,7 @@ MonoBehaviour:
   isBuildCastle: 0
   _castleCount: 0
   team: 0
+  mode: 0
   hpBarImage: {fileID: 5961534349399336545}
 --- !u!114 &4320856916694314688
 MonoBehaviour:
@@ -611,6 +614,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HP: 0
   HpBarSlider: {fileID: 1286928989015985276}
+--- !u!114 &7378274099261269854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442255509702882950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85767acda7d1244fc9512058a836b69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enhance1weight: 20
+  enhance2weight: 20
+  enhance3weight: 20
+  enhance4weight: 20
+  enhance5weight: 20
+  enhance6weight: 10
+  enhance7weight: 10
+  enhance8weight: 10
 --- !u!1 &488901411468893419
 GameObject:
   m_ObjectHideFlags: 0

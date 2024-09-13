@@ -414,19 +414,36 @@ namespace Agit.FortressCraft
 				float needExp = GetNeedExpByLevel(level, Job);
 				if (RewardManager.Instance.Exp >= needExp)
 				{
-                    enhancementCaller.ActiveSelf();
-                    if (level == 1) enhancement.Init();
-                    enhancement.EnhancementSetting();
-                    //enhancementCaller.SetAsOrgPos();
-                    StartCoroutine(EnhancementSetAsOrgPos());
+                    if (level == 1)
+                    {
+                        enhancementCaller.ActiveSelf();
+                        enhancement.Init();
+                        enhancementCaller.gameObject.SetActive(false);
+                    }
 
-					RewardManager.Instance.Exp -= needExp;
+                    RewardManager.Instance.Exp -= needExp;
 					++level;
-					RPCSetLevel(level);
+
+                    if( level % 5 == 0 )
+                    {
+                        ++enhancement.EnhancementCount;
+                    }
+                    
+                    RPCSetLevel(level);
 					UpdateProperty();
 				}
 			}
 		}
+
+        private void EnhancementCheck()
+        {
+            if (enhancement.EnhancementCount > 0)
+            {
+                enhancementCaller.ActiveSelf();
+                enhancement.EnhancementSetting();
+                StartCoroutine(EnhancementSetAsOrgPos());
+            }
+        }
 
         private IEnumerator EnhancementSetAsOrgPos()
         {
@@ -462,6 +479,9 @@ namespace Agit.FortressCraft
 			UpdateBtnColor();
 
 			ExpCheck();
+            EnhancementCheck();
+
+            Debug.Log("E Count: " + enhancement.EnhancementCount);
 
 			if (InputController.fetchInput)
 			{
