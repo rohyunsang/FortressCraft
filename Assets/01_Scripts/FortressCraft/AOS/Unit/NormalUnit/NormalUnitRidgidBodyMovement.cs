@@ -42,6 +42,7 @@ namespace Agit.FortressCraft
         public float HP { get; set; }
 
         private TickTimer dieTimer;
+        private TickTimer attackDelayTimer;
 
         void Awake()
         {
@@ -61,6 +62,11 @@ namespace Agit.FortressCraft
             grounds[1] = GameObject.Find("SpawnPoint 2").transform;
             grounds[2] = GameObject.Find("SpawnPoint 3").transform;
             grounds[3] = GameObject.Find("SpawnPoint 4").transform;
+        }
+
+        public override void Spawned()
+        {
+            attackDelayTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
         }
 
         private float GetDistanceXYSquared(Transform t)
@@ -185,6 +191,7 @@ namespace Agit.FortressCraft
 
                     if (animatorState.fullPathHash != animAttackBow)
                     {
+                        attackDelayTimer = TickTimer.CreateFromSeconds(Runner, NormalUnitDataManager.Instance.AttackDelay);
                         _netAnimator.Animator.SetTrigger("Attack");
                     }
 
@@ -201,6 +208,8 @@ namespace Agit.FortressCraft
             {
                 return false;
             }
+
+            if (!attackDelayTimer.Expired(Runner)) return false;
 
             if (Spawner.Target.CompareTo(OwnType) == 0)
             {
@@ -232,6 +241,7 @@ namespace Agit.FortressCraft
 
                     if (animatorState.fullPathHash != animAttackBow)
                     {
+                        attackDelayTimer = TickTimer.CreateFromSeconds(Runner, NormalUnitDataManager.Instance.AttackDelay);
                         _netAnimator.Animator.SetTrigger("Attack");
                     }
 
@@ -308,7 +318,6 @@ namespace Agit.FortressCraft
             Vector3 movDir = targetGround.position - transform.position;
             Vector3 movDirNormalized = movDir.normalized;
 
-            // _rb.Rigidbody.velocity = movDirNormalized * speed;
             _rb.Rigidbody.velocity = movDirNormalized * NormalUnitDataManager.Instance.Speed;
 
             if (movDir.x > 0)

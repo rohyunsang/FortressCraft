@@ -22,6 +22,17 @@ namespace Agit.FortressCraft
 
         private int enhanceLength;
 
+        [SerializeField] private int enhance1weight = 20;
+        [SerializeField] private int enhance2weight = 20;
+        [SerializeField] private int enhance3weight = 20;
+        [SerializeField] private int enhance4weight = 20;
+        [SerializeField] private int enhance5weight = 20;
+        [SerializeField] private int enhance6weight = 10;
+        [SerializeField] private int enhance7weight = 10;
+        [SerializeField] private int enhance8weight = 10;
+
+        private int sumOfWeight;
+
         public void Init()
         {
             btn[0] = GameObject.Find("EnhBtn1").GetComponent<Button>();
@@ -46,15 +57,21 @@ namespace Agit.FortressCraft
             EnhanceList.Add(Enhance2);
             EnhanceList.Add(Enhance3);
             EnhanceList.Add(Enhance4);
+            EnhanceList.Add(Enhance5);
+            EnhanceList.Add(Enhance6);
+            EnhanceList.Add(Enhance7);
+            EnhanceList.Add(Enhance8);
 
             enhanceLength = EnhanceList.Count;
+            sumOfWeight = enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight;
         }
 
         public void EnhancementSetting()
         {
             for( int i = 0; i < 3; ++i )
             {
-                int idx = Random.Range(0, enhanceLength);
+                int idx = Random.Range(0, sumOfWeight);
                 btn[i].onClick.RemoveAllListeners();
                 btn[i].onClick.AddListener(() => EnhanceList[idx]());
                 TextSetting(i, idx);
@@ -63,29 +80,63 @@ namespace Agit.FortressCraft
 
         private void TextSetting(int btnNum, int enhanceNum)
         {
-            switch(enhanceNum)
+            if( enhanceNum < enhance1weight )
             {
-                case 1:
-                    btnRankText[btnNum].text = "일반";
-                    btnNameText[btnNum].text = "돈 주고도 못 사~";
-                    btnUpgradeText[btnNum].text = "경험치 30 획득!";
-                    break;
-                case 2:
-                    btnRankText[btnNum].text = "일반";
-                    btnNameText[btnNum].text = "배부르게 먹자";
-                    btnUpgradeText[btnNum].text = "체력 +100, 골드 + 40";
-                    break;
-                case 3:
-                    btnRankText[btnNum].text = "일반";
-                    btnNameText[btnNum].text = "수색조";
-                    btnUpgradeText[btnNum].text = "유닛 속도 5% 증가";
-                    break;
+                btnRankText[btnNum].text = "일반";
+                btnNameText[btnNum].text = "돈 주고도 못 사~";
+                btnUpgradeText[btnNum].text = "경험치 +30";
+            }
+            else if( enhanceNum < enhance1weight + enhance2weight )
+            {
+                btnRankText[btnNum].text = "일반";
+                btnNameText[btnNum].text = "배부르게 먹자";
+                btnUpgradeText[btnNum].text = "체력 +100\n골드 + 40";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight)
+            {
+                btnRankText[btnNum].text = "일반";
+                btnNameText[btnNum].text = "수색조";
+                btnUpgradeText[btnNum].text = "유닛 이동속도\n10% 증가\n\n유닛 공격속도\n5% 감소";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight)
+            {
+                btnRankText[btnNum].text = "일반";
+                btnNameText[btnNum].text = "월급날 발걸음";
+                btnUpgradeText[btnNum].text = "유닛 이동속도\n5% 증가\n\n골드 + 40";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight)
+            {
+                btnRankText[btnNum].text = "일반";
+                btnNameText[btnNum].text = "돈으로 해결";
+                btnUpgradeText[btnNum].text = "유닛 공격속도\n5% 증가\n\n골드 + 20";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight)
+            {
+                btnRankText[btnNum].text = "희귀";
+                btnNameText[btnNum].text = "사기증진";
+                btnUpgradeText[btnNum].text = "유닛 공격속도\n20% 증가";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight + enhance7weight)
+            {
+                btnRankText[btnNum].text = "희귀";
+                btnNameText[btnNum].text = "하체 단련";
+                btnUpgradeText[btnNum].text = "유닛 이동속도\n20% 증가";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight)
+            {
+                btnRankText[btnNum].text = "희귀";
+                btnNameText[btnNum].text = "돈이 최고야!";
+                btnUpgradeText[btnNum].text = "골드 +100";
             }
         }
 
         private void Enhance1()
         {
-            RewardManager.Instance.Exp += 130;
+            RewardManager.Instance.Exp += 30;
         }
 
         private void Enhance2()
@@ -96,12 +147,35 @@ namespace Agit.FortressCraft
 
         private void Enhance3()
         {
-            NormalUnitDataManager.Instance.Speed *= 1.05f;
+            NormalUnitDataManager.Instance.Speed *= 1.1f;
+            NormalUnitDataManager.Instance.AttackDelay *= 0.95f;
         }
 
         private void Enhance4()
         {
-            Debug.Log("Enhance - 4");
+            NormalUnitDataManager.Instance.Speed *= 1.05f;
+            RewardManager.Instance.Gold += 40;
+        }
+
+        private void Enhance5()
+        {
+            NormalUnitDataManager.Instance.AttackDelay *= 1.05f;
+            RewardManager.Instance.Gold += 20;
+        }
+
+        private void Enhance6()
+        {
+            NormalUnitDataManager.Instance.AttackDelay *= 1.2f;
+        }
+
+        private void Enhance7()
+        {
+            NormalUnitDataManager.Instance.Speed *= 1.2f;
+        }
+
+        private void Enhance8()
+        {
+            RewardManager.Instance.Gold += 100;
         }
     }
 }
