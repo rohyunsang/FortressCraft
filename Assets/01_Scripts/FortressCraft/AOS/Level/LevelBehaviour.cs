@@ -75,7 +75,8 @@ namespace Agit.FortressCraft
             Player[] players = FindObjectsOfType<Player>();
             foreach (Player player in players)
             {
-                player._spawnCastle.SpawnCastleObject(player);
+                NormalUnitSpawner tempSpawner = player._spawnCastle.SpawnCastleObject(player);
+				player.FirstSpawner = tempSpawner;
             }
         }
     }

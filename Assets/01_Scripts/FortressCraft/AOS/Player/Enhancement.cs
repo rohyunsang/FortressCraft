@@ -33,6 +33,7 @@ namespace Agit.FortressCraft
         [SerializeField] private int enhance6weight = 10;
         [SerializeField] private int enhance7weight = 10;
         [SerializeField] private int enhance8weight = 10;
+        [SerializeField] private int enhance9weight = 20;
 
         private int sumOfWeight;
 
@@ -64,10 +65,11 @@ namespace Agit.FortressCraft
             EnhanceList.Add(Enhance6);
             EnhanceList.Add(Enhance7);
             EnhanceList.Add(Enhance8);
+            EnhanceList.Add(Enhance9);
 
             enhanceLength = EnhanceList.Count;
             sumOfWeight = enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight;
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight;
             EnhancementCount = 0;
             EnhanceRequired = false;
         }
@@ -75,10 +77,11 @@ namespace Agit.FortressCraft
         public void EnhancementSetting()
         {
             if (EnhanceRequired) return;
-            Debug.Log("E: " + EnhanceList.Count);
+
             for( int i = 0; i < 3; ++i )
             {
                 int enhanceNum = Random.Range(0, sumOfWeight);
+                //int enhanceNum = sumOfWeight-1;
                 btn[i].onClick.RemoveAllListeners();
                 TextSetting(i, enhanceNum);
             }
@@ -92,6 +95,7 @@ namespace Agit.FortressCraft
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[0]());
                 btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
                 btnNameText[btnNum].text = "돈 주고도 못 사~";
                 btnUpgradeText[btnNum].text = "경험치 +30";
             }
@@ -99,6 +103,7 @@ namespace Agit.FortressCraft
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[1]());
                 btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
                 btnNameText[btnNum].text = "배부르게 먹자";
                 btnUpgradeText[btnNum].text = "체력 +100\n골드 + 40";
             }
@@ -106,6 +111,7 @@ namespace Agit.FortressCraft
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[2]());
                 btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
                 btnNameText[btnNum].text = "수색조";
                 btnUpgradeText[btnNum].text = "유닛 이동속도\n10% 증가\n\n유닛 공격속도\n5% 감소";
             }
@@ -113,6 +119,7 @@ namespace Agit.FortressCraft
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[3]());
                 btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
                 btnNameText[btnNum].text = "월급날 발걸음";
                 btnUpgradeText[btnNum].text = "유닛 이동속도\n5% 증가\n\n골드 + 40";
             }
@@ -121,6 +128,7 @@ namespace Agit.FortressCraft
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[4]());
                 btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
                 btnNameText[btnNum].text = "돈으로 해결";
                 btnUpgradeText[btnNum].text = "유닛 공격속도\n5% 증가\n\n골드 + 20";
             }
@@ -150,6 +158,15 @@ namespace Agit.FortressCraft
                 btnRankText[btnNum].color = Color.blue;
                 btnNameText[btnNum].text = "돈이 최고야!";
                 btnUpgradeText[btnNum].text = "골드 +100";
+            }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight +enhance9weight)
+            {
+                btn[btnNum].onClick.AddListener(() => EnhanceList[8]());
+                btnRankText[btnNum].text = "일반";
+                btnRankText[btnNum].color = Color.white;
+                btnNameText[btnNum].text = "어셈블";
+                btnUpgradeText[btnNum].text = "유닛 10명 소환";
             }
         }
 
@@ -211,6 +228,15 @@ namespace Agit.FortressCraft
             RewardManager.Instance.Gold += 100;
             --EnhancementCount;
             EnhanceRequired = false;
+        }
+
+        private void Enhance9()
+        {
+            --EnhancementCount;
+            for (int i = 0; i < 10; ++i)
+            {
+                player.FirstSpawner.SpawnUnitNoLimit();
+            }
         }
     }
 }

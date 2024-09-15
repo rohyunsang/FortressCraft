@@ -126,7 +126,7 @@ namespace Agit.FortressCraft
         public Mode mode;
 
         public Image hpBarImage;
-        
+        public NormalUnitSpawner FirstSpawner { get; set; }
 
         private void Awake()
         {
@@ -847,6 +847,7 @@ namespace Agit.FortressCraft
                 spawnCastleCostManager.LevelUp();
 
                 RPC_CastleCount();
+                
                 _spawnCastle.SpawnCastleObject(this);
             }
         }
