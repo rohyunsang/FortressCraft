@@ -35,6 +35,7 @@ namespace Agit.FortressCraft
         [SerializeField] private int enhance8weight = 10;
         [SerializeField] private int enhance9weight = 20;
         [SerializeField] private int enhance10weight = 5;
+        [SerializeField] private int enhance11weight = 5;
 
         private int sumOfWeight;
 
@@ -68,11 +69,12 @@ namespace Agit.FortressCraft
             EnhanceList.Add(Enhance8);
             EnhanceList.Add(Enhance9);
             EnhanceList.Add(Enhance10);
+            EnhanceList.Add(Enhance11);
 
             enhanceLength = EnhanceList.Count;
             sumOfWeight = enhance1weight + enhance2weight + enhance3weight + enhance4weight
                 + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight
-                + enhance10weight;
+                + enhance10weight + enhance11weight;
 
             EnhancementCount = 0;
             EnhanceRequired = false;
@@ -182,6 +184,16 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "베테랑";
                 btnUpgradeText[btnNum].text = "유닛 거대화\n유닛 공격속도\n25% 증가\n유닛 이동속도\n35% 증가";
             }
+            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight
+                + enhance10weight + enhance11weight)
+            {
+                btn[btnNum].onClick.AddListener(() => EnhanceList[10]());
+                btnRankText[btnNum].text = "전설";
+                btnRankText[btnNum].color = Color.yellow;
+                btnNameText[btnNum].text = "재참전";
+                btnUpgradeText[btnNum].text = "부활대기시간\n80%감소";
+            }
         }
 
         private void Enhance1()
@@ -259,6 +271,12 @@ namespace Agit.FortressCraft
             NormalUnitDataManager.Instance.Scale = 0.45f;
             NormalUnitDataManager.Instance.Speed *= 1.35f;
             NormalUnitDataManager.Instance.AttackDelay *= 1.25f;
+        }
+
+        private void Enhance11()
+        {
+            --EnhancementCount;
+            player.RespawnTime *= 0.2f;
         }
     }
 }

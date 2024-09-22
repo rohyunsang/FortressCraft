@@ -28,7 +28,7 @@ namespace Agit.FortressCraft
         [SerializeField] private Transform _commander;
         [SerializeField] private TankTeleportInEffect _teleportIn;
         [SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
-        [SerializeField] private float _respawnTime;
+        
         [SerializeField] private PlayerHPBar playerHPBar;
 
         [SerializeField] private AudioSource sound1;
@@ -44,6 +44,8 @@ namespace Agit.FortressCraft
         [Networked] public float Defense { get; set; }
         [Networked] public float AttackDamage { get; set; }
         public int level { get; set; }
+
+        public float RespawnTime { get; set; }
 
         public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
         public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -140,6 +142,7 @@ namespace Agit.FortressCraft
             arrowVector = GetComponentInChildren<ArrowVector>();
             bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
             level = 1;
+            RespawnTime = 5.0f;
 
             Job = FindObjectOfType<App>().jobType;
 
@@ -1044,7 +1047,7 @@ namespace Agit.FortressCraft
             died = true;
             _netAnimator.Animator.SetTrigger("Death");
             //stage = Stage.Dead;
-            Respawn(5);
+            Respawn(RespawnTime);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]
