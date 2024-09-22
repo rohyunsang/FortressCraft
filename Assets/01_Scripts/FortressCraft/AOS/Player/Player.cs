@@ -481,7 +481,7 @@ namespace Agit.FortressCraft
 			ExpCheck();
             EnhancementCheck();
 
-            Debug.Log("E Count: " + enhancement.EnhancementCount);
+            // Debug.Log("E Count: " + enhancement.EnhancementCount);
 
 			if (InputController.fetchInput)
 			{

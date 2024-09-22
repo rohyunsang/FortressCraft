@@ -122,7 +122,8 @@ namespace Agit.FortressCraft
         public override void FixedUpdateNetwork()
         {
             if (!initialized) return;
-            
+            _rb.transform.localScale = new Vector3(Mathf.Sign(transform.localScale.x) * NormalUnitDataManager.Instance.Scale,
+                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
             if (!Attack()) MoveToTarget();
             else _rb.Rigidbody.velocity = Vector2.zero;
 
@@ -180,13 +181,13 @@ namespace Agit.FortressCraft
 
                     if (col.transform.position.x > transform.position.x)
                     {
-                        transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
-                                                transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(-1.0f * NormalUnitDataManager.Instance.Scale,
+                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
                     }
                     else
                     {
-                        transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
-                                                transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(1.0f * NormalUnitDataManager.Instance.Scale,
+                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
                     }
 
                     if (animatorState.fullPathHash != animAttackBow)
@@ -230,13 +231,13 @@ namespace Agit.FortressCraft
 
                     if (col.transform.position.x > transform.position.x)
                     {
-                        transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
-                                                transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(-1.0f * NormalUnitDataManager.Instance.Scale,
+                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
                     }
                     else
                     {
-                        transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
-                                                transform.localScale.y, transform.localScale.z);
+                        transform.localScale = new Vector3(1.0f * NormalUnitDataManager.Instance.Scale,
+                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
                     }
 
                     if (animatorState.fullPathHash != animAttackBow)
@@ -322,13 +323,13 @@ namespace Agit.FortressCraft
 
             if (movDir.x > 0)
             {
-                transform.localScale = new Vector3(-1.0f * Mathf.Abs(transform.localScale.x),
-                                            transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-1.0f * NormalUnitDataManager.Instance.Scale,
+                                            NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
             }
             else
             {
-                transform.localScale = new Vector3(1.0f * Mathf.Abs(transform.localScale.x),
-                                            transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(1.0f * NormalUnitDataManager.Instance.Scale,
+                                            NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
             }
         }
 
