@@ -70,8 +70,11 @@ namespace Agit.FortressCraft
             EnhanceList.Add(Enhance9);
             EnhanceList.Add(Enhance10);
             EnhanceList.Add(Enhance11);
+            
+            // EnhanceList[0] += DecleaseEnhancementCount;
 
             enhanceLength = EnhanceList.Count;
+            
             sumOfWeight = enhance1weight + enhance2weight + enhance3weight + enhance4weight
                 + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight
                 + enhance10weight + enhance11weight;
@@ -166,7 +169,7 @@ namespace Agit.FortressCraft
                 btnUpgradeText[btnNum].text = "골드 +100";
             }
             else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight +enhance9weight)
+                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight)
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[8]());
                 btnRankText[btnNum].text = "일반";
@@ -281,6 +284,15 @@ namespace Agit.FortressCraft
             player.RespawnTime *= 0.2f;
             EnhanceRequired = false;
         }
+
+
+        /*
+          private void DecleaseEnhancementCount() {
+            --EnhancementCount;
+        }
+         */
+
+
     }
 }
 
