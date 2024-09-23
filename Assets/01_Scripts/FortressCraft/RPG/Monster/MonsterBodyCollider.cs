@@ -15,6 +15,7 @@ namespace Agit.FortressCraft
 
         public override void CallDamageCheck()
         {
+            controller.TriggerDamaged();
             controller.RPCCheckDamaged();
         }
     }

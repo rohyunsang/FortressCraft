@@ -1834,7 +1834,7 @@ MonoBehaviour:
   ApplyTiming: 2
   SyncSettings: -1
   StateHashes: 00000000b7bdef136916ae70f7725a4229d91b21e017735350e6cc0dd0be2a23cdb9ed64cb00f8593299021fcb6298c815c9d9ab
-  TriggerHashes: 000000002b1a167c6bd5a32dd54a973d37b935010ccf716a170ad4f6
+  TriggerHashes: 000000002b1a167c6bd5a32dd54a973d37b935010ccf716a170ad4f677967513
 --- !u!114 &6889352370302393501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1848,7 +1848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterData: {fileID: 11400000, guid: cc7f87133c35145b6b85a6579a0a2bcf, type: 2}
-  _Hp: 0
+  _HP: 0
 --- !u!114 &386755887964259986
 MonoBehaviour:
   m_ObjectHideFlags: 0

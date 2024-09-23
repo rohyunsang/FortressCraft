@@ -28,7 +28,7 @@ namespace Agit.FortressCraft
         [SerializeField] private Transform _commander;
         [SerializeField] private TankTeleportInEffect _teleportIn;
         [SerializeField] private TankTeleportOutEffect _teleportOutPrefab;
-        [SerializeField] private float _respawnTime;
+        
         [SerializeField] private PlayerHPBar playerHPBar;
 
         [SerializeField] private AudioSource sound1;
@@ -44,6 +44,8 @@ namespace Agit.FortressCraft
         [Networked] public float Defense { get; set; }
         [Networked] public float AttackDamage { get; set; }
         public int level { get; set; }
+
+        public float RespawnTime { get; set; }
 
         public bool isActivated => (gameObject.activeInHierarchy && (stage == Stage.Active || stage == Stage.TeleportIn));
         public bool isRespawningDone => stage == Stage.TeleportIn && respawnTimer.Expired(Runner);
@@ -105,6 +107,9 @@ namespace Agit.FortressCraft
 
         private Button spawnCastleBtn;
 
+        private Enhancement enhancement;
+        private EnhancementCaller enhancementCaller;
+
         public string OwnType { get; set; }
 
         [Networked] public NetworkString<_32> PlayerName { get; set; }
@@ -123,10 +128,12 @@ namespace Agit.FortressCraft
         public Mode mode;
 
         public Image hpBarImage;
-        
+        public NormalUnitSpawner FirstSpawner { get; set; }
 
         private void Awake()
         {
+            enhancement = GetComponent<Enhancement>();
+            enhancementCaller = Transform.FindObjectOfType<EnhancementCaller>(true);
             _cc = GetComponent<NetworkCharacterController>();
             _collider = GetComponentInChildren<Collider>();
             _netAnimator = GetComponent<NetworkMecanimAnimator>();
@@ -135,6 +142,7 @@ namespace Agit.FortressCraft
             arrowVector = GetComponentInChildren<ArrowVector>();
             bodyCollider = GetComponentInChildren<CommanderBodyCollider>();
             level = 1;
+            RespawnTime = 5.0f;
 
             Job = FindObjectOfType<App>().jobType;
 
@@ -409,13 +417,42 @@ namespace Agit.FortressCraft
 				float needExp = GetNeedExpByLevel(level, Job);
 				if (RewardManager.Instance.Exp >= needExp)
 				{
-					RewardManager.Instance.Exp -= needExp;
+                    if (level == 1)
+                    {
+                        enhancementCaller.ActiveSelf();
+                        enhancement.Init();
+                        enhancementCaller.gameObject.SetActive(false);
+                    }
+
+                    RewardManager.Instance.Exp -= needExp;
 					++level;
-					RPCSetLevel(level);
+
+                    if( level % 5 == 0 )
+                    {
+                        ++enhancement.EnhancementCount;
+                    }
+                    
+                    RPCSetLevel(level);
 					UpdateProperty();
 				}
 			}
 		}
+
+        private void EnhancementCheck()
+        {
+            if (enhancement.EnhancementCount > 0)
+            {
+                enhancementCaller.ActiveSelf();
+                enhancement.EnhancementSetting();
+                StartCoroutine(EnhancementSetAsOrgPos());
+            }
+        }
+
+        private IEnumerator EnhancementSetAsOrgPos()
+        {
+            yield return new WaitForSeconds(0.1f);
+            enhancementCaller.SetAsOrgPos();
+        }
 
 		public void UpdateProperty()
 		{
@@ -445,6 +482,9 @@ namespace Agit.FortressCraft
 			UpdateBtnColor();
 
 			ExpCheck();
+            EnhancementCheck();
+
+            // Debug.Log("E Count: " + enhancement.EnhancementCount);
 
 			if (InputController.fetchInput)
 			{
@@ -810,6 +850,7 @@ namespace Agit.FortressCraft
                 spawnCastleCostManager.LevelUp();
 
                 RPC_CastleCount();
+                
                 _spawnCastle.SpawnCastleObject(this);
             }
         }
@@ -1006,7 +1047,7 @@ namespace Agit.FortressCraft
             died = true;
             _netAnimator.Animator.SetTrigger("Death");
             //stage = Stage.Dead;
-            Respawn(5);
+            Respawn(RespawnTime);
         }
 
         [Rpc(RpcSources.All, RpcTargets.All)]

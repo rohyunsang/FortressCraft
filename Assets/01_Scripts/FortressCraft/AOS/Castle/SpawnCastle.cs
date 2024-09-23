@@ -8,9 +8,9 @@ namespace Agit.FortressCraft
     {
         [SerializeField] private NetworkObject castle;
 
-        public void SpawnCastleObject(Player player)
+    public NormalUnitSpawner SpawnCastleObject(Player player)
         {
-            if (!HasStateAuthority) return;
+            if (!HasStateAuthority) return null;
 
             NetworkObject NO = Runner.Spawn(castle, Vector3.zero, Quaternion.identity);
 
@@ -62,6 +62,8 @@ namespace Agit.FortressCraft
 
                 RPC_SpawnCastleTransformSync(NO, tag, team, player);
             }
+            
+            return NO.GetComponent<NormalUnitSpawner>();
         }
         [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
         public void RPC_SpawnCastleTransformSync(NetworkObject NO, string tag, Team team, Player player)

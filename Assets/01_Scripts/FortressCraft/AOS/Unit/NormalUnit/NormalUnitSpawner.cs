@@ -190,6 +190,11 @@ namespace Agit.FortressCraft
         public void SpawnUnit()
         {
             if (NowUnitCount >= maxUnitCount) return;
+            SpawnUnitNoLimit();
+        }
+
+        public void SpawnUnitNoLimit()
+        {
             if (Object.HasStateAuthority)
             {
                 NetworkObject unitObj = null;

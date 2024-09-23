@@ -167,11 +167,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 2514548284473449981}
-  TotalWords: 3
+  TotalWords: 6
   ApplyTiming: 2
   SyncSettings: -1
-  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90be8245b89a768de
-  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab12ad6867737b935010bf865e4
+  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90be8245b89a768de77967513ab4ce551d26d2926fbdd6b04
+  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab12ad6867737b935010bf865e477967513
 --- !u!114 &4220513473901683800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130112074167170893}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 789bab61935f94a1bb95bd2d4d59495e, type: 3}
   m_Name: 
@@ -1434,7 +1434,7 @@ RectTransform:
   m_Father: {fileID: 4915009432239115456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.0000038146973, y: 0}
   m_SizeDelta: {x: -0.0000037923455, y: -0.8}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2827,7 +2827,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1349074085844301623
 RectTransform:
   m_ObjectHideFlags: 0
