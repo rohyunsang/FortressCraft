@@ -482,6 +482,7 @@ namespace Agit.FortressCraft
 			UpdateBtnColor();
 
 			ExpCheck();
+
             EnhancementCheck();
 
             // Debug.Log("E Count: " + enhancement.EnhancementCount);

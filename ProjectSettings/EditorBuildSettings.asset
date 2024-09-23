@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Battle 1.unity
     guid: 052fff544c47e418ea30fc6e46af400b
-  - enabled: 0
-    path: Assets/00_Scenes/Main_Roh.unity
-    guid: d0fee794bfd01254886cd0556f13a278
   m_configObjects: {}
