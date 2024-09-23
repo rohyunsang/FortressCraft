@@ -86,8 +86,8 @@ namespace Agit.FortressCraft
 
             for( int i = 0; i < 3; ++i )
             {
-                //int enhanceNum = Random.Range(0, sumOfWeight);
-                int enhanceNum = sumOfWeight-1;
+                int enhanceNum = Random.Range(0, sumOfWeight);
+                //int enhanceNum = sumOfWeight-1;
                 btn[i].onClick.RemoveAllListeners();
                 TextSetting(i, enhanceNum);
             }
@@ -263,6 +263,7 @@ namespace Agit.FortressCraft
             {
                 player.FirstSpawner.SpawnUnitNoLimit();
             }
+            EnhanceRequired = false;
         }
 
         private void Enhance10()
@@ -271,12 +272,14 @@ namespace Agit.FortressCraft
             NormalUnitDataManager.Instance.Scale = 0.45f;
             NormalUnitDataManager.Instance.Speed *= 1.35f;
             NormalUnitDataManager.Instance.AttackDelay *= 1.25f;
+            EnhanceRequired = false;
         }
 
         private void Enhance11()
         {
             --EnhancementCount;
             player.RespawnTime *= 0.2f;
+            EnhanceRequired = false;
         }
     }
 }

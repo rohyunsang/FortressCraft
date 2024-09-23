@@ -265,11 +265,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 7993541375591472112}
-  TotalWords: 3
+  TotalWords: 6
   ApplyTiming: 2
   SyncSettings: -1
-  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90be8245b89a768de
-  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab12ad6867737b935010bf865e4
+  StateHashes: 000000001d949bf25e3aa8f1ed42775e6f0d3bdb6f8f9b1d4c3f98bb234596c0cd275eb5f584fd5fe8833a183ffdd8c2fd8f19602ae93cdcaecaea33dfc3554d7a87b2f2eeb6395b2cc4f8f90be8245b89a768de77967513ab4ce551d26d2926fbdd6b04
+  TriggerHashes: 000000002b1a167c20e23b68b2df6c6a8103dab12ad6867737b935010bf865e477967513
 --- !u!50 &1334741900220004052
 Rigidbody2D:
   serializedVersion: 4

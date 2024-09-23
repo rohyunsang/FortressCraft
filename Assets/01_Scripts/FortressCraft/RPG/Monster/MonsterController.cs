@@ -86,6 +86,11 @@ namespace Agit.FortressCraft
             return (this.HP == 0);
         }
 
+        public void TriggerDamaged()
+        {
+            animator.SetTrigger("Damaged");
+        }
+
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCCheckDamaged()
         {
