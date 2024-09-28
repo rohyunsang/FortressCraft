@@ -2143,7 +2143,6 @@ public class SPUM_Manager : MonoBehaviour
             }
             
             tSObj.transform.localScale = new Vector3(1,1,1); //크기 정보 변경
-            tSObj.transform.localPosition = Vector3.zero;
             tSObj.transform.GetChild(0).GetComponent<Animator>().runtimeAnimatorController = _animControllerList[0];
             GameObject tObj = PrefabUtility.SaveAsPrefabAsset(tSObj,unitPath+prefabName+".prefab");
             DestroyImmediate(tSObj);

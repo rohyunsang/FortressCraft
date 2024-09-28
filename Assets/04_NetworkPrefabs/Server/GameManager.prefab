@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &592953329146046645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 592953329146046640}
+  - component: {fileID: 592953329146046647}
+  - component: {fileID: 592953329146046646}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &592953329146046640
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592953329146046645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &592953329146046647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592953329146046645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2449752314
+  ObjectInterest: 1
+  Flags: 133377
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 592953329146046646}
+--- !u!114 &592953329146046646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592953329146046645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d70075d235f4744eac5db7003358662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 0}
+  _playerPrefabWarrior: {fileID: 8960233729958994200, guid: c7fc9c156a388d946a1ebfd0cff81284, type: 3}
+  _playerPrefabArcher: {fileID: 8960233729958994200, guid: 033790961274843e5bfc4d51b1a86e35, type: 3}
+  _playerPrefabMagician: {fileID: 9140731734683221681, guid: 77593f0a3a33e453f867c2a78d18b68e, type: 3}
+  _playerPrefabGreatSword: {fileID: 8960233729958994200, guid: 136c4f1339e68aa4c84e55d1d29b7154, type: 3}
+  _playerRefByIndex:
+    _items: []
+  _currentPlayState: 0
+  _playerRef_playerIdx:
+    _items: []
+  isStarted: 0
