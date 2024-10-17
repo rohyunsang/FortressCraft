@@ -104433,6 +104433,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MonsterSpawner_FrostLizard
       objectReference: {fileID: 0}
+    - target: {fileID: 2615875543147215736, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4134978373828175079, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: SortKey
       value: 1881552685
@@ -106004,6 +106008,10 @@ PrefabInstance:
     - target: {fileID: 2615875543147215736, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner_FrostLizard (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615875543147215736, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4134978373828175079, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: SortKey
