@@ -10,7 +10,6 @@ public class PortraitController : MonoBehaviour
     public Image warriorPortrait;
     public Image archerPortrait;
     public Image magicianPortrait;
-    public Image greatSwordPortrait;
 
     // 선택된 이미지와 비선택 이미지들의 색상을 정의
     private Color selectedColor = Color.white;  // FFFFFF
@@ -27,31 +26,26 @@ public class PortraitController : MonoBehaviour
         switch (portrait)
         {
             case "Warrior":
-                SetPortraitColors(warriorPortrait, archerPortrait, magicianPortrait, greatSwordPortrait);
+                SetPortraitColors(warriorPortrait, archerPortrait, magicianPortrait);
                 break;
             case "Archer":
-                SetPortraitColors(archerPortrait, warriorPortrait, magicianPortrait, greatSwordPortrait);
+                SetPortraitColors(archerPortrait, warriorPortrait, magicianPortrait);
                 break;
             case "Magician":
-                SetPortraitColors(magicianPortrait, warriorPortrait, archerPortrait, greatSwordPortrait);
+                SetPortraitColors(magicianPortrait, warriorPortrait, archerPortrait);
                 break;
-            case "GreatSword":
-                UIManager.Instance._unImplementInfo.SetActive(true);
-                
-                // 미구현이라 아처로 대신. 
-                SetPortraitColors(archerPortrait, warriorPortrait, magicianPortrait, greatSwordPortrait); 
-
-                // SetPortraitColors(greatSwordPortrait, warriorPortrait, archerPortrait, magicianPortrait);
+            
+            default:   // none click => archer default 
+                SetPortraitColors(archerPortrait, warriorPortrait, magicianPortrait); 
                 break;
         }
     }
 
     // 실제 이미지 색상을 설정하는 메서드
-    private void SetPortraitColors(Image selected, Image nonSelected1, Image nonSelected2, Image nonSelected3)
+    private void SetPortraitColors(Image selected, Image nonSelected1, Image nonSelected2)
     {
         selected.color = selectedColor;
         nonSelected1.color = nonSelectedColor;
         nonSelected2.color = nonSelectedColor;
-        nonSelected3.color = nonSelectedColor;
     }
 }

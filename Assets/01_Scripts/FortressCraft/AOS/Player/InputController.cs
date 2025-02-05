@@ -16,7 +16,6 @@ namespace Agit.FortressCraft
 
         public static bool fetchInput = true;
 
-        private RPG_Player _rpg_Player;
         private Player _player;
         private NetworkInputData _inputData = new NetworkInputData();
         private Vector2 _moveDelta;
@@ -64,14 +63,6 @@ namespace Agit.FortressCraft
                 _inputData.Buttons = _buttonSample;
                 _buttonReset |= _buttonSample; // This effectively delays the reset of the read button flags until next Update() in case we're ticking faster than we're rendering
             }
-            else if(_rpg_Player != null && _rpg_Player.Object != null && _rpg_Player.stage == RPG_Player.Stage.Active)
-            {
-                _inputData.aimDirection = _aimDelta.normalized;
-                _inputData.moveDirection = _moveDelta.normalized;
-                _inputData.Buttons = _buttonSample;
-                _buttonReset |= _buttonSample; // This effectively delays the reset of the read button flags until next Update() in case we're ticking faster than we're rendering
-            }
-
             // Hand over the data to Fusion
             input.Set(_inputData);
             _inputData.Buttons = 0;
@@ -140,18 +131,6 @@ namespace Agit.FortressCraft
                             _moveDelta += 10.0f * touch.deltaPosition / Screen.dpi;
                         else
                             _leftDown = touch.position;
-                    }
-                    else
-                    {
-                        /*
-                         rightIsDown = true;
-                        _rightPos = touch.position;
-                        if (_rightTouchWasDown && (touch.position - _rightDown).magnitude > (0.01f * Screen.dpi))
-                            _aimDelta = (10.0f / Screen.dpi) * (touch.position - _rightDown);
-                        else
-                            _rightDown = touch.position;
-                         */
-                        
                     }
                 }
                 if (_rightTouchWasDown && !rightIsDown)

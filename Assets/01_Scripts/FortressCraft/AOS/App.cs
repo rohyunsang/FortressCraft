@@ -39,7 +39,6 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject[] warriorSkillUIs;
 		[SerializeField] private GameObject[] archerSkillUIs;
 		[SerializeField] private GameObject[] magicianSkillUIs;
-		[SerializeField] private GameObject[] greatswordSkillUIs;
 
 
         public string roomCode = "";
@@ -67,6 +66,9 @@ namespace Agit.FortressCraft
 			OnConnectionStatusUpdate(null, FusionLauncher.ConnectionStatus.Disconnected, "");
 
 			StartCoroutine(GoogleSheetManager.Loader());
+
+			this.jobType = JobType.Archer; // job type default 
+            JobUIVisible(archerSkillUIs);
         }
 
 
@@ -86,10 +88,6 @@ namespace Agit.FortressCraft
                     this.jobType = JobType.Magician;
 					JobUIVisible(magicianSkillUIs);
                     break;
-				case "GreatSword":
-					this.jobType = JobType.GreatSword;
-					JobUIVisible(greatswordSkillUIs);
-					break;
 			}
 		}
 
@@ -104,10 +102,6 @@ namespace Agit.FortressCraft
                 UI.gameObject.SetActive(false);
             }
             foreach (GameObject UI in magicianSkillUIs)
-            {
-                UI.gameObject.SetActive(false);
-            }
-            foreach (GameObject UI in greatswordSkillUIs)
             {
                 UI.gameObject.SetActive(false);
             }
@@ -197,9 +191,7 @@ namespace Agit.FortressCraft
 
         private void CreateRandomRoomCode()
 		{
-            // 0���� 99999 ������ ���� ���� ����
             int randomNumber = Random.Range(0, 100000);
-            // ���ڸ� ���ڿ��� ��ȯ�ϸ鼭 5�ڸ� ������ ����
             string randomCode = randomNumber.ToString("D5");
 			
 			roomCode = randomCode;

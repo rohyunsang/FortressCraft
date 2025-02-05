@@ -91,7 +91,6 @@ namespace Agit.FortressCraft
         
         [SerializeField] private WarriorWeaponCollider wairrorWeapon;
         [SerializeField] private WarriorChargeCollider warriorChargeCollider;
-        [SerializeField] private GreatSwordWeaponCollider greatSwordWeaponCollider;
 
         private bool died = false;
 
@@ -261,10 +260,6 @@ namespace Agit.FortressCraft
             skill2Btn.onClick.AddListener(Skill2);
             skill2BtnImages = skill2Btn.GetComponentsInChildren<Image>();
 
-            skill3Btn = GameObject.Find("SkillBtnGroups_003").GetComponentInChildren<Button>();
-            skill3Btn.onClick.AddListener(Skill3);
-            skill3BtnImages = skill3Btn.GetComponentsInChildren<Image>();
-
             spawnCastleBtn = GameObject.Find("SpawnCastleBtnGroups").GetComponentInChildren<Button>();
             spawnCastleBtn.onClick.AddListener(SpawnCastleObejct);
 
@@ -306,10 +301,6 @@ namespace Agit.FortressCraft
                         wairrorWeapon.OwnType = OwnType;
                         warriorChargeCollider.OwnType = OwnType;
                     }
-                    else if (Job == JobType.GreatSword)
-                    {
-                        greatSwordWeaponCollider.OwnType = OwnType;
-                    }
                 }
             }
             else
@@ -333,10 +324,6 @@ namespace Agit.FortressCraft
                 {
                     wairrorWeapon.OwnType = OwnType;
                     warriorChargeCollider.OwnType = OwnType;
-                }
-                else if (Job == JobType.GreatSword)
-                {
-                    greatSwordWeaponCollider.OwnType = OwnType;
                 }
             }
         }
@@ -485,8 +472,6 @@ namespace Agit.FortressCraft
 
             EnhancementCheck();
 
-            // Debug.Log("E Count: " + enhancement.EnhancementCount);
-
 			if (InputController.fetchInput)
 			{
 				if (GetInput(out NetworkInputData input))
@@ -582,24 +567,9 @@ namespace Agit.FortressCraft
                     btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
                 }
             }
-
-            if (skill3CoolTimer.Expired(Runner) && skill3Btn != null)
-            {
-                foreach (Image btnImage in skill3BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 1.0f);
-                }
-            }
-            else if (skill3Btn != null)
-            {
-                foreach (Image btnImage in skill3BtnImages)
-                {
-                    btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
-                }
-            }
         }
 
-        public void Attack()  // Archer
+        public void Attack()  
 		{
 			if (attackInputTimer.Expired(Runner) && animState.fullPathHash != animAttack )
 			{
@@ -638,11 +608,6 @@ namespace Agit.FortressCraft
 
 					Invoke("PlaySound1", 0.2f);
 				}
-                else if (Job == JobType.GreatSword)
-                {
-                    SetAttack(level, Job);
-                    greatSwordWeaponCollider.Damage = AttackDamage;
-                }
 				_netAnimator.Animator.SetTrigger("Attack");
 				attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.2f);
 			}
@@ -693,14 +658,10 @@ namespace Agit.FortressCraft
 					_netAnimator.Animator.SetTrigger("Skill1");
 					_cc.isCharge = true;
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-                    Invoke("ChargeFinishCallback", 0.15f);
+                    Invoke("RPC_ChargeEndCallback", 0.15f);
 					PlaySound2();
                 }
-                else if (Job == JobType.GreatSword)
-                {
-                    _netAnimator.Animator.SetTrigger("Skill1");
-                    skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-                }
+
 			}
 		}
 
@@ -731,12 +692,6 @@ namespace Agit.FortressCraft
         {
             magicianFire.FireDirection = lastDir;
             magicianFire.SetDamageByLevel(level, Job);
-        }
-        private void ChargeFinishCallback()
-        {
-            _cc.isCharge = false;
-            if (Job == JobType.GreatSword) return;
-            RPC_ChargeEndCallback();
         }
 
 
@@ -800,40 +755,6 @@ namespace Agit.FortressCraft
 
                     PlaySound3();
                 }
-                else if (Job == JobType.GreatSword)
-                {
-                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-                    _cc.isCharge = true;
-                    Invoke("ChargeFinishCallback", 0.15f);
-                }
-
-                if(Job != JobType.GreatSword)
-                    _netAnimator.Animator.SetTrigger("Skill2");
-            }
-        }
-
-        public void Skill3() // SKill 3
-        {
-            if (Job == JobType.Archer)
-            {
-
-            }
-            else if (Job == JobType.Magician)
-            {
-
-            }
-            else if (Job == JobType.Warrior)
-            {
-
-            }
-            else if (skill3CoolTimer.Expired(Runner))
-            {
-                if (Job == JobType.GreatSword)
-                {
-                    skill3CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-                }
-
-                _netAnimator.Animator.SetTrigger("Skill3");
             }
         }
 
