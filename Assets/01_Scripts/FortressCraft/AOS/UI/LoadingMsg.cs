@@ -11,7 +11,7 @@ namespace Agit.FortressCraft
         [SerializeField] private GameObject info;
 
         public void OnInfo()
-        { 
+        {
             RPCSetInfoActive();
         }
 

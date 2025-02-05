@@ -100,7 +100,9 @@ namespace Agit.FortressCraft
 
         private void TextSetting(int btnNum, int enhanceNum)
         {
-            if( enhanceNum < enhance1weight )
+            int currentSum = enhance1weight;
+
+            if ( enhanceNum < currentSum )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[0]());
                 btnRankText[btnNum].text = "일반";
@@ -108,7 +110,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "돈 주고도 못 사~";
                 btnUpgradeText[btnNum].text = "경험치 +30";
             }
-            else if( enhanceNum < enhance1weight + enhance2weight )
+            else if( enhanceNum < (currentSum += enhance2weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[1]());
                 btnRankText[btnNum].text = "일반";
@@ -116,7 +118,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "배부르게 먹자";
                 btnUpgradeText[btnNum].text = "체력 +100\n골드 + 40";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight)
+            else if (enhanceNum < (currentSum += enhance3weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[2]());
                 btnRankText[btnNum].text = "일반";
@@ -124,7 +126,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "수색조";
                 btnUpgradeText[btnNum].text = "유닛 이동속도\n10% 증가\n\n유닛 공격속도\n5% 감소";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight)
+            else if (enhanceNum < (currentSum += enhance4weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[3]());
                 btnRankText[btnNum].text = "일반";
@@ -132,8 +134,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "월급날 발걸음";
                 btnUpgradeText[btnNum].text = "유닛 이동속도\n5% 증가\n\n골드 + 40";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight)
+            else if (enhanceNum < (currentSum += enhance5weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[4]());
                 btnRankText[btnNum].text = "일반";
@@ -141,8 +142,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "돈으로 해결";
                 btnUpgradeText[btnNum].text = "유닛 공격속도\n5% 증가\n\n골드 + 20";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight)
+            else if (enhanceNum < (currentSum += enhance6weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[5]());
                 btnRankText[btnNum].text = "희귀";
@@ -150,8 +150,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "사기증진";
                 btnUpgradeText[btnNum].text = "유닛 공격속도\n20% 증가";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight)
+            else if (enhanceNum < (currentSum += enhance7weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[6]());
                 btnRankText[btnNum].text = "희귀";
@@ -159,8 +158,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "하체 단련";
                 btnUpgradeText[btnNum].text = "유닛 이동속도\n20% 증가";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight)
+            else if (enhanceNum < (currentSum += enhance8weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[7]());
                 btnRankText[btnNum].text = "희귀";
@@ -168,8 +166,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "돈이 최고야!";
                 btnUpgradeText[btnNum].text = "골드 +100";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight)
+            else if (enhanceNum < (currentSum += enhance9weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[8]());
                 btnRankText[btnNum].text = "일반";
@@ -177,9 +174,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "어셈블";
                 btnUpgradeText[btnNum].text = "유닛 10명 소환";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight
-                + enhance10weight)
+            else if (enhanceNum < (currentSum += enhance10weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[9]());
                 btnRankText[btnNum].text = "전설";
@@ -187,9 +182,7 @@ namespace Agit.FortressCraft
                 btnNameText[btnNum].text = "베테랑";
                 btnUpgradeText[btnNum].text = "유닛 거대화\n유닛 공격속도\n25% 증가\n유닛 이동속도\n35% 증가";
             }
-            else if (enhanceNum < enhance1weight + enhance2weight + enhance3weight + enhance4weight
-                + enhance5weight + enhance6weight + enhance7weight + enhance8weight + enhance9weight
-                + enhance10weight + enhance11weight)
+            else if (enhanceNum < (currentSum + enhance11weight) )
             {
                 btn[btnNum].onClick.AddListener(() => EnhanceList[10]());
                 btnRankText[btnNum].text = "전설";
