@@ -311,6 +311,5 @@ namespace Agit.FortressCraft
 		Warrior = 0,
 		Archer,
 		Magician,
-        GreatSword,
     }
 }

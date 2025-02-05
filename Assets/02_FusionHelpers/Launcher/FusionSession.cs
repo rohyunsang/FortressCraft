@@ -55,9 +55,6 @@ namespace FusionHelpers
                 case JobType.Magician:
                     _playerPrefab = _playerPrefabMagician;
                     break;
-				case JobType.GreatSword:
-					_playerPrefab = _playerPrefabGreatSword;
-					break;
                 default:
                     _playerPrefab = _playerPrefabArcher; // default commander is Archer
                     Debug.LogError("default commander is Archer");

@@ -5528,10 +5528,6 @@ MonoBehaviour:
   magicianSkillUIs:
   - {fileID: 1847541618}
   - {fileID: 876910909}
-  greatswordSkillUIs:
-  - {fileID: 157761825}
-  - {fileID: 1062934687}
-  - {fileID: 0}
   roomCode: 
   mode: 0
   jobType: 1
@@ -10607,6 +10603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3b804efa754c442a8e67e29b1f0e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCurrentInputField: {fileID: 0}
   mPrevInputField: {fileID: 743097111}
   mNextInputField: {fileID: 2069924291}
 --- !u!114 &679906058

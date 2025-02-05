@@ -232,7 +232,6 @@ namespace Agit.FortressCraft
             attackInputTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
             skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
             skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
-            skill3CoolTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
             BuffAttackTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 			BuffDefenseTimer = TickTimer.CreateFromSeconds(Runner, 0.1f);
 
@@ -301,29 +300,6 @@ namespace Agit.FortressCraft
                         wairrorWeapon.OwnType = OwnType;
                         warriorChargeCollider.OwnType = OwnType;
                     }
-                }
-            }
-            else
-            {
-                OwnType = team.ToString();
-
-                RPCSetTag("Unit_" + OwnType);
-
-                BattleBarUIManager.Instance.OwnType = OwnType;
-
-                if (Job == JobType.Archer)
-                {
-                    sound2.SetScheduledStartTime(0.7f);
-                    archerFire.OwnType = OwnType;
-                }
-                else if (Job == JobType.Magician)
-                {
-                    magicianFire.OwnType = OwnType;
-                }
-                else if (Job == JobType.Warrior)
-                {
-                    wairrorWeapon.OwnType = OwnType;
-                    warriorChargeCollider.OwnType = OwnType;
                 }
             }
         }
@@ -567,6 +543,7 @@ namespace Agit.FortressCraft
                     btnImage.color = new Color(btnImage.color.r, btnImage.color.g, btnImage.color.b, 0.6f);
                 }
             }
+
         }
 
         public void Attack()  
@@ -658,14 +635,66 @@ namespace Agit.FortressCraft
 					_netAnimator.Animator.SetTrigger("Skill1");
 					_cc.isCharge = true;
 					skill1CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-                    Invoke("RPC_ChargeEndCallback", 0.15f);
+                    Invoke("ChargeFinishCallback", 0.15f);
 					PlaySound2();
                 }
 
 			}
 		}
+        public void Skill2() // Archer
+        {
+            if (skill2CoolTimer.Expired(Runner))
+            {
+                if (Job == JobType.Archer)
+                {
+                    archerFire.SetDamageByLevel(level, Job);
 
-        
+                    if (!BuffAttackTimer.Expired(Runner))
+                    {
+                        archerFire.BuffDamage(coefAttack);
+                    }
+
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
+                    Invoke("PlaySound3", 0.5f);
+                }
+                else if (Job == JobType.Magician)
+                {
+                    magicianFire.SetDamageByLevel(level, Job);
+
+                    if (!BuffAttackTimer.Expired(Runner))
+                    {
+                        magicianFire.BuffDamage(coefAttack);
+                    }
+
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                }
+                else if (Job == JobType.Warrior)
+                {
+                    // Healing 부분 
+                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
+                    float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
+
+                    if (currentMaxHp < life + currentMaxHp * 0.3f)
+                    {
+                        life = currentMaxHp;
+                    }
+                    else
+                    {
+                        life += currentMaxHp * 0.3f;
+                    }
+
+                    PlaySound3();
+                }
+                _netAnimator.Animator.SetTrigger("Skill2");
+            }
+        }
+        private void ChargeFinishCallback()
+        {
+            _cc.isCharge = false;
+            RPC_ChargeEndCallback();
+        }
+
+
         #region Sound
 
         public void PlaySound1()
@@ -711,52 +740,7 @@ namespace Agit.FortressCraft
             gameObject.layer = LayerMask.NameToLayer("Player");
         }
 
-        public void Skill2() // Archer
-        {
-            if (skill2CoolTimer.Expired(Runner))
-            {
-                if (Job == JobType.Archer)
-                {
-					archerFire.SetDamageByLevel(level, Job);
-
-					if (!BuffAttackTimer.Expired(Runner))
-					{
-						archerFire.BuffDamage(coefAttack);
-					}
-
-					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 5.0f);
-					Invoke("PlaySound3", 0.5f);
-				}
-				else if( Job == JobType.Magician )
-                {
-					magicianFire.SetDamageByLevel(level, Job);
-
-					if (!BuffAttackTimer.Expired(Runner))
-					{
-						magicianFire.BuffDamage(coefAttack);
-					}
-
-					skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
-                }
-                else if (Job == JobType.Warrior)
-                {
-                    // Healing 부분 
-                    skill2CoolTimer = TickTimer.CreateFromSeconds(Runner, 10.0f);
-                    float currentMaxHp = GoogleSheetManager.GetCommanderData(level, Job).HP;
-
-                    if (currentMaxHp < life + currentMaxHp * 0.3f)
-                    {
-                        life = currentMaxHp;
-                    }
-                    else
-                    {
-                        life += currentMaxHp * 0.3f;
-                    }
-
-                    PlaySound3();
-                }
-            }
-        }
+        
 
         public void SpawnCastleObejct()
         {
