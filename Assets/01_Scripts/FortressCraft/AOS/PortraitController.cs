@@ -1,3 +1,4 @@
+using Agit.FortressCraft;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,12 @@ public class PortraitController : MonoBehaviour
                 SetPortraitColors(magicianPortrait, warriorPortrait, archerPortrait, greatSwordPortrait);
                 break;
             case "GreatSword":
-                SetPortraitColors(greatSwordPortrait, warriorPortrait, archerPortrait, magicianPortrait);
+                UIManager.Instance._unImplementInfo.SetActive(true);
+                
+                // 미구현이라 아처로 대신. 
+                SetPortraitColors(archerPortrait, warriorPortrait, magicianPortrait, greatSwordPortrait); 
+
+                // SetPortraitColors(greatSwordPortrait, warriorPortrait, archerPortrait, magicianPortrait);
                 break;
         }
     }

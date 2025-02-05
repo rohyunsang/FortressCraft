@@ -17,6 +17,9 @@ namespace Agit.FortressCraft
 		{
 			GetComponent<PostProcessLayer>().enabled = !Application.isMobilePlatform;
 			GetComponent<PostProcessVolume>().enabled = !Application.isMobilePlatform;
+
+			Vector2 vector2 = new Vector2(0.1f, 0.1f);
+
 		}
 
 		void Start()

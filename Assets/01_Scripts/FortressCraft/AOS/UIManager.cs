@@ -49,6 +49,8 @@ namespace Agit.FortressCraft
         public GameObject _roomListPanel;
         public GameObject _roomOptionPanel;
 
+        public GameObject _unImplementInfo;
+
         public void InitOnClickJoinButton()
         {
             _room.text = "";

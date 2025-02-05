@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 using Photon.Voice.Unity.UtilityScripts;
 using UnityEngine.UI;
 using Photon.Realtime;
+using Photon.Voice.Unity.Demos.DemoVoiceUI;
 
 namespace Agit.FortressCraft
 {
@@ -34,6 +35,11 @@ namespace Agit.FortressCraft
 		[SerializeField] private GameObject selectJoinModePanel;
 		[SerializeField] private GameObject nickNamePanel;
 		[SerializeField] private GameObject roomListPanel;
+
+		[SerializeField] private GameObject[] warriorSkillUIs;
+		[SerializeField] private GameObject[] archerSkillUIs;
+		[SerializeField] private GameObject[] magicianSkillUIs;
+		[SerializeField] private GameObject[] greatswordSkillUIs;
 
 
         public string roomCode = "";
@@ -70,18 +76,48 @@ namespace Agit.FortressCraft
 			{
 				case "Warrior":
                     this.jobType = JobType.Warrior;
+					JobUIVisible(warriorSkillUIs);
                     break;
 				case "Archer":
                     this.jobType = JobType.Archer;
+					JobUIVisible(archerSkillUIs);
                     break;
 				case "Magician":
                     this.jobType = JobType.Magician;
+					JobUIVisible(magicianSkillUIs);
                     break;
 				case "GreatSword":
 					this.jobType = JobType.GreatSword;
+					JobUIVisible(greatswordSkillUIs);
 					break;
 			}
 		}
+
+		private void JobUIVisible(GameObject[] UIs)
+		{
+			foreach(GameObject UI in warriorSkillUIs)
+			{
+				UI.gameObject.SetActive(false);
+			}
+            foreach (GameObject UI in archerSkillUIs)
+            {
+                UI.gameObject.SetActive(false);
+            }
+            foreach (GameObject UI in magicianSkillUIs)
+            {
+                UI.gameObject.SetActive(false);
+            }
+            foreach (GameObject UI in greatswordSkillUIs)
+            {
+                UI.gameObject.SetActive(false);
+            }
+
+            foreach (GameObject UI in UIs)
+			{
+				UI.gameObject.SetActive(true);
+			}
+		}
+
 
 		public void SetGameModeSurvival() // using Button 
 		{

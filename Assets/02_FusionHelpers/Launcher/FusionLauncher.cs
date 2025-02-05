@@ -68,8 +68,7 @@ namespace FusionHelpers
 
             while (runner.State == NetworkRunner.States.Shutdown)
             {
-				Debug.Log(runner.State);
-                await Task.Delay(100); // 100ms wait loop time 
+                await Task.Delay(100); // 100ms wait loop 
             }
 
             // Voice 
