@@ -22,7 +22,7 @@ namespace Agit.FortressCraft
         public string OwnType { get; set; }
         public bool NoReward { get; set; }
         public int gold = 10;
-        public float exp = 10;
+        public float exp = 1;
 
         private readonly static int animAttackBow =
             Animator.StringToHash("Base Layer.AttackState");
