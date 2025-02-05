@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/Main_Jeong.unity
+    path: Assets/00_Scenes/Main.unity
     guid: 87f67472c5812429c86b0a75fd9520b9
   - enabled: 1
     path: Assets/00_Scenes/Lobby.unity
     guid: 96f5ef0db30079249a4486d8e90b128d
   - enabled: 1
-    path: Assets/00_Scenes/Battle 1.unity
+    path: Assets/00_Scenes/Battle.unity
     guid: 052fff544c47e418ea30fc6e46af400b
   m_configObjects: {}
