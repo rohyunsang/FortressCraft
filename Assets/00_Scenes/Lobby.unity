@@ -31787,7 +31787,7 @@ Transform:
   m_GameObject: {fileID: 747482670}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.74, y: 1.27, z: 0}
+  m_LocalPosition: {x: -0.59, y: 1.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31925,7 +31925,7 @@ Transform:
   m_GameObject: {fileID: 846804264}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 1.27, z: 0}
+  m_LocalPosition: {x: -0.57, y: 0.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -32374,7 +32374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1290074407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32483,7 +32483,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1045171602
+  SortKey: 4237262100
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []

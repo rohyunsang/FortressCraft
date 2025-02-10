@@ -959,7 +959,8 @@ namespace Agit.FortressCraft
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCCheckDamaged()
         {
-            CheckDamaged();
+            if(HasStateAuthority)
+                CheckDamaged();
         }
     }
 }
