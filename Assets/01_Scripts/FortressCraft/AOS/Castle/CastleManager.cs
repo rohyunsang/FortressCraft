@@ -62,6 +62,7 @@ namespace Agit.FortressCraft
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCCheckDamaged()
         {
+            if (!HasStateAuthority) return;
             CheckDamaged();
         }
 
@@ -79,8 +80,6 @@ namespace Agit.FortressCraft
 
         public void UpdateCastleHP()
         {
-            if (!HasStateAuthority) return;
-
             if (this.CurrentHP <= 0 && !isDestroyCastle)
             {
                 isDestroyCastle = true;
