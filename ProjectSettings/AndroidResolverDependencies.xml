@@ -21,8 +21,8 @@
     <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-database-unity/12.2.0/firebase-database-unity-12.2.0.pom</file>
   </files>
   <settings>
-    <setting name="androidAbis" value="armeabi-v7a" />
-    <setting name="bundleId" value="com.Ln.FortressCraft" />
+    <setting name="androidAbis" value="arm64-v8a" />
+    <setting name="bundleId" value="com.LLog.FortressCraft" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="True" />
