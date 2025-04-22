@@ -146,6 +146,7 @@ namespace FusionHelpers
 		}
         #endregion
 
+
         public void ShutDownCustom()
         {
             Invoke("ShutdownRunner", 2.0f);
@@ -252,6 +253,7 @@ namespace FusionHelpers
 		}
 
 		public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
+		
 		public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) {
             Debug.Log($"Session List Updated with {sessionList.Count} session(s)");
             // RoomListPanel - Content - Destroy
