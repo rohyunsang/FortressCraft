@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Ln
+  companyName: LLog
   productName: FortressCraft
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -169,9 +169,9 @@ PlayerSettings:
     VisionOS: 0
     iPhone: 0
     tvOS: 0
-  overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 2
-  AndroidMinSdkVersion: 34
+  overrideDefaultApplicationIdentifier: 1
+  AndroidBundleVersionCode: 3
+  AndroidMinSdkVersion: 31
   AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -260,11 +260,11 @@ PlayerSettings:
   useCustomGradlePropertiesTemplate: 1
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 2
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{dedicated}: Desktop/FortressCraftKey.keystore'
+  AndroidKeystoreName: C:/Users/Roh/Desktop/Unity Key/FortressCraftKey.keystore
   AndroidKeyaliasName: fckey
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0
@@ -849,7 +849,8 @@ PlayerSettings:
     tvOS: UNITY_POST_PROCESSING_STACK_V2
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel: {}

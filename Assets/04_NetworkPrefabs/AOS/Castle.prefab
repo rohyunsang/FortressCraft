@@ -253,6 +253,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpBarSlider: {fileID: 1521518489167026119}
+  player: {fileID: 0}
+  bodyCollider: {fileID: 0}
   team: 0
 --- !u!114 &3225645976391736003
 MonoBehaviour:
@@ -337,14 +339,17 @@ MonoBehaviour:
   UnitPrefab_B: {fileID: 5210533129529175386, guid: 0aa75b624633e485787e038a388457f9, type: 3}
   UnitPrefab_C: {fileID: 7966046597260627443, guid: c773d11cb55c2428b8c17d857cfc082a, type: 3}
   UnitPrefab_D: {fileID: 3736519570788222119, guid: f12aabbe6e2b045eab6382b49fdd4c43, type: 3}
+  UnitPrefab_A_Team: {fileID: 0}
+  UnitPrefab_B_Team: {fileID: 0}
   Arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
   player: {fileID: 0}
   poolManager: {fileID: 0}
-  maxUnitCount: 10
+  maxUnitCount: 30
   id:
     RawValue: 0
   arrowId:
     RawValue: 0
+  mode: 0
 --- !u!114 &5546238465827495858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,7 +661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.0000038146973, y: 0}
+  m_AnchoredPosition: {x: -0.0000076293945, y: 0}
   m_SizeDelta: {x: -0.0000037923455, y: -0.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8841595735757127777
@@ -680,7 +685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.6901961}
+  m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 0.6901961}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

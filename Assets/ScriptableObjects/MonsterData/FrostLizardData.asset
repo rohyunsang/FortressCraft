@@ -19,6 +19,6 @@ MonoBehaviour:
   runDelay: 1
   attackDelay: 1
   gold: 300
-  exp: 100
+  exp: 70
   type: 4
   buff: 1

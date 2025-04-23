@@ -15637,6 +15637,53 @@ Transform:
   - {fileID: 349410514}
   m_Father: {fileID: 1403504309}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &496507393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 496507394}
+  - component: {fileID: 496507395}
+  m_Layer: 0
+  m_Name: UnitSeparationSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &496507394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496507393}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &496507395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496507393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c37ce9e3adf19584d8a2576debc9cebb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredSeparation: 0.2
+  separationStrength: 0.1
+  unitTransforms: []
 --- !u!1 &499353930
 GameObject:
   m_ObjectHideFlags: 0
@@ -49792,6 +49839,52 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.4, y: 2.23, z: 1}
   m_Center: {x: 15.92, y: -7.98, z: 0}
+--- !u!1 &942303696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 942303697}
+  - component: {fileID: 942303698}
+  m_Layer: 0
+  m_Name: UnitSepartionConnector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &942303697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942303696}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &942303698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942303696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eb65141295ff464d942b7297b9af627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  separationSystem: {fileID: 496507395}
+  updateInterval: 1
 --- !u!1 &942385237
 GameObject:
   m_ObjectHideFlags: 0
@@ -69020,7 +69113,6 @@ MonoBehaviour:
   currentSceneName: 
   BGM_Lobby: {fileID: 3706139729383731699, guid: 0270807074b14404ea3a79291b88a2ec, type: 3}
   BGM_Battle: {fileID: 7367861615516812373, guid: 4985cd06e55f04db58d6f69d8bcbafdb, type: 3}
-  _setTeamGroup: {fileID: 0}
   _singleModeMap: {fileID: 0}
 --- !u!1 &1568337323
 GameObject:
@@ -104435,7 +104527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615875543147215736, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4134978373828175079, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: SortKey
@@ -105996,7 +106088,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &7941255232695539752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -106011,7 +106103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615875543147215736, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4134978373828175079, guid: 34ad7364144d541f7a28041cf18795ad, type: 3}
       propertyPath: SortKey
@@ -106579,3 +106671,5 @@ SceneRoots:
   - {fileID: 1501181849}
   - {fileID: 5074727285972209689}
   - {fileID: 6546189736647764353}
+  - {fileID: 942303697}
+  - {fileID: 496507394}

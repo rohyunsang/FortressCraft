@@ -17,8 +17,8 @@ namespace Agit.FortressCraft
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RPCSetDamage(float damage)
         {
-            Damaged = damage;
-            // Debug.Log(transform.parent.name + ": " + damage);
+            if(HasStateAuthority)
+                Damaged = damage;
         }
 
         public virtual void CallDamageCheck() { }

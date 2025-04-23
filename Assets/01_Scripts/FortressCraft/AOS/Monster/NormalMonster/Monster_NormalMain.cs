@@ -59,16 +59,18 @@ namespace Agit.FortressCraft
                 // 스테이트 일반 설정 ----------------------------------------------------
                 num = Random.Range(0, sum);
 
-                if (num < idle)
+                int currentSum = idle;
+
+                if (num < currentSum)
                 {
                     //Debug.Log("Monster - Idle");
                     nextState = Monster_NormalState.IDLE;
                 }
-                else if( num < idle + run )
+                else if( num < (currentSum += run) )
                 {
                     nextState = Monster_NormalState.RUN;
                 }
-                else if( num < idle + run + attack )
+                else if( num < (currentSum += attack) )
                 {
                     nextState = Monster_NormalState.ATTACK;
                 }

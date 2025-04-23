@@ -19,46 +19,30 @@ namespace Agit.FortressCraft
             Team team = Team.A;
             if (Runner.TryGetSingleton(out GameManager gameManager))
             {
-                if (gameManager.mode != Mode.Team)
-                {
-                    int idx = 0;
-                    idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
+                int idx = 0;
+                idx = gameManager.TryGetPlayerId(Runner.LocalPlayer);
 
-                    team = Team.A; // Default
-                    switch (idx)
-                    {
-                        case 0:
-                            tag = "A";
-                            team = Team.A;
-                            break;
-                        case 1:
-                            tag = "B";
-                            team = Team.B;
-                            break;
-                        case 2:
-                            tag = "C";
-                            team = Team.C;
-                            break;
-                        case 3:
-                            tag = "D";
-                            team = Team.D;
-                            break;
-                    }
-                }
-                else
+                team = Team.A; // Default
+                switch (idx)
                 {
-                    string playerTeam = gameManager.TryGetPlayerTeam(Runner.LocalPlayer);
-                    if (playerTeam == Team.A.ToString())
-                    {
+                    case 0:
                         tag = "A";
                         team = Team.A;
-                    }
-                    else if (playerTeam == Team.B.ToString())
-                    {
+                        break;
+                    case 1:
                         tag = "B";
                         team = Team.B;
-                    }
+                        break;
+                    case 2:
+                        tag = "C";
+                        team = Team.C;
+                        break;
+                    case 3:
+                        tag = "D";
+                        team = Team.D;
+                        break;
                 }
+                
 
                 RPC_SpawnCastleTransformSync(NO, tag, team, player);
             }

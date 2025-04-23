@@ -13,14 +13,18 @@ namespace Agit.FortressCraft{
         public bool IsDestroyed { get; private set; }
         public Slider HpBarSlider;
         public Player player;
+        public CastleBodyCollider bodyCollider;
 
         public Team team;
+
+
 
         public void Init(float currntHP)
         {
             CurrentHP = currntHP;
             IsDestroyed = false;
         }
+
         public void SliderInit()
         {
             HpBarSlider.gameObject.SetActive(true);

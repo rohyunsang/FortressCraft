@@ -31,16 +31,10 @@ namespace Agit.FortressCraft
             }
 
         }
-        
-        private void OnTriggerEnter2D(Collider2D collision)
+
+        public override void CallDamageCheck()
         {
-            if (collision.CompareTag("Attack"))
-            {
-                if (collision.TryGetComponent<AttackCollider>(out AttackCollider attackCollider))
-                {
-                    castleManager.RPCCheckDamaged();
-                }
-            }
+            castleManager.RPCCheckDamaged();
         }
     }
 }

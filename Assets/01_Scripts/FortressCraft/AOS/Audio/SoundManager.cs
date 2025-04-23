@@ -17,8 +17,8 @@ namespace Agit.FortressCraft
         {
             Instance = this;
 
-            BGMVolume = 1.0f;
-            SFXVolume = 1.0f;
+            BGMVolume = 0.0f;
+            SFXVolume = 0.0f;
         }
 
         public void UpdateBGMVolume()

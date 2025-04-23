@@ -21,7 +21,7 @@ namespace Agit.FortressCraft
         public void SetHPBar(float currentHP)
         {
             HP = currentHP;
-            HpBarSlider.value = HP / 500f;
+            HpBarSlider.value = HP / 1000f;
         }
 
         public float getMaxHPByLevel(int level, JobType jobType)

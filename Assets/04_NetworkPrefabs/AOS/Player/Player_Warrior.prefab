@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a878ab4e18e76420b8a0182f1f71b81e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b49e645f3634a141ae4fdef27ef5a49, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3137,7 +3137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 8960233729958994200}
-  player_RPG: {fileID: 0}
 --- !u!114 &2217924828203588813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3185,10 +3184,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.45
-  m_fontSizeBase: 36
+  m_fontSize: 5
+  m_fontSizeBase: 5
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 0.01
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -3952,7 +3951,6 @@ MonoBehaviour:
   _commander: {fileID: 0}
   _teleportIn: {fileID: 0}
   _teleportOutPrefab: {fileID: 0}
-  _respawnTime: 0
   playerHPBar: {fileID: 8281999552098622695}
   sound1: {fileID: 8655229826051841986}
   sound2: {fileID: 8749882878871296597}
@@ -3967,7 +3965,6 @@ MonoBehaviour:
   BuffDefenseTime: 100
   wairrorWeapon: {fileID: 1562815616911068479}
   warriorChargeCollider: {fileID: 9173448906131834303}
-  greatSwordWeaponCollider: {fileID: 0}
   _PlayerName:
     _length: 0
     _data:
@@ -4065,6 +4062,9 @@ MonoBehaviour:
   enhance6weight: 10
   enhance7weight: 10
   enhance8weight: 10
+  enhance9weight: 20
+  enhance10weight: 5
+  enhance11weight: 5
 --- !u!1 &5643880208726375868
 GameObject:
   m_ObjectHideFlags: 0
@@ -5202,7 +5202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4761200173271245654
 RectTransform:
   m_ObjectHideFlags: 0
