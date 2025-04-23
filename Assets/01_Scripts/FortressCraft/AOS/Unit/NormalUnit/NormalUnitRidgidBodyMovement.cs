@@ -314,6 +314,12 @@ namespace Agit.FortressCraft
                 targetGround = middlePoint;
             }
 
+            if (Vector2.Distance(targetGround.position, transform.position) <= 1f)
+            {
+                _rb.Rigidbody.velocity = Vector2.zero;
+                return;
+            }
+
             if (Mathf.Sqrt(GetDistanceXYSquared(targetGround)) < 0.3f)
             {
                 if (middlePoint == null)
