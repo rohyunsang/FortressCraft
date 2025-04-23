@@ -44,6 +44,17 @@ namespace Agit.FortressCraft
         private TickTimer dieTimer;
         private TickTimer attackDelayTimer;
 
+        private string ownTag;
+        private float triggerStayElapsed = 0f;
+        public void SetOwnType(string ownType) // 새로 추가됨
+        {
+            OwnType = ownType;
+            TargetUnit = "Unit_" + ownType;
+            ownTag = TargetUnit;
+        }
+
+
+
         void Awake()
         {
             speed = 10;
@@ -106,6 +117,8 @@ namespace Agit.FortressCraft
                         middlePoint = Spawner.Center;
                     }
                 }
+
+                SetOwnType(OwnType);
 
                 // RPC Properties
                 TargetString = Spawner.Target;
@@ -172,33 +185,32 @@ namespace Agit.FortressCraft
             // 적 탐색 
             foreach (Collider2D col in cols)
             {
-                if (col.tag.StartsWith("Unit"))
+                if (!col.tag.StartsWith("Unit")) continue;
+                if (col.CompareTag(ownTag)) continue; // 새로 추가됨
+
+                normalUnitFire.TargetTranform = col.transform;
+                normalUnitFire.SecondTargetUnit = col.tag;
+
+                if (col.transform.position.x > transform.position.x)
                 {
-                    if (col.CompareTag("Unit_" + OwnType)) continue;
-                    //Debug.Log(col.tag + " " + OwnType);
-                    normalUnitFire.TargetTranform = col.transform;
-                    normalUnitFire.SecondTargetUnit = col.tag;
-
-                    if (col.transform.position.x > transform.position.x)
-                    {
-                        transform.localScale = new Vector3(-1.0f * NormalUnitDataManager.Instance.Scale,
-                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
-                    }
-                    else
-                    {
-                        transform.localScale = new Vector3(1.0f * NormalUnitDataManager.Instance.Scale,
-                                                NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
-                    }
-
-                    if (animatorState.fullPathHash != animAttackBow)
-                    {
-                        attackDelayTimer = TickTimer.CreateFromSeconds(Runner, NormalUnitDataManager.Instance.AttackDelay);
-                        _netAnimator.Animator.SetTrigger("Attack");
-                    }
-
-                    return true;
+                    transform.localScale = new Vector3(-1.0f * NormalUnitDataManager.Instance.Scale,
+                                            NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
                 }
+                else
+                {
+                    transform.localScale = new Vector3(1.0f * NormalUnitDataManager.Instance.Scale,
+                                            NormalUnitDataManager.Instance.Scale, NormalUnitDataManager.Instance.Scale);
+                }
+
+                if (animatorState.fullPathHash != animAttackBow)
+                {
+                    attackDelayTimer = TickTimer.CreateFromSeconds(Runner, NormalUnitDataManager.Instance.AttackDelay);
+                    _netAnimator.Animator.SetTrigger("Attack");
+                }
+
+                return true;
             }
+
 
             return false;
         }
@@ -354,6 +366,15 @@ namespace Agit.FortressCraft
 
         private void OnTriggerStay2D(Collider2D collision)
         {
+            // 0.5초(물리 시간 기준)마다 한 번만 처리
+            if (triggerStayElapsed < 0.5f)
+            {
+                triggerStayElapsed += Time.fixedDeltaTime;   // FixedUpdate 주기만큼 누적
+                return;
+            }
+            triggerStayElapsed = 0f;   // 타이머 리셋
+
+
             if (collision.CompareTag("Ground_A"))
             {
                 nowGround = "Ground_A";
@@ -391,7 +412,7 @@ namespace Agit.FortressCraft
         public void RPCSetUnactive()
         {
             //Debug.Log("Unactive: " + normal.name);
-            Debug.Log("Name? : " + gameObject.name);
+            // Debug.Log("Name? : " + gameObject.name);
             gameObject.SetActive(false);
         }
 

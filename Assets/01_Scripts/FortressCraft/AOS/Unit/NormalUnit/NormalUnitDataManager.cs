@@ -21,7 +21,7 @@ namespace Agit.FortressCraft
 
             Attack = 20.0f;
             Defense = 1.0f;
-            SpawnTime = 5.0f;
+            SpawnTime = 1.0f;
             Speed = 1.5f;
             AttackDelay = 2.0f;
             Scale = 0.35f;

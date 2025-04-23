@@ -69020,7 +69020,6 @@ MonoBehaviour:
   currentSceneName: 
   BGM_Lobby: {fileID: 3706139729383731699, guid: 0270807074b14404ea3a79291b88a2ec, type: 3}
   BGM_Battle: {fileID: 7367861615516812373, guid: 4985cd06e55f04db58d6f69d8bcbafdb, type: 3}
-  _setTeamGroup: {fileID: 0}
   _singleModeMap: {fileID: 0}
 --- !u!1 &1568337323
 GameObject:
@@ -105996,7 +105995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &7941255232695539752
 PrefabInstance:
   m_ObjectHideFlags: 0

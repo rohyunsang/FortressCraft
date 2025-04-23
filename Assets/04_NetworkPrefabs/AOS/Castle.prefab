@@ -344,7 +344,7 @@ MonoBehaviour:
   Arrow: {fileID: 4894933982693379610, guid: 8640248b821de4acea4e8ffadb7bfebf, type: 3}
   player: {fileID: 0}
   poolManager: {fileID: 0}
-  maxUnitCount: 10
+  maxUnitCount: 30
   id:
     RawValue: 0
   arrowId:
